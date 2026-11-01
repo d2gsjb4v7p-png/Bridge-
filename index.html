@@ -476,6 +476,17 @@ textarea.mono{width:100%;font:600 14px/1.4 Menlo,Consolas,monospace;padding:8px;
 .backs i{height:4px;margin-top:-1px}
 .play .score{padding:5px 14px;margin-bottom:6px;font-size:14px}
 .top .sub{font-size:12px}
+.notes10{display:flex;gap:8px;margin:6px 0}.notes10>span{flex:1;background:var(--soft);border-radius:10px;padding:6px 8px;font-size:13px;text-align:center}.notes10 b{font-size:16px;font-family:var(--f-disp)}.notes10 i{font-size:12px;color:var(--muted)}
+.notes10.big>span{padding:10px}.notes10.big b{font-size:26px}
+.rival .rv1{display:flex;align-items:center;justify-content:center;gap:12px;font-family:"Poiret One",var(--f-disp),Georgia,serif;font-size:20px}.rival .rv1 b{font-size:38px;font-family:var(--f-disp);color:var(--brass)}.rival .vs{font-size:28px}.rival p{text-align:center}
+.mrow{border-top:1px dashed var(--line);padding:8px 0}.msel{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}.msel select{font:inherit;font-size:14px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}
+.cupsvg{width:110px;height:128px;margin:0 auto;display:block;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35))}
+.cups{display:flex;flex-wrap:wrap;gap:10px 18px;justify-content:center;margin-top:6px}.cups b{font-size:28px;font-family:var(--f-disp);color:var(--brass)}
+.celeb.cup{background:rgba(7,18,28,.72)}.cupbox{background:linear-gradient(180deg,#13283b,#0c1824)!important;color:#f7f0df!important;border:2px solid #c9a34e!important;box-shadow:0 0 0 5px #0c1824,0 0 0 6px rgba(201,163,78,.6),0 20px 50px rgba(0,0,0,.6)!important}
+.cuptitle{font-family:"Poiret One",Georgia,serif;font-size:24px;letter-spacing:.06em;color:#e9cf8a;margin:6px 0 4px}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden}.confetti i{position:absolute;top:-20px;width:9px;height:14px;border-radius:2px;animation:confall linear infinite;opacity:.95}
+@keyframes confall{0%{transform:translateY(-20px) rotate(0deg)}100%{transform:translateY(110vh) rotate(720deg)}}
+@media (prefers-reduced-motion: reduce){.confetti{display:none}}
 </style>
 </head>
 <body>
@@ -4448,8 +4459,7 @@ app.addEventListener('click', e => {
   if (d.dmode) {
     if (d.dmode === 'mp' || d.dmode === 'imp') { ST.opt.tmode = d.dmode; ST.opt.tset = 'normal'; }
     if (d.dmode === 'freak') ST.opt.tset = 'freak';
-    save(); openSection('tournoi');
-    if (d.dmode === 'duel') { const el = document.getElementById('djoin'); if (el) el.scrollIntoView({ block: 'center' }); }
+    save(); if (d.dmode === 'duel') return duelHome(); openSection('tournoi');
   }
 });
 
@@ -4760,23 +4770,27 @@ function duelNew(nb) { const lv = curLv(), set = (ST.opt.tset || 'normal') === '
 function duelEnc(r) {
   let v = 0; const c = r.c;
   if (c) v = 1 + (((((c.level - 1) * 5 + ST_IDX.indexOf(c.st)) * 4 + SEAT_IDX.indexOf(c.decl)) * 3 + (c.dbl || 0)) * 14 + r.tr);
-  const err = Math.min(9, (r.dec || []).filter(d => !d.sys.accept.includes(d.user)).length);
-  return v.toString(36).toUpperCase().padStart(3, '0') + err;
+  const bad = (r.dec || []).filter(d => !d.sys.accept.includes(d.user)), err = Math.min(9, bad.length);
+  const ci = bad.length ? CTX_KEYS.indexOf(bad[0].sys.ctx) + 1 : 0;
+  return v.toString(36).toUpperCase().padStart(3, '0') + err + Math.max(0, ci).toString(36).toUpperCase();
 }
+const CTX_KEYS = ['ouvrir','soutien','sansfit','mineure','sa1','texas','stayman','fortes','barrage','troisieme','capitaine','intervenir','contre','repcontre','cuebid','chelem','conv','general'];
 function duelDec(s) {
-  const v = parseInt(s.slice(0, 3), 36), err = +s[3]; if (isNaN(v) || isNaN(err)) return null;
-  if (v === 0) return { c: null, tr: 0, err };
+  const v = parseInt(s.slice(0, 3), 36), err = +s[3], ci = s.length > 4 ? parseInt(s[4], 36) : 0; if (isNaN(v) || isNaN(err)) return null;
+  const ctx = ci > 0 ? CTX_KEYS[ci - 1] || null : null;
+  if (v === 0) return { c: null, tr: 0, err, ctx };
   let x = v - 1; const tr = x % 14; x = (x - tr) / 14; const dbl = x % 3; x = (x - dbl) / 3; const decl = SEAT_IDX[x % 4]; x = (x - x % 4) / 4; const st = ST_IDX[x % 5]; const level = (x - x % 5) / 5 + 1;
-  return { c: { level, st, decl, dbl }, tr, err };
+  return { c: { level, st, decl, dbl }, tr, err, ctx };
 }
 function duelResultCode(D) { const p = D.res.map(duelEnc).join(''); const chk = (p.split('').reduce((a, ch) => a + parseInt(ch, 36), 0) % 36).toString(36).toUpperCase(); return `${D.code}.${p}${chk}`; }
 function duelReadCode(D, txt) {
   const s = String(txt || '').trim().toUpperCase().replace(/\s+/g, ''); const i = s.indexOf('.'); if (i < 0) return { err: 'Ce code ne ressemble pas à un code résultat (il doit contenir un point).' };
   const head = duelParse(s.slice(0, i)); if (!head || head.code !== D.code) return { err: `Ce résultat vient d'un autre duel (${s.slice(0, i)}). Le vôtre : ${D.code}.` };
   const body = s.slice(i + 1), p = body.slice(0, -1), chk = body.slice(-1);
-  if (p.length !== D.res.length * 4) return { err: 'Le code est incomplet : vérifiez qu\'il est entier.' };
+  const W = p.length === D.res.length * 5 ? 5 : p.length === D.res.length * 4 ? 4 : 0;
+  if (!W) return { err: 'Le code est incomplet : vérifiez qu\'il est entier.' };
   if ((p.split('').reduce((a, ch) => a + parseInt(ch, 36), 0) % 36).toString(36).toUpperCase() !== chk) return { err: 'Une lettre ou un chiffre est mal recopié.' };
-  const out = []; for (let k = 0; k < p.length; k += 4) { const d = duelDec(p.slice(k, k + 4)); if (!d) return { err: 'Code illisible.' }; out.push(d); }
+  const out = []; for (let k = 0; k < p.length; k += W) { const d = duelDec(p.slice(k, k + W)); if (!d) return { err: 'Code illisible.' }; out.push(d); }
   return { boards: out };
 }
 // ---------- écrans ----------
@@ -4787,6 +4801,26 @@ function duelBlock() {
   <div class="label" style="margin-top:10px">Rejoindre un duel</div><div class="gate"><input type="text" id="djoin" placeholder="Code du duel, ex. 8IN-4821" autocapitalize="characters" autocomplete="off"><button class="btn" data-djoin="1">Jouer ›</button></div><p class="small" id="djmsg"></p>
   ${L.length ? `<div class="label" style="margin-top:10px">Mes duels</div>${L.slice(0, 5).map(D => `<div class="rvrow"><span><b>${D.code}</b> <span class="small">${new Date(D.d).toLocaleDateString('fr-BE')}${D.theirs ? ` · ${D.sum}` : ' · à comparer'}</span></span><span class="rvb"><button class="btn sec small" data-dopen="${D.code}">${D.theirs ? 'Revoir' : 'Comparer'}</button></span></div>`).join('')}` : ''}</div>`;
 }
+function duelHome() {
+  CUR = 'tournoi'; X = null; const T = ST.tour, lv = curLv();
+  show(`${topBar('⚔️ Le duel en duplicate', 'À deux, sur deux appareils, sans connexion', 'donnes')}<div class="wrap">
+  ${T && T.duel ? `<div class="card win" style="text-align:center"><div class="label">Duel en cours</div><div class="big2" style="font-size:32px;letter-spacing:.06em">${T.duel}</div><p class="small">Donne ${T.k + 1}/${T.n}. Votre adversaire tape ce code dans « Rejoindre un duel ».</p><div class="acts" style="justify-content:center"><button class="btn" data-tres="1">Reprendre le duel ›</button></div></div>` : ''}
+  ${rivalBlock()}<div class="acts"><button class="btn sec" data-dpalm="1">🏆 Palmarès de la Coupe du Paquebot Caroline</button></div>
+  <div class="card"><h2>1 · Créer un duel</h2><p class="small">Choisissez le niveau des adversaires et le type de donnes, puis le nombre de donnes. L'application vous donne un <b>code</b> à communiquer à votre adversaire.</p>
+   <div class="label" style="margin-top:12px">Niveau des adversaires</div><div class="acts">${Object.entries(OPP_LV).map(([k, o]) => `<button class="btn ${k === lv ? '' : 'sec '}small" data-dlv="${k}">${o.t}</button>`).join('')}</div>
+   <div class="label" style="margin-top:14px">Type de donnes</div><div class="acts">${[['normal', 'Donnes variées'], ['freak', 'Mains folles']].map(([k, t]) => `<button class="btn ${(ST.opt.tset || 'normal') === k ? '' : 'sec '}small" data-dset="${k}">${t}</button>`).join('')}</div>
+   <div class="label" style="margin-top:14px">Nombre de donnes</div><div class="acts">${[6, 8, 12].map(k => `<button class="btn" data-dnew="${k}">${k} donnes ›</button>`).join('')}</div></div>
+  <div class="card"><h2>2 · Rejoindre un duel</h2><p class="small">Votre adversaire a créé le duel ? Tapez son code.</p><div class="gate"><input type="text" id="djoin" placeholder="ex. 8IN-4821" autocapitalize="characters" autocomplete="off"><button class="btn" data-djoin="1">Jouer ›</button></div><p class="small" id="djmsg"></p></div>
+  <div class="card"><h2>3 · Comparer les résultats</h2><p class="small">À la fin, chacun obtient un code résultat. Échangez-les (en le montrant, ou par AirDrop) : l'application compare donne par donne, félicite, et explique ce qui aurait pu être mieux.</p>${(ST.duels || []).slice().reverse().slice(0, 6).map(D => `<div class="rvrow"><span><b>${D.code}</b> <span class="small">${new Date(D.d).toLocaleDateString('fr-BE')}${D.theirs ? ` · ${D.sum}` : ' · à comparer'}</span></span><span class="rvb"><button class="btn sec small" data-dopen="${D.code}">${D.theirs ? 'Revoir' : 'Comparer'}</button></span></div>`).join('') || '<p class="small"><i>Aucun duel terminé pour l\'instant.</i></p>'}</div></div>`);
+}
+function duelNote(sc, fs, err) { const pct = fs.length ? mpPct(sc, fs) : 50; const v = 0.7 * pct / 10 + 0.3 * Math.max(0, 10 - 2.5 * (err || 0)); return Math.round(v * 2) / 2; }
+const fmtN = x => String(Math.round(x * 2) / 2).replace('.', ',');
+function noteWord(x) { return x >= 9 ? 'excellent' : x >= 7.5 ? 'très bien' : x >= 6 ? 'bien' : x >= 4.5 ? 'correct' : x >= 3 ? 'à revoir' : 'raté'; }
+function rivalBlock() {
+  const R = Object.values(ST.rival || {}); if (!R.length) return '';
+  const me = ST.opt.name ? escA(ST.opt.name) : 'Vous';
+  return `<div class="card win"><h2>🏆 Le grand challenge</h2>${R.map(r => `<div class="rival"><div class="rv1"><span>${me}</span><b>${r.w}</b><span class="vs">–</span><b>${r.l}</b><span>${escA(r.name)}</span></div><p class="small">${r.k} duel${r.k > 1 ? 's' : ''}${r.d ? `, ${r.d} nul${r.d > 1 ? 's' : ''}` : ''} · total ${sgn(r.imp)} IMP · notes moyennes : ${me} ${fmtN(r.nm / r.k)}/10, ${escA(r.name)} ${fmtN(r.no / r.k)}/10</p></div>`).join('')}</div>`;
+}
 function duelStart(D, force) {
   if (ST.tour && !force) return show(`${topBar('Duel ' + D.code, 'Un tournoi est en cours', 'tournoi')}<div class="wrap"><div class="card"><p>Vous avez un tournoi en cours (donne ${ST.tour.k + 1}/${ST.tour.n})${ST.tour.duel ? `, le duel ${ST.tour.duel}` : ''}. Le duel ${D.code} va le remplacer.</p></div><div class="acts"><button class="btn" data-dforce="${D.code}">Commencer le duel ${D.code} ›</button><button class="btn sec" data-tres="1">Finir d'abord le tournoi en cours</button></div></div>`);
   tourStart(D.nb, D);
@@ -4796,53 +4830,138 @@ function duelPage(code, msg) {
   const mine = duelResultCode(D);
   show(`${topBar('Duel ' + D.code, D.theirs ? 'La comparaison' : 'Échanger les résultats', 'tournoi')}<div class="wrap">
   <div class="card"><h2>Mon code résultat</h2><p class="small">Montrez-le à votre adversaire, ou envoyez-le par AirDrop ou par message (AirDrop fonctionne même en mode avion, Wi-Fi et Bluetooth activés).</p><textarea id="dmine" readonly rows="2" class="mono">${mine}</textarea><div class="acts"><button class="btn sec small" data-dcopy="1">Copier</button></div></div>
-  <div class="card"><h2>Le code de mon adversaire</h2><label class="nm small">Son prénom <input type="text" id="dname" maxlength="20" value="${escA(D.name || '')}" placeholder="par exemple Valérie"></label><textarea id="dtheirs" rows="2" class="mono" placeholder="Collez ou tapez son code résultat">${D.theirsCode || ''}</textarea>${msg ? `<p class="small" style="color:var(--bad)">${msg}</p>` : ''}<div class="acts"><button class="btn" data-dcmp="${D.code}">Comparer ›</button></div></div>
+  <div class="card"><h2>Le code de mon adversaire</h2><label class="nm small">Son prénom <input type="text" id="dname" maxlength="20" value="${escA(D.name || '')}" placeholder="par exemple Valérie"></label><textarea id="dtheirs" rows="2" class="mono" placeholder="Collez ou tapez son code résultat">${D.theirsCode || ''}</textarea>${msg ? `<p class="small" style="color:var(--bad)">${msg}</p>` : ''}<div class="acts"><button class="btn" data-dcmp="${D.code}">Comparer ›</button><button class="btn sec" data-dman="${D.code}">Ou encoder ses résultats à la main</button></div></div>
   ${D.theirs ? duelReport(D) : ''}</div>`);
 }
 function duelReport(D) {
   const nm = D.name || 'votre adversaire', me = ST.opt.name || 'Vous';
-  let tot = 0, wins = 0, losses = 0;
+  let tot = 0, wins = 0, losses = 0, sumM = 0, sumO = 0; const catsM = [], catsO = [];
   const rows = D.res.map((r, k) => {
     const b = ALLB.find(x => x.id === r.id), o = D.theirs[k], vul = VULN[b.n];
-    const scM = r.sc, scO = nsScore(b, o.c, o.tr), imp = impOf(scM - scO); tot += imp; if (imp > 0) wins++; if (imp < 0) losses++;
+    const scM = r.sc, scO = nsScore(b, o.c, o.tr), imp = impOf(scM - scO);
+    const fs = (r.field || []).map(f => f.sc), errM0 = Math.min(9, (r.dec || []).filter(d => !d.sys.accept.includes(d.user)).length);
+    const nM = duelNote(scM, fs, errM0), nO = duelNote(scO, fs, o.err); sumM += nM; sumO += nO; tot += imp; if (imp > 0) wins++; if (imp < 0) losses++;
     const best = bestNS(b), errM = Math.min(9, (r.dec || []).filter(d => !d.sys.accept.includes(d.user)).length);
     const lines = [];
-    const judge = (who, c, tr, sc, err) => {
-      const out = [];
-      if (best && sc >= Math.max(best.score, b.par)) out.push(`<b>Excellent</b> : le meilleur résultat possible sur cette donne.`);
+    const judge = (who, c, tr, sc, err, cats) => {
+      const out = []; cats = cats || [];
+      if (best && sc >= Math.max(best.score, b.par)) { cats.push('top'); } if (best && sc >= Math.max(best.score, b.par)) out.push(`<b>Excellent</b> : le meilleur résultat possible sur cette donne.`);
       if (c && pairOf(c.decl) === 'NS') {
         const need = c.level + 6, dd = b.dd[ddIdx(c.st, c.decl)];
+        if (tr < need) cats.push(dd < need ? 'ambition' : 'jeu');
         if (tr < need) out.push(dd < need ? `le contrat ne pouvait pas réussir, même avec un jeu parfait (${dd} levées) : <b>enchère trop ambitieuse</b>.` : `le contrat pouvait réussir avec un jeu parfait (${dd} levées) : une levée s'est échappée au <b>jeu de la carte</b>.`);
         const gameL = c.st === 'N' ? 3 : (c.st === 'H' || c.st === 'S') ? 4 : 5;
+        if (tr >= need && c.level < gameL && best && best.level < 6 && best.score >= 400) cats.push('manche');
         if (tr >= need && c.level < gameL && best && best.level < 6 && best.score >= 400) out.push(`<b>manche manquée</b> : ${best.level}${best.st === 'N' ? 'SA' : SYM[best.st]} réussissait (${best.tricks} levées).`);
+        if (best && best.level >= 6 && c.level < best.level) cats.push('chelem');
         if (best && best.level >= 6 && c.level < best.level) out.push(`<b>${c.level < 6 ? 'chelem manqué' : 'grand chelem manqué'}</b> : ${best.level}${best.st === 'N' ? 'SA' : SYM[best.st]} était sur table (${best.tricks} levées).`);
-      } else if (c) { if (sc < 0 && b.par > sc) out.push('les adversaires ont joué la donne : il y avait peut-être mieux à faire (intervenir, disputer, ou contrer).'); }
+      } else if (c) { if (sc < 0 && b.par > sc) cats.push('defense'); if (sc < 0 && b.par > sc) out.push('les adversaires ont joué la donne : il y avait peut-être mieux à faire (intervenir, disputer, ou contrer).'); }
+      if (err) cats.push('systeme');
       if (err) out.push(`${err} enchère${err > 1 ? 's' : ''} hors système.`);
       return out;
     };
-    const jm = judge(me, r.c, r.tr, scM, errM), jo = judge(nm, o.c, o.tr, scO, o.err);
+    const cm = [], co = []; const jm = judge(me, r.c, r.tr, scM, errM, cm), jo = judge(nm, o.c, o.tr, scO, o.err, co);
+    catsM.push({ cats: cm, ctx: ((r.dec || []).find(d => !d.sys.accept.includes(d.user)) || { sys: {} }).sys.ctx || null }); catsO.push({ cats: co, ctx: o.ctx || null });
     const verdict = imp > 0 ? `<b>+${imp} IMP pour ${ST.opt.name ? escA(me) : 'vous'}</b>` : imp < 0 ? `<b>+${-imp} IMP pour ${escA(nm)}</b>` : 'Égalité';
     const why = scM === scO ? 'Même résultat aux deux tables.' : (cS(r.c) !== cS(o.c) ? `Les contrats diffèrent : c'est aux <b>enchères</b> que la donne s'est jouée.` : `Même contrat, levées différentes : c'est au <b>jeu de la carte</b> (ou en défense) que la donne s'est jouée.`);
     return `<div class="rev ${imp > 0 ? 'ok' : imp < 0 ? 'bad' : ''}"><b>Donne ${k + 1}</b> · ${vulTxt(vul)} vulnérable · ${verdict}
+    <div class="notes10"><span>${ST.opt.name ? escA(me) : 'Vous'} <b>${fmtN(nM)}/10</b> <i>${noteWord(nM)}</i></span><span>${escA(nm)} <b>${fmtN(nO)}/10</b> <i>${noteWord(nO)}</i></span></div>
     <div class="small">${ST.opt.name ? escA(me) : 'Vous'} : ${cS(r.c)} ${resTxt(r.c, r.tr)} (${sgn(scM)}) · ${escA(nm)} : ${cS(o.c)} ${resTxt(o.c, o.tr)} (${sgn(scO)})</div>
     <div class="small">${why}</div>
     ${jm.length ? `<div class="small">— ${ST.opt.name ? escA(me) : 'Vous'} : ${jm.join(' ')}</div>` : ''}${jo.length ? `<div class="small">— ${escA(nm)} : ${jo.join(' ')}</div>` : ''}
     <div class="acts"><button class="btn sec small" data-dtrev="${D.code}:${k}">Ma donne commentée</button></div></div>`;
   }).join('');
-  D.sum = tot > 0 ? `victoire ${sgn(tot)} IMP` : tot < 0 ? `défaite ${tot} IMP` : 'égalité'; save();
-  const head = tot > 0 ? `🏆 ${ST.opt.name ? escA(me) : 'Vous'} remportez le duel !` : tot < 0 ? `🏆 ${escA(nm)} remporte le duel !` : '🤝 Match nul, parfaitement équilibré';
+  const n = D.res.length, avM = sumM / n, avO = sumO / n;
+  D.sum = tot > 0 ? `victoire ${sgn(tot)} IMP` : tot < 0 ? `défaite ${tot} IMP` : 'égalité'; D.tot = tot; D.catsM = catsM; D.catsO = catsO; D.me = ST.opt.name || 'Moi'; D.winner = tot > 0 ? D.me : tot < 0 ? (D.name || 'Adversaire') : null;
+  palmUpsert(D, avM, avO); save();
+  const ck = (D.name || '').toLowerCase() + '|' + (D.theirsCode || 'm' + tot);
+  if (D.cele !== ck) { D.cele = ck; save(); setTimeout(() => cupCelebrate(D.winner, Math.abs(tot), D.code), 350); }
+  const head = tot > 0 ? (ST.opt.name ? `🏆 ${escA(me)} remporte le duel !` : '🏆 Vous remportez le duel !') : tot < 0 ? `🏆 ${escA(nm)} remporte le duel !` : '🤝 Match nul, parfaitement équilibré';
   const tone = Math.abs(tot) <= 3 ? 'Un duel très serré : quelques dizaines de points ont fait la différence.' : Math.abs(tot) >= 20 ? 'Un écart net : regardez les donnes rouges, ce sont elles qui ont décidé.' : 'Un vrai match : les grosses donnes ont fait la différence.';
-  return `<div class="card win"><div class="label">Résultat du duel, calculé en IMP comme un match par quatre</div><div class="big2" style="font-size:24px">${head}</div><p>${sgn(tot)} IMP · ${wins} donne${wins > 1 ? 's' : ''} gagnée${wins > 1 ? 's' : ''}, ${losses} perdue${losses > 1 ? 's' : ''}, ${D.res.length - wins - losses} à égalité.</p><p class="small">${tone} Et rappelez-vous : en duplicate, on ne perd pas contre son adversaire, on apprend de lui.</p></div>
+  return `<div class="card win"><div class="label">Résultat du duel, calculé en IMP comme un match par quatre</div><div class="big2" style="font-size:24px">${head}</div><div class="notes10 big"><span>${ST.opt.name ? escA(me) : 'Vous'}<br><b>${fmtN(avM)}/10</b><br><i>${noteWord(avM)}</i></span><span>${escA(nm)}<br><b>${fmtN(avO)}/10</b><br><i>${noteWord(avO)}</i></span></div><p class="small">Note moyenne sur la série : chaque donne est notée sur 10 selon votre résultat face aux 7 autres tables du tournoi (70 %) et le respect du système aux enchères (30 %).</p><p>${sgn(tot)} IMP · ${wins} donne${wins > 1 ? 's' : ''} gagnée${wins > 1 ? 's' : ''}, ${losses} perdue${losses > 1 ? 's' : ''}, ${D.res.length - wins - losses} à égalité.</p><p class="small">${tone} Et rappelez-vous : en duplicate, on ne perd pas contre son adversaire, on apprend de lui.</p></div>
+  ${weakCard(D.me, catsM, 'me')}${weakCard(D.name || 'Votre adversaire', catsO, 'them')}
   <div class="card"><h2>Donne par donne</h2>${rows}</div>`;
 }
+// ---------- encoder les résultats de l'adversaire à la main ----------
+function duelManual(code) {
+  const D = (ST.duels || []).find(x => x.code === code); if (!D) return;
+  const sel = (id, opts, v) => `<select id="${id}">${opts.map(([k, t]) => `<option value="${k}"${String(k) === String(v) ? ' selected' : ''}>${t}</option>`).join('')}</select>`;
+  const rows = D.res.map((r, k) => { const o = { c: r.c, tr: r.tr }; const c = o.c; return `<div class="mrow"><div class="small"><b>Donne ${k + 1}</b> · vous : ${cS(r.c)} ${resTxt(r.c, r.tr)}</div><div class="msel">${sel('ml' + k, [[0, 'Passe général'], [1, '1'], [2, '2'], [3, '3'], [4, '4'], [5, '5'], [6, '6'], [7, '7']], c ? c.level : 0)}${sel('ms' + k, [['C', '♣'], ['D', '♦'], ['H', '♥'], ['S', '♠'], ['N', 'SA']], c ? c.st : 'N')}${sel('md' + k, [['N', 'Nord'], ['E', 'Est'], ['S', 'Sud'], ['O', 'Ouest']], c ? c.decl : 'S')}${sel('mx' + k, [[0, '—'], [1, 'contré'], [2, 'surcontré']], c ? c.dbl || 0 : 0)}${sel('mt' + k, Array.from({ length: 14 }, (_, i) => [i, i + ' levées']), c ? o.tr : 7)}</div></div>`; }).join('');
+  show(`${topBar('Duel ' + D.code, 'Encoder les résultats de mon adversaire', 'tournoi')}<div class="wrap"><div class="card"><p class="small">Pour chaque donne, indiquez le contrat final de votre adversaire, le déclarant, et le nombre de levées faites par le déclarant. Les cases sont pré-remplies avec votre propre résultat : changez seulement ce qui diffère.</p><label class="nm small">Son prénom <input type="text" id="dname" maxlength="20" value="${escA(D.name || '')}" placeholder="par exemple Valérie"></label>${rows}</div><div class="acts"><button class="btn" data-dmsave="${D.code}">Comparer ›</button></div></div>`);
+}
+function duelManualSave(code) {
+  const D = (ST.duels || []).find(x => x.code === code); const v = id => document.getElementById(id).value;
+  D.theirs = D.res.map((r, k) => { const l = +v('ml' + k); if (!l) return { c: null, tr: 0, err: 0, ctx: null }; return { c: { level: l, st: v('ms' + k), decl: v('md' + k), dbl: +v('mx' + k) }, tr: +v('mt' + k), err: 0, ctx: null }; });
+  D.name = (v('dname') || '').trim().slice(0, 20); D.manual = 1; D.theirsCode = ''; save(); duelPage(D.code);
+}
+// ---------- palmarès permanent (un enregistrement par duel et par adversaire) ----------
+function palmUpsert(D, avM, avO) {
+  ST.palm = ST.palm || []; const name = D.name || 'Adversaire', k = D.code + '|' + name.toLowerCase();
+  const e = { k, d: D.d || Date.now(), code: D.code, me: D.me, name, tot: D.tot, winner: D.winner, nm: avM, no: avO, catsM: D.catsM, catsO: D.catsO };
+  const i = ST.palm.findIndex(x => x.k === k); if (i >= 0) ST.palm[i] = e; else ST.palm.push(e);
+  if (ST.palm.length > 300) ST.palm = ST.palm.slice(-300);
+  ST.rival = {}; ST.palm.forEach(x => { const key = x.name.toLowerCase(); const R = ST.rival[key] || (ST.rival[key] = { name: x.name, w: 0, l: 0, d: 0, imp: 0, nm: 0, no: 0, k: 0 }); if (x.tot > 0) R.w++; else if (x.tot < 0) R.l++; else R.d++; R.imp += x.tot; R.nm += x.nm; R.no += x.no; R.k++; });
+}
+// ---------- les points faibles de chaque joueur ----------
+const WEAK_INFO = {
+  ambition: ['Enchères trop ambitieuses', 'des contrats qui ne pouvaient pas réussir', [['data-chap="points"', 'Fiche : compter ses points'], ['data-game="jugement"', 'Quiz : le jugement'], ['data-chap="aiguilleur"', 'Quel comptage choisir ?']]],
+  manche: ['Manches manquées', 'des manches qui réussissaient, arrêtées en partielle', [['data-case="troisieme"', 'Exercice : le 3e tour'], ['data-case="capitaine"', 'Exercice : le capitaine'], ['data-game="contrat"', 'Jeu : le juste contrat']]],
+  chelem: ['Chelems manqués', 'des chelems sur table non déclarés', [['data-chap="chelem"', 'Fiche : les chelems'], ['data-case="bw"', 'Exercice : le Blackwood'], ['data-case="potentiel"', 'Exercice : le potentiel de chelem']]],
+  jeu: ['Levées perdues au jeu de la carte', 'des contrats possibles, chutés au jeu', [['data-ecm="10"', 'École de la carte : le plan'], ['data-ecm="9"', 'Quelle technique ?'], ['data-suivi="2"', 'Suivre les cartes']]],
+  defense: ['Défense et compétition', 'des donnes laissées aux adversaires', [['data-playdef="donnes"', 'Défendre en jouant les cartes'], ['data-case="intervenir"', 'Exercice : intervenir'], ['data-chap="contres"', 'Fiche : contres']]],
+  systeme: ['Écarts avec le système', 'des enchères hors système', []],
+};
+function weakProfile(list) {
+  const cnt = {}, ctx = {}; let n = 0, top = 0;
+  (list || []).forEach(x => { n++; (x.cats || []).forEach(c => { if (c === 'top') top++; else cnt[c] = (cnt[c] || 0) + 1; }); if (x.ctx) ctx[x.ctx] = (ctx[x.ctx] || 0) + 1; });
+  return { n, top, items: Object.entries(cnt).sort((a, z) => z[1] - a[1]), ctx: Object.entries(ctx).sort((a, z) => z[1] - a[1]) };
+}
+function weakHtmlP(P, who) {
+  if (!P.n) return '<p class="small"><i>Pas encore assez de donnes.</i></p>';
+  const items = P.items.filter(([k]) => WEAK_INFO[k]).slice(0, 3);
+  const caseBtns = P.ctx.slice(0, 3).map(([c, k]) => CTX_CASE[c] && typeof caseById === 'function' && caseById(CTX_CASE[c]) ? `<button class="btn sec small" data-case="${CTX_CASE[c]}">${caseById(CTX_CASE[c]).short} (${k})</button>` : '').join('');
+  return `<p class="small">${P.n} donne${P.n > 1 ? 's' : ''} analysée${P.n > 1 ? 's' : ''} · ${P.top} résultat${P.top > 1 ? 's' : ''} parfait${P.top > 1 ? 's' : ''} 👏</p>${items.length ? items.map(([k, c], i) => { const W = WEAK_INFO[k]; return `<div class="weak"><b>${i === 0 ? '⚠️ Point faible n°1' : 'Ensuite'} : ${W[0]}</b> <span class="small">(${c} fois : ${W[1]})</span><div class="acts">${(k === 'systeme' ? '' : W[2].map(([a, t]) => `<button class="btn sec small" ${a}>${t}</button>`).join(''))}${k === 'systeme' ? caseBtns || '<button class="btn sec small" data-sec="encheres">Les exercices d\'enchères</button>' : ''}</div></div>`; }).join('') : `<p>Aucun défaut récurrent : ${escA(who)} joue un bridge très propre. 🎩</p>`}${P.ctx.length && !items.some(([k]) => k === 'systeme') ? `<div class="small">Enchères à revoir :</div><div class="acts">${caseBtns}</div>` : ''}`;
+}
+function weakCard(who, list, kind) { return `<div class="card"><h2>${kind === 'me' ? '🎯 Mes points à travailler' : '🎯 Les points à travailler de ' + escA(who)}</h2>${weakHtmlP(weakProfile(list), who)}${kind === 'them' && !(list || []).some(x => x.ctx) ? '<p class="small">Pour le détail des enchères de votre adversaire, utilisez les codes résultats plutôt que l\'encodage à la main.</p>' : ''}</div>`; }
+// ---------- le palmarès de la Coupe du Paquebot Caroline ----------
+function duelPalmares() {
+  const L = (ST.palm || []).slice().reverse(), me = ST.opt.name || 'Moi';
+  const cups = {}; L.forEach(D => { if (D.winner) cups[D.winner] = (cups[D.winner] || 0) + 1; });
+  const opps = [...new Set(L.map(D => D.name || 'Adversaire'))];
+  const seen = new Set(), allMe = L.filter(D => !seen.has(D.code) && seen.add(D.code)).flatMap(D => D.catsM || []);
+  show(`${topBar('🏆 Coupe du Paquebot Caroline', 'Le palmarès de vos duels en duplicate', 'tournoi')}<div class="wrap">
+  <div class="card win" style="text-align:center">${CUP_SVG}<div class="label">Coupes remportées</div><div class="cups">${Object.entries(cups).sort((a, z) => z[1] - a[1]).map(([n, k]) => `<span><b>${k}</b> ${escA(n)}</span>`).join('') || '<span><i>Aucune coupe pour l\'instant : à vos cartes !</i></span>'}</div></div>
+  <div class="card"><h2>Le palmarès</h2>${L.length ? `<table class="mini"><tr><th>Date</th><th>Adversaire</th><th>Résultat</th><th>Coupe</th></tr>${L.map(D => `<tr><td>${new Date(D.d).toLocaleDateString('fr-BE')}</td><td>${escA(D.name || 'Adversaire')}</td><td>${sgn(D.tot || 0)} IMP</td><td>${D.winner ? '🏆 ' + escA(D.winner) : 'nul'}</td></tr>`).join('')}</table>` : '<p class="small"><i>Aucun duel comparé pour l\'instant.</i></p>'}</div>
+  <div class="card"><h2>🎯 ${escA(me)} : les points faibles sur tous les duels</h2>${weakHtmlP(weakProfile(allMe), me)}</div>
+  ${opps.map(o => `<div class="card"><h2>🎯 ${escA(o)} : les points faibles sur tous les duels</h2>${weakHtmlP(weakProfile(L.filter(D => (D.name || 'Adversaire') === o).flatMap(D => D.catsO || [])), o)}</div>`).join('')}
+  <div class="acts"><button class="btn sec" data-dhome="1">Retour au duel</button></div></div>`);
+}
+const CUP_SVG = `<svg class="cupsvg" viewBox="0 0 120 140" aria-hidden="true"><defs><linearGradient id="cg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbeec6"/><stop offset=".5" stop-color="#e3c47a"/><stop offset="1" stop-color="#a77d22"/></linearGradient></defs><path d="M28 14h64v22c0 22-14 38-32 40-18-2-32-18-32-40z" fill="url(#cg)" stroke="#7a5a14" stroke-width="2"/><path d="M28 22H12c0 18 8 26 18 28M92 22h16c0 18-8 26-18 28" fill="none" stroke="#c9a34e" stroke-width="5"/><rect x="54" y="76" width="12" height="22" fill="url(#cg)" stroke="#7a5a14" stroke-width="2"/><path d="M36 98h48l6 14H30z" fill="url(#cg)" stroke="#7a5a14" stroke-width="2"/><rect x="26" y="112" width="68" height="14" rx="2" fill="#0f2233" stroke="#c9a34e" stroke-width="2"/><text x="60" y="54" text-anchor="middle" font-size="22" fill="#0f2233" font-family="Georgia,serif">♠♥♦♣</text></svg>`;
+function cupCelebrate(winner, imp, code) {
+  try {
+    const old = document.querySelector('.celeb'); if (old) old.remove();
+    const d = document.createElement('div'); d.className = 'celeb cup'; d.setAttribute('role', 'status');
+    const cols = ['#e3c47a', '#c3132f', '#ffffff', '#1f6fb5', '#2e8b57', '#f2a51a', '#d94fa3'];
+    const conf = Array.from({ length: 70 }, (_, i) => `<i style="left:${(i * 53) % 100}%;background:${cols[i % cols.length]};animation-delay:${(i % 14) * 0.09}s;animation-duration:${2.2 + (i % 5) * 0.35}s;transform:rotate(${i * 37}deg)"></i>`).join('');
+    d.innerHTML = `<div class="confetti" aria-hidden="true">${conf}</div><div class="cbox cupbox">${CUP_SVG}<div class="cuptitle">Coupe du Paquebot Caroline</div>${winner ? `<b>remportée par ${escA(winner)} !</b><span>avec ${imp} IMP d'avance · duel ${code}</span>` : '<b>Match nul !</b><span>La coupe reste au salon, en attendant la revanche.</span>'}<button class="btn" type="button">🥂 Champagne !</button></div>`;
+    d.addEventListener('click', ev => { if (ev.target.closest('button') || ev.target === d) d.remove(); });
+    document.body.appendChild(d);
+  } catch (e) { }
+}
 app.addEventListener('click', e => {
-  const t = e.target.closest('[data-dforce],[data-dnew],[data-djoin],[data-dopen],[data-dcopy],[data-dcmp],[data-dtrev]'); if (!t || t.disabled) return; const d = t.dataset;
+  const t = e.target.closest('[data-dpalm],[data-dman],[data-dmsave],[data-dhome],[data-dlv],[data-dset],[data-dforce],[data-dnew],[data-djoin],[data-dopen],[data-dcopy],[data-dcmp],[data-dtrev]'); if (!t || t.disabled) return; const d = t.dataset;
+  if (d.dpalm) return duelPalmares();
+  if (d.dman) return duelManual(d.dman);
+  if (d.dmsave) return duelManualSave(d.dmsave);
+  if (d.dhome) return duelHome();
+  if (d.dlv) { ST.opt.lv = d.dlv; save(); return duelHome(); }
+  if (d.dset) { ST.opt.tset = d.dset; save(); return duelHome(); }
   if (d.dforce) { const D = duelParse(d.dforce); if (D) { ST.tour = null; return duelStart(D, true); } return; }
   if (d.dnew) { const D = duelNew(+d.dnew); return show(`${topBar('Nouveau duel', 'Le code à donner à votre adversaire', 'tournoi')}<div class="wrap"><div class="card" style="text-align:center"><p>Donnez ce code à votre adversaire :</p><div class="big2" style="font-size:34px;letter-spacing:.08em">${D.code}</div><p class="small">${D.nb} donnes · adversaires ${OPP_LV[D.lv].t.toLowerCase()} · ${D.set === 'F' ? 'répartitions extraordinaires' : 'donnes variées'}</p><p class="small">Il le tape dans « Rejoindre un duel ». Vous jouerez exactement les mêmes donnes.</p></div><div class="acts"><button class="btn" data-djoin="${D.code}">Commencer le duel ›</button></div></div>`); }
   if (d.djoin) { const code = d.djoin === '1' ? (document.getElementById('djoin') || {}).value : d.djoin; const D = duelParse(code); if (!D) { const m = document.getElementById('djmsg'); if (m) m.innerHTML = '<span style="color:var(--bad)">Code non reconnu. Il ressemble à 8IN-4821.</span>'; return; } return duelStart(D); }
   if (d.dopen) return duelPage(d.dopen);
   if (d.dcopy) { const v = document.getElementById('dmine').value; try { navigator.clipboard.writeText(v).then(() => toast('Code copié')); } catch (er) { const ta = document.getElementById('dmine'); ta.select(); try { document.execCommand('copy'); toast('Code copié'); } catch (e2) { } } return; }
-  if (d.dcmp) { const D = (ST.duels || []).find(x => x.code === d.dcmp); const txt = document.getElementById('dtheirs').value; D.name = (document.getElementById('dname').value || '').trim().slice(0, 20); const R = duelReadCode(D, txt); if (R.err) return duelPage(D.code, R.err); D.theirs = R.boards; D.theirsCode = txt.trim().toUpperCase(); save(); return duelPage(D.code); }
+  if (d.dcmp) { const D = (ST.duels || []).find(x => x.code === d.dcmp); const txt = document.getElementById('dtheirs').value; D.name = (document.getElementById('dname').value || '').trim().slice(0, 20); const R = duelReadCode(D, txt); if (R.err) return duelPage(D.code, R.err); D.theirs = R.boards; D.theirsCode = txt.trim().toUpperCase(); D.manual = 0; save(); return duelPage(D.code); }
   if (d.dtrev) { const [code, k] = d.dtrev.split(':'); const D = ST.duels.find(x => x.code === code); return tourResult(+k, false, { res: D.res, mode: 'imp', lv: D.lv, n: D.res.length }); }
 });
 
@@ -5209,8 +5328,8 @@ function tourBlock() {
   ${T ? '' : `<div class="label" style="margin-top:10px">Niveau de vos adversaires</div><div class="lvl">${Object.entries(OPP_LV).map(([k, o]) => `<button class="lvb${k === lv ? ' on' : ''}" data-tlv="${k}"><b>${o.t}</b><span class="small">${o.d}</span></button>`).join('')}</div><div class="acts"><button class="btn sec small" data-chap="champion">Qu'est-ce qui distingue un bon joueur d'un champion ?</button></div>
   <div class="label" style="margin-top:12px">Les donnes</div><div class="lvl">${[['normal', 'Donnes variées', 'Manches, chelems, barrages, contres d\'appel, donnes disputées.'], ['freak', 'Répartitions extraordinaires', '6-5, 7-5, chicanes, couleurs de 8 cartes : des donnes folles où il faut annoncer en fonction.']].map(([k, t, d]) => `<button class="lvb${(ST.opt.tset || 'normal') === k ? ' on' : ''}" data-tset="${k}"><b>${t}</b><span class="small">${d}</span></button>`).join('')}</div><div class="acts"><button class="btn sec small" data-chap="excentriques">Fiche : les mains extraordinaires</button></div>
   <div class="label" style="margin-top:12px">Le calcul des scores</div><div class="lvl">${[['mp', 'Duplicate au pourcentage', 'Comme dans votre club : on compte combien de tables vous battez. Chaque dizaine de points compte.'], ['imp', 'En IMP, comme sur Funbridge', 'Votre score est comparé à la moyenne des tables, puis converti en IMP. Les manches et les chelems comptent énormément, les levées de mieux presque pas.']].map(([k, t, d]) => `<button class="lvb${(ST.opt.tmode || 'mp') === k ? ' on' : ''}" data-tmode="${k}"><b>${t}</b><span class="small">${d}</span></button>`).join('')}</div><div class="acts"><button class="btn sec small" data-chap="imp">Fiche : jouer en IMP</button></div>`}
-  ${T ? `<div class="acts"><button class="btn" data-tres="1">Reprendre le tournoi (donne ${T.k + 1}/${T.n}) ›</button><button class="btn sec small" data-tabandon="1">Abandonner</button></div>` : `<div class="label">Nouveau tournoi ${(ST.opt.tset || 'normal') === 'freak' ? 'de mains folles ' : ''}${(ST.opt.tmode || 'mp') === 'imp' ? 'en IMP' : 'au pourcentage'}, contre des adversaires « ${OPP_LV[lv].t} »</div><div class="acts">${[6, 8, 12].map(k => `<button class="btn${k === 8 ? '' : ' sec'}" data-tstart="${k}">${k} donnes</button>`).join('')}</div>`}</div>
-  ${h.length ? `<div class="card"><h2>Vos tournois</h2><table class="mini"><tr><th>Date</th><th>Niveau</th><th>Résultat</th><th>Rang</th></tr>${h.slice(-10).reverse().map(t => `<tr><td>${new Date(t.d).toLocaleDateString('fr-BE')}</td><td>${t.lv ? OPP_LV[t.lv].t : '—'}</td><td>${t.mode === 'imp' ? impTxt(t.imp) : fmt1(t.pct) + ' %'}</td><td>${t.rank}/8${t.rank === 1 ? ' 🏆' : ''}</td></tr>`).join('')}</table><div class="spark big">${h.slice(-10).map(t => `<i style="height:${Math.max(6, t.pct)}%"><span>${Math.round(t.pct)}</span></i>`).join('')}</div></div>` : ''}${typeof duelBlock === 'function' ? duelBlock() : ''}${typeof reviewBlock === 'function' ? reviewBlock() : ''}`;
+  ${T ? `<div class="acts"><button class="btn" data-tres="1">${T.duel ? `Reprendre le duel ${T.duel}` : 'Reprendre le tournoi'} (donne ${T.k + 1}/${T.n}) ›</button><button class="btn sec small" data-tabandon="1">Abandonner</button></div>` : `<div class="label">Nouveau tournoi ${(ST.opt.tset || 'normal') === 'freak' ? 'de mains folles ' : ''}${(ST.opt.tmode || 'mp') === 'imp' ? 'en IMP' : 'au pourcentage'}, contre des adversaires « ${OPP_LV[lv].t} »</div><div class="acts">${[6, 8, 12].map(k => `<button class="btn${k === 8 ? '' : ' sec'}" data-tstart="${k}">${k} donnes</button>`).join('')}</div>`}</div>
+  ${h.length ? `<div class="card"><h2>Vos tournois</h2><table class="mini"><tr><th>Date</th><th>Niveau</th><th>Résultat</th><th>Rang</th></tr>${h.slice(-10).reverse().map(t => `<tr><td>${new Date(t.d).toLocaleDateString('fr-BE')}</td><td>${t.lv ? OPP_LV[t.lv].t : '—'}</td><td>${t.mode === 'imp' ? impTxt(t.imp) : fmt1(t.pct) + ' %'}</td><td>${t.rank}/8${t.rank === 1 ? ' 🏆' : ''}</td></tr>`).join('')}</table><div class="spark big">${h.slice(-10).map(t => `<i style="height:${Math.max(6, t.pct)}%"><span>${Math.round(t.pct)}</span></i>`).join('')}</div></div>` : ''}${typeof duelBlock === 'function' ? `<div class="acts"><button class="btn" data-dhome="1">⚔️ Le duel en duplicate ›</button></div>` : ''}${typeof reviewBlock === 'function' ? reviewBlock() : ''}`;
 }
 function tourStart(nb, duel) {
   const oldRNG = RNG; if (duel) RNG = mulberry(duel.seed * 97 + nb * 7 + 13);
@@ -5233,7 +5352,7 @@ const alertTxt = e => (e.user ? 'votre enchère' : e.mean && e.mean.al ? e.mean.
 function tourRender() {
   const T = ST.tour, b = TB.b, A = TB.A, vul = VULN[b.n];
   const notes = A.ev.filter(e => e.b !== 'P' && !e.user).map(e => `<li><b>${SEATNAME[e.s]}, ${BC(e.b)}</b>${alertTxt(e) ? ' : ' + alertTxt(e) : ''}</li>`).join('');
-  show(`${topBar(`${T.duel ? '⚔️ Duel ' + T.duel : 'Tournoi'} · donne ${T.k + 1}/${T.n}`, `Adversaires : ${EW_NAMES[TB.oi]} (${tourLv(T).t.toLowerCase()})${T.mode === 'imp' && T.res.length ? ` · total : ${impTxt(T.res.reduce((a, r) => a + (r.imp || 0), 0))}` : ''}`, 'tournoi')}<div class="wrap">
+  show(`${topBar(`${T.duel ? '⚔️ Duel ' + T.duel : 'Tournoi'} · donne ${T.k + 1}/${T.n}`, `${T.duel ? `Code du duel : ${T.duel} · ` : ''}Adversaires : ${EW_NAMES[TB.oi]} (${tourLv(T).t.toLowerCase()})${T.mode === 'imp' && T.res.length ? ` · total : ${impTxt(T.res.reduce((a, r) => a + (r.imp || 0), 0))}` : ''}`, 'tournoi')}<div class="wrap">
   <div class="card"><div class="sit">Vous êtes <b>Sud</b> · Donneur : ${SEATNAME[A.dealer]} · Vulnérable : <b>${vulTxt(vul)}</b>${isVul(vul, 'S') ? ' (vous l\'êtes)' : ''}</div><div class="label">Votre main</div>${handBlock(TB.H.S)}${ST.opt.showH ? `<div class="hcp">${hcp(TB.H.S)} points d'honneur</div>` : ''}</div>
   <div class="card"><div class="label">Les enchères</div>${aucSimple(A.dealer, A.ev.map(e => e.b), 'S', true)}${notes ? `<div class="label" style="margin-top:10px">Ce que disent les annonces</div><ul class="notes">${notes}</ul>` : ''}</div>
   <div class="card"><div class="q">À vous.</div>${bidGrid(legalCalls(A.ev, 'S'), 'data-tb')}${TB.dec.length ? '<div class="acts" style="margin-top:10px"><button class="btn sec small" data-tundo="1">↶ Annuler ma dernière enchère</button></div>' : ''}</div></div>`);
