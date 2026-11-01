@@ -2550,6 +2550,7 @@ if (typeof module !== 'undefined') Object.assign(module.exports, { ROBOT_ERRS, r
 // ====================================================================
 //  THÉORIE EXPRESS — fiches courtes, faciles à lire
 // ====================================================================
+const IMP_TABLE_ROWS = [['0 à 10', '0'], ['20 à 40', '1'], ['50 à 80', '2'], ['90 à 120', '3'], ['130 à 160', '4'], ['170 à 210', '5'], ['220 à 260', '6'], ['270 à 310', '7'], ['320 à 360', '8'], ['370 à 420', '9'], ['430 à 490', '10'], ['500 à 590', '11'], ['600 à 740', '12'], ['750 à 890', '13'], ['900 à 1090', '14'], ['1100 à 1290', '15'], ['1300 à 1490', '16'], ['1500 et plus', '17 et plus']];
 const KEEP = t => `<div class="keep"><b>À retenir</b><br>${t}</div>`;
 const TBL = (head, rows, on) => memoTable(head, rows, on == null ? -1 : on);
 const THEORY = [
@@ -2675,6 +2676,14 @@ ${KEEP('Écouter leurs enchères, faire le grand calcul (40 − moi − le mort)
 <p>Les paires Nord-Sud restent en général à leur table, les paires Est-Ouest changent de table à chaque tour. On ne gagne pas en ayant de belles cartes, mais en faisant <b>mieux que les autres avec les mêmes cartes</b>.</p>
 <p>Le résultat de chaque donne est un <b>pourcentage</b> (voir « La marque »). Un tournoi correct se situe autour de <b>50 %</b> ; au-dessus de <b>55 %</b>, c'est très bien ; au-dessus de <b>60 %</b>, on gagne souvent.</p>
 ${KEEP('Même donnes partout : on compare. 50 % = moyenne, 60 % = excellent.')}` },
+  { id: 'imp', t: 'Jouer en IMP (Funbridge, matchs par quatre)', d: 'Une autre façon de compter, une autre stratégie', cases: [], html: `
+<p>Sur <b>Funbridge</b> (tournois d'entraînement et souvent les tournois du jour) et dans les <b>matchs par quatre</b>, on ne compte pas en pourcentage mais en <b>IMP</b> (International Match Points). Sur Funbridge, votre score est comparé à la <b>moyenne</b> de tous ceux qui ont joué la donne, puis l'écart est converti en IMP avec ce barème :</p>
+${TBL(['Écart de points', 'IMP'], IMP_TABLE_ROWS)}
+<h3>Ce qui change tout</h3><p>Le barème « écrase » les petites différences et garde les grosses. Une <b>levée de mieux</b> (+30) rapporte <b>1 IMP</b>. Une <b>manche vulnérable</b> ratée (environ 600 points d'écart) coûte <b>12 IMP</b>. Un total négatif veut simplement dire « un peu moins bien que la moyenne » : sur Funbridge, la moyenne est assez forte.</p>
+${TBL(['Situation', 'Au pourcentage (club)', 'En IMP (Funbridge)'], [['Levée de mieux', 'précieuse', 'presque rien (1 IMP)'], ['Manche vulnérable douteuse', 'on suit la salle', 'on la déclare dès environ 1 chance sur 3'], ['Manche non vulnérable', 'on suit la salle', 'à partir d\'environ 1 chance sur 2'], ['Petit chelem', 'on suit la salle', 'dès qu\'il réussit plus d\'une fois sur 2'], ['Grand chelem', 'rarement', 'seulement s\'il est presque sûr'], ['3SA ou 4♥ (10 points d\'écart)', 'important', 'sans importance'], ['Contrer une partielle', 'souvent rentable', 'risqué : petit gain, grosse perte'], ['Jeu de la carte', 'viser la levée de plus', 'assurer le contrat d\'abord']])}
+<h3>Les six règles de l'IMP</h3><ol><li><b>Audace pour les manches vulnérables.</b> Avec 24 points et un fit, on la dit.</li><li><b>Sécurité au jeu de la carte</b> : on joue pour réussir, pas pour la levée de mieux.</li><li><b>En défense, on fait chuter</b> : on ne prend pas de risque pour empêcher une levée de mieux.</li><li><b>Les partielles comptent peu</b> : pas de bataille acharnée pour 2♥ contre 2♠.</li><li><b>Chelems</b> : petit chelem à 50 %, grand chelem quasi sûr. En cas de doute, le petit.</li><li><b>Pas de contre « pour voir »</b> sur une partielle : contré, 2♥ qui réussit vaut la manche.</li></ol>
+<p class="small">Sur Funbridge, une donne non jouée compte −6 IMP : terminez vos tournois !</p>
+${KEEP('En IMP, on compare ce qu\'on peut gagner et ce qu\'on risque. Les petites différences ne comptent presque pas, les grosses comptent énormément.')}` },
   { id: 'duplicate', t: 'Être un peu meilleur que les autres en duplicate', d: 'La stratégie du tournoi, pour joueurs confirmés', cases: [], html: `
 <p>En duplicate, on ne joue pas contre les cartes : on joue contre <b>les autres tables</b>. Une donne gagnée de 10 points vaut autant qu'une donne gagnée de 1 000. Toute la stratégie découle de cette idée : <b>la fréquence compte, pas l'ampleur</b>.</p>
 <h3>1. Chaque dizaine compte</h3><p>3SA +1 (430) bat 4♥ = (420). 1SA +1 (120) bat 2♥ +1 (110). En partielle comme en manche, <b>Sans-Atout et majeures</b> rapportent plus que les mineures : avec un fit mineur et des arrêts partout, préférez 3SA à 5♣. Et une levée de mieux au jeu de la carte, c'est souvent 20 % de mieux.</p>
@@ -2747,6 +2756,7 @@ ${TBL(['Situation', 'Je compte…', 'Pourquoi'], [['Enchères, main régulière'
 ${KEEP('Jouer VERS ses honneurs, affranchir la couleur longue, 8 toujours 9 jamais, et la règle de 7 pour le hold-up.')}` },
 ];
 const SECS = {
+  imp: { t: 'Jouer en IMP', chap: 'imp', cases: [] },
   bases: { t: 'Les bases', chap: 'bases', cases: [] }, points: { t: 'Compter ses points', chap: 'points', cases: ['compter', 'hld'] },
   marque: { t: 'La marque', chap: 'marque', cases: [] }, ouvrir: { t: 'Ouvrir', chap: 'ouvrir', cases: ['ouvrir'] },
   repondre: { t: 'Répondre à 1 à la couleur', chap: 'repondre', cases: ['soutien', 'sansfit', 'mineure'] }, sa: { t: 'Répondre à 1SA', chap: 'sa', cases: ['sa1', 'texas', 'stayman'] },
@@ -2759,6 +2769,12 @@ const CASE_SEC = { ouvrir: 'ouvrir', compter: 'points', hld: 'points', soutien: 
 // ---------------- banque de questions (théorie) ----------------
 // [section, question, [options], index de la bonne réponse, explication]
 const QBANK = [
+  ['imp', 'En IMP, une levée de mieux (+30 points) rapporte…', ['1 IMP', '3 IMP', '6 IMP', 'Rien du tout'], 0, '20 à 40 points d\'écart = 1 IMP.'],
+  ['imp', 'Sur Funbridge, votre score en IMP est calculé par rapport…', ['À la moyenne de tous les joueurs de la donne', 'Au meilleur score', 'Au par de la donne', 'À votre partenaire robot'], 0, 'Chaque résultat est comparé à la moyenne de la donne, puis l\'écart est converti en IMP.'],
+  ['imp', 'En IMP, vulnérable, une manche vaut la peine dès qu\'elle réussit environ…', ['1 fois sur 3', '1 fois sur 2', '2 fois sur 3', '9 fois sur 10'], 0, 'On gagne environ 10 IMP si elle réussit et on perd environ 6 IMP si elle chute.'],
+  ['imp', 'En IMP, vous jouez un contrat normal. Faut-il risquer le contrat pour une levée de mieux ?', ['Non : on assure le contrat', 'Oui, toujours', 'Oui si on est vulnérable', 'Cela ne change rien'], 0, 'La levée de mieux vaut 1 IMP, la chute en coûte 10 à 12.'],
+  ['imp', 'En IMP, le grand chelem se déclare…', ['Quand il est presque sûr', 'Dès qu\'il réussit une fois sur deux', 'Jamais', 'Seulement non vulnérable'], 0, 'On perd plus (le petit chelem) qu\'on ne gagne : il faut au moins 6 chances sur 10, en pratique presque la certitude.'],
+  ['imp', 'Un écart de 450 points vaut combien d\'IMP ?', ['10', '5', '12', '15'], 0, '430 à 490 points = 10 IMP.'],
   ['flanc', 'Contre 4♠, combien de levées la défense doit-elle faire pour faire chuter ?', ['3', '4', '5', '7'], 1, '8 − le palier : 8 − 4 = 4 levées.'],
   ['flanc', 'Contre 3SA, combien de levées faut-il à la défense ?', ['3', '4', '5', '6'], 2, '8 − 3 = 5 levées.'],
   ['flanc', 'J\'ai 9 H, le mort 12 H, le déclarant a ouvert 1SA (15-17). Mon partenaire a au plus…', ['4 H', '7 H', '9 H', '19 H'], 0, '40 − 9 − 12 − 15 = 4 H au maximum.'],
@@ -2890,6 +2906,10 @@ const QBANK = [
 ];
 // Vrai / faux éclair
 const TFBANK = [
+  ['En IMP, 3SA = (400) contre 4♥ = (420), c\'est sans importance.', 1],
+  ['En IMP, il faut toujours chercher la levée de mieux.', 0],
+  ['Sur Funbridge, une donne non jouée compte −6 IMP.', 1],
+  ['En IMP, contrer une partielle adverse est presque toujours rentable.', 0],
   ['Pour faire chuter 4♥, la défense doit faire 4 levées.', 1], ['Avec 6 cartes dehors, le 3-3 est la répartition la plus probable.', 0], ['En défense, on joue petit en deuxième position, en principe.', 1], ['Le mort peut demander au déclarant qui ne fournit pas s\'il n\'a plus de cette couleur.', 1], ['Une chicane, c\'est un singleton.', 0], ['Le joueur à gauche du déclarant entame.', 1], ['1SA adverse promet une main régulière.', 1], ['La règle de 11 se sert de l\'entame en 4e meilleure.', 1],
   ['On ouvre 1SA avec 15 à 17 H et une main régulière.', 1], ['On ouvre 1SA avec 12 H régulier.', 0], ['Le Texas 2♦ montre 5 cœurs.', 1], ['Le Texas 2♥ montre 5 cœurs.', 0],
   ['Le Stayman demande une majeure 4e et 8 H.', 1], ['Avec 5 cartes en majeure sur 1SA, on fait un Stayman.', 0], ['Fit = 8 cartes à deux.', 1], ['Un singleton vaut 2 points même sans fit.', 0],
@@ -3788,6 +3808,83 @@ app.addEventListener('click', e => {
 
 'use strict';
 // ====================================================================
+//  LES IMP (comme sur Funbridge) : barème, tournoi en IMP, décisions
+// ====================================================================
+const IMP_STEPS = [20, 50, 90, 130, 170, 220, 270, 320, 370, 430, 500, 600, 750, 900, 1100, 1300, 1500, 1750, 2000, 2250, 2500, 3000, 3500, 4000];
+function impOf(d) { const a = Math.abs(d); let k = 0; while (k < IMP_STEPS.length && a >= IMP_STEPS[k]) k++; return d < 0 ? -k : k; }
+const impTxt = x => (x > 0 ? '+' : x < 0 ? '−' : '') + Math.abs(x) + ' IMP';
+const sc0 = (l, st, dbl, vul, t) => dupScore(l, st, dbl, vul, t);
+const ctrS = (l, st, dbl) => `${l}${st === 'N' ? 'SA' : SYM[st]}${dbl ? ' contré' : ''}`;
+
+// ---------- jeu : décisions en IMP ----------
+function impQ() {
+  const kinds = ['conv', 'manche', 'manche', 'secu', 'chelem', 'grand', 'contre'];
+  for (let t = 0; t < 60; t++) {
+    const k = pick(kinds), vul = RNG() < 0.5, vt = vul ? 'vulnérable' : 'non vulnérable';
+    if (k === 'conv') {
+      const d = pick([30, 60, 100, 140, 190, 230, 290, 340, 400, 450, 530, 650, 800, 1000]), v = impOf(d);
+      const opts = shuffle([...new Set([v, v + 1, Math.max(0, v - 1), v + 3].filter(x => x >= 0))]).slice(0, 4); if (!opts.includes(v)) opts[0] = v;
+      return { prompt: `Votre score dépasse la moyenne de <b>${d} points</b>. Combien d'IMP gagnez-vous ?`, opts: opts.map(x => x + ' IMP'), a: opts.indexOf(v), expl: `D'après le barème, ${d} points d'écart valent <b>${v} IMP</b>. Retenez les repères : 30 points (une levée de mieux) = 1 IMP ; une manche non vulnérable gagnée ou perdue ≈ 6 à 10 IMP ; vulnérable ≈ 10 à 12 IMP.` };
+    }
+    if (k === 'manche') {
+      const st = pick(['H', 'S', 'N']), gl = st === 'N' ? 3 : 4, pl = st === 'N' ? 2 : 3, need = gl + 6, p = pick([30, 40, 50, 60, 70]);
+      const winG = sc0(gl, st, 0, vul, need), winP = sc0(pl, st, 0, vul, need), failG = sc0(gl, st, 0, vul, need - 1), failP = sc0(pl, st, 0, vul, need - 1);
+      const gain = impOf(winG - winP), loss = impOf(failP - failG), ev = (p * gain - (100 - p) * loss) / 100;
+      if (Math.abs(ev) < 0.4) continue;
+      return { prompt: `En IMP, ${vt}. Vous hésitez entre <b>${ctrS(pl, st)}</b> et la manche <b>${ctrS(gl, st)}</b>. La manche réussit environ <b>${p} fois sur 100</b>. Les autres tables s'arrêtent à ${ctrS(pl, st)}. Faut-il déclarer la manche ?`, opts: ['Oui, la manche', 'Non, je m\'arrête'], a: ev > 0 ? 0 : 1, expl: `Si elle réussit : ${winG} au lieu de ${winP}, soit +${winG - winP} points = <b>+${gain} IMP</b>. Si elle chute : ${failG} au lieu de +${failP}, soit ${failG - failP} points = <b>−${loss} IMP</b>. Sur 100 donnes : ${p} × ${gain} − ${100 - p} × ${loss} = ${Math.round(ev * 100)} IMP, donc <b>${ev > 0 ? 'il faut la déclarer' : 'il vaut mieux s\'arrêter'}</b>. ${vul ? 'Vulnérable, la manche rapporte gros : elle vaut la peine dès qu\'elle réussit environ une fois sur trois.' : 'Non vulnérable, la manche vaut la peine dès qu\'elle réussit à peu près une fois sur deux.'}` };
+    }
+    if (k === 'secu') {
+      const st = pick(['H', 'S']), q = pick([70, 80, 90]), need = 10;
+      const make = sc0(4, st, 0, vul, need), over = sc0(4, st, 0, vul, need + 1), down = sc0(4, st, 0, vul, need - 1);
+      const g = impOf(over - make), l = impOf(make - down), ev = (q * g - (100 - q) * l) / 100;
+      return { prompt: `En IMP, ${vt}, vous jouez <b>4${SYM[st]}</b>. Un jeu de sécurité garantit 10 levées. Un jeu plus risqué en rapporte 11, ${q} fois sur 100, mais sinon vous chutez d'une levée. Toutes les autres tables réussissent 4${SYM[st]}. Que jouez-vous ?`, opts: ['La sécurité : 10 levées garanties', 'Le risque : viser 11 levées'], a: ev > 0 ? 1 : 0, expl: `Réussir avec une levée de mieux : ${over} au lieu de ${make}, soit +${over - make} points = <b>+${g} IMP</b>. Chuter : ${down} au lieu de ${make}, soit −${make - down} points = <b>−${l} IMP</b>. Sur 100 donnes : ${q} × ${g} − ${100 - q} × ${l} = ${Math.round(ev * 100)} IMP. <b>En IMP, on joue pour le contrat</b>, presque toujours. (En duplicate au pourcentage, c'est l'inverse : le risque serait le bon choix dès qu'il réussit plus d'une fois sur deux.)` };
+    }
+    if (k === 'chelem') {
+      const st = pick(['H', 'S', 'N']), p = pick([35, 40, 60, 65]), gl = st === 'N' ? 3 : 4;
+      const win6 = sc0(6, st, 0, vul, 12), winG = sc0(gl, st, 0, vul, 12), fail6 = sc0(6, st, 0, vul, 11), failG = sc0(gl, st, 0, vul, 11);
+      const gain = impOf(win6 - winG), loss = impOf(failG - fail6), ev = (p * gain - (100 - p) * loss) / 100;
+      return { prompt: `En IMP, ${vt}. Le petit chelem <b>6${st === 'N' ? 'SA' : SYM[st]}</b> réussit environ <b>${p} fois sur 100</b>. Sinon vous faites 11 levées. Les autres tables jouent la manche. Faut-il déclarer le chelem ?`, opts: ['Oui, le chelem', 'Non, la manche'], a: ev > 0 ? 0 : 1, expl: `Réussi : ${win6} au lieu de ${winG}, soit +${win6 - winG} = <b>+${gain} IMP</b>. Chuté : ${fail6} au lieu de ${failG}, soit −${failG - fail6} = <b>−${loss} IMP</b>. Gains et pertes sont presque égaux : <b>le petit chelem se déclare s'il réussit plus d'une fois sur deux</b>. Ici, ${p} sur 100 → ${ev > 0 ? 'oui' : 'non'}.` };
+    }
+    if (k === 'grand') {
+      const st = pick(['H', 'S']), p = pick([45, 50, 70, 80]);
+      const win7 = sc0(7, st, 0, vul, 13), win6 = sc0(6, st, 0, vul, 13), fail7 = sc0(7, st, 0, vul, 12), fail6 = sc0(6, st, 0, vul, 12);
+      const gain = impOf(win7 - win6), loss = impOf(fail6 - fail7), ev = (p * gain - (100 - p) * loss) / 100;
+      return { prompt: `En IMP, ${vt}. Le petit chelem à ${SYM[st]} est sûr. Le <b>grand chelem</b> réussit environ <b>${p} fois sur 100</b>. Faut-il déclarer le grand chelem ?`, opts: ['Oui, le grand chelem', 'Non, le petit chelem'], a: ev > 0 ? 0 : 1, expl: `Réussi : ${win7} au lieu de ${win6}, soit +${win7 - win6} = <b>+${gain} IMP</b>. Chuté : ${fail7} au lieu de ${fail6}, soit −${fail6 - fail7} = <b>−${loss} IMP</b>. On perd plus qu'on ne gagne : <b>le grand chelem demande au moins 6 chances sur 10</b>, et dans la pratique on le veut presque sûr (13 levées que l'on peut compter). Ici, ${p} sur 100 → ${ev > 0 ? 'oui' : 'non'}.` };
+    }
+    if (k === 'contre') {
+      const st = pick(['H', 'S']), p = pick([50, 60, 70]), ov = RNG() < 0.5;
+      const dn = sc0(2, st, 0, ov, 7), dnX = sc0(2, st, 1, ov, 7), mk = sc0(2, st, 0, ov, 8), mkX = sc0(2, st, 1, ov, 8);
+      const gain = impOf(dn - dnX), loss = impOf(mkX - mk), ev = (p * gain - (100 - p) * loss) / 100;
+      return { prompt: `En IMP. Les adversaires (${ov ? 'vulnérables' : 'non vulnérables'}) jouent <b>2${SYM[st]}</b>. Vous pensez qu'ils chuteront d'une levée environ <b>${p} fois sur 100</b>. Sinon, ils réussissent tout juste. Faut-il contrer ?`, opts: ['Oui, je contre', 'Non, je passe'], a: ev > 0 ? 0 : 1, expl: `S'ils chutent : vous marquez ${-dnX} au lieu de ${-dn}, soit +${dn - dnX} = <b>+${gain} IMP</b>. S'ils réussissent : ils marquent ${mkX} au lieu de ${mk} (contrés, 2${SYM[st]} vaut la manche !), soit −${mkX - mk} = <b>−${loss} IMP</b>. Sur 100 donnes : ${p} × ${gain} − ${100 - p} × ${loss} = ${Math.round(ev * 100)} IMP. <b>En IMP, on ne contre pas une partielle « pour voir »</b> : le gain est petit, la perte est grosse.` };
+    }
+  }
+  return impQ();
+}
+let IG = null;
+function impStart() { IG = { i: 0, ok: 0, q: impQ(), fb: null }; impRender(); }
+function impRender() {
+  const q = IG.q;
+  show(`${topBar('Décisions en IMP', `Question ${IG.i + 1}/10 · ${IG.ok} bonne${IG.ok > 1 ? 's' : ''} réponse${IG.ok > 1 ? 's' : ''}`, 'jeux')}<div class="wrap">
+  <div class="card"><div class="q">${q.prompt}</div>${IG.fb ? '' : `<div class="reasons">${q.opts.map((o, k) => `<button class="reason" data-ia="${k}">${o}</button>`).join('')}</div>`}</div>
+  ${IG.fb || ''}${IG.fb ? `<div class="acts"><button class="btn" data-inext="1">${IG.i >= 9 ? 'Résultat ›' : 'Question suivante ›'}</button><button class="btn sec small" data-chap="imp">Fiche : jouer en IMP</button></div>` : ''}</div>`);
+}
+function impAnswer(v) { const q = IG.q, ok = v === q.a; if (ok) IG.ok++; IG.fb = `<div class="fb ${ok ? 'ok' : 'bad'}"><h3>${ok ? '✓ ' + (typeof praise === 'function' ? pick(praise()) : 'Juste') : `✗ La bonne décision : ${q.opts[q.a]}`}</h3><p>${q.expl}</p></div>`; impRender(); }
+function impNext() {
+  IG.i++; if (IG.i < 10) { IG.q = impQ(); IG.fb = null; return impRender(); }
+  ST.games = ST.games || {}; const rec = ST.games.impdec == null || IG.ok > ST.games.impdec; if (rec) ST.games.impdec = IG.ok; save();
+  if (IG.ok >= 8 && typeof celebrate === 'function') celebrate('Joueur d\'IMP !', 'Vous pensez comme un joueur de match par quatre.');
+  show(`${topBar('Décisions en IMP', 'Résultat', 'jeux')}<div class="wrap"><div class="card"><div class="label">Score</div><div class="big2">${IG.ok}<small>/10</small></div><p>${rec ? '<b>Nouveau record !</b>' : `Record : ${ST.games.impdec}/10`}</p><p class="small">${IG.ok >= 8 ? 'Vous avez compris l\'esprit des IMP : de l\'audace pour les manches, de la prudence pour tout le reste.' : 'Le réflexe à prendre : en IMP, on compare ce qu\'on gagne et ce qu\'on risque. Une levée de mieux ne vaut presque rien, une manche ratée coûte très cher.'}</p></div>
+  <div class="acts"><button class="btn" data-game="impdec">Rejouer ›</button><button class="btn sec" data-chap="imp">Fiche : jouer en IMP</button><button class="btn sec" data-nav="jeux">Retour</button></div></div>`);
+}
+app.addEventListener('click', e => {
+  const t = e.target.closest('[data-ia],[data-inext],[data-tmode]'); if (!t || t.disabled) return; const d = t.dataset;
+  if (d.ia) return impAnswer(+d.ia);
+  if (d.inext) return impNext();
+  if (d.tmode) { ST.opt.tmode = d.tmode; save(); return openSection('tournoi'); }
+});
+
+'use strict';
+// ====================================================================
 //  MENU, RUBRIQUES, THÉORIE, COMPTAGE, JEUX, EXAMENS, TOURNOI, PROGRESSION
 // ====================================================================
 let CUR = null;
@@ -3950,6 +4047,7 @@ function gamesBlock() {
     ['jour', 'Série du jour', '10 questions mélangées, une nouvelle série chaque jour', g.jours ? `${g.jours} série${g.jours > 1 ? 's' : ''} faite${g.jours > 1 ? 's' : ''}` : '—'],
     ['chrono', 'Chrono des points', 'Comptez les H de 10 mains le plus vite possible', g.chrono ? `record ${g.chrono} s` : '—'],
     ['vf', 'Vrai ou faux éclair', '60 secondes, un maximum de bonnes réponses', g.vf != null ? `record ${g.vf}` : '—'],
+    ['impdec', 'Décisions en IMP', 'Manche, chelem, sécurité, contre : la bonne décision en IMP (comme sur Funbridge)', g.impdec != null ? `record ${g.impdec}/10` : '—'],
     ['contrat', 'Le juste contrat', 'Voyez les deux mains de Nord-Sud : quel contrat jouer ?', g.contrat != null ? `record ${g.contrat}/10` : '—'],
   ];
   return `<div class="card"><ul class="cases">${items.map(([k, t, d, r]) => `<li data-game="${k}"><span class="t"><b>${t}</b><br><span class="small">${d}</span></span><span class="pill${r !== '—' ? ' acq' : ''}">${r}</span></li>`).join('')}</ul></div>`;
@@ -3960,6 +4058,7 @@ function startGame(k) {
   if (k === 'jour') return startExam('jour');
   if (k === 'chrono') { GS = { k, i: 0, err: 0, t0: Date.now(), h: genHand({ hcp: [5, 22] }) }; return chronoRender(); }
   if (k === 'vf') { GS = { k, ok: 0, bad: 0, end: Date.now() + 60000, q: pick(TFBANK), fb: '' }; vfRender(); VFT = setInterval(() => { if (!GS || GS.k !== 'vf') { clearInterval(VFT); VFT = null; return; } const el = document.getElementById('vft'); const left = Math.ceil((GS.end - Date.now()) / 1000); if (left <= 0) { clearInterval(VFT); VFT = null; vfEnd(); } else if (el) el.textContent = left + ' s'; }, 250); return; }
+  if (k === 'impdec') return impStart();
   if (k === 'contrat') { GS = { k, i: 0, pts: 0, log: [] }; return contratNext(); }
 }
 function chronoRender(msg) {
@@ -4015,7 +4114,7 @@ const EXAMS = {
   general: { t: 'Examen général', d: 'Théorie, enchères, entames, jeu, défense', plan: [['th', ['bases', 'points', 'marque', 'ouvrir', 'repondre', 'sa', 'troisieme', 'intervenir', 'entame', 'jeu', 'flanc'], 8], ['case', ['compter', 'hld'], 2], ['case', BID_CASES, 7], ['case', ['entsa', 'entcoul'], 2], ['drill', null, 1]] },
   encheres: { t: 'Examen enchères', d: 'Ouvrir, répondre, 3e tour, intervenir', plan: [['th', ['ouvrir', 'repondre', 'sa', 'fortes', 'troisieme', 'intervenir'], 6], ['case', BID_CASES, 14]] },
   jeu: { t: 'Examen jeu de la carte et défense', d: 'Entame, plan de jeu, défense, compter', plan: [['th', ['entame', 'jeu', 'flanc', 'comptage'], 10], ['case', ['entsa', 'entcoul'], 5], ['drill', null, 5]] },
-  chelem: { t: 'Examen chelems et marque', d: 'HL/HLD, 33 et 37, Blackwood, la marque', plan: [['th', ['chelem', 'marque', 'points'], 8], ['case', SLAM_CASES, 12]] },
+  chelem: { t: 'Examen chelems et marque', d: 'HL/HLD, 33 et 37, Blackwood, la marque', plan: [['th', ['chelem', 'marque', 'points', 'imp'], 8], ['case', SLAM_CASES, 12]] },
 };
 function caseQ(cid) {
   const c = caseById(cid), ex = makeExercise(c); if (!ex) return null; const sec = CASE_SEC[cid] || 'repondre';
@@ -4130,16 +4229,17 @@ const mpPct = (s, others) => { let p = 0; others.forEach(o => { p += s > o ? 2 :
 function tourBlock() {
   const T = ST.tour, h = ST.tours || [], lv = curLv();
   return `<div class="card"><h2>Le principe</h2><p class="small">Vous êtes <b>Sud</b>. Votre partenaire (Nord) joue toujours à un très bon niveau et suit le système à la lettre. Vous choisissez le niveau de vos adversaires. Sept autres paires Nord-Sud jouent les mêmes donnes contre des adversaires du même niveau : votre résultat est comparé au leur, comme dans un vrai tournoi. Le jeu de la carte est simulé : votre camp joue parfaitement, les adversaires font les erreurs de leur niveau. Après chaque donne : un commentaire complet. À la fin : le classement et le vainqueur.</p>
-  ${T ? '' : `<div class="label" style="margin-top:10px">Niveau de vos adversaires</div><div class="lvl">${Object.entries(OPP_LV).map(([k, o]) => `<button class="lvb${k === lv ? ' on' : ''}" data-tlv="${k}"><b>${o.t}</b><span class="small">${o.d}</span></button>`).join('')}</div><div class="acts"><button class="btn sec small" data-chap="champion">Qu'est-ce qui distingue un bon joueur d'un champion ?</button></div>`}
-  ${T ? `<div class="acts"><button class="btn" data-tres="1">Reprendre le tournoi (donne ${T.k + 1}/${T.n}) ›</button><button class="btn sec small" data-tabandon="1">Abandonner</button></div>` : `<div class="label">Nouveau tournoi contre des adversaires « ${OPP_LV[lv].t} »</div><div class="acts">${[6, 8, 12].map(k => `<button class="btn${k === 8 ? '' : ' sec'}" data-tstart="${k}">${k} donnes</button>`).join('')}</div>`}</div>
-  ${h.length ? `<div class="card"><h2>Vos tournois</h2><table class="mini"><tr><th>Date</th><th>Niveau</th><th>Résultat</th><th>Rang</th></tr>${h.slice(-10).reverse().map(t => `<tr><td>${new Date(t.d).toLocaleDateString('fr-BE')}</td><td>${t.lv ? OPP_LV[t.lv].t : '—'}</td><td>${fmt1(t.pct)} %</td><td>${t.rank}/8${t.rank === 1 ? ' 🏆' : ''}</td></tr>`).join('')}</table><div class="spark big">${h.slice(-10).map(t => `<i style="height:${Math.max(6, t.pct)}%"><span>${Math.round(t.pct)}</span></i>`).join('')}</div></div>` : ''}`;
+  ${T ? '' : `<div class="label" style="margin-top:10px">Niveau de vos adversaires</div><div class="lvl">${Object.entries(OPP_LV).map(([k, o]) => `<button class="lvb${k === lv ? ' on' : ''}" data-tlv="${k}"><b>${o.t}</b><span class="small">${o.d}</span></button>`).join('')}</div><div class="acts"><button class="btn sec small" data-chap="champion">Qu'est-ce qui distingue un bon joueur d'un champion ?</button></div>
+  <div class="label" style="margin-top:12px">Le calcul des scores</div><div class="lvl">${[['mp', 'Duplicate au pourcentage', 'Comme dans votre club : on compte combien de tables vous battez. Chaque dizaine de points compte.'], ['imp', 'En IMP, comme sur Funbridge', 'Votre score est comparé à la moyenne des tables, puis converti en IMP. Les manches et les chelems comptent énormément, les levées de mieux presque pas.']].map(([k, t, d]) => `<button class="lvb${(ST.opt.tmode || 'mp') === k ? ' on' : ''}" data-tmode="${k}"><b>${t}</b><span class="small">${d}</span></button>`).join('')}</div><div class="acts"><button class="btn sec small" data-chap="imp">Fiche : jouer en IMP</button></div>`}
+  ${T ? `<div class="acts"><button class="btn" data-tres="1">Reprendre le tournoi (donne ${T.k + 1}/${T.n}) ›</button><button class="btn sec small" data-tabandon="1">Abandonner</button></div>` : `<div class="label">Nouveau tournoi ${(ST.opt.tmode || 'mp') === 'imp' ? 'en IMP' : 'au pourcentage'}, contre des adversaires « ${OPP_LV[lv].t} »</div><div class="acts">${[6, 8, 12].map(k => `<button class="btn${k === 8 ? '' : ' sec'}" data-tstart="${k}">${k} donnes</button>`).join('')}</div>`}</div>
+  ${h.length ? `<div class="card"><h2>Vos tournois</h2><table class="mini"><tr><th>Date</th><th>Niveau</th><th>Résultat</th><th>Rang</th></tr>${h.slice(-10).reverse().map(t => `<tr><td>${new Date(t.d).toLocaleDateString('fr-BE')}</td><td>${t.lv ? OPP_LV[t.lv].t : '—'}</td><td>${t.mode === 'imp' ? impTxt(t.imp) : fmt1(t.pct) + ' %'}</td><td>${t.rank}/8${t.rank === 1 ? ' 🏆' : ''}</td></tr>`).join('')}</table><div class="spark big">${h.slice(-10).map(t => `<i style="height:${Math.max(6, t.pct)}%"><span>${Math.round(t.pct)}</span></i>`).join('')}</div></div>` : ''}`;
 }
 function tourStart(nb) {
   const recent = new Set(ST.played || []); let pool = BOARDS.filter(b => !recent.has(b.id)); if (pool.length < nb) { ST.played = []; pool = BOARDS.slice(); }
   const byT = {}; shuffle(pool).forEach(b => (byT[b.t] = byT[b.t] || []).push(b));
   const themes = shuffle(Object.keys(byT)), ids = []; let k = 0;
   while (ids.length < nb && k < 500) { const t = themes[k % themes.length]; const b = byT[t].pop(); if (b) ids.push(b.id); k++; }
-  ST.tour = { seed: (Date.now() % 1e9) | 0, ids: shuffle(ids), k: 0, n: ids.length, res: [], nsLv: shuffle([0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.22]), lv: curLv(), ewLv: shuffle([0.8, 0.9, 1, 1, 1, 1.1, 1.2]).map(f => Math.min(0.6, f * OPP_LV[curLv()].noise)), d: Date.now() };
+  ST.tour = { seed: (Date.now() % 1e9) | 0, ids: shuffle(ids), k: 0, n: ids.length, res: [], nsLv: shuffle([0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.22]), lv: curLv(), mode: ST.opt.tmode || 'mp', ewLv: shuffle([0.8, 0.9, 1, 1, 1, 1.1, 1.2]).map(f => Math.min(0.6, f * OPP_LV[curLv()].noise)), d: Date.now() };
   save(); tourBoard();
 }
 function tourBoard() {
@@ -4151,7 +4251,7 @@ const alertTxt = e => (e.user ? 'votre enchère' : e.mean && e.mean.al ? e.mean.
 function tourRender() {
   const T = ST.tour, b = TB.b, A = TB.A, vul = VULN[b.n];
   const notes = A.ev.filter(e => e.b !== 'P' && !e.user).map(e => `<li><b>${SEATNAME[e.s]}, ${BC(e.b)}</b>${alertTxt(e) ? ' : ' + alertTxt(e) : ''}</li>`).join('');
-  show(`${topBar(`Tournoi · donne ${T.k + 1}/${T.n}`, `Adversaires : ${EW_NAMES[TB.oi]} (${tourLv(T).t.toLowerCase()})`, 'tournoi')}<div class="wrap">
+  show(`${topBar(`Tournoi · donne ${T.k + 1}/${T.n}`, `Adversaires : ${EW_NAMES[TB.oi]} (${tourLv(T).t.toLowerCase()})${T.mode === 'imp' && T.res.length ? ` · total : ${impTxt(T.res.reduce((a, r) => a + (r.imp || 0), 0))}` : ''}`, 'tournoi')}<div class="wrap">
   <div class="card"><div class="sit">Vous êtes <b>Sud</b> · Donneur : ${SEATNAME[A.dealer]} · Vulnérable : <b>${vulTxt(vul)}</b>${isVul(vul, 'S') ? ' (vous l\'êtes)' : ''}</div><div class="label">Votre main</div>${handBlock(TB.H.S)}${ST.opt.showH ? `<div class="hcp">${hcp(TB.H.S)} points d'honneur</div>` : ''}</div>
   <div class="card"><div class="label">Les enchères</div>${aucSimple(A.dealer, A.ev.map(e => e.b), 'S', true)}${notes ? `<div class="label" style="margin-top:10px">Ce que disent les annonces</div><ul class="notes">${notes}</ul>` : ''}</div>
   <div class="card"><div class="q">À vous.</div>${bidGrid(legalCalls(A.ev, 'S'), 'data-tb')}</div></div>`);
@@ -4178,8 +4278,9 @@ function tourFinishBoard() {
   const sys = playTable(b, H, { N: 0, S: 0, E: A.noise.E, O: A.noise.O }, s0, tourLv(T), 0);
   const fs = field.map(f => f.sc), pct = mpPct(sc, fs), sysPct = mpPct(sys.sc, fs);
   const all = [sc].concat(fs), pairsPct = all.map((x, i) => mpPct(x, all.filter((_, j) => j !== i)));
+  const avg = Math.round(all.reduce((a, x) => a + x, 0) / all.length), imp = impOf(sc - avg), pairsImp = all.map(x => impOf(x - avg)), sysImp = impOf(sys.sc - avg);
   const errs = A.ev.filter(e => e.err).map(e => `${SEATNAME[e.s]} ${e.err}`);
-  const res = { id: b.id, ev: A.ev.map(e => [e.s, e.b, e.user ? 1 : 0, (e.mean && e.mean.al) || rangeTxt(e.mean) || '']), c, tr, sc, pct, field: field.map(f => ({ c: f.c, tr: f.tr, sc: f.sc })), sys: { c: sys.c, tr: sys.tr, sc: sys.sc, pct: sysPct, ev: sys.ev }, dec: TB.dec, errs, pairsPct, opp: TB.oi };
+  const res = { id: b.id, ev: A.ev.map(e => [e.s, e.b, e.user ? 1 : 0, (e.mean && e.mean.al) || rangeTxt(e.mean) || '']), c, tr, sc, pct, field: field.map(f => ({ c: f.c, tr: f.tr, sc: f.sc })), sys: { c: sys.c, tr: sys.tr, sc: sys.sc, pct: sysPct, imp: sysImp, ev: sys.ev }, dec: TB.dec, errs, pairsPct, avg, imp, pairsImp, opp: TB.oi };
   T.res.push(res); T.k++; ST.played = (ST.played || []).concat([b.id]).slice(-150); save();
   tourResult(T.res.length - 1, true);
 }
@@ -4206,15 +4307,15 @@ function tourResult(idx, fresh) {
   avis.push(`<b>${THEME_TXT[b.t]}.</b> ${THEME_TIP[b.t]}`);
   if (r.dec.length) avis.push(nOk === r.dec.length ? `Vos ${r.dec.length} décision${r.dec.length > 1 ? 's sont conformes' : ' est conforme'} au système.` : `${nOk} décision${nOk > 1 ? 's' : ''} conforme${nOk > 1 ? 's' : ''} au système sur ${r.dec.length}.`);
   const same = cS(r.sys.c) === cS(c);
-  avis.push(same ? 'Votre table a joué le même contrat que le système aurait choisi.' : `Avec les enchères du système, votre table aurait joué <b>${cS(r.sys.c)}</b> (${resTxt(r.sys.c, r.sys.tr)}, ${sgn(r.sys.sc)} pour Nord-Sud, soit ${fmt1(r.sys.pct)} %).`);
+  avis.push(same ? 'Votre table a joué le même contrat que le système aurait choisi.' : `Avec les enchères du système, votre table aurait joué <b>${cS(r.sys.c)}</b> (${resTxt(r.sys.c, r.sys.tr)}, ${sgn(r.sys.sc)} pour Nord-Sud, soit ${T.mode === 'imp' ? impTxt(r.sys.imp) : fmt1(r.sys.pct) + ' %'}).`);
   if (r.errs.length) avis.push(`Les adversaires se sont trompés : ${r.errs.join(' ; ')}.`);
   if (c) { const dd = b.dd[ddIdx(c.st, c.decl)]; if (r.tr !== dd) avis.push(r.tr > dd === ourSide ? `Au jeu de la carte, les adversaires vous ont offert ${Math.abs(r.tr - dd)} levée${Math.abs(r.tr - dd) > 1 ? 's' : ''} (${dd} levées avec un jeu parfait des deux côtés).` : `Au jeu de la carte, ${r.tr - dd} levée(s) par rapport au jeu parfait.`); }
   const best = bestNS(b);
   avis.push(`En double mort, le <b>par</b> de la donne vaut ${sgn(b.par)} pour Nord-Sud${b.pc && b.pc[0] ? ` (${b.pc[0].replace('NT', 'SA').replace(/W/g, 'O')})` : ''}${best ? ` ; sans adversaires, le meilleur contrat de Nord-Sud était ${best.level}${best.st === 'N' ? 'SA' : SYM[best.st]} (${sgn(best.score)})` : ''}.`);
   const isLast = ST.tour && idx === ST.tour.n - 1;
   show(`${topBar(`Donne ${idx + 1} · résultat`, `${THEME_TXT[b.t]} · ${vulTxt(vul)} vulnérable`, 'tournoi')}<div class="wrap">
-  <div class="card"><div class="label">Votre résultat</div><div class="res"><span class="big">${cS(c)} ${resTxt(c, r.tr)}</span><span class="big">${sgn(r.sc)}</span><span class="big pct">${fmt1(r.pct)} %</span></div>
-  <p class="small">${c ? `${r.tr} levées pour ${SEATNAME[c.decl]}. ` : ''}Vous battez ${win} table${win > 1 ? 's' : ''} sur 7${tie ? `, égalité avec ${tie}` : ''} : (${win} × 2${tie ? ` + ${tie}` : ''}) ÷ 14 = ${fmt1(r.pct)} %.</p></div>
+  <div class="card"><div class="label">Votre résultat</div><div class="res"><span class="big">${cS(c)} ${resTxt(c, r.tr)}</span><span class="big">${sgn(r.sc)}</span><span class="big pct">${T.mode === 'imp' ? impTxt(r.imp) : fmt1(r.pct) + ' %'}</span></div>
+  <p class="small">${c ? `${r.tr} levées pour ${SEATNAME[c.decl]}. ` : ''}${T.mode === 'imp' ? `Moyenne des 8 tables : ${sgn(r.avg)}. Votre écart : ${sgn(r.sc)} − (${sgn(r.avg)}) = ${sgn(r.sc - r.avg)} points, soit <b>${impTxt(r.imp)}</b> d'après le barème. ${Math.abs(r.imp) <= 1 ? 'Petite différence : en IMP, cela ne compte presque pas.' : Math.abs(r.imp) >= 6 ? 'Grosse donne : c\'est sur ce genre de donnes que se gagnent (ou se perdent) les matchs en IMP.' : ''}` : `Vous battez ${win} table${win > 1 ? 's' : ''} sur 7${tie ? `, égalité avec ${tie}` : ''} : (${win} × 2${tie ? ` + ${tie}` : ''}) ÷ 14 = ${fmt1(r.pct)} %.`}</p></div>
   <div class="card"><h2>Le calcul des points</h2>${calc}</div>
   <div class="card"><h2>Les autres tables</h2><table class="mini"><tr><th>Contrat</th><th>Rés.</th><th>N-S</th><th>Tables</th></tr>${rows}</table><p class="small">La ligne surlignée a le même score que vous.</p></div>
   <div class="card"><h2>Les enchères de votre table</h2>${aucSimple(DEALER_OF(b.n), r.ev.map(e => e[1]), 'S', false)}<ul class="notes">${r.ev.filter(e => e[1] !== 'P').map(e => `<li><b>${SEATNAME[e[0]]}, ${BC(e[1])}</b>${e[2] ? ' : votre enchère' : e[3] ? ' : ' + e[3] : ''}</li>`).join('')}</ul></div>
@@ -4229,20 +4330,21 @@ function handsDiagramB(hs, decl, c) {
 }
 function tourFinal() {
   const T = ST.tour, n = T.res.length, names = ['Vous (Sud) & votre partenaire'].concat(NS_NAMES);
-  const tot = names.map((_, i) => T.res.reduce((a, r) => a + r.pairsPct[i], 0) / n);
+  const isImp = T.mode === 'imp', totPct = names.map((_, i) => T.res.reduce((a, r) => a + r.pairsPct[i], 0) / n), totImp = names.map((_, i) => T.res.reduce((a, r) => a + ((r.pairsImp || [])[i] || 0), 0));
+  const tot = isImp ? totImp : totPct, fmtR = x => (isImp ? impTxt(x) : fmt1(x) + ' %');
   const order = names.map((nm, i) => ({ nm, i, p: tot[i] })).sort((a, z) => z.p - a.p);
   const rank = order.findIndex(o => o.i === 0) + 1, winner = order[0];
   const decs = T.res.flatMap(r => r.dec), okD = decs.filter(d => d.sys.accept.includes(d.user)).length;
   const missCtx = {}; decs.filter(d => !d.sys.accept.includes(d.user)).forEach(d => { const cc = CTX_CASE[d.sys.ctx]; if (cc) missCtx[cc] = (missCtx[cc] || 0) + 1; });
   const weak = Object.entries(missCtx).sort((a, z) => z[1] - a[1]).slice(0, 4);
-  ST.tours = (ST.tours || []).concat([{ d: Date.now(), n, lv: T.lv || 'inter', pct: tot[0], rank, winner: winner.nm, dec: `${okD}/${decs.length}` }]).slice(-30);
+  ST.tours = (ST.tours || []).concat([{ d: Date.now(), n, lv: T.lv || 'inter', mode: T.mode || 'mp', pct: totPct[0], imp: totImp[0], rank, winner: winner.nm, dec: `${okD}/${decs.length}` }]).slice(-30);
   const full = T; ST.tour = null; save();
-  show(`${topBar('Classement final', `${n} donnes · adversaires : ${tourLv(T).t.toLowerCase()}`, 'tournoi')}<div class="wrap">
-  <div class="card win"><div class="label">Vainqueur du tournoi</div><div class="big2" style="font-size:26px">🏆 ${winner.nm}</div><p>${fmt1(winner.p)} %${winner.i === 0 ? ' — <b>bravo, c\'est vous !</b>' : ''}</p></div>
-  <div class="card"><table class="mini"><tr><th>Rang</th><th>Paire</th><th>Résultat</th></tr>${order.map((o, k) => `<tr class="${o.i === 0 ? 'on' : ''}"><td>${k + 1}</td><td>${o.nm}</td><td>${fmt1(o.p)} %</td></tr>`).join('')}</table></div>
-  <div class="card"><h2>Votre bilan</h2><p>Vous terminez <b>${rank}${rank === 1 ? 'er' : 'e'} sur 8</b> avec <b>${fmt1(tot[0])} %</b>. ${tot[0] >= 60 ? 'Un excellent résultat : on va finir par vous inscrire à un vrai tournoi.' : tot[0] >= 55 ? 'Un très bon résultat.' : tot[0] >= 48 ? 'Un résultat dans la moyenne : la moyenne, c\'est déjà battre la moitié de la salle.' : 'Un tournoi difficile. Rassurez-vous : les cartes, elles, ne vous en veulent pas.'}</p><p>Décisions conformes au système : <b>${okD}/${decs.length}</b>.</p>
+  show(`${topBar('Classement final', `${n} donnes · ${T.mode === 'imp' ? 'en IMP' : 'au pourcentage'} · adversaires : ${tourLv(T).t.toLowerCase()}`, 'tournoi')}<div class="wrap">
+  <div class="card win"><div class="label">Vainqueur du tournoi</div><div class="big2" style="font-size:26px">🏆 ${winner.nm}</div><p>${fmtR(winner.p)}${winner.i === 0 ? ' — <b>bravo, c\'est vous !</b>' : ''}</p></div>
+  <div class="card"><table class="mini"><tr><th>Rang</th><th>Paire</th><th>Résultat</th></tr>${order.map((o, k) => `<tr class="${o.i === 0 ? 'on' : ''}"><td>${k + 1}</td><td>${o.nm}</td><td>${fmtR(o.p)}</td></tr>`).join('')}</table></div>
+  <div class="card"><h2>Votre bilan</h2><p>Vous terminez <b>${rank}${rank === 1 ? 'er' : 'e'} sur 8</b> avec <b>${fmtR(tot[0])}</b>. ${isImp ? (tot[0] >= 10 ? 'Excellent : vous battez nettement la moyenne de la salle.' : tot[0] >= 0 ? 'Au-dessus de la moyenne : c\'est exactement l\'objectif sur Funbridge.' : 'En dessous de la moyenne : regardez les grosses donnes, c\'est là que les IMP s\'envolent.') : ''} ${isImp ? '' : tot[0] >= 60 ? 'Un excellent résultat : on va finir par vous inscrire à un vrai tournoi.' : tot[0] >= 55 ? 'Un très bon résultat.' : tot[0] >= 48 ? 'Un résultat dans la moyenne : la moyenne, c\'est déjà battre la moitié de la salle.' : 'Un tournoi difficile. Rassurez-vous : les cartes, elles, ne vous en veulent pas.'}</p><p>Décisions conformes au système : <b>${okD}/${decs.length}</b>.</p>
   ${weak.length ? `<div class="label">À retravailler</div><div class="acts">${weak.map(([cc, k]) => `<button class="btn sec small" data-case="${cc}">${caseById(cc).short} (${k})</button>`).join('')}</div>` : ''}
-  <table class="mini" style="margin-top:10px"><tr><th>Donne</th><th>Contrat</th><th>N-S</th><th>%</th></tr>${full.res.map((r, k) => `<tr><td>${k + 1}</td><td>${cS(r.c)} ${resTxt(r.c, r.tr)}</td><td>${sgn(r.sc)}</td><td>${fmt1(r.pct)}</td></tr>`).join('')}</table></div>
+  <table class="mini" style="margin-top:10px"><tr><th>Donne</th><th>Contrat</th><th>N-S</th><th>${isImp ? 'IMP' : '%'}</th></tr>${full.res.map((r, k) => `<tr><td>${k + 1}</td><td>${cS(r.c)} ${resTxt(r.c, r.tr)}</td><td>${sgn(r.sc)}</td><td>${isImp ? sgn(r.imp || 0) : fmt1(r.pct)}</td></tr>`).join('')}</table></div>
   <div class="acts"><button class="btn" data-nav="tournoi">Nouveau tournoi ›</button><button class="btn sec" data-nav="menu">Menu</button></div></div>`);
 }
 
@@ -4489,7 +4591,7 @@ const MAIN_PATH = [
   { id: 'n7', t: 'La compétition', d: 'Intervenir, contrer, barrer, ouvertures fortes', steps: [S_('chap', 'intervenir', 'Fiche : intervenir et contrer'), S_('case', 'intervenir', 'Exercice : intervenir'), S_('case', 'contre', 'Exercice : le contre d\'appel'), S_('case', 'repcontre', 'Exercice : répondre au contre'), S_('case', 'cuebid', 'Exercice : le cue-bid'), S_('chap', 'fortes', 'Fiche : ouvertures fortes et barrages'), S_('case', 'fortes', 'Exercice : 2♣, 2♦, 2SA'), S_('case', 'barrage', 'Exercice : le barrage')] },
   { id: 'n8', t: 'Les chelems', d: '33 et 37, Blackwood, règles FFB', steps: [S_('chap', 'chelem', 'Fiche : les chelems'), S_('case', 'hld', 'Exercice : HL et HLD'), S_('case', 'quanti', 'Exercice : 4SA quantitatif'), S_('case', 'bw', 'Exercice : Blackwood'), S_('case', 'dame', 'Exercice : la Dame d\'atout'), S_('case', 'grand', 'Exercice : le grand chelem')] },
   { id: 'n9', t: 'Le tournoi', d: 'La marque, les donnes complètes, le duplicate', steps: [S_('chap', 'marque', 'Fiche : la marque'), S_('game', 'contrat', 'Jeu : le juste contrat'), S_('free', '', 'Donnes complètes : une série'), S_('chap', 'tournoi', 'Fiche : le tournoi'), S_('tour', 'inter', 'Un tournoi contre des intermédiaires'), S_('exam', 'general', 'Examen général (12/20 pour valider)')] },
-  { id: 'n10', t: 'Le perfectionnement', d: 'Mieux que les autres en duplicate', steps: [S_('chap', 'duplicate', 'Fiche : être meilleur en duplicate'), S_('chap', 'champion', 'Fiche : du bon joueur au champion'), S_('suivi', '3', 'Suivre les cartes (difficile)'), S_('exam', 'jeu', 'Examen jeu de la carte'), S_('exam', 'chelem', 'Examen chelems et marque'), S_('tour', 'bon', 'Un tournoi contre de très bons joueurs'), S_('tour', 'champ', 'Le défi : un tournoi contre des champions')] },
+  { id: 'n10', t: 'Le perfectionnement', d: 'Mieux que les autres en duplicate et en IMP', steps: [S_('chap', 'duplicate', 'Fiche : être meilleur en duplicate'), S_('chap', 'imp', 'Fiche : jouer en IMP (Funbridge)'), S_('game', 'impdec', 'Jeu : décisions en IMP'), S_('chap', 'champion', 'Fiche : du bon joueur au champion'), S_('suivi', '3', 'Suivre les cartes (difficile)'), S_('exam', 'jeu', 'Examen jeu de la carte'), S_('exam', 'chelem', 'Examen chelems et marque'), S_('tour', 'bon', 'Un tournoi contre de très bons joueurs'), S_('tour', 'champ', 'Le défi : un tournoi contre des champions')] },
 ];
 const JUNIOR_PATH = [
   { id: 'j1', t: 'Les cartes', d: 'Qui est le chef ?', steps: [S_('lesson', 'cartes', 'Les cartes et leur force'), S_('mini', 'ordre', 'Jeu : la carte la plus forte')] },
