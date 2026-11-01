@@ -375,6 +375,107 @@ body{background:radial-gradient(1200px 500px at 50% -200px,rgba(14,90,67,.10),tr
 .tierh .btn.sec{background:transparent;color:#f7f0df;border-color:rgba(233,207,138,.6);font-family:var(--f-body);letter-spacing:0}
 .mbt{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:300px;margin:10px auto;text-align:center}.mbs{background:var(--soft);border-radius:10px;padding:6px;font-size:13px}.mbs b{font-size:20px;font-family:var(--f-disp)}.mbs.me{background:var(--on);border:2px solid var(--gold)}.mbc{display:flex;align-items:center;justify-content:center;font-size:26px}
 textarea.mono{width:100%;font:600 14px/1.4 Menlo,Consolas,monospace;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);box-sizing:border-box}
+
+/* ===================== TABLE ET CARTES ART DÉCO 1925 ===================== */
+.card.felt{position:relative;border:9px solid #2a1a10;border-radius:18px;padding:22px 14px;
+ background:
+  radial-gradient(circle at 50% 47%,rgba(233,207,138,.16) 0 46px,transparent 47px),
+  radial-gradient(circle at 50% 47%,transparent 0 58px,rgba(233,207,138,.22) 59px 60px,transparent 61px),
+  repeating-conic-gradient(from 0deg at 50% 47%,rgba(233,207,138,.07) 0deg 3deg,transparent 3deg 10deg),
+  radial-gradient(120% 95% at 50% 45%,#156b50 0%,#0c4b37 52%,#052519 100%);
+ box-shadow:0 0 0 2px #c9a34e,0 0 0 5px #2a1a10,0 0 0 6px rgba(201,163,78,.7),inset 0 0 0 2px #c9a34e,inset 0 0 0 7px rgba(5,37,25,.9),inset 0 0 0 8px rgba(201,163,78,.75),inset 0 0 60px rgba(0,0,0,.5),0 18px 40px -14px rgba(0,0,0,.7)}
+.card.felt::before{content:"";position:absolute;inset:12px;pointer-events:none;
+ background:
+  linear-gradient(#e3c47a,#e3c47a) top left/30px 2px no-repeat,linear-gradient(#e3c47a,#e3c47a) top left/2px 30px no-repeat,
+  linear-gradient(#e3c47a,#e3c47a) top right/30px 2px no-repeat,linear-gradient(#e3c47a,#e3c47a) top right/2px 30px no-repeat,
+  linear-gradient(#e3c47a,#e3c47a) bottom left/30px 2px no-repeat,linear-gradient(#e3c47a,#e3c47a) bottom left/2px 30px no-repeat,
+  linear-gradient(#e3c47a,#e3c47a) bottom right/30px 2px no-repeat,linear-gradient(#e3c47a,#e3c47a) bottom right/2px 30px no-repeat;opacity:.9}
+.card.felt::after{content:"";position:absolute;inset:19px;pointer-events:none;
+ background:
+  linear-gradient(#e3c47a,#e3c47a) top left/16px 1px no-repeat,linear-gradient(#e3c47a,#e3c47a) top left/1px 16px no-repeat,
+  linear-gradient(#e3c47a,#e3c47a) top right/16px 1px no-repeat,linear-gradient(#e3c47a,#e3c47a) top right/1px 16px no-repeat,
+  linear-gradient(#e3c47a,#e3c47a) bottom left/16px 1px no-repeat,linear-gradient(#e3c47a,#e3c47a) bottom left/1px 16px no-repeat,
+  linear-gradient(#e3c47a,#e3c47a) bottom right/16px 1px no-repeat,linear-gradient(#e3c47a,#e3c47a) bottom right/1px 16px no-repeat;opacity:.7}
+.card.felt .lab,.card.felt .lab2{font-family:"Poiret One",var(--f-disp),Georgia,serif;letter-spacing:.12em;text-transform:uppercase;font-size:12px;color:#e9cf8a;font-weight:400}
+.card.felt .tmid{font-family:"Poiret One",Georgia,serif;color:#e9cf8a;letter-spacing:.1em}
+/* dos des cartes : bleu nuit, losanges dorés, liseré ivoire */
+.backs i,.backs.row i{background:
+  repeating-linear-gradient(45deg,rgba(233,207,138,.85) 0 1px,transparent 1px 5px),
+  repeating-linear-gradient(-45deg,rgba(233,207,138,.85) 0 1px,transparent 1px 5px),
+  linear-gradient(#14304a,#0c1f30);border:1px solid #f4e9cc;box-shadow:0 0 0 1px #8a6a24}
+.backs.row i{width:14px;height:34px;margin:0 -4px;border-radius:3px}
+/* cartes face visible : ivoire, double filet doré */
+.pc{background:linear-gradient(160deg,#fffdf7,#f1e8d0);border:1px solid #b99447;box-shadow:inset 0 0 0 2px #fffdf7,inset 0 0 0 3px rgba(185,148,71,.45),-2px 0 4px rgba(0,0,0,.18)}
+.pc b{font-family:var(--f-disp)}
+.felt .tc{background:linear-gradient(160deg,#fffdf7,#f1e8d0);border:1px solid #b99447;box-shadow:inset 0 0 0 2px #fffdf7,inset 0 0 0 3px rgba(185,148,71,.5),0 4px 10px rgba(0,0,0,.45)}
+.tc.empty{border:1px dashed rgba(233,207,138,.45)!important;background:rgba(233,207,138,.05)!important;box-shadow:none!important}
+/* choix en deux temps */
+.two-step{gap:8px 8px}
+.pcs.pick{background:rgba(5,37,25,.35);border:1px solid rgba(233,207,138,.55);border-radius:10px;padding:5px 8px 5px 14px;cursor:pointer;display:flex;align-items:center;transition:transform .12s,background .12s}
+.pcs.pick:active{transform:scale(.97)}.pcs.pick:hover{background:rgba(233,207,138,.14)}
+.pcs.pick.no{opacity:.35;cursor:default}
+.pc.mini{width:24px;height:36px;margin-left:-8px;padding:2px 3px;pointer-events:none;transform:none!important}
+.pc.mini b{font-size:12px}.pc.mini i{font-size:11px}
+.pcs.big{flex-basis:100%;justify-content:center;margin:4px 0 6px}
+.pcs.big .pc{width:52px;height:78px;margin-left:-6px;padding:5px 6px}
+.pcs.big .pc b{font-size:22px}.pcs.big .pc i{font-size:20px}
+.pcs.big .pc:not(.off){transform:translateY(-10px)}
+.tap{text-align:center;margin-top:4px}
+.card.felt{padding:34px 22px 30px}.card.felt .pw .small{color:#e9cf8a;font-family:"Poiret One",Georgia,serif;letter-spacing:.06em}
+.backs.row{flex-direction:row!important;align-items:center}
+
+/* ===================== TAPIS BLEU NUIT + GRANDES CARTES ===================== */
+.card.felt{background:
+  radial-gradient(circle at 50% 47%,rgba(233,207,138,.14) 0 46px,transparent 47px),
+  radial-gradient(circle at 50% 47%,transparent 0 58px,rgba(233,207,138,.24) 59px 60px,transparent 61px),
+  repeating-conic-gradient(from 0deg at 50% 47%,rgba(233,207,138,.07) 0deg 3deg,transparent 3deg 10deg),
+  radial-gradient(120% 95% at 50% 45%,#1f4566 0%,#122a40 52%,#07121c 100%);
+ box-shadow:0 0 0 2px #c9a34e,0 0 0 5px #2a1a10,0 0 0 6px rgba(201,163,78,.7),inset 0 0 0 2px #c9a34e,inset 0 0 0 7px rgba(7,18,28,.92),inset 0 0 0 8px rgba(201,163,78,.75),inset 0 0 60px rgba(0,0,0,.55),0 18px 40px -14px rgba(0,0,0,.7)}
+.pcs.pick{background:rgba(7,18,28,.4)}
+.card.felt{padding:30px 12px 26px}
+.pc{width:46px;height:68px;margin-left:-14px;padding:4px 5px}
+.pc b{font-size:20px}.pc i{font-size:18px}
+.pcs.big .pc{width:62px;height:92px;margin-left:-20px;padding:6px 7px;border-radius:8px}
+.pcs.big .pc:first-child{margin-left:0}
+.pcs.big .pc b{font-size:27px}.pcs.big .pc i{font-size:24px}
+.pc.mini{width:30px;height:46px;margin-left:-11px;padding:3px 4px}
+.pc.mini b{font-size:15px}.pc.mini i{font-size:14px}
+.pcs.pick .pc.mini:first-child{margin-left:0}
+.felt .tc{min-width:54px;padding:12px 6px;font-size:23px;border-radius:8px}
+.tc.empty{height:52px;min-width:54px}
+.mid3{grid-template-columns:52px 1fr 52px!important}
+.donnes-cta{display:block;width:100%;text-align:center;margin:18px 0 6px}
+.card.felt{padding:38px 16px 30px}.card.felt .lab{padding-left:16px}
+
+/* ===================== AJUSTEMENT HAUTEUR iPHONE ===================== */
+.card.felt{padding:26px 12px 18px;margin-bottom:6px}
+.card.felt .pn,.card.felt .ps{margin:0}
+.card.felt .lab{margin-bottom:2px;font-size:11px}
+.ph{gap:4px 8px}
+.pc{width:40px;height:58px;margin-left:-13px;padding:3px 4px}
+.pc b{font-size:18px}.pc i{font-size:16px}
+.pcs.big{margin:2px 0 4px}
+.pcs.big .pc{width:58px;height:84px;margin-left:-20px}
+.pcs.big .pc:not(.off){transform:translateY(-6px)}
+.pc.mini{width:27px;height:40px;margin-left:-10px}
+.pc.mini b{font-size:14px}.pc.mini i{font-size:13px}
+.pcs.pick{padding:4px 7px 4px 12px}
+.mid3{margin:4px 0}
+.table4{min-height:0;gap:2px}
+.felt .tc{min-width:48px;padding:9px 5px;font-size:21px}
+.tc.empty{height:44px;min-width:48px}
+.backs i{height:5px;margin-top:-1px;width:26px}
+.pw .small{font-size:11px;line-height:1.2}
+.play .score{padding:6px 14px;margin-bottom:8px}
+.turn{margin:4px 0 8px}
+.tap{margin-top:2px;font-size:11px}
+.card.felt{padding:22px 10px 14px}
+.felt .tc{padding:6px 4px;font-size:20px;min-width:46px}
+.tc.empty{height:38px;min-width:46px}
+.table4>div{min-height:0}
+.backs i{height:4px;margin-top:-1px}
+.play .score{padding:5px 14px;margin-bottom:6px;font-size:14px}
+.top .sub{font-size:12px}
 </style>
 </head>
 <body>
@@ -2770,6 +2871,23 @@ ${KEEP('L\'ouvreur au 3e tour renseigne, il ne calcule pas le total. Le capitain
 <h3>Répondre au contre d'appel (obligatoire)</h3>${TBL(['Mes points', 'Je dis'], RC_ROWS)}
 <h3>Le cue-bid</h3><p>Annoncer <b>leur</b> couleur = un code : <b>fit avec mon partenaire et 11 points ou plus</b>. On ne veut jamais jouer dans leur couleur.</p>
 ${KEEP('Palier 1 : 8 H et 5 belles cartes. Palier 2 : 11 H et 6 cartes. Sur un contre d\'appel : on répond toujours, majeure d\'abord.')}` },
+  { id: 'contres', t: 'Contres et surcontres', d: 'Appel ou punition ? La règle pour ne plus se tromper', cases: ['contre', 'repcontre'], html: `
+<p>Le même mot, « contre », a deux sens opposés : <b>« partenaire, choisis la couleur »</b> (appel) ou <b>« ils vont chuter »</b> (punitif). Une règle simple permet de savoir lequel.</p>
+<h3>La règle de base</h3>${TBL(['Situation', 'Le contre est…'], [
+ ['Ouverture adverse à la couleur (palier 1 ou 2), partenaire muet', '<b>d\'appel</b>'],
+ ['Barrage adverse (jusqu\'à 4♥), partenaire muet', '<b>d\'appel</b>'],
+ ['Ouverture adverse de 1SA', '<b>punitif</b> (15 H et plus, comme un 1SA)'],
+ ['Le partenaire a déjà parlé (ouvert ou intervenu), sans accord Spoutnik', '<b>punitif</b>'],
+ ['Manche ou chelem adverse, ou contrat fitté à haut niveau', '<b>punitif</b>'],
+ ['Enchère conventionnelle adverse (Stayman, Texas, Blackwood)', '<b>d\'entame</b> : « entame cette couleur »'],
+])}
+<h3>Le contre d'appel</h3><p>12 H et plus, <b>court dans leur couleur</b> (2 cartes au plus), au moins 3 cartes dans chaque autre couleur, surtout les majeures. Le partenaire <b>doit</b> répondre, même avec 0 point : il nomme sa meilleure couleur, la majeure d'abord.</p>
+<p><b>La seule exception</b> : passer le contre d'appel du partenaire (le « transformer » en punitif) avec <b>5 bons atouts</b> dans leur couleur, comme D V 10 9 8. Sans cela, on parle.</p>
+<h3>Le contre punitif</h3><p>Il promet des <b>levées de défense</b> : des atouts solides dans leur couleur, et des As ou des Rois. On contre un contrat qu'on pense faire chuter, pas un contrat « pour voir » (voir « Jouer en IMP »).</p>
+<h3>Le surcontre</h3><ul><li><b>Après un contre d'appel</b> sur l'ouverture du partenaire : 10 H et plus, souvent sans fit. Message : « la donne est à nous, on peut les punir ».</li><li><b>Après un contre punitif</b> de notre contrat : « je suis sûr de gagner ». La marque est multipliée par 4.</li></ul>
+<h3>Ce que cela rapporte</h3>${TBL(['Résultat', 'Non vulnérable', 'Vulnérable'], [['1 de chute contré', '100', '200'], ['2 de chute contrés', '300', '500'], ['3 de chute contrés', '500', '800'], ['Prime pour un contrat contré réussi', '+50', '+50'], ['Levée de mieux contrée', '100', '200']])}
+<p>Attention : contré, un contrat de partielle peut valoir la manche. 2♠ contré réussi = 120 points de levées, donc <b>prime de manche</b> : 470 non vulnérable.</p>
+${KEEP('Partenaire muet et palier bas : appel. Partenaire qui a parlé, 1SA, manche ou chelem : punitif. Surcontre : la donne est à nous.')}` },
   { id: 'chelem', t: 'Les chelems (FFB)', d: '33, 37, Blackwood 5 clés', cases: ['quanti', 'potentiel', 'bw', 'bwcap', 'dame', 'grand'], html: `
 <h3>À Sans-Atout : on additionne</h3>${TBL(['Total HL', 'Je dis'], [['25 à 32', '3SA'], ['33 seulement face au maximum', '4SA quantitatif (proposition)'], ['33 à 36 sûr', '6SA'], ['37 seulement face au maximum', '5SA (proposition de grand chelem)'], ['37 sûr', '7SA']])}<p>Après une enchère à SA, 4SA n'est <b>jamais</b> un Blackwood.</p>
 <h3>À la couleur : trois étapes</h3><p>1. <b>Fixer l'atout</b>. 2. Vérifier le <b>potentiel</b> (33 HLD) et les <b>contrôles</b> (As ou chicane), le moins cher d'abord. 3. Le <b>Blackwood 5 clés</b> (4 As + Roi d'atout).</p>
@@ -2976,6 +3094,7 @@ ${TBL(['Situation', 'Je compte…', 'Pourquoi'], [['Enchères, main régulière'
 ${KEEP('Jouer VERS ses honneurs, affranchir la couleur longue, 8 toujours 9 jamais, et la règle de 7 pour le hold-up.')}` },
 ];
 const SECS = {
+  contres: { t: 'Contres et surcontres', chap: 'contres', cases: ['contre', 'repcontre'] },
   qualites: { t: 'Les qualités du champion', chap: 'qualites', cases: [] },
   excentriques: { t: 'Les mains extraordinaires', chap: 'excentriques', cases: [] },
   conventions: { t: 'Conventions d\'expert', chap: 'conventions', cases: [] },
@@ -3978,15 +4097,21 @@ function playStart(opt) {
   PG = { G: gNew(H, tr, decl), mode, decl, dummy: PPART(decl), ctrl: mode === 'def' ? ['S'] : ['S', 'N'], open: !!opt.open, level, tr, dd, title, back: opt.back || (mode === 'def' ? 'defense' : 'declarant'), busy: false, ecole: opt.ecole || null, help: opt.help != null ? opt.help : tone() === 'enfant', hint: '', sigTxt: '', last: null, done: false };
   if (mode === 'def') PG.G.sigSeat = 'N';
   if (!opt.H) PG.again = () => ({ mode, back: PG.back }); else PG.replay = opt;
+  if (opt.again) PG.again = opt.again;
   ST.games = ST.games || {}; playRender(); playAuto();
 }
 function cardBtn(s, r, on, attr) { return `<button class="pc${on ? '' : ' off'}" ${on ? `${attr}="${s}${r}"` : 'disabled'}><b>${rk(r)}</b><i>${SYM[s]}</i></button>`; }
 function handRow(p, clickable) {
   const G = PG.G, legal = clickable ? gLegal(G, p).map(c => c[0] + c[1]) : [];
   const order = G.tr ? [G.tr].concat(SU.filter(s => s !== G.tr)) : SU;
-  return `<div class="ph">${order.filter(s => G.live[p][s].length).map(s => `<div class="pcs">${G.live[p][s].map(r => cardBtn(s, r, legal.includes(s + r), 'data-pp')).join('')}</div>`).join('')}</div>`;
+  if (!clickable) return `<div class="ph">${order.filter(s => G.live[p][s].length).map(s => `<div class="pcs">${G.live[p][s].map(r => cardBtn(s, r, false, 'data-pp')).join('')}</div>`).join('')}</div>`;
+  const ls = [...new Set(legal.map(c => c[0]))];
+  const sel = ls.length === 1 ? ls[0] : PG.sel && PG.sel.p === p && ls.includes(PG.sel.s) ? PG.sel.s : null;
+  return `<div class="ph two-step">${order.filter(s => G.live[p][s].length).map(s => s === sel
+    ? `<div class="pcs big">${G.live[p][s].map(r => cardBtn(s, r, legal.includes(s + r), 'data-pp')).join('')}</div>`
+    : `<button class="pcs pick${ls.includes(s) ? '' : ' no'}" ${ls.includes(s) ? `data-psuit="${p}:${s}"` : 'disabled'} aria-label="Choisir ${SNS ? SNS(s) : s}">${G.live[p][s].map(r => `<span class="pc mini"><b>${rk(r)}</b><i>${SYM[s]}</i></span>`).join('')}</button>`).join('')}</div>${sel ? '' : '<div class="small lab tap">Touchez une couleur, puis la carte</div>'}`;
 }
-function backs(p) { const k = SU.reduce((a, s) => a + PG.G.live[p][s].length, 0); return `<div class="backs" aria-label="${k} cartes">${'<i></i>'.repeat(Math.min(k, 13))}</div><div class="small">${SEATNAME[p]} · ${k}</div>`; }
+function backs(p) { const k = SU.reduce((a, s) => a + PG.G.live[p][s].length, 0); return `<div class="backs" aria-label="${k} cartes">${'<i></i>'.repeat(Math.min(k, 13))}</div><div class="small">${SEATNAME[p]}<br>${k}</div>`; }
 function slot(p) { const G = PG.G, src = G.cur.length ? G.cur : PG.last ? PG.last.cards : []; const x = src.find(c => c[0] === p); const win = !G.cur.length && PG.last && PG.last.win === p; return x ? `<span class="tc${win ? ' w' : ''}">${rk(x[1][1])}${SYM[x[1][0]]}</span>` : '<span class="tc empty"></span>'; }
 function countHelp() {
   const G = PG.G, rows = SU.map(s => { const opp = G.live.E[s].length + G.live.O[s].length; return `<span>${SYM[s]} <b>${opp}</b></span>`; }).join('');
@@ -4018,7 +4143,8 @@ function playRender() {
   ${PG.sigTxt ? `<div class="fb ok slim"><b>Le signal de votre partenaire.</b> ${PG.sigTxt}</div>` : ''}
   ${PG.help ? countHelp() : ''}
   ${PG.hint ? `<div class="fb mid slim">${PG.hint}</div>` : ''}
-  <div class="acts"><button class="btn sec small" data-pgo="hint">💡 Un conseil</button><button class="btn sec small" data-pgo="help">${PG.help ? 'Masquer' : 'Afficher'} l'aide au comptage</button>${PG.open ? '' : '<button class="btn sec small" data-pgo="new">Autre donne</button>'}</div></div>`);
+  <div class="acts">${PG.hist && PG.hist.length && !PG.done ? '<button class="btn sec small" data-pgo="undo">↶ Annuler mon dernier coup</button>' : ''}<button class="btn sec small" data-pgo="hint">💡 Un conseil</button><button class="btn sec small" data-pgo="help">${PG.help ? 'Masquer' : 'Afficher'} l'aide au comptage</button>${PG.open ? '' : '<button class="btn sec small" data-pgo="new">Autre donne</button>'}</div></div>`);
+  try { const t = document.querySelector('.turn'); if (t) { const r = t.getBoundingClientRect(); if (r.bottom > innerHeight) window.scrollTo(0, scrollY + r.bottom - innerHeight + 10); } } catch (e) { }
 }
 function playAuto() {
   const G = PG.G; if (PG.done) return;
@@ -4036,7 +4162,16 @@ function afterCard(tr) {
 function playCard(code) {
   const G = PG.G, t = gTurn(G); if (PG.busy || PG.done || !PG.ctrl.includes(t)) return;
   const c = [code[0], +code.slice(1)]; if (!gLegal(G, t).some(x => x[0] === c[0] && x[1] === c[1])) return;
+  PG.hist = PG.hist || []; PG.hist.push(gSnap(G, PG)); PG.sel = null;
   PG.hint = ''; if (!G.cur.length) PG.sigTxt = ''; const tr = gPlay(G, t, c); afterCard(tr);
+}
+function gSnap(G, pg) { return JSON.stringify({ live: G.live, gone: [...G.gone], tricks: G.tricks, cur: G.cur, leader: G.leader, ledBy: G.ledBy, sig: G.sig || null, last: pg.last, sigTxt: pg.sigTxt }); }
+function playUndo() {
+  if (!PG || !PG.hist || !PG.hist.length) return;
+  const s = JSON.parse(PG.hist.pop()), old = PG.G;
+  const G = { H: old.H, tr: old.tr, decl: old.decl, sigSeat: old.sigSeat, live: s.live, gone: new Set(s.gone), tricks: s.tricks, cur: s.cur, leader: s.leader, ledBy: s.ledBy, sig: s.sig };
+  PG.G = G; PG.last = s.last; PG.sigTxt = s.sigTxt; PG.busy = false; PG.done = false; PG.hint = ''; PG.sel = null;
+  PG.undos = (PG.undos || 0) + 1; playRender();
 }
 function playHint() {
   const G = PG.G, H = G.H;
@@ -4072,14 +4207,16 @@ function playEnd() {
   ${PG.ecole && typeof ecoleDebrief === 'function' ? ecoleDebrief(ns, need) : ''}
   <div class="card"><div class="label">Toute la donne</div>${handsDiagramB(G.H, PG.decl, { level: PG.level, st: PG.tr || 'N', dbl: 0, decl: PG.decl })}</div>
   <div class="card"><div class="label">Les 13 plis</div>${G.tricks.map((x, i) => `<div class="small mono">Pli ${i + 1} : ${x.cards.map(([q, c]) => `${q} ${rk(c[1])}${SYM[c[0]]}`).join(' · ')} → ${SEATNAME[x.win]}</div>`).join('')}</div>
-  <div class="acts">${PG.ecole ? '' : PG.open ? '<button class="btn" data-pgo="again">Rejouer cette donne ›</button>' : '<button class="btn" data-pgo="new">Une autre donne ›</button>'}<button class="btn sec" data-chap="${def ? 'flanc' : 'jeu'}">Fiche : ${def ? 'la défense' : 'le plan du déclarant'}</button><button class="btn sec" data-nav="${PG.back}">Retour</button></div></div>`);
+  <div class="acts">${PG.hist && PG.hist.length ? '<button class="btn sec" data-pgo="undo">↶ Revenir en arrière</button>' : ''}${PG.ecole ? '' : PG.open ? '<button class="btn" data-pgo="again">Rejouer cette donne ›</button>' : '<button class="btn" data-pgo="new">Une autre donne ›</button>'}<button class="btn sec" data-chap="${def ? 'flanc' : 'jeu'}">Fiche : ${def ? 'la défense' : 'le plan du déclarant'}</button><button class="btn sec" data-nav="${PG.back}">Retour</button></div></div>`);
 }
 app.addEventListener('click', e => {
-  const t = e.target.closest('[data-pp],[data-pgo],[data-play],[data-playdef]'); if (!t || t.disabled) return; const d = t.dataset;
+  const t = e.target.closest('[data-pp],[data-pgo],[data-play],[data-playdef],[data-psuit]'); if (!t || t.disabled) return; const d = t.dataset;
   if (d.play) return playStart({ back: d.play });
   if (d.playdef) return playStart({ mode: 'def', back: d.playdef });
   if (d.pp) return playCard(d.pp);
   if (d.pgo === 'hint') return playHint();
+  if (d.pgo === 'undo') return playUndo();
+  if (d.psuit) { const [p, s] = d.psuit.split(':'); PG.sel = { p, s }; return playRender(); }
   if (d.pgo === 'help') { PG.help = !PG.help; return playRender(); }
   if (d.pgo === 'again' && PG && PG.replay) return playStart(PG.replay);
   if (d.pgo === 'new') { const back = PG ? PG.back : 'declarant', opt = PG && PG.again ? PG.again() : { back }; return playStart(opt); }
@@ -4283,6 +4420,41 @@ app.addEventListener('click', e => {
 
 'use strict';
 // ====================================================================
+//  DONNES D'ENTRAÎNEMENT : le carrefour des donnes à jouer
+// ====================================================================
+function belleOpt() {
+  const pool = BOARDS.filter(b => b.t === 'chelem').concat(typeof FREAK_BOARDS !== 'undefined' ? FREAK_BOARDS : []);
+  for (let t = 0; t < 300; t++) {
+    const b = pick(pool), best = bestNS(b); if (!best || best.level < 4) continue;
+    let H = parseHands(b); if (best.decl === 'N') H = rot180(H);
+    return { H, tr: best.st === 'N' ? null : best.st, level: best.level, decl: 'S', dd: best.tricks, title: best.level >= 6 ? (best.level === 7 ? 'Un grand chelem à jouer' : 'Un chelem à jouer') : 'Une main extraordinaire', back: 'donnes', again: belleOpt };
+  }
+  return { back: 'donnes' };
+}
+function donnesBlock() {
+  const e = ST.ecole || {}, g = ST.games || {};
+  const steps = ecList().map(m => { const st = e[m] || {}; const done = (st.made || 0) >= 2; return `<li data-ecm="${m}"><span class="num">${done ? '✓' : m}</span><span class="t"><b>${EC_M[m].t}</b></span>${done ? '<span class="pill acq">acquise</span>' : st.tries ? `<span class="pill">${st.made || 0}/${st.tries}</span>` : '<span class="pill">à faire</span>'}</li>`; }).join('');
+  const T = ST.tour;
+  return `<div class="card"><h2>1 · Par thème, du plus simple au plus difficile</h2><p class="small">Une technique par marche, avec une donne guidée, puis des donnes en autonomie, et à chaque fois un débriefing : ce qui va, ce qui ne va pas, et pourquoi.</p><ul class="cases">${steps}</ul>
+   <div class="acts">${tone() !== 'adulte' ? '<button class="btn sec small" data-minib="1">Mini-bridge</button>' : ''}<button class="btn sec small" data-playdef="donnes">Défendre en jouant les cartes</button><button class="btn sec small" data-suivi="1">Suivre les cartes</button></div></div>
+  <div class="card"><h2>2 · Les simulations de tournoi</h2><p class="small">Vous enchérissez contre des adversaires du niveau choisi ; chaque donne est commentée (calcul de la marque, autres tables, vos décisions, mon avis), puis vient le classement final.</p>
+   ${T ? `<div class="acts"><button class="btn" data-tres="1">Reprendre ${T.duel ? 'le duel ' + T.duel : 'le tournoi'} (donne ${T.k + 1}/${T.n}) ›</button></div>` : ''}
+   <div class="acts"><button class="btn sec" data-dmode="mp">🏛 Tournoi au pourcentage (duplicate de club)</button><button class="btn sec" data-dmode="imp">📊 Tournoi en IMP (comme Funbridge)</button><button class="btn sec" data-dmode="freak">🌪 Tournoi de mains folles</button><button class="btn sec" data-dmode="duel">⚔️ Duel en duplicate (à deux)</button></div></div>
+  <div class="card felt-cta"><h2>3 · Les plus belles donnes</h2><p class="small">Des chelems et des mains extraordinaires, à jouer vous-même. À la fin : le nombre de levées possible avec un jeu parfait, et le commentaire de votre jeu.</p><div class="acts"><button class="btn" data-belle="1">Jouer une belle donne ›</button>${g.made ? `<span class="pill acq" style="align-self:center">${g.made} donne${g.made > 1 ? 's' : ''} gagnée${g.made > 1 ? 's' : ''}</span>` : ''}</div></div>`;
+}
+app.addEventListener('click', e => {
+  const t = e.target.closest('[data-belle],[data-dmode]'); if (!t || t.disabled) return; const d = t.dataset;
+  if (d.belle) return playStart(belleOpt());
+  if (d.dmode) {
+    if (d.dmode === 'mp' || d.dmode === 'imp') { ST.opt.tmode = d.dmode; ST.opt.tset = 'normal'; }
+    if (d.dmode === 'freak') ST.opt.tset = 'freak';
+    save(); openSection('tournoi');
+    if (d.dmode === 'duel') { const el = document.getElementById('djoin'); if (el) el.scrollIntoView({ block: 'center' }); }
+  }
+});
+
+'use strict';
+// ====================================================================
 //  LES IMP (comme sur Funbridge) : barème, tournoi en IMP, décisions
 // ====================================================================
 const IMP_STEPS = [20, 50, 90, 130, 170, 220, 270, 320, 370, 430, 500, 600, 750, 900, 1100, 1300, 1500, 1750, 2000, 2250, 2500, 3000, 3500, 4000];
@@ -4468,7 +4640,23 @@ const ETH_Q = [
   ['Au premier pli, le mort vient de s\'étaler.', '', 'Comment jouer ?', ['Prendre le temps de faire son plan avant de jouer la première carte', 'Jouer vite pour montrer son assurance', 'Jouer la plus petite carte du mort'], 0, 'C\'est <b>le</b> moment de réfléchir, et c\'est parfaitement normal de prendre son temps. Beaucoup de contrats se perdent au premier pli.'],
   ['Un adversaire est désagréable à la table.', '', 'Que faire ?', ['Rester courtois, et appeler l\'arbitre si cela continue', 'Lui répondre sur le même ton', 'Quitter la table'], 0, 'La courtoisie fait partie du jeu, et l\'arbitre est là pour faire respecter le règlement. Et garder son calme… c\'est aussi bien jouer la donne suivante.'],
 ];
+const CTR_Q = [
+  ['Est ouvre 1♥ à votre droite.', 'KQ84.5.AJ93.KJ72', 'Que dites-vous ?', ['Contre', '1♠', '1SA', 'Passe'], 0, '{H} H, singleton cœur, 4 cartes dans chaque autre couleur : le <b>contre d\'appel</b> idéal. Le partenaire choisira la couleur.'],
+  ['Est ouvre 1SA (15-17) à votre droite.', 'AQJ.KT8.KQT4.A92', 'Que dites-vous ?', ['Contre', '2♦', '3SA', 'Passe'], 0, 'Sur 1SA, le contre est <b>punitif</b> : il montre une main au moins aussi forte que l\'ouvreur. Avec {H} H, ils vont souffrir.'],
+  ['Est ouvre 3♠ (barrage) à votre droite.', 'A4.KJ93.AQT4.K72', 'Que dites-vous ?', ['Contre', '3SA', '4♥', 'Passe'], 0, 'Sur un barrage, le contre reste <b>d\'appel</b> : {H} H, court à pique, des cartes partout. Le partenaire choisit (souvent 4♥ ou 4 d\'une mineure).'],
+  ['Votre partenaire ouvre 1♥, Est intervient 2♣ et vous contrez.', '', 'Sans accord Spoutnik, ce contre est…', ['Punitif : de bons trèfles et des points', 'D\'appel', 'Un Stayman', 'Une demande d\'As'], 0, 'Le partenaire a déjà parlé : le contre est <b>punitif</b>. (Si vous jouez le Spoutnik, chapitre Expert, il devient « négatif » : il montre l\'autre majeure.)'],
+  ['Ouest ouvre 1♥, votre partenaire contre (appel), Est passe.', '74.QJT98.Q63.852', 'Que faites-vous ?', ['Passe : je transforme en contre punitif', '2♣', '1SA', '2♥'], 0, 'Avec <b>5 très bons atouts</b> dans leur couleur (D V 10 9 8), on peut passer : le contre devient punitif et 1♥ contré va chuter. Sans ces atouts, il faudrait répondre.'],
+  ['Ouest ouvre 1♥, votre partenaire contre (appel), Est passe.', '7432.85.9632.T84', 'Avec 0 point, que faites-vous ?', ['1♠ : on répond toujours, même sans point', 'Passe', 'Contre', '1SA'], 0, 'Le contre d\'appel <b>oblige</b> à répondre. Passer ferait jouer 1♥ contré… réussi avec des levées de mieux. On nomme sa meilleure majeure, même faible.'],
+  ['Les adversaires ont trouvé un fit et terminé à 4♠.', 'QJT8.A54.A63.972', 'Que faites-vous ?', ['Contre', 'Passe', '5♥', '4SA'], 0, 'Quatre bons atouts derrière le déclarant et deux As : au moins trois levées de défense, sans doute quatre. C\'est un <b>contre punitif</b> justifié.'],
+  ['Votre partenaire ouvre 1♠, Est contre (appel).', '7.KQ94.AJT5.Q862', 'Que dites-vous ?', ['Surcontre', '2♥', '1SA', 'Passe'], 0, 'Après un contre d\'appel, le <b>surcontre</b> montre 10 H et plus (ici {H}), sans fit. Message : la donne est à nous, on peut punir leurs enchères.'],
+  ['Les adversaires jouent un Stayman (2♣ conventionnel) et vous contrez.', '', 'Que signifie ce contre ?', ['« J\'ai de bons trèfles : entame trèfle »', 'Punitif', 'Contre d\'appel', 'Demande de Stayman'], 0, 'Sur une enchère conventionnelle, le contre est un <b>contre d\'entame</b> : il indique au partenaire quelle couleur entamer.'],
+  ['On compte la marque.', '', '1♥ contré, réussi juste, non vulnérable, vaut…', ['160', '80', '110', '230'], 0, '30 × 1 × 2 = 60 points de levées + 50 (prime de partielle) + 50 (prime pour un contrat contré réussi) = <b>160</b>.'],
+  ['On compte la marque.', '', '2♠ contré, réussi juste, non vulnérable, vaut…', ['470', '220', '170', '620'], 0, '30 × 2 × 2 = 120 : c\'est 100 ou plus, donc la <b>prime de manche</b> (300) ! 120 + 300 + 50 = <b>470</b>. Contrer une partielle qui réussit coûte très cher.'],
+  ['On compte la marque.', '', 'Deux de chute contrés, vulnérable, coûtent…', ['500', '300', '200', '800'], 0, 'Vulnérable : 200 pour la 1re levée de chute, 300 pour la 2e = <b>500</b>. Non vulnérable : 100 + 200 = 300.'],
+  ['Vous jouez 4♥ ; l\'adversaire contre (punitif). Vous êtes sûr de gagner.', '', 'Que signifie un surcontre ici ?', ['« Je suis sûr de gagner » : la marque est multipliée par 4', 'Un appel à l\'aide', 'Un changement de couleur', 'Une demande de clés'], 0, 'Après un contre punitif, le surcontre dit « je vais gagner » : la valeur des levées est multipliée par 4. À utiliser avec certitude… et modération.'],
+];
 Object.assign(QZ_SETS, {
+  contres: { t: 'Contres et surcontres', items: CTR_Q, back: 'jeux', chap: 'contres' },
   jugement: { t: 'Le jugement', items: JUG_Q, back: 'jeux', chap: 'qualites' },
   probas: { t: 'Les probabilités', items: PROB_Q, back: 'jeux', chap: 'qualites' },
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
@@ -4599,7 +4787,10 @@ function duelBlock() {
   <div class="label" style="margin-top:10px">Rejoindre un duel</div><div class="gate"><input type="text" id="djoin" placeholder="Code du duel, ex. 8IN-4821" autocapitalize="characters" autocomplete="off"><button class="btn" data-djoin="1">Jouer ›</button></div><p class="small" id="djmsg"></p>
   ${L.length ? `<div class="label" style="margin-top:10px">Mes duels</div>${L.slice(0, 5).map(D => `<div class="rvrow"><span><b>${D.code}</b> <span class="small">${new Date(D.d).toLocaleDateString('fr-BE')}${D.theirs ? ` · ${D.sum}` : ' · à comparer'}</span></span><span class="rvb"><button class="btn sec small" data-dopen="${D.code}">${D.theirs ? 'Revoir' : 'Comparer'}</button></span></div>`).join('')}` : ''}</div>`;
 }
-function duelStart(D) { if (ST.tour && !confirm('Un tournoi est en cours : il sera remplacé par le duel. Continuer ?')) return; tourStart(D.nb, D); }
+function duelStart(D, force) {
+  if (ST.tour && !force) return show(`${topBar('Duel ' + D.code, 'Un tournoi est en cours', 'tournoi')}<div class="wrap"><div class="card"><p>Vous avez un tournoi en cours (donne ${ST.tour.k + 1}/${ST.tour.n})${ST.tour.duel ? `, le duel ${ST.tour.duel}` : ''}. Le duel ${D.code} va le remplacer.</p></div><div class="acts"><button class="btn" data-dforce="${D.code}">Commencer le duel ${D.code} ›</button><button class="btn sec" data-tres="1">Finir d'abord le tournoi en cours</button></div></div>`);
+  tourStart(D.nb, D);
+}
 function duelPage(code, msg) {
   const D = (ST.duels || []).find(x => x.code === code); if (!D) return openSection('tournoi');
   const mine = duelResultCode(D);
@@ -4645,7 +4836,8 @@ function duelReport(D) {
   <div class="card"><h2>Donne par donne</h2>${rows}</div>`;
 }
 app.addEventListener('click', e => {
-  const t = e.target.closest('[data-dnew],[data-djoin],[data-dopen],[data-dcopy],[data-dcmp],[data-dtrev]'); if (!t || t.disabled) return; const d = t.dataset;
+  const t = e.target.closest('[data-dforce],[data-dnew],[data-djoin],[data-dopen],[data-dcopy],[data-dcmp],[data-dtrev]'); if (!t || t.disabled) return; const d = t.dataset;
+  if (d.dforce) { const D = duelParse(d.dforce); if (D) { ST.tour = null; return duelStart(D, true); } return; }
   if (d.dnew) { const D = duelNew(+d.dnew); return show(`${topBar('Nouveau duel', 'Le code à donner à votre adversaire', 'tournoi')}<div class="wrap"><div class="card" style="text-align:center"><p>Donnez ce code à votre adversaire :</p><div class="big2" style="font-size:34px;letter-spacing:.08em">${D.code}</div><p class="small">${D.nb} donnes · adversaires ${OPP_LV[D.lv].t.toLowerCase()} · ${D.set === 'F' ? 'répartitions extraordinaires' : 'donnes variées'}</p><p class="small">Il le tape dans « Rejoindre un duel ». Vous jouerez exactement les mêmes donnes.</p></div><div class="acts"><button class="btn" data-djoin="${D.code}">Commencer le duel ›</button></div></div>`); }
   if (d.djoin) { const code = d.djoin === '1' ? (document.getElementById('djoin') || {}).value : d.djoin; const D = duelParse(code); if (!D) { const m = document.getElementById('djmsg'); if (m) m.innerHTML = '<span style="color:var(--bad)">Code non reconnu. Il ressemble à 8IN-4821.</span>'; return; } return duelStart(D); }
   if (d.dopen) return duelPage(d.dopen);
@@ -4660,6 +4852,7 @@ app.addEventListener('click', e => {
 // ====================================================================
 let CUR = null;
 const SECTIONS = [
+  { id: 'donnes', ic: '🃏', g: 'Jouer des donnes', t: 'Donnes d\'entraînement', d: 'Par thème, du plus simple au plus difficile ; tournois, duplicate, IMP ; les plus belles donnes' },
   { id: 'theorie', ic: '📖', g: 'Les fondations', t: 'Théorie express', d: 'Les règles en fiches courtes, faciles à lire' },
   { id: 'compter', ic: '🧮', g: 'Les fondations', t: 'Compter', d: 'Ses points, et les cartes qui tombent pendant le jeu' },
   { id: 'encheres', ic: '🗣️', g: 'Les enchères et l\'entame', t: 'Enchères', d: 'Le parcours pas à pas du système 5e majeure' },
@@ -4740,6 +4933,7 @@ function openSection(id) {
   if (id === 'encheres') body = trackBlock('bid', 'Parcours enchères', 'Ouvrir, compter, répondre, le 3e tour, intervenir, les contres, les ouvertures fortes et les barrages.') + `<div class="acts"><button class="btn sec small" data-chap="ouvrir">Fiches de théorie des enchères</button></div>`;
   if (id === 'entames') body = trackBlock('lead', 'Parcours entames', 'Contre Sans-Atout et contre une couleur.') + `<div class="acts"><button class="btn sec small" data-chap="entame">Fiche : l'entame</button><button class="btn sec small" data-chap="jeu">Fiche : le jeu de la carte</button></div>`;
   if (id === 'ecole') body = ecoleBlock();
+  if (id === 'donnes') body = donnesBlock();
   if (id === 'declarant') body = `<div class="card"><h2>Avant la première carte du mort : un plan</h2><p>Le déclarant qui gagne n'est pas celui qui joue vite : c'est celui qui <b>compte d'abord</b>. À Sans-Atout ses levées sûres, à la couleur ses perdantes, puis il décide comment trouver la différence.</p><div class="acts"><button class="btn sec small" data-chap="jeu">Fiche : le plan de jeu</button><button class="btn sec small" data-chap="comptage">Fiche : suivre les cartes</button></div></div>
     <div class="card felt-cta"><h2>À la table</h2><p class="small">Vous êtes le déclarant et vous jouez vous-même chaque carte, pour vous et pour le mort. Les adversaires défendent. Un conseil est disponible à tout moment, et l'aide au comptage s'affiche si vous le souhaitez.</p><div class="acts"><button class="btn" data-play="declarant">Jouer une donne ›</button><button class="btn sec small" data-chap="maniement">Fiche : maniements de couleur</button></div></div>
     <div class="card"><h2>Exercices</h2><ul class="cases"><li data-mini="impasse"><span class="num">♦</span><span class="t"><b>Impasses et maniements</b><br><span class="small">Jouer vers l’honneur, huit toujours neuf jamais, honneur sur honneur</span></span>${((ST.drills || {})['m_impasse'] ? `<span class="pill acq">record ${ST.drills['m_impasse'].best} %</span>` : '<span class="pill">—</span>')}</li><li data-mini="longueur"><span class="num">♦</span><span class="t"><b>Les levées de longueur</b><br><span class="small">Quand compter les longueurs plutôt que les honneurs</span></span>${((ST.drills || {})['m_longueur'] ? `<span class="pill acq">record ${ST.drills['m_longueur'].best} %</span>` : '<span class="pill">—</span>')}</li><li data-plan="1"><span class="num">♠</span><span class="t"><b>Plan de jeu à Sans-Atout</b><br><span class="small">Levées sûres, levées qui manquent, couleur à affranchir</span></span>${(ST.drills || {}).plan ? `<span class="pill acq">record ${ST.drills.plan.best} %</span>` : '<span class="pill">—</span>'}</li>${[1, 2, 3].map(k => { const r = (ST.drills || {})['suivi' + k]; return `<li data-suivi="${k}"><span class="num">${k}</span><span class="t"><b>Suivre les cartes · ${SV_LV[k].t}</b><br><span class="small">${SV_LV[k].d}</span></span>${r ? `<span class="pill acq">record ${r.best} %</span>` : '<span class="pill">—</span>'}</li>`; }).join('')}</ul></div>
@@ -4824,6 +5018,7 @@ function gamesBlock() {
     ['vf', 'Vrai ou faux éclair', '60 secondes, un maximum de bonnes réponses', g.vf != null ? `record ${g.vf}` : '—'],
     ['freakq', 'Mains extraordinaires', '6-5, 7-5, chicanes, 8 cartes : la bonne enchère', g.freakq != null ? `record ${g.freakq}/10` : '—'],
     ['convq', 'Conventions d\'expert', 'Splinter, Spoutnik, Roudi, Smolen, Michaels… (niveau expert)', g.convq != null ? `record ${g.convq}/10` : '—'],
+    ['contres', 'Contres et surcontres', 'Appel, punitif, surcontre, la marque contrée', g.contres != null ? `record ${g.contres}/10` : '—'],
     ['jugement', 'Le jugement', 'Ce que valent vraiment vos points (qualité du champion)', g.jugement != null ? `record ${g.jugement}/8` : '—'],
     ['probas', 'Les probabilités', 'Répartitions, impasses : jouer les pourcentages', g.probas != null ? `record ${g.probas}/8` : '—'],
     ['ethique', 'Éthique et mental', 'Le fair-play et le sang-froid des grands joueurs', g.ethique != null ? `record ${g.ethique}/9` : '—'],
@@ -5041,14 +5236,22 @@ function tourRender() {
   show(`${topBar(`${T.duel ? '⚔️ Duel ' + T.duel : 'Tournoi'} · donne ${T.k + 1}/${T.n}`, `Adversaires : ${EW_NAMES[TB.oi]} (${tourLv(T).t.toLowerCase()})${T.mode === 'imp' && T.res.length ? ` · total : ${impTxt(T.res.reduce((a, r) => a + (r.imp || 0), 0))}` : ''}`, 'tournoi')}<div class="wrap">
   <div class="card"><div class="sit">Vous êtes <b>Sud</b> · Donneur : ${SEATNAME[A.dealer]} · Vulnérable : <b>${vulTxt(vul)}</b>${isVul(vul, 'S') ? ' (vous l\'êtes)' : ''}</div><div class="label">Votre main</div>${handBlock(TB.H.S)}${ST.opt.showH ? `<div class="hcp">${hcp(TB.H.S)} points d'honneur</div>` : ''}</div>
   <div class="card"><div class="label">Les enchères</div>${aucSimple(A.dealer, A.ev.map(e => e.b), 'S', true)}${notes ? `<div class="label" style="margin-top:10px">Ce que disent les annonces</div><ul class="notes">${notes}</ul>` : ''}</div>
-  <div class="card"><div class="q">À vous.</div>${bidGrid(legalCalls(A.ev, 'S'), 'data-tb')}</div></div>`);
+  <div class="card"><div class="q">À vous.</div>${bidGrid(legalCalls(A.ev, 'S'), 'data-tb')}${TB.dec.length ? '<div class="acts" style="margin-top:10px"><button class="btn sec small" data-tundo="1">↶ Annuler ma dernière enchère</button></div>' : ''}</div></div>`);
 }
-function tourBid(call) {
+function tourUndo() {
+  const kept = TB.dec.map(d => d.user).slice(0, -1); if (!TB.dec.length) return;
+  const T = ST.tour, b = TB.b, L = T.ewLv[TB.oi];
+  TB.A = { dealer: DEALER_OF(b.n), ev: [], hands: TB.H, noise: { N: 0, S: 0, E: L, O: L }, rng: mulberry(T.seed + b.id * 101) }; TB.dec = [];
+  runAuction(TB.A, 'S'); for (const c of kept) { tourBid(c, true); }
+  TB.undos = (TB.undos || 0) + 1; tourRender();
+}
+function tourBid(call, replay) {
   const A = TB.A; if (!legalCalls(A.ev, 'S').includes(call)) return;
   const um = userMean(A, 'S', call);
   TB.dec.push({ k: A.ev.length, user: call, sys: { bid: um.sys.bid, accept: um.sys.accept || [um.sys.bid], why: um.sys.why, ctx: um.sys.ctx } });
   A.ev.push({ s: 'S', b: call, mean: um.mean, user: true });
-  if (runAuction(A, 'S')) return tourRender();
+  if (runAuction(A, 'S')) return replay ? null : tourRender();
+  if (replay) return;
   tourFinishBoard();
 }
 const tourLv = T => OPP_LV[T.lv || 'inter'];
@@ -5154,9 +5357,10 @@ function progressBlock() {
 
 // ---------------- clics ----------------
 app.addEventListener('click', e => {
-  const t = e.target.closest('[data-welcome],[data-tlv],[data-nav],[data-sec],[data-chap],[data-read],[data-drill],[data-dn],[data-dm],[data-dnext],[data-game],[data-gn],[data-vf],[data-jl],[data-js],[data-jok],[data-jnext],[data-exam],[data-xa],[data-xn],[data-xb],[data-xc],[data-xnext],[data-tstart],[data-tres],[data-tabandon],[data-tb],[data-tnext],[data-tfinal]');
+  const t = e.target.closest('[data-tundo],[data-welcome],[data-tlv],[data-nav],[data-sec],[data-chap],[data-read],[data-drill],[data-dn],[data-dm],[data-dnext],[data-game],[data-gn],[data-vf],[data-jl],[data-js],[data-jok],[data-jnext],[data-exam],[data-xa],[data-xn],[data-xb],[data-xc],[data-xnext],[data-tstart],[data-tres],[data-tabandon],[data-tb],[data-tnext],[data-tfinal]');
   if (!t || t.disabled) return;
   const d = t.dataset;
+  if (d.tundo) return tourUndo();
   if (d.welcome) { e.preventDefault(); return welcome(); }
   if (d.tlv) { ST.opt.lv = d.tlv; save(); return openSection('tournoi'); }
   if (d.read) { ST.theo = ST.theo || {}; ST.theo[d.read] = 1; save(); }
@@ -5379,7 +5583,7 @@ const MAIN_PATH = [
   { id: 'nE2', t: 'L\'école de la carte : impasses, coupes et plan', d: 'Couper au mort, les impasses, choisir la technique, le plan complet', steps: [6, 7, 8, 9, 10].map(m => S_('ecole', String(m), `Marche ${m} : ${EC_M[m].t}`)) },
   { id: 'n5', t: 'Le jeu de la carte', d: 'Le plan, les impasses, l\'affranchissement', steps: [S_('chap', 'jeu', 'Fiche : le plan du déclarant'), S_('chap', 'maniement', 'Fiche : maniements de couleur'), S_('mini', 'impasse', 'Jeu : impasses et maniements'), S_('mini', 'longueur', 'Jeu : les levées de longueur'), S_('play', 'declarant', 'Jouer une donne complète'), S_('chap', 'comptage', 'Fiche : suivre les cartes'), S_('suivi', '1', 'Suivre les cartes (facile)')] },
   { id: 'n6', t: 'L\'entame et la défense', d: 'Lire leurs enchères, compter, faire chuter', steps: [S_('chap', 'entame', 'Fiche : l\'entame'), S_('case', 'entsa', 'Exercice : entame à SA'), S_('case', 'entcoul', 'Exercice : entame à la couleur'), S_('chap', 'flanc', 'Fiche : faire chuter'), S_('flanc', '', 'Exercice : lire leurs enchères et compter'), S_('suivi', '2', 'Suivre les cartes (moyen)')] },
-  { id: 'n7', t: 'La compétition', d: 'Intervenir, contrer, barrer, ouvertures fortes', steps: [S_('chap', 'intervenir', 'Fiche : intervenir et contrer'), S_('case', 'intervenir', 'Exercice : intervenir'), S_('case', 'contre', 'Exercice : le contre d\'appel'), S_('case', 'repcontre', 'Exercice : répondre au contre'), S_('case', 'cuebid', 'Exercice : le cue-bid'), S_('chap', 'fortes', 'Fiche : ouvertures fortes et barrages'), S_('case', 'fortes', 'Exercice : 2♣, 2♦, 2SA'), S_('case', 'barrage', 'Exercice : le barrage')] },
+  { id: 'n7', t: 'La compétition', d: 'Intervenir, contrer, barrer, ouvertures fortes', steps: [S_('chap', 'intervenir', 'Fiche : intervenir et contrer'), S_('case', 'intervenir', 'Exercice : intervenir'), S_('case', 'contre', 'Exercice : le contre d\'appel'), S_('case', 'repcontre', 'Exercice : répondre au contre'), S_('case', 'cuebid', 'Exercice : le cue-bid'), S_('chap', 'fortes', 'Fiche : ouvertures fortes et barrages'), S_('case', 'fortes', 'Exercice : 2♣, 2♦, 2SA'), S_('case', 'barrage', 'Exercice : le barrage'), S_('chap', 'contres', 'Fiche : contres et surcontres'), S_('game', 'contres', 'Quiz : contres et surcontres')] },
   { id: 'n8', t: 'Les chelems', d: '33 et 37, Blackwood, règles FFB', steps: [S_('chap', 'chelem', 'Fiche : les chelems'), S_('case', 'hld', 'Exercice : HL et HLD'), S_('case', 'quanti', 'Exercice : 4SA quantitatif'), S_('case', 'bw', 'Exercice : Blackwood'), S_('case', 'dame', 'Exercice : la Dame d\'atout'), S_('case', 'grand', 'Exercice : le grand chelem')] },
   { id: 'n9', t: 'Le tournoi', d: 'La marque, les donnes complètes, le duplicate', steps: [S_('chap', 'marque', 'Fiche : la marque'), S_('game', 'contrat', 'Jeu : le juste contrat'), S_('free', '', 'Donnes complètes : une série'), S_('chap', 'tournoi', 'Fiche : le tournoi'), S_('tour', 'inter', 'Un tournoi contre des intermédiaires'), S_('exam', 'general', 'Examen général (12/20 pour valider)')] },
   { id: 'n10', t: 'Le perfectionnement', d: 'Mieux que les autres en duplicate et en IMP', steps: [S_('chap', 'duplicate', 'Fiche : être meilleur en duplicate'), S_('chap', 'imp', 'Fiche : jouer en IMP (Funbridge)'), S_('game', 'impdec', 'Jeu : décisions en IMP'), S_('chap', 'champion', 'Fiche : du bon joueur au champion'), S_('suivi', '3', 'Suivre les cartes (difficile)'), S_('exam', 'jeu', 'Examen jeu de la carte'), S_('exam', 'chelem', 'Examen chelems et marque'), S_('tour', 'bon', 'Un tournoi contre de très bons joueurs'), S_('tour', 'champ', 'Le défi : un tournoi contre des champions')] },
@@ -5473,6 +5677,7 @@ function welcome() {
    <p class="deco-tag">Le bridge s'apprend en jouant. Ici, on joue beaucoup.</p>
   </div></header>
   <div class="wrap">
+  <button class="btn donnes-cta" data-sec="donnes">🃏 Donnes d'entraînement ›</button>
   <section class="deco-card"><h2>Qui embarque aujourd'hui ?</h2><p class="small">Chaque passager a sa cabine : les leçons, le vocabulaire et le parcours s'adaptent à chacun.</p><div class="profs">${Object.entries(PROFILES).map(([k, o]) => `<button class="prof${p === k ? ' on' : ''}" data-setprof="${k}"><b>${o.t}</b><span class="small">${o.d}</span></button>`).join('')}</div></section>
   <section class="deco-card"><h2>Le programme de la traversée</h2>
   <ol class="how"><li><b>Un parcours ordonné</b>, du tout premier pli au tournoi contre des champions. Chaque étape réussie se coche toute seule.</li><li><b>Des leçons courtes</b>, puis tout de suite un petit jeu pour vérifier qu'on a compris.</li><li><b>Une bibliothèque complète</b> : fiches, enchères du système 5e majeure, jeu de la carte, défense, chelems (règles FFB).</li><li><b>Des examens notés sur 20</b> qui trouvent vos points faibles et vous y renvoient.</li><li><b>Un vrai tournoi duplicate</b>, avec 4 niveaux d'adversaires, au pourcentage ou en IMP.</li></ol>
