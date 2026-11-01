@@ -16,7 +16,7 @@
 <meta name="copyright" content="© 2026 Arnaud de Beukelaer. Tous droits réservés.">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&family=Young+Serif&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&family=Young+Serif&family=Poiret+One&family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap">
 <style>
 /* Concept : « la table de club » — tapis vert profond, cartes en papier crème, boîte à enchères (vert Passe, rouge Contre, bleu Surcontre), laiton pour les réussites. */
 :root{--felt:#0e5a43;--felt-d:#093d2e;--felt-l:#1b7a5b;--bg:#eef2ed;--paper:#fffdf8;--ink:#15211c;--muted:#5b6b63;--line:#d8e1da;--soft:#e7efe9;--red:#c3132f;--gold:#c99419;--brass:#b07d10;--ok:#227a4c;--okbg:#e2f3e8;--bad:#bf2d3d;--badbg:#fbe7e9;--mid:#a86400;--midbg:#fff0d6;--on:#fff3c9;--blue:#2b5fb4;--shadow:0 1px 2px rgba(20,40,30,.06),0 4px 14px rgba(20,40,30,.06);--f-disp:"Young Serif",Georgia,"Iowan Old Style","Times New Roman",serif;--f-body:"Nunito Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
@@ -247,6 +247,130 @@ details.rv{border-top:1px solid var(--line);padding:6px 0}details.rv>summary{cur
 .backs.row{display:flex;justify-content:center;gap:0;margin:4px 0 2px}.lab2{color:#dfeee6;font-weight:700;text-align:center;font-size:12px}
 .diploma{background:#fffdf5;color:#2a2416;border:3px double #b8932f;border-radius:14px;padding:28px 20px;text-align:center;margin:0 0 14px;box-shadow:0 4px 18px rgba(0,0,0,.08)}.diploma .r{color:#c8102e}.dsuits{font-size:26px;letter-spacing:8px}.dtitle{font-family:Georgia,"Times New Roman",serif;font-size:30px;margin:8px 0 4px;color:#0b5a40}.dname{font-family:Georgia,serif;font-size:28px;font-style:italic;margin:6px 0 10px;border-bottom:1px solid #d8c48a;display:inline-block;padding:0 18px 4px}.dlevel{font-family:Georgia,serif;font-size:21px;font-weight:700;margin:4px 0}.dfoot{display:flex;justify-content:space-between;margin-top:22px;font-size:13px;text-align:left;gap:12px}.dfoot span:last-child{text-align:right}
 @media print{body{background:#fff!important}.top,.hero,.acts,.noprint,.back,.quip,button,.legal{display:none!important}.card{box-shadow:none!important;border:1px solid #ccc!important;break-inside:avoid}.wrap{max-width:none;padding:0}.diploma{border:4px double #b8932f;margin-top:40px}}
+
+/* ===================== HABILLAGE « CLUB DE BRIDGE » ===================== */
+:root{--gold-l:#e8c66a;--card-shadow:0 1px 1px rgba(20,40,30,.05),0 6px 18px -8px rgba(20,60,40,.25);--suits:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg font-family='Georgia,serif' font-size='22' fill='%23ffffff' fill-opacity='.06'%3E%3Ctext x='10' y='30'%3E%E2%99%A0%3C/text%3E%3Ctext x='70' y='30'%3E%E2%99%A5%3C/text%3E%3Ctext x='40' y='80'%3E%E2%99%A6%3C/text%3E%3Ctext x='100' y='80'%3E%E2%99%A3%3C/text%3E%3Ctext x='10' y='112'%3E%E2%99%A5%3C/text%3E%3Ctext x='70' y='112'%3E%E2%99%A0%3C/text%3E%3C/g%3E%3C/svg%3E")}
+body{background:radial-gradient(1200px 500px at 50% -200px,rgba(14,90,67,.10),transparent 70%),var(--bg)}
+.top,.hero{background-image:var(--suits),radial-gradient(120% 140% at 15% 0%,var(--felt-l) 0%,var(--felt) 45%,var(--felt-d) 100%);position:relative}
+.top::after,.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold-l) 20%,var(--gold) 50%,var(--gold-l) 80%,transparent);opacity:.85}
+.hero h1{text-shadow:0 1px 0 rgba(0,0,0,.25)}
+.hero.big{padding-block:30px 40px}.hero.big h1{font-size:34px}
+.hero .logo{filter:drop-shadow(0 6px 10px rgba(0,0,0,.3));animation:fan .7s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes fan{from{transform:rotate(-8deg) scale(.85);opacity:0}to{transform:none;opacity:1}}
+/* titres de groupe ornés */
+.grp{display:flex;align-items:center;gap:10px;color:var(--brass);letter-spacing:1.6px}
+.grp::before,.grp::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--line))}
+.grp::after{background:linear-gradient(90deg,var(--line),transparent)}
+/* tuiles : une vraie petite carte à jouer */
+.tile{border:1px solid var(--line);box-shadow:var(--card-shadow);background:linear-gradient(180deg,var(--paper),var(--paper));position:relative;overflow:hidden}
+.tile::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--felt);opacity:.0;transition:opacity .2s}
+.tile:hover::before,.tile:focus-visible::before{opacity:1}
+.tn{position:relative;width:46px;height:62px;flex:0 0 46px;border-radius:7px;background:linear-gradient(160deg,#fffefa,#f4efe2);border:1px solid #d9d0b8;box-shadow:0 2px 0 #e3dac4,0 4px 10px -4px rgba(0,0,0,.25);font-family:var(--f-disp);font-size:26px;color:#1d2621}
+.tn::before,.tn::after{position:absolute;font-size:10px;line-height:1;font-family:var(--f-disp)}
+.tn::before{top:4px;left:5px}.tn::after{bottom:4px;right:5px;transform:rotate(180deg)}
+.tn.s0::before,.tn.s0::after{content:"♠"}.tn.s1::before,.tn.s1::after{content:"♥"}.tn.s2::before,.tn.s2::after{content:"♦"}.tn.s3::before,.tn.s3::after{content:"♣"}
+.tn.s1,.tn.s2{color:#c3132f}
+.tile .ts{display:inline-flex;align-items:center;gap:6px;margin-top:4px;padding:2px 9px;border-radius:999px;background:var(--okbg);font-size:12px;width:fit-content}
+.chev{color:var(--brass);font-size:22px}
+/* cartes de contenu */
+.card{border:1px solid var(--line);box-shadow:var(--card-shadow)}
+.card>h2:first-child{position:relative;padding-bottom:8px;margin-bottom:12px}
+.card>h2:first-child::after{content:"";position:absolute;left:0;bottom:0;width:38px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--gold),var(--gold-l))}
+/* boutons */
+.btn{background:linear-gradient(180deg,var(--felt-l),var(--felt));box-shadow:0 2px 0 var(--felt-d),inset 0 1px 0 rgba(255,255,255,.18)}
+.btn:hover{filter:brightness(1.06)}
+.btn.sec{background:var(--paper);color:var(--felt);border:1.5px solid color-mix(in srgb,var(--felt) 35%,var(--line));box-shadow:none;font-weight:700}
+:root[data-theme="dark"] .btn.sec{color:var(--ink)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.sec{color:var(--ink)}}
+/* le parcours */
+.phero{background:linear-gradient(180deg,var(--paper),var(--paper)) padding-box,linear-gradient(135deg,var(--gold-l),var(--line) 40%,var(--line) 60%,var(--gold)) border-box;border:1.5px solid transparent}
+.prog{height:10px;background:var(--soft);box-shadow:inset 0 1px 2px rgba(0,0,0,.08)}
+.prog i{background:linear-gradient(90deg,var(--felt-l),var(--ok) 60%,var(--gold));border-radius:6px;position:relative;overflow:hidden}
+.prog i::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);animation:shine 2.6s ease-in-out infinite}
+@keyframes shine{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.quip{background:linear-gradient(135deg,var(--on),color-mix(in srgb,var(--on) 60%,var(--paper)));border:1px solid color-mix(in srgb,var(--gold) 30%,transparent)}
+/* retours */
+.fb{box-shadow:var(--card-shadow)}
+.fb.ok h3::before{content:"♣ ";color:var(--ok)}.fb.bad h3::before{content:"♦ ";color:var(--bad)}
+/* boîte à enchères : de vrais cartons */
+.bid{border-radius:6px;border:1px solid #d6cdb6;background:linear-gradient(180deg,#fffefa,#f3eee0);color:#1d2621;box-shadow:0 2px 0 #ddd3bb}
+:root[data-theme="dark"] .bid:not(.pass):not(.dbl):not(.on){background:linear-gradient(180deg,#263129,#1d2621);color:var(--ink);border-color:#36443c;box-shadow:0 2px 0 #121916}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .bid:not(.pass):not(.dbl):not(.on){background:linear-gradient(180deg,#263129,#1d2621);color:var(--ink);border-color:#36443c;box-shadow:0 2px 0 #121916}}
+.bid:not(:disabled):active{transform:translateY(2px);box-shadow:none}
+/* la table de jeu */
+.card.felt{background-image:var(--suits),radial-gradient(130% 100% at 50% 40%,#17805e 0%,#0e5a43 55%,#083827 100%);border:6px solid #5a3a1e;box-shadow:inset 0 0 0 2px rgba(201,148,25,.55),inset 0 0 40px rgba(0,0,0,.35),0 10px 30px -10px rgba(0,0,0,.5);border-radius:22px}
+.pc{background:linear-gradient(160deg,#fffefa,#f2ecdc);border-color:#d3c9ae}
+.backs i{background:repeating-linear-gradient(45deg,#8e1f30 0 3px,#b52e43 3px 6px);border:1px solid #f4e7c8}
+.backs.row i{width:12px;height:30px;margin:0 -3px;border-radius:3px}
+.felt .tc{box-shadow:0 3px 8px rgba(0,0,0,.35);animation:drop .25s ease-out both}
+@keyframes drop{from{transform:translateY(-8px) scale(.94);opacity:0}to{transform:none;opacity:1}}
+/* pages : légère entrée */
+.wrap{animation:rise .28s ease-out both}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* profils de l'accueil */
+.prof{position:relative;border:1px solid var(--line);box-shadow:var(--card-shadow);transition:transform .12s,border-color .12s}
+.prof:hover{transform:translateY(-1px);border-color:var(--gold)}
+.prof.on{border:2px solid var(--felt);background:linear-gradient(180deg,var(--okbg),var(--paper))}
+/* pieds de page */
+.foot{border-top:1px solid var(--line);padding-top:14px}
+@media (prefers-reduced-motion: reduce){.wrap,.felt .tc,.hero .logo,.prog i::after{animation:none!important}}
+@media print{.card.felt{border:1px solid #999}.wrap{animation:none}}
+.prof[data-setprof]{padding-left:66px!important;min-height:64px}
+.prof[data-setprof]::before{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:21px;background:var(--soft);box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--gold) 45%,transparent)}
+.prof[data-setprof="enfant"]::before{content:"🧒"}.prof[data-setprof="ado"]::before{content:"🎧"}.prof[data-setprof="adulte"]::before{content:"🙂"}.prof[data-setprof="confirme"]::before{content:"🏆"}.prof[data-setprof="decouverte"]::before{content:"🎲"}
+
+/* ===================== ACCUEIL ART DÉCO « PAQUEBOT 1925 » ===================== */
+.deco-page{--navy:#0c1824;--navy2:#13283b;--gd:#c9a34e;--gd2:#e9cf8a;--cream:#f7f0df;--ink2:#14202c;min-height:100vh;color:var(--cream);background:
+ repeating-linear-gradient(90deg,rgba(201,163,78,.05) 0 1px,transparent 1px 64px),
+ radial-gradient(900px 500px at 50% 0%,#18344c 0%,var(--navy) 60%);background-color:var(--navy)}
+.deco-hero{position:relative;padding:22px 16px 18px;text-align:center;overflow:hidden}
+.deco-frame{position:relative;max-width:560px;margin:0 auto;padding:30px 18px 26px;border:1px solid var(--gd);outline:1px solid var(--gd);outline-offset:5px;border-radius:2px}
+.deco-frame::before,.deco-frame::after{content:"";position:absolute;width:26px;height:26px;border:2px solid var(--gd2)}
+.deco-frame::before{top:-10px;left:-10px;border-right:0;border-bottom:0}.deco-frame::after{bottom:-10px;right:-10px;border-left:0;border-top:0}
+.deco-sun{position:absolute;inset:-40% -20% auto;height:150%;background:repeating-conic-gradient(from -90deg at 50% 62%,rgba(233,207,138,.16) 0deg 3deg,transparent 3deg 9deg);-webkit-mask-image:radial-gradient(circle at 50% 62%,#000 0,#000 30%,transparent 62%);mask-image:radial-gradient(circle at 50% 62%,#000 0,#000 30%,transparent 62%);pointer-events:none}
+.deco-fan{position:relative;height:96px;width:160px;margin:0 auto 14px}
+.deco-fan b{position:absolute;left:62px;top:6px;width:38px;height:56px;border-radius:5px;background:linear-gradient(160deg,#fffdf6,#efe4c8);border:1px solid var(--gd);box-shadow:0 0 0 3px #fffdf6 inset,0 0 0 4px rgba(201,163,78,.6) inset,0 8px 16px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;font:400 24px Georgia,serif;color:#16212b;transform-origin:50% 120%;animation:decofan .9s cubic-bezier(.2,.9,.25,1.15) both}
+.deco-fan b.r{color:#b3122c}
+.deco-fan b:nth-child(1){--rot:-33deg}.deco-fan b:nth-child(2){--rot:-11deg;animation-delay:.06s}.deco-fan b:nth-child(3){--rot:11deg;animation-delay:.12s}.deco-fan b:nth-child(4){--rot:33deg;animation-delay:.18s}
+.deco-fan b{transform:rotate(var(--rot))}
+@keyframes decofan{from{transform:rotate(0deg);opacity:0}to{transform:rotate(var(--rot));opacity:1}}
+.deco-kicker{font:600 11.5px/1.2 var(--f-body);letter-spacing:.32em;text-transform:uppercase;color:var(--gd2);opacity:.9}
+.deco-title{font-family:"Poiret One",var(--f-disp),Georgia,serif;font-weight:400;font-size:36px;line-height:1.1;letter-spacing:.06em;margin:10px 0 6px;background:linear-gradient(180deg,#fbf0cf 0%,var(--gd2) 45%,var(--gd) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none}
+.deco-rule{display:flex;align-items:center;gap:10px;justify-content:center;margin:8px auto 10px;max-width:340px}
+.deco-rule>span{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gd))}.deco-rule>span:last-child{background:linear-gradient(90deg,var(--gd),transparent)}
+.d4{display:inline-flex;gap:9px;font:400 17px Georgia,serif;color:var(--gd2)}.d4 i{font-style:normal}.d4 i.r,.d4 .r{color:#e0566b}
+.deco-tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;font-size:20px;color:var(--cream);margin:4px 0 0}
+.deco-page .wrap{max-width:620px}
+.deco-card{position:relative;background:var(--cream);color:var(--ink2);border:1px solid var(--gd);box-shadow:0 0 0 4px var(--cream),0 0 0 5px rgba(201,163,78,.75),0 14px 30px -12px rgba(0,0,0,.6);border-radius:3px;padding:20px 18px;margin:18px 6px 22px}
+.deco-card h2{font-family:"Poiret One",var(--f-disp),Georgia,serif;font-weight:400;font-size:24px;letter-spacing:.05em;text-align:center;color:#0f2233;margin:0 0 6px}
+.deco-card h2::after{content:"◆";display:block;font-size:10px;color:var(--gd);margin-top:4px}
+.deco-card>.small{text-align:center;color:#5b5446}
+.deco-card .prof{background:#fffaf0;border:1px solid #d8c18a;border-radius:3px;box-shadow:none;color:var(--ink2)}
+.deco-card .prof:hover{border-color:var(--gd);background:#fff6e2}
+.deco-card .prof.on{border:2px solid #0f2233;background:#fff3d6}
+.deco-card .prof b{font-family:"Cormorant Garamond",Georgia,serif;font-size:20px;font-weight:500}
+.deco-card .prof .small{color:#5b5446}
+.deco-card .prof[data-setprof]::before{background:#0f2233;box-shadow:inset 0 0 0 2px var(--gd)}
+.deco-card ol.how li{color:var(--ink2)}.deco-card ol.how li::marker{color:var(--gd);font-family:"Poiret One",Georgia,serif;font-weight:700}
+.deco-card .small{color:#5b5446}
+.deco-card.set label{color:var(--ink2)}
+.deco-card.set input[type=text]{background:#fffaf0;border:1px solid #d8c18a;color:var(--ink2)}
+.deco-acts{justify-content:center}
+.deco-page .btn{background:linear-gradient(180deg,#183650,#0f2233);color:var(--gd2);border:1px solid var(--gd);box-shadow:0 0 0 3px var(--navy),0 0 0 4px rgba(201,163,78,.55);text-transform:uppercase;letter-spacing:.14em;font-size:14px;border-radius:2px;padding:14px 22px}
+.deco-page .btn.sec{background:transparent;color:var(--cream);border:1px solid rgba(233,207,138,.6);box-shadow:none}
+.deco-page .legal{color:rgba(247,240,223,.7)}.deco-page .legal a{color:var(--gd2)}
+.small-rule{margin-top:26px}
+@media (max-width:420px){.deco-title{font-size:31px}.deco-frame{padding:26px 12px 22px}}
+@media (prefers-reduced-motion: reduce){.deco-fan b{animation:none}}
+.deco-fan{height:104px;width:200px}
+.deco-fan b{left:80px;top:4px;width:42px;height:60px;align-items:flex-start;justify-content:flex-start;padding:4px 0 0 6px;font-size:21px;line-height:1;transform-origin:50% 150%}
+.deco-fan b::after{content:attr(data-p);position:absolute;right:6px;bottom:5px;font-size:21px;transform:rotate(180deg)}
+.deco-fan b:nth-child(1){--rot:-39deg}.deco-fan b:nth-child(2){--rot:-13deg}.deco-fan b:nth-child(3){--rot:13deg}.deco-fan b:nth-child(4){--rot:39deg}
+.deco-rule{margin:10px auto 16px}.deco-tag{margin-top:6px;line-height:1.35}
+.deco-kicker{letter-spacing:.24em}
+.deco-rule>.d4{flex:0 0 auto;height:auto;background:none!important}
+.deco-fan b::after{content:none}
+.deco-card .gate input{background:#fffaf0;border:1px solid #d8c18a;color:#14202c;border-radius:2px}.deco-card .gate .btn{padding:12px 16px}
 </style>
 </head>
 <body>
@@ -3950,8 +4074,8 @@ function gateThen(next) {
   let ok = !PW_HASH || GATE_OK; try { if (!ok && localStorage.getItem('bn_pw') === PW_HASH) ok = true; } catch (e) { }
   if (ok) return next();
   GATE_NEXT = next;
-  show(`<div class="hero big"><div class="in">${typeof LOGO !== 'undefined' ? LOGO : ''}<h1>Entraîneur de bridge</h1><div class="sub">Accès réservé</div></div></div><div class="wrap"><div class="card"><h2>Mot de passe</h2><p class="small">Cette application est privée. Entrez le mot de passe qui vous a été communiqué par son auteur.</p><form id="gate" class="gate"><input type="password" id="gpw" autocomplete="current-password" placeholder="Mot de passe" aria-label="Mot de passe"><button class="btn" type="submit">Entrer ›</button></form><p class="small" id="gmsg"></p></div>${typeof LEGAL !== 'undefined' ? LEGAL : ''}</div>`);
-  const f = document.getElementById('gate'); f.addEventListener('submit', ev => { ev.preventDefault(); const v = document.getElementById('gpw').value; if (pwHash(v) === PW_HASH) { GATE_OK = true; try { localStorage.setItem('bn_pw', PW_HASH); } catch (e) { } const n = GATE_NEXT; GATE_NEXT = null; n(); } else { document.getElementById('gmsg').innerHTML = '<span style="color:var(--bad)">Ce n\'est pas le bon mot de passe.</span>'; } });
+  show(`<div class="deco-page"><header class="deco-hero"><div class="deco-frame"><div class="deco-sun" aria-hidden="true"></div><div class="deco-fan" aria-hidden="true"><b>♠</b><b class="r">♥</b><b class="r">♦</b><b>♣</b></div><div class="deco-kicker">Salon de bridge · Première classe</div><h1 class="deco-title">Accès réservé</h1><div class="deco-rule" aria-hidden="true"><span></span><span class="d4"><i>♠</i><i class="r">♥</i><i class="r">♦</i><i>♣</i></span><span></span></div><p class="deco-tag">Votre carte d'embarquement, s'il vous plaît.</p></div></header><div class="wrap"><section class="deco-card"><h2>Mot de passe</h2><p class="small">Cette application est privée. Entrez le mot de passe qui vous a été communiqué par son auteur.</p><form id="gate" class="gate"><input type="password" id="gpw" autocomplete="current-password" placeholder="Mot de passe" aria-label="Mot de passe"><button class="btn" type="submit">Embarquer ›</button></form><p class="small" id="gmsg"></p></section>${typeof LEGAL !== 'undefined' ? LEGAL : ''}</div></div>`);
+  const f = document.getElementById('gate'); f.addEventListener('submit', ev => { ev.preventDefault(); const v = document.getElementById('gpw').value; if (pwHash(v) === PW_HASH) { GATE_OK = true; try { localStorage.setItem('bn_pw', PW_HASH); } catch (e) { } const n = GATE_NEXT; GATE_NEXT = null; n(); } else { document.getElementById('gmsg').innerHTML = '<span style="color:var(--bad)">Ce n\'est pas le bon mot de passe. Le commissaire de bord est désolé.</span>'; } });
   setTimeout(() => { const i = document.getElementById('gpw'); if (i) i.focus(); }, 50);
 }
 
@@ -4795,18 +4919,27 @@ function lessonPage(id) {
 // ====================================================================
 //  ACCUEIL ET MENU
 // ====================================================================
-const LOGO = `<svg class="logo" viewBox="0 0 64 44" aria-hidden="true"><g stroke="currentColor" stroke-width="1.4"><rect x="6" y="6" width="22" height="32" rx="3" transform="rotate(-16 17 22)" fill="var(--paper)"/><rect x="21" y="4" width="22" height="32" rx="3" fill="var(--paper)"/><rect x="36" y="6" width="22" height="32" rx="3" transform="rotate(16 47 22)" fill="var(--paper)"/></g><text x="14" y="27" font-size="12" transform="rotate(-16 17 22)" fill="var(--ink)">&#9824;</text><text x="27" y="25" font-size="13" fill="var(--red)">&#9829;</text><text x="43" y="27" font-size="12" transform="rotate(16 47 22)" fill="var(--red)">&#9830;</text></svg>`;
+const LOGO = `<svg class="logo" viewBox="0 0 80 48" aria-hidden="true"><g transform="rotate(-27 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--ink)">&#9824;</text></g><g transform="rotate(-9 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--red)">&#9829;</text></g><g transform="rotate(9 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--red)">&#9830;</text></g><g transform="rotate(27 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--ink)">&#9827;</text></g></svg>`;
 const LEGAL = `<p class="legal">© 2026 <b>Arnaud de Beukelaer</b>, auteur de ce site · Tous droits réservés.<br>Cette application ne peut être communiquée à des tiers sans l'accord de l'auteur.<br>Contact : <a href="mailto:arnaud.de.beukelaer@gmail.com">arnaud.de.beukelaer@gmail.com</a></p>`;
 function welcome() {
   CUR = null; X = null; const p = ST.prof;
-  show(`<div class="hero big"><div class="in">${LOGO}<h1>${p ? T3('Salut ! Prêt·e pour le bridge ?', 'Salut ! On joue ?', 'Bienvenue à la table') : 'Bienvenue à la table'}</h1><div class="sub">Le bridge s'apprend en jouant. Ici, on joue beaucoup.</div></div></div>
+  const SUITS4 = '<span class="d4"><i>♠</i><i class="r">♥</i><i class="r">♦</i><i>♣</i></span>';
+  show(`<div class="deco-page"><header class="deco-hero"><div class="deco-frame">
+   <div class="deco-sun" aria-hidden="true"></div>
+   <div class="deco-fan" aria-hidden="true"><b>♠</b><b class="r">♥</b><b class="r">♦</b><b>♣</b></div>
+   <div class="deco-kicker">Salon de bridge · Première classe</div>
+   <h1 class="deco-title">${p ? T3('Bienvenue à bord, moussaillon !', 'Bienvenue à bord !', 'Bienvenue à bord') : 'Bienvenue à bord'}</h1>
+   <div class="deco-rule" aria-hidden="true"><span></span>${SUITS4}<span></span></div>
+   <p class="deco-tag">Le bridge s'apprend en jouant. Ici, on joue beaucoup.</p>
+  </div></header>
   <div class="wrap">
-  <div class="card"><h2>Qui apprend aujourd'hui ?</h2><p class="small">Le site adapte ses leçons, son vocabulaire et son parcours à chacun.</p><div class="profs">${Object.entries(PROFILES).map(([k, o]) => `<button class="prof${p === k ? ' on' : ''}" data-setprof="${k}"><b>${o.t}</b><span class="small">${o.d}</span></button>`).join('')}</div></div>
-  <div class="card th"><h2>Comment ça marche</h2>
-  <ol class="how"><li><b>Un parcours ordonné</b>, du tout premier pli au tournoi contre des champions. Chaque étape réussie se coche toute seule.</li><li><b>Des leçons courtes</b>, puis tout de suite un petit jeu pour vérifier qu'on a compris.</li><li><b>Une bibliothèque complète</b> : fiches, enchères du système 5e majeure, jeu de la carte, défense, chelems (règles FFB).</li><li><b>Des examens notés sur 20</b> qui trouvent vos points faibles et vous y renvoient.</li><li><b>Un vrai tournoi duplicate</b>, avec 4 niveaux d'adversaires.</li></ol>
-  <p class="small">Pas de notifications, pas de série à ne pas casser : on apprend quand on veut, en avion comme un dimanche de pluie, et le site fonctionne sans connexion.</p></div>
-  <div class="acts"><button class="btn" data-nav="menu">${p ? 'Entrer' : 'Entrer sans choisir'} ›</button>${!p ? '' : '<button class="btn sec" data-sec="parcours">Voir mon parcours</button>'}</div>
-  <div class="card set" style="margin-top:12px"><label class="nm">Prénom (facultatif) <input type="text" id="optName" maxlength="20" value="${escA(ST.opt.name || '')}" placeholder="pour qu'on vous salue"></label><label><input type="checkbox" id="optW" ${ST.opt.noWelcome ? '' : 'checked'}> Afficher cette page à chaque ouverture</label></div>${LEGAL}</div>`);
+  <section class="deco-card"><h2>Qui embarque aujourd'hui ?</h2><p class="small">Chaque passager a sa cabine : les leçons, le vocabulaire et le parcours s'adaptent à chacun.</p><div class="profs">${Object.entries(PROFILES).map(([k, o]) => `<button class="prof${p === k ? ' on' : ''}" data-setprof="${k}"><b>${o.t}</b><span class="small">${o.d}</span></button>`).join('')}</div></section>
+  <section class="deco-card"><h2>Le programme de la traversée</h2>
+  <ol class="how"><li><b>Un parcours ordonné</b>, du tout premier pli au tournoi contre des champions. Chaque étape réussie se coche toute seule.</li><li><b>Des leçons courtes</b>, puis tout de suite un petit jeu pour vérifier qu'on a compris.</li><li><b>Une bibliothèque complète</b> : fiches, enchères du système 5e majeure, jeu de la carte, défense, chelems (règles FFB).</li><li><b>Des examens notés sur 20</b> qui trouvent vos points faibles et vous y renvoient.</li><li><b>Un vrai tournoi duplicate</b>, avec 4 niveaux d'adversaires, au pourcentage ou en IMP.</li></ol>
+  <p class="small">Pas de notifications, pas de série à ne pas casser : on apprend quand on veut, en avion comme un dimanche de pluie, et le site fonctionne sans connexion. Le steward ne vous réveillera pas.</p></section>
+  <div class="acts deco-acts"><button class="btn" data-nav="menu">${p ? 'Monter à bord' : 'Monter à bord sans choisir'} ›</button>${!p ? '' : '<button class="btn sec" data-sec="parcours">Voir mon parcours</button>'}</div>
+  <section class="deco-card set"><label class="nm">Votre prénom (facultatif) <input type="text" id="optName" maxlength="20" value="${escA(ST.opt.name || '')}" placeholder="pour qu'on vous salue"></label><label><input type="checkbox" id="optW" ${ST.opt.noWelcome ? '' : 'checked'}> Afficher cette page à chaque ouverture</label></section>
+  <div class="deco-rule small-rule" aria-hidden="true"><span></span>${SUITS4}<span></span></div>${LEGAL}</div></div>`);
   const cb = document.getElementById('optW'); if (cb) cb.addEventListener('change', () => { ST.opt.noWelcome = !cb.checked; save(); });
   const nm = document.getElementById('optName'); if (nm) nm.addEventListener('change', () => { ST.opt.name = nm.value.trim().slice(0, 20); save(); });
 }
