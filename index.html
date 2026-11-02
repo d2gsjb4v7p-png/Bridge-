@@ -633,6 +633,18 @@ textarea.mono{width:100%;font:600 14px/1.4 Menlo,Consolas,monospace;padding:8px;
 .mid3.rkm .table4{grid-template-columns:repeat(3,minmax(0,1fr))}.mid3.rkm .felt .tc,.rkfelt .tc{min-width:50px!important;font-size:22px!important}
 .rkfelt .front .fl{white-space:nowrap}
 .wrap.play .card.felt.rkfelt.done{min-height:0!important}
+.wrap.play.rkw .card.felt.rkfelt{min-height:0!important;padding-top:10px!important;padding-bottom:8px!important}
+.rkw .rkbar{margin-bottom:6px;padding:4px 8px}.rkw .rkbar .cf.mini2{width:40px;height:56px}
+.rkw .turn{font-size:15px;margin:6px 0;line-height:1.35}
+.rkcbid{display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(5,30,20,.55);border:1px solid rgba(233,207,138,.6);border-radius:16px;padding:8px 4px;min-height:150px}
+.rkcbid .q{color:#f3dc9a;font-family:"Poiret One",Georgia,serif;font-weight:700;font-size:15px;text-align:center;margin:0 0 2px}
+.rkcbid .rkbids{gap:6px;margin-top:6px}.rkcbid .jeton{width:48px;height:48px}.rkcbid .jeton span{width:34px;height:34px;margin:7px;font-size:20px}
+.rkcbid .fnote{font-size:11px;color:#f3dc9a;margin-top:6px;text-align:center}
+.rkfelt .mfan{height:38px}.rkfelt .mfan i{width:20px;height:30px;left:25px}
+.rkcbid.many .jeton{width:40px;height:40px}.rkcbid.many .jeton span{width:28px;height:28px;margin:6px;font-size:17px}.rkcbid.many .rkbids{gap:4px}.rkcbid.many{min-height:0;padding:6px 2px}
+.rkp .dlr{font-size:10.5px!important;font-weight:900;letter-spacing:.06em!important;background:#fff!important;color:#b21f35!important;border:2px solid #e3c47a;padding:1px 6px!important;box-shadow:0 0 0 2px rgba(178,31,53,.55),0 0 10px rgba(255,233,168,.7)}
+.rkover{position:fixed;inset:0;z-index:90;background:rgba(5,14,22,.7);display:flex;align-items:center;justify-content:center;padding:16px}.rkover .card{max-width:560px;max-height:85vh;overflow:auto;margin:0}.rkover li{font-size:16.5px;line-height:1.5;margin-bottom:4px}
+.rkw .acts{gap:6px;flex-wrap:nowrap;overflow-x:auto}.rkw .acts .btn.small{padding:7px 10px;font-size:13.5px;white-space:nowrap}.rkfelt .ps .rkp{margin-bottom:16px}
 </style>
 </head>
 <body>
@@ -4611,12 +4623,14 @@ const RK_LEN = { courte: 5, normale: 8, longue: 12 };
 const rkSeq = k => { const up = Array.from({ length: k }, (_, i) => i + 1); return up.concat(up.slice(0, -1).reverse()); };
 const rkCard = c => rk(c[1]) + SYM[c[0]];
 const rkName = p => RKG.names[p];
+function rkRulesHtml() { return `<ul><li>On distribue 1 carte, puis 2, 3… jusqu'au maximum, puis on redescend.</li><li>La carte retournée donne l'<b>atout</b>.</li><li>On doit <b>fournir</b> la couleur demandée si on en a. Sinon, on coupe ou on se défausse, au choix.</li><li>Le joueur à gauche du donneur annonce en premier ; <b>le donneur annonce en dernier, puis c'est lui qui entame</b>.</li><li>Comme il annonce en dernier, et le total des annonces ne peut jamais être égal au nombre de cartes : quelqu'un devra forcément se tromper !</li><li><b>Les points</b> : annonce réussie = 10 points + 2 par pli annoncé. Annonce ratée = −2 points par pli d'écart.</li></ul>`; }
+function rkRules() { const o = document.createElement('div'); o.className = 'rkover'; o.innerHTML = colorize(`<div class="card"><h2>Les règles du rikiki</h2>${rkRulesHtml()}<div class="acts"><button class="btn">Compris ›</button></div></div>`); o.addEventListener('click', ev => { if (ev.target === o || ev.target.closest('button')) o.remove(); }); document.body.appendChild(o); }
 function rkSetup() {
   const kid = tone() !== 'adulte', lv = ST.opt.rkLv || (kid ? 'kid' : 'adult'), len = ST.opt.rkLen || 'courte';
   show(`${topBar('Le rikiki', T3('Le jeu des plis annoncés', 'Annoncer juste, puis tenir parole', 'Annoncer juste, puis tenir parole'), kid ? 'menu' : 'donnes')}<div class="wrap rep">
   <div class="card"><h2>${T3('C\'est quoi, le rikiki ?', 'Le principe', 'Le principe')}</h2>
   <p>${T3('Quatre joueurs, chacun pour soi. À chaque donne, tu regardes tes cartes et tu dis <b>combien de plis tu vas gagner</b>. Puis on joue. Si tu fais <b>exactement</b> ton annonce, tu gagnes des points. Trop, ou pas assez : tu en perds !', 'Quatre joueurs, chacun pour soi. À chaque donne, vous annoncez le nombre exact de plis que vous allez faire, puis on joue. Le but : tomber pile. Ni plus, ni moins.', 'Quatre joueurs, chacun pour soi. À chaque donne, chacun annonce le nombre exact de plis qu\'il fera, puis on joue. Il faut tomber pile : ni plus, ni moins. C\'est le meilleur entraînement qui soit pour le jeu de la carte du bridge : compter, prévoir, et savoir aussi <b>perdre un pli exprès</b>.')}</p>
-  <ul><li>On distribue 1 carte, puis 2, 3… jusqu'au maximum, puis on redescend.</li><li>La carte retournée donne l'<b>atout</b>.</li><li>On doit <b>fournir</b> la couleur demandée si on en a. Sinon, on coupe ou on se défausse, au choix.</li><li>Le donneur annonce en dernier, et le total des annonces ne peut jamais être égal au nombre de cartes : quelqu'un devra forcément se tromper !</li><li><b>Les points</b> : annonce réussie = 10 points + 2 par pli annoncé. Annonce ratée = −2 points par pli d'écart.</li></ul></div>
+  <ul><li>On distribue 1 carte, puis 2, 3… jusqu'au maximum, puis on redescend.</li><li>La carte retournée donne l'<b>atout</b>.</li><li>On doit <b>fournir</b> la couleur demandée si on en a. Sinon, on coupe ou on se défausse, au choix.</li><li>Le joueur à gauche du donneur annonce en premier ; <b>le donneur annonce en dernier, puis c'est lui qui entame</b>.</li><li>Comme il annonce en dernier, et le total des annonces ne peut jamais être égal au nombre de cartes : quelqu'un devra forcément se tromper !</li><li><b>Les points</b> : annonce réussie = 10 points + 2 par pli annoncé. Annonce ratée = −2 points par pli d'écart.</li></ul></div>
   <div class="card"><div class="label">Vos adversaires</div><div class="lvl">${[['kid', 'Sympathiques', 'Léon le lion, Mamie Rose et Robot Bip : ils jouent correctement, sans plus.'], ['adult', 'Redoutables', 'Lord Ashby, Lady Pembroke et le Colonel Higgins : ils comptent les cartes et raisonnent, mais sans jamais voir vos cartes.']].map(([k, t, d]) => `<button class="lvb${lv === k ? ' on' : ''}" data-rklv="${k}"><b>${t}</b><span class="small">${d}</span></button>`).join('')}</div>
   <div class="label" style="margin-top:12px">La longueur de la partie</div><div class="lvl">${[['courte', 'Courte', '1 à 5 cartes, puis on redescend : 9 donnes'], ['normale', 'Normale', '1 à 8 cartes : 15 donnes'], ['longue', 'Longue', '1 à 12 cartes : 23 donnes']].map(([k, t, d]) => `<button class="lvb${len === k ? ' on' : ''}" data-rklen="${k}"><b>${t}</b><span class="small">${d}</span></button>`).join('')}</div></div>
   ${RKG && !RKG.over ? `<div class="acts"><button class="btn" data-rkgo="resume">Reprendre la partie (donne ${RKG.i + 1}/${RKG.seq.length}) ›</button></div>` : ''}
@@ -4632,8 +4646,8 @@ function rkDeal() {
   RKG.n = n; RKG.hands = {}; ['S', 'O', 'N', 'E'].forEach((p, k) => { RKG.hands[p] = deck.slice(k * n, k * n + n); });
   RKG.tcard = deck[4 * n] || null; RKG.trump = RKG.tcard ? RKG.tcard[0] : null;
   RKG.bids = {}; RKG.won = { S: 0, O: 0, N: 0, E: 0 }; RKG.cur = []; RKG.tricks = []; RKG.played = []; RKG.voids = { S: {}, O: {}, N: {}, E: {} };
-  RKG.phase = 'bid'; RKG.turn = RK_ORDER[RKG.dealer]; RKG.leader = RKG.turn; RKG.hist = []; RKG.ulog = []; RKG.initS = RKG.hands.S.slice(); RKG.pick = null; RKG.last = null; RKG.front = n === 1; RKG.fsel = null;
-  RKG.msg = `Donne ${RKG.i + 1} : ${n} carte${n > 1 ? 's' : ''} chacun. ${RKG.trump ? `Atout : ${SYM[RKG.trump]} (la carte retournée est le ${rkCard(RKG.tcard)}).` : 'Pas d\'atout.'} ${rkName(RKG.dealer)} donne.${n === 1 ? ' <b>Une seule carte : chacun la pose sur son front !</b> Vous voyez celles des autres, jamais la vôtre.' : ''}`;
+  RKG.phase = 'bid'; RKG.turn = RK_ORDER[RKG.dealer]; RKG.leader = RKG.dealer; RKG.hist = []; RKG.ulog = []; RKG.initS = RKG.hands.S.slice(); RKG.pick = null; RKG.last = null; RKG.front = n === 1; RKG.fsel = null;
+  RKG.msg = `${rkName(RKG.dealer)} ${RKG.dealer === 'S' ? 'donnez' : 'donne'}. ${RKG.trump ? `Atout ${SYM[RKG.trump]}.` : 'Sans atout.'}`;
   save(); rkLoop();
 }
 // ---------- règles ----------
@@ -4720,7 +4734,7 @@ function rkSay(p, b) {
   return pick(L[p]);
 }
 function rkAfterBid() {
-  if (Object.keys(RKG.bids).length === 4) { RKG.phase = 'play'; RKG.turn = RKG.leader; const s = Object.values(RKG.bids).reduce((a, x) => a + x, 0); RKG.msg += ` Total des annonces : ${s} pour ${RKG.n} pli${RKG.n > 1 ? 's' : ''} : ${s > RKG.n ? 'quelqu\'un en fera moins que prévu !' : 'il restera des plis dont personne ne veut !'}`; }
+  if (Object.keys(RKG.bids).length === 4) { RKG.phase = 'play'; RKG.turn = RKG.leader; const s = Object.values(RKG.bids).reduce((a, x) => a + x, 0); RKG.msg += ` Total des annonces : ${s} pour ${RKG.n}.`; }
   else RKG.turn = RK_ORDER[RKG.turn];
   save(); rkLoop();
 }
@@ -4787,7 +4801,7 @@ function rkComment() {
 }
 // ---------- l'affichage ----------
 function rkFan(clickable) {
-  if (RKG.front && RKG.hands.S.length) return `<div class="front me"><span class="cf back big"></span><span class="fl">${T3('Ta carte est sur ton front : tu ne la vois pas !', 'Votre carte est sur votre front : invisible pour vous.', 'Votre carte est sur votre front : vous seul ne la voyez pas.')}</span></div>`;
+  if (RKG.front && RKG.hands.S.length) return `<div class="front me"><span class="cf back big"></span></div>`;
   const h = RKG.hands.S, ord = suitOrd(RKG.trump), cards = []; ord.forEach((s, si) => h.filter(c => c[0] === s).sort((a, z) => z[1] - a[1]).forEach(c => cards.push({ s: c[0], r: c[1], si })));
   const n = cards.length; if (!n) return '<div class="fan" style="height:30px"></div>';
   const avail = Math.min(innerWidth, 660) - 64, W = Math.round(Math.min(84, Math.max(58, avail * 0.175))), H = Math.round(W * 1.42), maxY = Math.pow((n - 1) / 2, 2) * 0.35;
@@ -4804,12 +4818,12 @@ function rkPips(p) {
 }
 function rkMiniFan(p) {
   const k = RKG.hands[p].length; if (!k) return '';
-  if (RKG.front && RKG.phase !== 'end') { const c = RKG.hands[p][0]; return `<div class="front"><span class="cf mini2${c[0] === 'H' || c[0] === 'D' ? ' red' : ''}">${cfIn(c[0], c[1])}</span><span class="fl">sur son front</span></div>`; }
+  if (RKG.front && RKG.phase !== 'end') { const c = RKG.hands[p][0]; return `<div class="front"><span class="cf mini2${c[0] === 'H' || c[0] === 'D' ? ' red' : ''}">${cfIn(c[0], c[1])}</span></div>`; }
   return `<div class="mfan">${Array.from({ length: k }, (_, i) => `<i style="transform:rotate(${((i - (k - 1) / 2) * Math.min(9, 40 / k)).toFixed(1)}deg)"></i>`).join('')}</div>`;
 }
 function rkSeat(p) {
   const on = RKG.turn === p && RKG.phase !== 'end';
-  return `<div class="rkp${on ? ' on' : ''}${p === 'S' ? ' me' : ''}"><span class="av">${RK_AV[RKG.lv][p]}</span><span class="nm">${rkName(p)}${p === RKG.dealer ? '<em class="dlr">donne</em>' : ''}</span>${rkPips(p)}</div>${p === 'S' ? '' : rkMiniFan(p)}`;
+  return `<div class="rkp${on ? ' on' : ''}${p === 'S' ? ' me' : ''}"><span class="av">${RK_AV[RKG.lv][p]}</span><span class="nm">${rkName(p)}${p === RKG.dealer ? '<em class="dlr">DONNEUR</em>' : ''}</span>${rkPips(p)}</div>${p === 'S' ? '' : rkMiniFan(p)}`;
 }
 function rkSlot(p) { const src = RKG.cur.length ? RKG.cur : RKG.showLast && RKG.last ? RKG.last.cards : []; const x = src.find(c => c[0] === p); const w = !RKG.cur.length && RKG.showLast && RKG.last && RKG.last.win === p; return x ? `<span class="tc${w ? ' w' : ''}">${rkCard(x[1])}</span>` : '<span class="tc empty"></span>'; }
 function rkLastBox() {
@@ -4820,7 +4834,7 @@ function rkRender() {
   if (!RKG) return rkSetup();
   const mineBid = RKG.phase === 'bid' && RKG.turn === 'S', minePlay = RKG.phase === 'play' && RKG.turn === 'S' && !RKG.showLast;
   const f = rkForbidden('S');
-  const bidPanel = mineBid ? `<div class="card"><div class="q">${T3('Combien de plis vas-tu gagner ?', 'Combien de plis annoncez-vous ?', 'Votre annonce ?')}</div><div class="rkbids">${Array.from({ length: RKG.n + 1 }, (_, b) => `<button class="jeton" data-rkbid="${b}" ${f === b ? 'disabled' : ''}><span>${b}</span></button>`).join('')}</div>${f != null ? `<p class="small">Vous êtes le donneur : <b>${f}</b> est interdit, sinon le total des annonces ferait ${RKG.n}.</p>` : ''}</div>` : '';
+  const bidPanel = mineBid ? `<div class="rkcbid${RKG.n >= 8 ? ' many' : ''}"><div class="q">${T3('Combien de plis vas-tu gagner ?', 'Combien de plis annoncez-vous ?', 'Votre annonce ?')}</div><div class="rkbids">${Array.from({ length: RKG.n + 1 }, (_, b) => `<button class="jeton" data-rkbid="${b}" ${f === b ? 'disabled' : ''}><span>${b}</span></button>`).join('')}</div>${f != null ? `<div class="fnote">Donneur : ${f} interdit (le total ferait ${RKG.n})</div>` : ''}</div>` : '';
   let endPanel = '';
   if (RKG.phase === 'end') {
     const r = RKG.rounds[RKG.rounds.length - 1], P = ['S', 'O', 'N', 'E'];
@@ -4833,13 +4847,13 @@ function rkRender() {
   <div class="rkbar"><div class="rktr">${RKG.tcard ? `<span class="cf mini2${RKG.trump === 'H' || RKG.trump === 'D' ? ' red' : ''}">${cfIn(RKG.tcard[0], RKG.tcard[1])}</span><span class="lb">atout</span>` : '<span class="nt">SA</span><span class="lb">sans atout</span>'}</div><div class="rkmk">${['S', 'O', 'N', 'E'].map(p => `<span class="${p === 'S' ? 'me' : ''}"><i>${RK_AV[RKG.lv][p]}</i><b>${RKG.scores[p]}</b></span>`).join('')}<div class="lb">Donne ${RKG.i + 1}/${RKG.seq.length} · ${RKG.n} carte${RKG.n > 1 ? 's' : ''}</div></div>${rkLastBox()}</div>
   <div class="card felt green rkfelt${RKG.phase === 'end' ? ' done' : ''}">
    <div class="pn">${rkSeat('N')}</div>
-   <div class="mid3 rkm"><div class="pw">${rkSeat('O')}</div><div class="table4"><div></div><div>${rkSlot('N')}</div><div></div><div>${rkSlot('O')}</div><div class="tmid rkemb"><span>${RKG.phase === 'play' ? `Pli ${Math.min(RKG.n, RKG.tricks.length + 1)}` : RKG.phase === 'bid' ? 'Annonces' : 'Rikiki'}</span></div><div>${rkSlot('E')}</div><div></div><div>${rkSlot('S')}</div><div></div></div><div class="pw">${rkSeat('E')}</div></div>
+   <div class="mid3 rkm"><div class="pw">${rkSeat('O')}</div>${mineBid ? bidPanel : `<div class="table4"><div></div><div>${rkSlot('N')}</div><div></div><div>${rkSlot('O')}</div><div class="tmid rkemb"><span>${RKG.phase === 'play' ? `Pli ${Math.min(RKG.n, RKG.tricks.length + 1)}` : RKG.phase === 'bid' ? 'Annonces' : 'Rikiki'}</span></div><div>${rkSlot('E')}</div><div></div><div>${rkSlot('S')}</div><div></div></div>`}<div class="pw">${rkSeat('E')}</div></div>
    <div class="ps">${rkSeat('S')}${rkFan(minePlay)}</div>
   </div>
   <p class="turn">${RKG.msg || ''}</p>
-  ${bidPanel}${endPanel}
-  <div class="acts">${RKG.hist && RKG.hist.length && RKG.phase !== 'end' ? '<button class="btn sec small" data-rkgo="undo">↶ Annuler mon dernier coup</button>' : ''}<button class="btn sec small" data-rkgo="speed">${spd()[2]}</button><button class="btn sec small" data-rkgo="scores">Scores</button><button class="btn sec small" data-rkgo="setup">Règles et options</button></div></div>`);
-  try { const t = document.querySelector(mineBid ? '.rkbids' : '.turn'); if (t) { const r = t.getBoundingClientRect(); if (r.bottom > innerHeight) window.scrollTo(0, scrollY + r.bottom - innerHeight + 16); } } catch (e) { }
+  ${endPanel}
+  <div class="acts">${RKG.hist && RKG.hist.length && RKG.phase !== 'end' ? '<button class="btn sec small" data-rkgo="undo">↶ Annuler mon dernier coup</button>' : ''}<button class="btn sec small" data-rkgo="speed">${spd()[2]}</button><button class="btn sec small" data-rkgo="scores">Scores</button><button class="btn sec small" data-rkgo="rules">📜 Règles</button><button class="btn sec small" data-rkgo="setup">Options</button></div></div>`);
+  try { const t = document.querySelector(RKG.phase === 'end' ? '.turn' : '.rkfelt'); if (t) { const r = t.getBoundingClientRect(); if (r.bottom > innerHeight) window.scrollTo(0, scrollY + r.bottom - innerHeight + 16); } } catch (e) { }
 }
 function rkFinal() {
   const P = ['S', 'O', 'N', 'E'].sort((a, z) => RKG.scores[z] - RKG.scores[a]), win = P[0];
@@ -4864,6 +4878,7 @@ app.addEventListener('click', e => {
   if (g === 'undo') return rkUndo();
   if (g === 'speed') { const k = Object.keys(SPEED), i = k.indexOf(ST.opt.speed || 'lent'); ST.opt.speed = k[(i + 1) % k.length]; save(); return rkRender(); }
   if (g === 'scores') { RK_TOK++; return rkScores(); }
+  if (g === 'rules') return rkRules();
   if (g === 'setup') { RK_TOK++; return rkSetup(); }
   if (g === 'last') { const old = document.querySelector('.ltover'); if (old) return old.remove(); const t2 = RKG.tricks[RKG.tricks.length - 1]; if (!t2) return; const o = document.createElement('div'); o.className = 'ltover'; const cell = p => { const x = t2.cards.find(c => c[0] === p); return `<span class="${t2.win === p ? 'w' : ''}">${x ? rkCard(x[1]) : ''}</span>`; }; o.innerHTML = colorize(`<div class="lastt big"><span class="lth">Pli ${RKG.tricks.length}</span><span class="ltg"><span></span>${cell('N')}<span></span>${cell('O')}<span></span>${cell('E')}<span></span>${cell('S')}<span></span></span></div><div class="small" style="text-align:center;color:#fff;margin-top:8px">Touchez pour fermer</div>`); o.addEventListener('click', () => o.remove()); return document.body.appendChild(o); }
 });
@@ -6498,7 +6513,7 @@ function lessonPage(id) {
 //  ACCUEIL ET MENU
 // ====================================================================
 const LOGO = `<svg class="logo" viewBox="0 0 80 48" aria-hidden="true"><g transform="rotate(-27 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--ink)">&#9824;</text></g><g transform="rotate(-9 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--red)">&#9829;</text></g><g transform="rotate(9 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--red)">&#9830;</text></g><g transform="rotate(27 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--ink)">&#9827;</text></g></svg>`;
-const LEGAL = `<p class="legal">© 2026 <b>Arnaud de Beukelaer</b>, auteur de ce site · Tous droits réservés.<br>Cette application ne peut être communiquée à des tiers sans l'accord de l'auteur.<br>Contact : <a href="mailto:arnaud.de.beukelaer@gmail.com">arnaud.de.beukelaer@gmail.com</a><br><span class="ver">Version du 2 novembre 2026 (v28)</span></p>`;
+const LEGAL = `<p class="legal">© 2026 <b>Arnaud de Beukelaer</b>, auteur de ce site · Tous droits réservés.<br>Cette application ne peut être communiquée à des tiers sans l'accord de l'auteur.<br>Contact : <a href="mailto:arnaud.de.beukelaer@gmail.com">arnaud.de.beukelaer@gmail.com</a><br><span class="ver">Version du 2 novembre 2026 (v31)</span></p>`;
 function welcome() {
   CUR = null; X = null; const p = ST.prof;
   const SUITS4 = '<span class="d4"><i>♠</i><i class="r">♥</i><i class="r">♦</i><i>♣</i></span>';
