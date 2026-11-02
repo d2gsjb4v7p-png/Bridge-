@@ -683,6 +683,23 @@ body[data-th=ado] .rkcbid{background:rgba(40,28,12,.55);border-color:#d9c79a}
 /* adultes : le Vapeur du Nil, bleu nuit et or avec sable et turquoise */
 body[data-th=adulte] .card.felt:not(.rkfelt){box-shadow:inset 0 0 0 1px rgba(201,163,78,.7),inset 0 0 0 5px rgba(11,29,46,.9),inset 0 0 0 6px rgba(63,184,175,.55),inset 0 -40px 50px -30px rgba(217,183,122,.18),0 6px 18px -8px rgba(0,0,0,.45)!important}
 body[data-th=adulte] .lastt{border-color:#3fb8af}
+
+/* ===================== CHOIX DE L'ÂGE ===================== */
+.agepage{max-width:640px;margin:0 auto;padding:max(18px,env(safe-area-inset-top,0px)) 16px 24px}
+.ageh{text-align:center;margin:6px 0 14px}.ageh h1{font-family:var(--f-disp);font-size:30px;margin:4px 0 6px;color:var(--ink)}.ageh p{color:var(--muted);font-size:15.5px;margin:0}
+.agesuits{display:flex;justify-content:center;gap:10px;font-size:22px}.agesuits .r{color:#c3132f}
+.agedoor{position:relative;border-radius:22px;padding:16px 16px 14px;margin:12px 0;color:#fff;overflow:hidden;box-shadow:0 10px 26px -12px rgba(0,0,0,.55)}
+.agedoor .agek{font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;font-weight:800}
+.agedoor h2{font-family:var(--f-disp);font-size:25px;margin:2px 0 4px;color:inherit}.agedoor p{font-size:15px;line-height:1.45;margin:0 0 8px;opacity:.95}
+.agecast{font-size:26px;letter-spacing:6px;margin:2px 0 10px}
+.agebtns{display:flex;flex-wrap:wrap;gap:8px}.agebtns .btn{flex:1 1 auto;font-size:15.5px;padding:11px 14px;border-radius:14px!important}
+.agedoor.kid{background:radial-gradient(circle at 80% 20%,rgba(255,233,138,.35) 0 2px,transparent 3px),radial-gradient(circle at 20% 70%,rgba(255,255,255,.5) 0 1.5px,transparent 2.5px),radial-gradient(circle at 60% 85%,rgba(255,255,255,.45) 0 1px,transparent 2px),radial-gradient(130% 110% at 50% 30%,#5b34a8 0%,#2c1760 60%,#170b38 100%);border:2px solid #ffd84d}
+.agedoor.kid .btn{background:#ffd84d!important;color:#2c1760!important;border:0!important;box-shadow:0 2px 0 #b8901c!important}
+.agedoor.teen{background:radial-gradient(130% 110% at 50% 30%,#6f8f44 0%,#3f5a27 60%,#26381a 100%);border:3px double #d9c79a}
+.agedoor.teen .btn{background:#e8d6a8!important;color:#3b2a14!important;border:0!important;box-shadow:0 2px 0 #9c7f45!important}
+.agedoor.adult{background:radial-gradient(130% 110% at 50% 30%,#1f4566 0%,#122a40 60%,#07121c 100%);border:2px solid #c9a34e;box-shadow:inset 0 0 0 4px #0b1d2e,inset 0 0 0 5px rgba(63,184,175,.6),0 10px 26px -12px rgba(0,0,0,.55)}
+.agedoor.adult .btn{background:#e3c47a!important;color:#0e2236!important;border:0!important;box-shadow:0 2px 0 #9c7a2c!important}
+.agedoor .btn.sec{opacity:.92}
 </style>
 </head>
 <body>
@@ -3596,7 +3613,7 @@ const THEME_CAST = {
 };
 const themeOf = () => (typeof tone === 'function' ? tone() : 'adulte');
 const seatAv = p => (THEME_CAST[themeOf()] || THEME_CAST.adulte)[p][1];
-function show(html) { try { document.body.dataset.th = themeOf(); } catch (e) { } if (!show._play && typeof PG !== 'undefined' && PG) PG = null; show._play = false; app.innerHTML = colorize(html); window.scrollTo(0, 0); }
+function show(html) { try { document.body.dataset.th = themeOf(); } catch (e) { } if (!show._play && typeof PG !== 'undefined' && PG) PG = null; show._play = false; app.innerHTML = colorize(html); try { if (typeof tuTree === 'function') tuTree(app); } catch (e) { } window.scrollTo(0, 0); }
 function toast(msg) { const d = document.createElement('div'); d.className = 'toast'; d.textContent = msg; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); }
 
 // ---------------- accueil ----------------
@@ -5764,7 +5781,7 @@ function openSection(id) {
   CUR = id; X = null; const s = SECTIONS.find(x => x.id === id), idx = SECTIONS.indexOf(s) + 1;
   const head = topBar(s.t, s.d, 'menu');
   let body = '';
-  if (id === 'theorie') { const G = [['Pour commencer', ['bases', 'points', 'aiguilleur', 'lexique']], ['Les enchères', ['ouvrir', 'repondre', 'sa', 'troisieme', 'fortes', 'intervenir']], ['Le jeu de la carte', ['jeu', 'maniement', 'comptage']], ['La défense', ['entame', 'flanc']], ['Chelems et marque', ['chelem', 'marque']], ['Le tournoi, et plus loin', ['tournoi', 'duplicate', 'champion']]]; const seen = new Set(G.flatMap(g => g[1])); const rest = THEORY.filter(c => !seen.has(c.id)).map(c => c.id); if (rest.length) G.push(['Autres fiches', rest]); let k = 0; body = G.map(([gt, ids]) => `<div class="grp">${gt}</div><div class="card"><ul class="cases">${ids.map(cid => THEORY.find(c => c.id === cid)).filter(Boolean).map(c => `<li data-chap="${c.id}"><span class="num">${++k}</span><span class="t"><b>${c.t}</b><br><span class="small">${c.d}</span></span>${(ST.theo || {})[c.id] ? '<span class="pill acq">✓ lu</span>' : '<span class="pill">à lire</span>'}</li>`).join('')}</ul></div>`).join(''); }
+  if (id === 'theorie') { const G = [['Pour commencer', ['bases', 'points', 'aiguilleur', 'lexique']], ['Les enchères', ['ouvrir', 'repondre', 'sa', 'troisieme', 'fortes', 'intervenir']], ['Le jeu de la carte', ['jeu', 'maniement', 'comptage']], ['La défense', ['entame', 'flanc']], ['Chelems et marque', ['chelem', 'marque']], ['Le tournoi, et plus loin', ['tournoi', 'duplicate', 'champion']]]; const seen = new Set(G.flatMap(g => g[1])); const rest = THEORY.filter(c => !seen.has(c.id)).map(c => c.id); if (rest.length) G.push(['Autres fiches', rest]); let k = 0; if (typeof theoAge === 'function' && tone() !== 'adulte') { const mine = ['bases', 'points', 'ouvrir', 'repondre', 'sa', 'jeu', 'comptage', 'entame', 'flanc', 'marque'].filter(x => theoAge(x)); const others = G.flatMap(g => g[1]).filter(x => !mine.includes(x)); body = `<div class="grp">${T3('Mes fiches de magie', 'Le grimoire de l\'aventurier', '')}</div><div class="card"><ul class="cases">${mine.map(cid => { const a = theoAge(cid); return `<li data-chap="${cid}"><span class="num">${++k}</span><span class="t"><b>${a.t}</b><br><span class="small">${a.d}</span></span>${(ST.theo || {})[cid] ? '<span class="pill acq">✓ lu</span>' : '<span class="pill">à lire</span>'}</li>`; }).join('')}</ul></div><details class="grands"><summary>${T3('Le coin des grands (pour plus tard)', 'Les fiches des experts', '')}</summary><div class="card"><ul class="cases">${others.map(cid => THEORY.find(c => c.id === cid)).filter(Boolean).map(c => `<li data-chap="${c.id}"><span class="num">${++k}</span><span class="t"><b>${c.t}</b><br><span class="small">${c.d}</span></span></li>`).join('')}</ul></div></details>`; } else body = G.map(([gt, ids]) => `<div class="grp">${gt}</div><div class="card"><ul class="cases">${ids.map(cid => THEORY.find(c => c.id === cid)).filter(Boolean).map(c => `<li data-chap="${c.id}"><span class="num">${++k}</span><span class="t"><b>${c.t}</b><br><span class="small">${c.d}</span></span>${(ST.theo || {})[c.id] ? '<span class="pill acq">✓ lu</span>' : '<span class="pill">à lire</span>'}</li>`).join('')}</ul></div>`).join(''); }
   if (id === 'compter') body = `<div class="card"><h2>La méthode en une phrase</h2><p>Avant de jouer, un nombre par couleur importante (« ils ont 5 atouts »), que l'on fait descendre <b>au moment où la 4e carte de chaque pli tombe</b>. Puis guetter qui ne fournit plus, et les honneurs qui tombent.</p><div class="acts"><button class="btn sec small" data-chap="comptage">Lire la méthode complète</button></div></div>
     <div class="card"><h2>Suivre les cartes pendant le jeu</h2><div class="small">Vous jouez le contrat. Les plis se déroulent sous vos yeux, puis sont retournés, comme à la table. Ensuite : combien d'atouts restent ? quelle carte est maîtresse ? qui ne fournit plus ?</div><ul class="cases">${[1, 2, 3].map(k => { const r = (ST.drills || {})['suivi' + k]; return `<li data-suivi="${k}"><span class="num">${k}</span><span class="t"><b>${SV_LV[k].t}</b><br><span class="small">${SV_LV[k].d}</span></span>${r ? `<span class="pill acq">record ${r.best} %</span>` : '<span class="pill">—</span>'}</li>`; }).join('')}</ul></div>
     <div class="card"><h2>Exercices de calcul rapide</h2><div class="small">Séries de 10 questions chronométrées, pour automatiser les petits calculs du comptage.</div><ul class="cases">${Object.entries(DRILLS).map(([k, d]) => { const r = (ST.drills || {})[k]; return `<li data-drill="${k}"><span class="t"><b>${d.t}</b><br><span class="small">${d.d}</span></span>${r ? `<span class="pill acq">${r.best}/10 · ${r.time}s</span>` : '<span class="pill">—</span>'}</li>`; }).join('')}<li data-drill="mix"><span class="t"><b>Série mélangée</b><br><span class="small">Un peu de tout</span></span>${(ST.drills || {}).mix ? `<span class="pill acq">${ST.drills.mix.best}/10</span>` : '<span class="pill">—</span>'}</li></ul></div>
@@ -5793,14 +5810,15 @@ function openSection(id) {
 
 // ---------------- théorie ----------------
 function chapter(id) {
-  const c = THEORY.find(x => x.id === id), i = THEORY.indexOf(c);
+  const c0 = THEORY.find(x => x.id === id), i = THEORY.indexOf(c0), ag = typeof theoAge === 'function' ? theoAge(id) : null;
+  const c = ag ? Object.assign({}, c0, { t: ag.t, d: ag.d, html: ag.h() }) : c0;
   const prev = THEORY[i - 1], next = THEORY[i + 1];
   show(`${topBar(`Fiche ${i + 1} · ${c.t}`, c.d, 'theorie')}<div class="wrap"><div class="card th">${c.html}</div>
   <div class="acts noprint"><button class="btn sec small" data-print="1">🖨 Imprimer ou enregistrer cette fiche (A4)</button></div>
   ${c.cases.length ? `<div class="card"><h2>S'entraîner sur ce chapitre</h2><div class="acts">${c.cases.map(cid => `<button class="btn sec small" data-case="${cid}">${caseById(cid).short}</button>`).join('')}</div></div>` : ''}
   ${id === 'comptage' ? '<div class="acts"><button class="btn" data-suivi="1">Exercice : suivre les cartes ›</button></div>' : ''}${id === 'champion' ? '<div class="acts"><button class="btn" data-sec="tournoi">Le tournoi, 4 niveaux ›</button></div>' : ''}
   ${id === 'marque' || id === 'tournoi' ? '<div class="acts"><button class="btn" data-game="contrat">Jeu : le juste contrat ›</button><button class="btn sec" data-sec="tournoi">Le tournoi ›</button></div>' : ''}
-  <div class="acts" style="margin-top:10px">${prev ? `<button class="btn sec" data-chap="${prev.id}">‹ ${prev.t}</button>` : ''}${next ? `<button class="btn" data-chap="${next.id}" data-read="${id}">${next.t} ›</button>` : `<button class="btn" data-read="${id}" data-sec="theorie">Terminer ›</button>`}</div></div>`);
+  <div class="acts" style="margin-top:10px">${prev ? `<button class="btn sec" data-chap="${prev.id}">‹ ${(theoAge(prev.id) || prev).t}</button>` : ''}${next ? `<button class="btn" data-chap="${next.id}" data-read="${id}">${(theoAge(next.id) || next).t} ›</button>` : `<button class="btn" data-read="${id}" data-sec="theorie">Terminer ›</button>`}</div></div>`);
 }
 
 // ---------------- petits rendus communs ----------------
@@ -6304,6 +6322,223 @@ app.addEventListener('click', e => {
 });
 
 
+// ---------------- La théorie racontée selon l'âge ----------------
+// enfant (8-12 ans) : L'École de magie · ado (13-17 ans) : La Comté des collines
+const THEO_AGE = {
+  enfant: {
+    bases: { t: 'Les bases du jeu', d: 'La table, le pli, le contrat', h: () => `
+<p>Bienvenue à l'École de magie, ${MAGE()} ! Avant de lancer tes premiers sorts, découvre la table de jeu.</p>
+<h3>🪄 La table</h3><p>On joue à <b>quatre</b> : deux équipes de deux. Ton partenaire est assis <b>en face de toi</b>. Vous êtes Nord et Sud, vos adversaires sont Est et Ouest. Chacun reçoit <b>13 cartes</b>.</p>
+<h3>✨ Le pli</h3><p>Chacun pose une carte, à tour de rôle : ces 4 cartes forment un <b>pli</b>. Règle d'or : tu dois <b>fournir</b>, c'est-à-dire jouer la même couleur que la première carte. La plus grosse carte gagne le pli.</p>
+<p>Tu n'as plus de cartes de la couleur demandée ? Alors tu peux jouer un <b>atout</b> : c'est la couleur magique, plus forte que toutes les autres. On dit que tu <b>coupes</b>.</p>
+<h3>👑 Qui est le plus fort ?</h3>${TBL(['Les cartes, de la plus forte à la plus faible'], [['As · Roi · Dame · Valet · 10 · 9 · 8 · 7 · 6 · 5 · 4 · 3 · 2']])}
+<h3>📜 Le contrat</h3><p>Avant de jouer, on fait les <b>enchères</b> : chacun dit combien de plis son équipe va gagner. Petit secret : on compte <b>à partir de 6</b>. Dire « 1 » veut dire « 7 plis », dire « 4 » veut dire « 10 plis ».</p>
+${TBL(['Tu dis…', 'Tu dois gagner…'], [['1', '7 plis'], ['2', '8 plis'], ['3', '9 plis'], ['4', '10 plis'], ['6', '12 plis : un chelem !']])}
+<p>Celui qui joue le contrat s'appelle le <b>déclarant</b>. Son partenaire pose toutes ses cartes sur la table : c'est le <b>mort</b>. Le déclarant joue les deux mains, comme un sorcier qui a quatre bras !</p>
+${KEEP('Fournir la couleur demandée. L\'atout bat tout le monde. Plis à gagner = 6 + ce que tu as annoncé.')}` },
+    points: { t: 'Compter ses points', d: 'Combien vaut ta main ?', h: () => `
+<p>Un bon magicien sait toujours combien de puissance il a dans sa main. Au bridge, on compte les <b>points d'honneur</b>.</p>
+${TBL(['As', 'Roi', 'Dame', 'Valet'], [['4 points', '3 points', '2 points', '1 point']])}
+<p>Il y a <b>40 points</b> dans tout le jeu, donc <b>10 points</b> chacun en moyenne. Avec <b>12 points</b> ou plus, ta main est assez forte pour <b>ouvrir</b> les enchères.</p>
+<h3>🧪 Exemple</h3><p>Tu as l'As de pique, le Roi de cœur et la Dame de trèfle : 4 + 3 + 2 = <b>9 points</b>.</p>
+<h3>🪄 Le petit bonus du fit</h3><p>Quand ton partenaire et toi avez <b>8 cartes ou plus</b> dans la même couleur, c'est un <b>fit</b> : vous avez trouvé votre atout ! Seulement à ce moment-là, tu peux ajouter des points pour tes couleurs courtes :</p>
+${TBL(['Aucune carte', 'Une seule carte', 'Deux cartes'], [['+3', '+2', '+1']])}
+<p>Pourquoi ? Parce que dans une couleur courte, tu pourras vite <b>couper</b> avec tes atouts !</p>
+<h3>🎯 Les nombres magiques</h3>${TBL(['Avec ton partenaire, vous avez…', 'Vous pouvez jouer…'], [['25 points', 'une manche (3SA, 4♥, 4♠)'], ['33 points', 'un petit chelem (12 plis)'], ['37 points', 'un grand chelem (13 plis)']])}
+${KEEP('As 4, Roi 3, Dame 2, Valet 1. On ouvre avec 12 points. 25 points à deux = la manche.')}` },
+    ouvrir: { t: 'Ouvrir les enchères', d: 'La première enchère', h: () => `
+<p>Ouvrir, c'est lancer le premier sort de la partie. Il te faut <b>12 points ou plus</b>. Avec moins de 12, tu dis <b>« Passe »</b>.</p>
+<h3>🪜 L'escalier magique</h3><p>Descends l'escalier et arrête-toi à la <b>première marche</b> qui correspond à ta main :</p>
+${TBL(['Marche', 'Ta main', 'Tu dis'], [['1', '5 cartes ou plus à ♠ (ou à ♥)', '1♠ (ou 1♥)'], ['2', '15, 16 ou 17 points, et pas de couleur trop courte', '1SA'], ['3', '4 cartes ou plus à ♦', '1♦'], ['4', 'tout le reste', '1♣']])}
+<p>Tu as 5 piques <b>et</b> 5 cœurs ? Ouvre <b>1♠</b>, la couleur la plus chère.</p>
+<h3>🌟 Les très grosses mains</h3>${TBL(['Tes points', 'Tu dis'], [['20 ou 21 points, main régulière', '2SA'], ['22 ou 23 points', '2♣'], ['24 points ou plus', '2♦']])}
+<h3>🧪 Exemple</h3><p>♠ A R 8 7 4 · ♥ D 3 · ♦ R 9 2 · ♣ 6 5 : tu as 4 + 3 + 2 + 3 = <b>12 points</b> et <b>5 piques</b>. Première marche : tu ouvres <b>1♠</b> !</p>
+${KEEP('12 points pour ouvrir. D\'abord 5 cartes en ♠ ou ♥, puis 1SA (15-17), puis 1♦, sinon 1♣.')}` },
+    repondre: { t: 'Répondre à ton partenaire', d: 'Quand ton partenaire a ouvert', h: () => `
+<p>Ton partenaire a ouvert : il a au moins 12 points. Maintenant, c'est à toi de lui parler ! Pose-toi <b>trois questions</b>, dans l'ordre :</p>
+<ol><li>🔮 Avons-nous un <b>fit</b> ? (pour ♥ ou ♠ : il en a 5, toi 3 ou plus = 8 cartes ensemble)</li><li>💎 Ai-je une <b>couleur à lui montrer</b> ?</li><li>🔢 Combien ai-je de <b>points</b> ?</li></ol>
+<h3>Il a ouvert 1♥ ou 1♠, et tu as le fit</h3>${TBL(['Tes points (avec le bonus du fit)', 'Tu dis'], [['0 à 5', 'Passe'], ['6 à 10', '2 dans sa couleur (2♥ ou 2♠)'], ['11 ou 12', '3 dans sa couleur'], ['13 à 15', '4 dans sa couleur : la manche !']])}
+<h3>Il a ouvert, et tu n'as pas le fit</h3>${TBL(['Ta main', 'Tu dis'], [['moins de 6 points', 'Passe'], ['6 points ou plus et 4 cartes dans une couleur plus chère', 'cette couleur au palier 1 (exemple : 1♠)'], ['6 à 10 points, rien d\'autre à dire', '1SA']])}
+<p>Tu nommes une nouvelle couleur ? Ton partenaire est <b>obligé de reparler</b> : la conversation continue.</p>
+${KEEP('Fit d\'abord ! Puis une couleur à montrer. Puis les points. Moins de 6 points : passe.')}` },
+    sa: { t: 'Quand ton partenaire ouvre 1SA', d: 'Le Texas et le Stayman, deux formules', h: () => `
+<p>Ton partenaire a ouvert <b>1SA</b> : il a <b>15, 16 ou 17 points</b> et une main bien équilibrée. Tu connais presque toute sa main : c'est toi qui décides !</p>
+<h3>🪄 Formule n°1 : le Texas</h3><p>Tu as <b>5 cartes</b> à cœur ou à pique ? Annonce la couleur <b>juste en dessous</b> :</p>${TBL(['Tu as 5 cartes à…', 'Tu dis', 'Il répond'], [['♥', '2♦', '2♥'], ['♠', '2♥', '2♠']])}<p>C'est un code secret : ton partenaire comprend et nomme ta couleur. Ça marche même avec 0 point !</p>
+<h3>🔍 Formule n°2 : le Stayman</h3><p>Tu as <b>4 cartes</b> à cœur ou à pique et <b>8 points ou plus</b> ? Dis <b>2♣</b>. Cela veut dire : « As-tu 4 cartes en ♥ ou en ♠ ? »</p>${TBL(['Il répond', 'Ça veut dire'], [['2♦', 'je n\'en ai pas'], ['2♥', 'j\'ai 4 cœurs'], ['2♠', 'j\'ai 4 piques']])}
+<h3>🔢 Sinon, on compte</h3>${TBL(['Tes points', 'Tu dis'], [['0 à 7', 'Passe'], ['8 ou 9', '2SA'], ['10 à 15', '3SA : la manche !']])}
+${KEEP('5 cartes en ♥ ou ♠ → Texas. 4 cartes et 8 points → Stayman 2♣. Sinon : passe, 2SA ou 3SA.')}` },
+    jeu: { t: 'Jouer le contrat', d: 'Le plan du sorcier', h: () => `
+<p>Tu es le déclarant : à toi de faire tes plis ! Un grand sorcier ne joue jamais au hasard : <b>avant de jouer la première carte, il fait un plan</b>.</p>
+<h3>🔮 Étape 1 : regarde le mort</h3><p>Le mort s'étale. Regarde tes cartes <b>et</b> les siennes : vous êtes une équipe.</p>
+<h3>✨ Étape 2 : compte tes plis sûrs</h3><p>Les As, puis les Rois quand l'As est tombé : ce sont des plis gagnés d'avance. Compte-les. Il en manque ? Pas de panique, il existe des sorts pour en créer :</p>
+${TBL(['Le sort', 'Comment ça marche'], [['🗡️ Faire tomber les atouts', 'joue atout jusqu\'à ce que les adversaires n\'en aient plus : ils ne pourront plus couper tes belles cartes'], ['✂️ Couper chez le mort', 'si le mort n\'a plus de cartes dans une couleur, il coupe avec ses atouts'], ['🌱 Faire pousser une couleur', 'joue ta couleur la plus longue : quand les adversaires n\'en ont plus, tes petites cartes deviennent gagnantes'], ['🕵️ L\'impasse', 'joue vers ta Dame en espérant que le Roi soit placé avant elle']])}
+<h3>🎯 Étape 3 : joue, et compte</h3><p>Pendant le jeu, compte les atouts des adversaires : « ils en ont 5… plus que 3… plus qu'un ! »</p>
+${KEEP('Fais un plan. Compte tes plis sûrs. Fais tomber les atouts. Fais pousser ta couleur longue.')}` },
+    entame: { t: 'L\'entame', d: 'La toute première carte', h: () => `
+<p>L'<b>entame</b>, c'est la première carte de la partie. Elle est jouée par le joueur assis <b>à gauche du déclarant</b>, avant de voir le mort. C'est un sort lancé un peu à l'aveugle !</p>
+<h3>🌙 Contre Sans-Atout</h3><p>Joue ta <b>couleur la plus longue</b> : quand les autres n'en auront plus, tes petites cartes gagneront. Avec trois honneurs qui se suivent (R D V), joue le plus gros : le <b>Roi</b>. Sinon, la <b>4e carte en partant du haut</b>.</p>
+<h3>☀️ Contre un contrat à l'atout</h3><ol><li>Une carte <b>toute seule</b> dans sa couleur (un singleton) : tu pourras couper au 2e tour !</li><li>Deux honneurs qui se suivent (R D) : le plus gros.</li><li>La couleur annoncée par ton partenaire.</li></ol>
+<p>⚠️ Ne joue <b>jamais</b> une petite carte quand tu as l'As dans cette couleur : l'As risquerait de ne jamais faire de pli.</p>
+${KEEP('Sans-Atout : ta couleur longue. À l\'atout : singleton, ou deux honneurs qui se suivent. Jamais sous un As.')}` },
+    flanc: { t: 'La défense', d: 'Faire chuter le contrat', h: () => `
+<p>Quand ce sont les adversaires qui jouent le contrat, ton partenaire et toi êtes les <b>défenseurs</b>. Votre mission : les empêcher de faire leurs plis. C'est un duel de magiciens !</p>
+<h3>🎯 Combien de plis faut-il ?</h3><p>Pour faire <b>chuter</b> le contrat, il suffit de gagner un peu de plis. Contre 4♠ (10 plis), il vous en faut <b>4</b>.</p>
+<h3>🛡️ Les 4 règles du défenseur</h3>${TBL(['Règle', 'Pourquoi'], [['2e joueur : petite carte', 'ton partenaire joue après, laisse-le décider'], ['3e joueur : grosse carte', 'oblige le déclarant à sortir son gros honneur'], ['Couvre un honneur par un honneur', 'si le déclarant joue sa Dame, mets ton Roi dessus'], ['Rejoue la couleur de ton partenaire', 'c\'est souvent là que sont vos plis']])}
+<h3>💬 Parler avec ses cartes</h3><p>Ton partenaire joue une <b>grosse carte</b> qui ne sert à rien ? Il te dit « j'aime, continue ! ». Une <b>toute petite</b> carte ? « Je n'aime pas, change de couleur. »</p>
+${KEEP('2e main petite, 3e main grosse, couvre un honneur, écoute les signaux de ton partenaire.')}` },
+    comptage: { t: 'Compter les cartes', d: 'La mémoire du magicien', h: () => `
+<p>Personne ne retient les 52 cartes, même pas les champions. Le secret : ne retenir <b>qu'un seul nombre</b>.</p>
+<h3>🔢 Le nombre magique</h3><p>Quand le mort s'étale, compte tes atouts et ceux du mort. Fais <b>13 moins ce nombre</b>. Tu as 8 atouts à deux ? Les adversaires en ont <b>5</b>. Dis-le dans ta tête : « cinq ».</p>
+<h3>⬇️ Fais-le descendre</h3><p>Chaque fois que les deux adversaires jouent atout : <b>moins 2</b>. « Cinq… trois… un… zéro ! » Quand tu arrives à zéro, tu peux arrêter de jouer atout : tes autres cartes sont en sécurité.</p>
+<h3>👀 Le détective</h3><p>Un adversaire ne fournit plus ? Note-le bien : c'est l'autre qui a toutes les cartes qui restent dans cette couleur !</p>
+${KEEP('13 moins tes atouts = leurs atouts. Moins 2 à chaque tour. À zéro, c\'est gagné !')}` },
+    marque: { t: 'Les points de la partie', d: 'Partielle, manche, chelem', h: () => `
+<p>À la fin de chaque donne, on compte les points, comme les points de magie gagnés à l'École.</p>
+${TBL(['Ce que tu as réussi', 'Ce que ça rapporte (environ)'], [['Une partielle (par exemple 2♥)', 'un peu plus de 100 points'], ['Une manche (3SA, 4♥, 4♠)', 'à peu près 400 points'], ['Un petit chelem (12 plis)', 'environ 1 000 points'], ['Un grand chelem (13 plis)', 'environ 1 500 points']])}
+<p>Si le contrat <b>chute</b>, ce sont les adversaires qui marquent des points : 50 par pli manquant (ou 100 si tu étais « vulnérable », ce qui veut dire que l'enjeu est plus grand).</p>
+<p>Le plus important : réussir une <b>manche</b> rapporte beaucoup plus qu'une petite partielle. Alors avec 25 points à deux, ose la manche !</p>
+${KEEP('La manche rapporte beaucoup : avec 25 points à deux, on la joue.')}` },
+  },
+  ado: {
+    bases: { t: 'Les bases du jeu', d: 'Le pli, le contrat, le mort', h: () => `
+<p>Bienvenue dans la Comté, ${MAGE()}. Ta quête commence ici : maîtriser les règles du jeu.</p>
+<h3>⚔️ La table</h3><p>Deux équipes de deux : <b>Nord-Sud</b> contre <b>Est-Ouest</b>. Ton partenaire est en face. On joue dans le sens des aiguilles d'une montre, avec <b>13 cartes</b> chacun.</p>
+<h3>🃏 Le pli</h3><p>Chacun pose une carte : c'est un <b>pli</b> (ou une <b>levée</b>). On doit <b>fournir</b> la couleur demandée. La plus forte carte gagne, sauf si quelqu'un qui n'a plus de cette couleur <b>coupe</b> avec un atout.</p>
+${TBL(['Les cartes', 'Les couleurs (pour les enchères)'], [['A, R, D, V, 10… 2', '♣ < ♦ < ♥ < ♠ < Sans-Atout']])}<p>♥ et ♠ sont les <b>majeures</b>, ♣ et ♦ les <b>mineures</b>.</p>
+<h3>📜 Le contrat</h3><p>On annonce le nombre de plis <b>au-delà de 6</b> : plis à faire = <b>6 + le palier</b>. 1♠ = 7 plis, 3SA = 9, 4♥ = 10. Trois « passe » de suite terminent les enchères.</p>
+<p>Le <b>déclarant</b> joue ses cartes et celles de son partenaire, le <b>mort</b>, posées face visible. L'adversaire à <b>gauche du déclarant</b> entame.</p>
+${TBL(['Objectif', 'Contrats', 'Points à deux'], [['Partielle', 'sous la manche', 'moins de 25'], ['Manche', '3SA · 4♥ · 4♠ · 5♣ · 5♦', '25'], ['Petit chelem', '12 plis', '33'], ['Grand chelem', '13 plis', '37']])}
+${KEEP('Plis à faire = 6 + palier. Les seuils à retenir : 25, 33, 37.')}` },
+    points: { t: 'Compter ses points', d: 'Honneurs et distribution', h: () => `
+<p>Avant chaque quête, on évalue ses forces. Au bridge, ça s'appelle compter ses points.</p>
+<h3>1. Les points d'honneur (H)</h3>${TBL(['As', 'Roi', 'Dame', 'Valet'], [['4', '3', '2', '1']])}<p>40 points dans le jeu, 10 en moyenne. Avec <b>12 H</b>, tu ouvres.</p>
+<h3>2. La distribution, seulement après un fit</h3><p>Un <b>fit</b>, ce sont <b>8 cartes à deux</b> dans une couleur. Dès que tu l'as trouvé, ajoute :</p>
+${TBL(['Chicane (0 carte)', 'Singleton', 'Doubleton', 'Atout en plus'], [['+3', '+2', '+1', '+1 par atout au-delà du 3e (quand tu soutiens la majeure 5e de ton partenaire)']])}
+<p>Sans fit, les couleurs courtes ne valent rien : on ne compte que les H.</p>
+<h3>3. Les seuils de la quête</h3>${TBL(['Total à deux', 'Objectif'], [['25', 'la manche'], ['33', 'le petit chelem'], ['37', 'le grand chelem']])}
+${KEEP('H d\'abord. La distribution seulement avec un fit. 25 = manche, 33 = petit chelem.')}` },
+    ouvrir: { t: 'Ouvrir', d: 'L\'échelle d\'ouverture', h: () => `
+<p>Ouvrir, c'est donner le premier renseignement à ton partenaire. Il faut <b>12 H ou plus</b>.</p>
+<h3>🪜 L'échelle : arrête-toi à la première marche qui colle</h3>
+${TBL(['Marche', 'Ta main', 'Tu ouvres'], [['1', 'une majeure de 5 cartes ou plus', '1♥ ou 1♠ (1♠ avec 5-5)'], ['2', '15 à 17 H, main régulière (4-3-3-3, 4-4-3-2, 5-3-3-2)', '1SA'], ['3', '4 carreaux ou plus', '1♦'], ['4', 'tout le reste', '1♣ (parfois avec seulement 2 ou 3 trèfles)']])}
+<h3>⚡ Les mains de héros</h3>${TBL(['Ta main', 'Tu ouvres'], [['20-21 H régulière', '2SA'], ['22-23 H', '2♣ (partenaire : relais 2♦)'], ['24 H et plus', '2♦ (partenaire : relais 2♥, manche obligatoire)']])}
+<h3>🏹 Le barrage</h3><p>Avec <b>6 à 10 H</b> et une belle couleur de <b>6 cartes</b> à ♥ ou ♠, ouvre <b>2♥ ou 2♠</b> : tu bloques les enchères adverses.</p>
+${KEEP('Majeure 5e d\'abord, puis 1SA (15-17 régulier), puis 1♦ (4 carreaux), sinon 1♣.')}` },
+    repondre: { t: 'Répondre à 1 à la couleur', d: 'Fit, majeure, points', h: () => `
+<p>Ton partenaire a ouvert : à toi de trouver le bon chemin. Trois questions, toujours dans cet ordre :</p>
+<ol><li>Ai-je un <b>fit</b> ? (3 cartes dans sa majeure 5e)</li><li>Ai-je une <b>majeure</b> de 4 cartes à montrer ?</li><li>Combien de <b>points</b> ?</li></ol>
+<h3>Sur 1♥ ou 1♠, avec le fit</h3>${TBL(['Points (avec la distribution)', 'Tu dis'], [['6 à 10', '2 dans sa majeure'], ['11 à 12', '3 dans sa majeure (proposition)'], ['13 à 15', '4 dans sa majeure (manche)'], ['16 et plus', '2♣ ou 2♦ d\'abord, tu soutiendras ensuite']])}
+<h3>Sur 1♥ ou 1♠, sans fit</h3>${TBL(['Tu dis', 'Il faut'], [['1♠ sur 1♥', '4 piques, dès 6 H'], ['1SA', '6 à 10 H, rien d\'autre à dire'], ['Une couleur au palier 2', '5 cartes (ou 4 en mineure) et 11 H']])}
+<h3>Sur 1♣ ou 1♦</h3><p>Une <b>majeure de 4 cartes</b> passe avant tout, dès 5-6 H (avec 4 cœurs et 4 piques : 1♥). Sans majeure : 1SA (6-10), 2SA (11-12), 3SA (13-18) avec une main régulière.</p>
+<p>Une <b>nouvelle couleur</b> du répondant oblige l'ouvreur à reparler (on dit qu'elle est <b>forcing</b>).</p>
+${KEEP('Sur une majeure : le fit d\'abord. Sur une mineure : la majeure 4e d\'abord. Au palier 2 sans fit : 11 H.')}` },
+    sa: { t: 'Répondre à 1SA et 2SA', d: 'Texas, Stayman, les points', h: () => `
+<p>1SA, c'est <b>15-17 H</b> et une main régulière. Tu connais presque tout de ton partenaire : c'est toi le chef d'expédition.</p>
+<h3>🧭 Le Texas : 5 cartes en majeure</h3>${TBL(['Tu as', 'Tu dis', 'Il complète'], [['5 cœurs', '2♦', '2♥'], ['5 piques', '2♥', '2♠']])}<p>Dès 0 point. Ensuite : passe si tu es faible, 2SA ou 3SA pour proposer ou conclure (6 cartes : 3 ou 4 dans ta majeure).</p>
+<h3>🔍 Le Stayman 2♣ : 4 cartes en majeure et 8 H</h3>${TBL(['Il répond', 'Signification'], [['2♦', 'aucune majeure de 4 cartes'], ['2♥', '4 cœurs (peut-être aussi 4 piques)'], ['2♠', '4 piques, pas 4 cœurs']])}<p>Fit trouvé ? Soutiens (3 avec 8-9 H, 4 avec 10-15 H). Pas de fit ? 2SA ou 3SA.</p>
+<h3>🔢 Sinon, on additionne</h3>${TBL(['Tes H', 'Tu dis'], [['0-7', 'Passe'], ['8-9', '2SA'], ['10-15', '3SA']])}
+<p>Sur <b>2SA</b> (20-21) : mêmes outils un palier plus haut (Stayman 3♣, Texas 3♦/3♥), dès 5 H.</p>
+${KEEP('5 cartes → Texas. 4 cartes et 8 H → Stayman. Sinon on compte : passe, 2SA, 3SA.')}` },
+    jeu: { t: 'Le jeu de la carte', d: 'Le plan de bataille', h: () => `
+<p>Un aventurier ne part jamais sans carte au trésor. Au bridge, c'est ton <b>plan</b>, à faire avant de jouer la première carte du mort.</p>
+<h3>🗺️ Contrat à l'atout : compter les perdantes</h3><p>Compte les plis que tu risques de perdre dans ta main longue en atout. Trop de perdantes ? Trois armes, la méthode <b>CDI</b> :</p>
+${TBL(['Arme', 'Comment'], [['C : couper', 'couper une perdante avec un atout du mort (la main courte)'], ['D : défausser', 'jeter une perdante sur une carte maîtresse de l\'autre main'], ['I : impasser', 'jouer vers ton honneur en espérant que l\'honneur adverse soit bien placé']])}
+<p>Fais tomber les atouts adverses <b>tôt</b>, sauf si tu as besoin des atouts du mort pour couper.</p>
+<h3>🏰 Sans-Atout : compter les gagnantes</h3><p>Compte tes levées sûres. Il en manque ? <b>Affranchis</b> ta couleur la plus longue : une fois les cartes adverses tombées, tes petites cartes deviennent maîtresses. Garde des <b>reprises</b> pour revenir dans la main qui a les levées.</p>
+<h3>🎲 Impasse ou tirer en tête ?</h3><p>Il te manque la Dame : avec 8 cartes à deux, fais l'impasse ; avec 9, tire en tête (« huit toujours, neuf jamais »).</p>
+${KEEP('Atout : compter les perdantes, puis CDI. SA : compter les gagnantes et affranchir.')}` },
+    entame: { t: 'L\'entame', d: 'La première flèche', h: () => `
+<p>L'entame est la première flèche tirée par la défense, avant de voir le mort. Le joueur à <b>gauche du déclarant</b> la décoche.</p>
+<h3>Contre Sans-Atout : développer sa longue</h3><ol><li>La couleur annoncée par ton partenaire.</li><li>Sinon ta couleur <b>la plus longue</b>.</li><li>La carte : <b>tête de séquence</b> (R D V → le Roi), sinon la <b>4e meilleure</b> (R 9 7 4 2 → le 4).</li></ol>
+<h3>Contre une couleur : faire ses plis vite</h3><ol><li>Un <b>singleton</b>, pour couper ensuite.</li><li>Une tête de séquence (deux honneurs qui se suivent).</li><li>La couleur du partenaire.</li><li>Sinon, l'atout.</li></ol>
+<p><b>Jamais</b> une petite carte sous un As contre une couleur.</p>
+${KEEP('SA : ta longue, tête de séquence ou 4e meilleure. Couleur : singleton, séquence, partenaire, atout.')}` },
+    flanc: { t: 'La défense', d: 'Faire chuter ensemble', h: () => `
+<p>En défense, tu fais équipe avec ton partenaire contre le déclarant. Lui voit ses 26 cartes ; toi, tu ne vois que les tiennes et le mort… mais tu as écouté les enchères, et elles t'ont raconté sa main.</p>
+<h3>🧮 Le grand calcul</h3><p><b>40 − tes points − ceux du mort</b> = les points du déclarant + ceux de ton partenaire. Retire ce que le déclarant a annoncé : tu connais le maximum de ton partenaire.</p>
+<h3>🎯 L'objectif</h3><p>Pour faire chuter, il faut <b>8 − le palier</b> levées : 4 contre 4♥, 3 contre 5♦.</p>
+<h3>⚔️ Les règles de combat</h3>${TBL(['Règle', 'Pourquoi'], [['2e main basse', 'ton partenaire, placé derrière, décide'], ['3e main haute', 'force le déclarant à sacrifier un gros honneur'], ['Couvrir un honneur par un honneur', 'pour promouvoir les cartes moyennes de ton camp'], ['Rejouer la couleur du partenaire', 'c\'est souvent là que sont vos levées']])}
+<h3>📯 Les signaux</h3><p>Sur l'entame du partenaire : une <b>grosse carte inutile</b> = « j'aime, continue » ; une <b>petite</b> = « change de couleur ».</p>
+${KEEP('Écoute les enchères, fais le grand calcul, vise 8 − palier levées, et parle avec tes signaux.')}` },
+    comptage: { t: 'Suivre les cartes', d: 'La mémoire de l\'aventurier', h: () => `
+<p>Personne ne retient les 52 cartes. Les champions retiennent <b>peu de choses, mais toujours les mêmes</b>.</p>
+<h3>Réflexe 1 : un nombre par couleur importante</h3><p>Quand le mort s'étale : <b>13 − (tes cartes + celles du mort)</b>. Tu as 8 atouts à deux → ils en ont <b>5</b>.</p>
+<h3>Réflexe 2 : faire descendre ce nombre</h3><p>Quand les deux adversaires fournissent : <b>moins 2</b>. « Cinq… trois… un. » À zéro, plus besoin de jouer atout.</p>
+<h3>Réflexe 3 : guetter celui qui ne fournit plus</h3><p>Un adversaire défausse ? L'autre a <b>toutes</b> les cartes restantes de la couleur. C'est l'info la plus précieuse du jeu.</p>
+<h3>Réflexe 4 : les honneurs qui manquent</h3><p>Retiens seulement les gros honneurs que tu n'as pas (« il manque l'As et la Dame ») et raye-les quand ils tombent.</p>
+${KEEP('Deux couleurs, un nombre chacune, que tu fais descendre. Puis guette les défausses et les honneurs.')}` },
+    marque: { t: 'La marque', d: 'Combien rapporte un contrat', h: () => `
+<p>Chaque contrat réussi rapporte un trésor : voici comment on le compte.</p>
+${TBL(['♣ ou ♦', '♥ ou ♠', 'Sans-Atout'], [['20 par levée', '30 par levée', '40 la 1re, puis 30']])}
+<p>On ne compte que les levées <b>demandées au-delà de 6</b>. Si elles font <b>100 ou plus</b>, c'est une <b>manche</b> : grosse prime (300, ou 500 si vulnérable). Sinon, c'est une partielle : prime de 50.</p>
+${TBL(['Contrat', 'Non vulnérable', 'Vulnérable'], [['2♥ juste', '110', '110'], ['3SA juste', '400', '600'], ['4♠ juste', '420', '620'], ['6♥ juste', '980', '1430']])}
+<p>Le contrat chute ? La défense marque 50 par levée manquante (100 si tu étais vulnérable), et bien plus en cas de contre.</p>
+${KEEP('La manche rapporte 300 ou 500 de prime : avec 25 points à deux, on la tente.')}` },
+  },
+};
+const theoAge = id => { const t = tone(); return t !== 'adulte' && THEO_AGE[t] && THEO_AGE[t][id] ? THEO_AGE[t][id] : null; };
+
+// ---------------- Choisir sa tranche d'âge (après le mot de passe) ----------------
+const GN = (m, f) => (ST.opt.genre === 'f' ? f : m);
+const MAGE = () => (tone() === 'enfant' ? GN('petit magicien', 'petite magicienne') : tone() === 'ado' ? GN('aventurier', 'aventurière') : 'voyageur');
+let AGE_OK = false;
+function ageGate() {
+  AGE_OK = false; const p = ST.prof, g = ST.opt.genre;
+  const door = (cls, kick, title, sub, cast, btns) => `<section class="agedoor ${cls}"><div class="agek">${kick}</div><h2>${title}</h2><p>${sub}</p><div class="agecast">${cast}</div><div class="agebtns">${btns}</div></section>`;
+  const b = (k, gg, label) => `<button class="btn${p === k && (!gg || g === gg) ? '' : ' sec'}" data-agep="${k}:${gg || ''}">${label}</button>`;
+  show(`<div class="agepage"><div class="ageh"><div class="agesuits"><b>♠</b><b class="r">♥</b><b class="r">♦</b><b>♣</b></div><h1>Qui vient jouer ?</h1><p>Choisis ton univers. Les leçons, les fiches, les commentaires et même les cartes s'adaptent à ton âge.</p></div>
+  ${door('kid', '8 à 12 ans', 'L\'École de magie', 'Tu deviens un petit magicien ou une petite magicienne du bridge. Chaque pli gagné est un sort réussi !', '🧙 🧝 ⛏️ 👻', b('enfant', 'm', '🧙‍♂️ Je suis un petit magicien') + b('enfant', 'f', '🧙‍♀️ Je suis une petite magicienne'))}
+  ${door('teen', '13 à 17 ans', 'La Comté des collines', 'Une quête pour aventuriers : chaque contrat réussi est un trésor rapporté.', '🌿 🧝 ⛏️ 🧙‍♂️', b('ado', 'm', '🗡️ Je suis un aventurier') + b('ado', 'f', '🏹 Je suis une aventurière'))}
+  ${door('adult', 'Adultes', 'Le Vapeur du Nil', 'Bienvenue à bord : croisière, tournois et Coupe du Vapeur Caroline.', '⚓ 💎 🎖️ 🏺', b('adulte', '', 'Je débute') + b('confirme', '', 'Je joue déjà') + b('decouverte', '', 'Je découvre le bridge'))}
+  ${LEGAL}</div>`);
+}
+app.addEventListener('click', e => {
+  const t = e.target.closest('[data-agep],[data-agegate]'); if (!t) return; const d = t.dataset;
+  if (d.agegate) return ageGate();
+  const [k, g] = d.agep.split(':'); ST.prof = k; if (g) ST.opt.genre = g; if (k === 'enfant' || k === 'ado') ST.opt.showH = true; AGE_OK = true; save();
+  if (k === 'decouverte') return lessonPage('cinqmin');
+  home();
+});
+// ---------------- Le tutoiement (8-12 ans et ados) ----------------
+const TU_FEM = new Set('main couleur enchère levée carte réponse ouverture longueur majeure mineure défense manche décision table place partie série note annonce entame fourchette force zone chance question ligne marque dame impasse coupe défausse donne main partenaire_f prime fiche leçon règle réponse première dernière parole tête séquence moyenne carte_f idée erreur faute victoire défaite tranche question méthode stratégie situation position'.split(' '));
+function tuFix(s) {
+  if (!/[Vv]ous|[Vv]otre|[Vv]os\b|ez\b|[Vv]ôtre/.test(s)) return s;
+  const cap = (src, out) => (src[0] === src[0].toUpperCase() && src[0] !== src[0].toLowerCase() ? out[0].toUpperCase() + out.slice(1) : out);
+  const R = (re, f) => { s = s.replace(re, f); };
+  const conjQ = v => { const lv = v.toLowerCase(), M = { avez: 'as', êtes: 'es', pouvez: 'peux', devez: 'dois', voulez: 'veux', faites: 'fais', dites: 'dis', allez: 'vas', voyez: 'vois', savez: 'sais', prenez: 'prends', mettez: 'mets' }; return M[lv] || (/issez$/.test(lv) ? lv.replace(/issez$/, 'is') : lv.replace(/ez$/, 'es')); };
+  R(/\(vous\)/gi, '(toi)');
+  R(/s'il vous plaît/gi, m => cap(m, 's\'il te plaît'));
+  R(/(?<!\p{L})(\p{L}+ez)-vous(?!\p{L})/gu, (m, v, off, str) => { const rest = str.slice(off); const q = rest.search(/[?]/), e = rest.search(/[.!:;]/); return (q >= 0 && (e < 0 || q < e)) ? cap(m, conjQ(v) + '-tu') : m; });
+  R(/(?<!\p{L})(\p{L}+)ez-vous(?!\p{L})/gu, (m, v) => cap(m, ({ rappel: 'rappelle', appel: 'appelle', méfi: 'méfie', souven: 'souviens', assur: 'assure' })[v.toLowerCase()] ? ({ rappel: 'rappelle', appel: 'appelle', méfi: 'méfie', souven: 'souviens', assur: 'assure' })[v.toLowerCase()] + '-toi' : v + 'e-toi'));
+  R(/\bvous vous\b/gi, m => cap(m, 'tu te'));
+  R(/\b(pour|à|chez|avec|de|sans|que|comme|devant|derrière|selon|sur) vous\b/gi, (m, p) => p + ' toi');
+  const IRR = { avez: 'as', êtes: 'es', pouvez: 'peux', devez: 'dois', voulez: 'veux', faites: 'fais', dites: 'dis', allez: 'vas', voyez: 'vois', savez: 'sais', prenez: 'prends', mettez: 'mets', tenez: 'tiens', venez: 'viens', lisez: 'lis', suivez: 'suis', attendez: 'attends', rendez: 'rends', défendez: 'défends', descendez: 'descends', apprenez: 'apprends', comprenez: 'comprends', perdez: 'perds', répondez: 'réponds', entendez: 'entends', reprenez: 'reprends', obtenez: 'obtiens', retenez: 'retiens', écrivez: 'écris', vivez: 'vis', battez: 'bats', connaissez: 'connais', croyez: 'crois', recevez: 'reçois' };
+  const PRES_R = new Set(['tirez', 'retirez', 'attirez', 'inspirez', 'admirez', 'désirez', 'assurez', 'mesurez', 'durez', 'virez', 'considérez', 'préférez', 'espérez', 'gérez', 'opérez', 'récupérez']);
+  const conj = v => { const lv = v.toLowerCase(); if (IRR[lv]) return IRR[lv]; if (/issez$/.test(lv)) return lv.replace(/issez$/, 'is'); if (/(er|ir|ur|rr|dr)ez$/.test(lv) && !PRES_R.has(lv)) return lv.replace(/ez$/, 'as'); if (/iez$/.test(lv)) return lv.replace(/iez$/, 'ais'); if (/ez$/.test(lv)) return lv.replace(/ez$/, 'es'); return lv; };
+  R(/\b(vous) ((?:ne |n')?)(\p{L}+)\b/giu, (m, v, ne, verb) => { const tu = cap(v, 'tu'); if (!/ez$|es$/.test(verb.toLowerCase())) return m; return `${tu} ${ne}${conj(verb)}`; });
+  R(/\bvous (en|y|le|la|les|l')\s?(\p{L}+ez)\b/giu, (m, o, verb) => `${cap(m, 'tu')} ${o}${o === "l'" ? '' : ' '}${conj(verb)}`);
+  const IMP = { faites: 'fais', dites: 'dis', prenez: 'prends', mettez: 'mets', voyez: 'vois', venez: 'viens', lisez: 'lis', suivez: 'suis', attendez: 'attends', rendez: 'rends', défendez: 'défends', descendez: 'descends', apprenez: 'apprends', allez: 'va', soyez: 'sois', ayez: 'aie', reprenez: 'reprends', retenez: 'retiens', comprenez: 'comprends', répondez: 'réponds', écrivez: 'écris', perdez: 'perds' };
+  const NOEZ = new Set(['chez', 'nez', 'assez', 'rez', 'avez', 'êtes']);
+  R(/(?<!\p{L})(\p{L}+ez)(?!\p{L})/gu, (m) => { const lv = m.toLowerCase(); if (NOEZ.has(lv)) return m; let o = IMP[lv] || (/issez$/.test(lv) ? lv.replace(/issez$/, 'is') : lv.replace(/ez$/, 'e')); return cap(m, o); });
+  R(/(?<!\p{L})(faites|dites)(?!\p{L})/giu, m => cap(m, m.toLowerCase() === 'faites' ? 'fais' : 'dis'));
+  R(/\b(le|la|les) vôtres?\b/gi, (m, a) => cap(m, a.toLowerCase() === 'le' ? 'le tien' : a.toLowerCase() === 'la' ? 'la tienne' : 'les tiens'));
+  R(/\bvotre (\p{L}+)/giu, (m, n) => { const w = n.toLowerCase(); const a = /^[aeiouyéèêàâîôûh]/.test(w) ? 'ton' : TU_FEM.has(w) ? 'ta' : 'ton'; return cap(m, a) + ' ' + n; });
+  R(/\bvos\b/gi, m => cap(m, 'tes'));
+  R(/\b(il|elle|on|ils|elles|je|qui|cela|ça|ce|ne|nous|me|le|la|les|lui|leur|en|y) vous (?=\p{L})/giu, (m, p) => p + ' te ');
+  R(/\bte ([aeiouéèêh])/gi, "t'$1");
+  R(/\bvous\s*\(/gi, m => cap(m, 'toi ('));
+  R(/\bVous\b(?=\s*$|\s*[·:,.!?»)])/g, 'Toi');
+  R(/\bvous\b/gi, m => cap(m, 'tu'));
+  return s;
+}
+function tuTree(root) {
+  if (tone() === 'adulte' || !root) return;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => (n.parentElement && n.parentElement.closest('.notu,script,style,input,textarea') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) });
+  const L = []; while (w.nextNode()) L.push(w.currentNode);
+  L.forEach(n => { const v = n.nodeValue, o = tuFix(v); if (o !== v) n.nodeValue = o; });
+  root.querySelectorAll('[placeholder],[aria-label]').forEach(el => { ['placeholder', 'aria-label'].forEach(a => { const v = el.getAttribute(a); if (v) el.setAttribute(a, tuFix(v)); }); });
+}
+
 'use strict';
 // ====================================================================
 //  PROFILS, TON, ENCOURAGEMENTS, PARCOURS PAR NIVEAUX, LEÇONS, MINI-JEUX
@@ -6575,7 +6810,7 @@ function lessonPage(id) {
 //  ACCUEIL ET MENU
 // ====================================================================
 const LOGO = `<svg class="logo" viewBox="0 0 80 48" aria-hidden="true"><g transform="rotate(-27 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--ink)">&#9824;</text></g><g transform="rotate(-9 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--red)">&#9829;</text></g><g transform="rotate(9 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--red)">&#9830;</text></g><g transform="rotate(27 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--ink)">&#9827;</text></g></svg>`;
-const LEGAL = `<p class="legal">© 2026 <b>Arnaud de Beukelaer</b>, auteur de ce site · Tous droits réservés.<br>Cette application ne peut être communiquée à des tiers sans l'accord de l'auteur.<br>Contact : <a href="mailto:arnaud.de.beukelaer@gmail.com">arnaud.de.beukelaer@gmail.com</a><br><span class="ver">Version du 2 novembre 2026 (v33)</span></p>`;
+const LEGAL = `<p class="legal">© 2026 <b>Arnaud de Beukelaer</b>, auteur de ce site · Tous droits réservés.<br>Cette application ne peut être communiquée à des tiers sans l'accord de l'auteur.<br>Contact : <a href="mailto:arnaud.de.beukelaer@gmail.com">arnaud.de.beukelaer@gmail.com</a><br><span class="ver">Version du 2 novembre 2026 (v34)</span></p>`;
 function welcome() {
   CUR = null; X = null; const p = ST.prof;
   const SUITS4 = '<span class="d4"><i>♠</i><i class="r">♥</i><i class="r">♦</i><i>♣</i></span>';
@@ -6604,7 +6839,7 @@ function menu() {
   CUR = null; X = null; checkLevels(); const hh = new Date().getHours(), t = tone();
   const groups = []; SECTIONS.forEach((s, i) => { let g = groups.find(x => x.t === s.g); if (!g) groups.push(g = { t: s.g, l: [] }); g.l.push([s, i]); });
   const hello = hh < 6 ? 'Encore debout ?' : hh < 12 ? 'Bonjour' : hh < 18 ? 'Bon après-midi' : 'Bonsoir';
-  show(`<div class="hero"><div class="in">${LOGO}<div><h1>${t === 'adulte' ? `${hello}${ST.opt.name ? ', ' + escA(ST.opt.name) : ''}` : T3(ST.opt.name ? `Salut, ${escA(ST.opt.name)} !` : 'Salut, champion·ne !', ST.opt.name ? `Salut, ${escA(ST.opt.name)} !` : 'Salut !', hello)}</h1><div class="sub">${t === 'adulte' ? 'Entraîneur de bridge · système 5e majeure' : T3('Le bridge des Juniors', 'Le bridge, version ados', '')}</div></div></div></div>
+  show(`<div class="hero"><div class="in">${LOGO}<div><h1>${t === 'adulte' ? `${hello}${ST.opt.name ? ', ' + escA(ST.opt.name) : ''}` : T3(`Salut, ${ST.opt.name ? escA(ST.opt.name) + ', ' : ''}${MAGE()} !`, `Salut, ${ST.opt.name ? escA(ST.opt.name) + ', ' : ''}${MAGE()} !`, hello)}</h1><div class="sub">${t === 'adulte' ? 'Entraîneur de bridge · système 5e majeure' : T3('Le bridge des Juniors', 'Le bridge, version ados', '')}</div></div></div></div>
   <div class="wrap">
   ${!CLOUD && !LS_OK ? '<div class="fb mid"><b>Attention :</b> ici, la progression ne s\'enregistre pas toute seule. Utilisez le code de sauvegarde (Ma progression).</div>' : ''}
   ${parcoursHero()}
@@ -6617,7 +6852,7 @@ function menu() {
   <details class="grands"><summary>Le coin des grands (pour plus tard)</summary>` : ''}
   ${groups.map(g => `<div class="grp">${g.t}</div><div class="menu">${g.l.map(([s]) => `<button class="tile" data-sec="${s.id}"><span class="tn s${SECTIONS.indexOf(s) % 4}">${'♠♥♦♣'[SECTIONS.indexOf(s) % 4]}</span><span class="tt"><b>${s.t}</b><span class="small">${s.d}</span><span class="ts">${tileStatus(s.id)}</span></span><span class="chev">›</span></button>`).join('')}</div>`).join('')}
   ${t === 'enfant' ? '</details>' : ''}
-  <p class="foot"><a href="#" data-welcome="1">Changer de profil · comment fonctionne le site</a><br>♠ <span class="r">♥</span> <span class="r">♦</span> ♣ · système 5e majeure · chelems FFB</p>
+  <p class="foot"><a href="#" data-agegate="1">Changer d'univers ou de tranche d'âge</a> · <a href="#" data-welcome="1">comment fonctionne le site</a><br>♠ <span class="r">♥</span> <span class="r">♦</span> ♣ · système 5e majeure · chelems FFB</p>
   ${LEGAL}
   </div>`);
 }
@@ -6632,7 +6867,7 @@ app.addEventListener('click', e => {
   if (d.mnext) { MS.i++; return MS.i >= MS.n ? miniEnd() : miniNext(); }
   if (d.tlvgo) { ST.opt.lv = d.tlvgo; save(); return openSection('tournoi'); }
 });
-gateThen(() => { if (ST.opt.noWelcome && ST.prof) home(); else welcome(); });
+gateThen(() => ageGate());
 cloudInit();
 
 </script>
