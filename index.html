@@ -500,6 +500,21 @@ textarea.mono{width:100%;font:600 14px/1.4 Menlo,Consolas,monospace;padding:8px;
 .sdl{font-family:var(--f-disp);font-size:15px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sdl i{font-style:normal;display:inline-block;width:15px}.sdl i.r{color:#c3132f}
 .mid3.dl .table4,.mid3.dr .table4{grid-template-columns:repeat(3,minmax(0,1fr))}
 .mid3.dl .felt .tc,.mid3.dl .tc,.mid3.dr .tc{min-width:42px!important;font-size:19px!important}
+
+/* ===================== TAPIS ADAPTÉ À TOUS LES ÉCRANS ===================== */
+.wrap.play .card.felt{display:flex;flex-direction:column;justify-content:space-between;min-height:min(calc(100svh - 240px),760px)}
+.wrap.play .mid3{flex:1;align-content:center}
+.pc{width:clamp(40px,10.2vw,58px)!important;height:auto!important;aspect-ratio:40/58;margin-left:clamp(-18px,-3.3vw,-13px)!important}
+.pc b{font-size:clamp(18px,4.6vw,25px)!important}.pc i{font-size:clamp(16px,4vw,22px)!important}
+.pcs.big .pc{width:clamp(58px,14.8vw,84px)!important;margin-left:clamp(-28px,-5vw,-20px)!important}
+.pcs.big .pc:first-child,.pcs .pc:first-child{margin-left:0!important}
+.pcs.big .pc b{font-size:clamp(27px,6.9vw,37px)!important}.pcs.big .pc i{font-size:clamp(24px,6.1vw,33px)!important}
+.pc.mini{width:clamp(27px,6.9vw,38px)!important;margin-left:clamp(-14px,-2.5vw,-10px)!important}
+.pc.mini b{font-size:clamp(14px,3.6vw,19px)!important}.pc.mini i{font-size:clamp(13px,3.3vw,17px)!important}
+.felt .tc{min-width:clamp(48px,12.3vw,64px)!important;font-size:clamp(21px,5.3vw,28px)!important}
+.tc.empty{height:clamp(44px,11.2vw,58px)!important;min-width:clamp(48px,12.3vw,64px)!important}
+.sdl{font-size:clamp(15px,3.8vw,19px)}
+.ver{opacity:.7}
 </style>
 </head>
 <body>
@@ -5839,7 +5854,7 @@ function lessonPage(id) {
 //  ACCUEIL ET MENU
 // ====================================================================
 const LOGO = `<svg class="logo" viewBox="0 0 80 48" aria-hidden="true"><g transform="rotate(-27 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--ink)">&#9824;</text></g><g transform="rotate(-9 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--red)">&#9829;</text></g><g transform="rotate(9 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--red)">&#9830;</text></g><g transform="rotate(27 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--ink)">&#9827;</text></g></svg>`;
-const LEGAL = `<p class="legal">© 2026 <b>Arnaud de Beukelaer</b>, auteur de ce site · Tous droits réservés.<br>Cette application ne peut être communiquée à des tiers sans l'accord de l'auteur.<br>Contact : <a href="mailto:arnaud.de.beukelaer@gmail.com">arnaud.de.beukelaer@gmail.com</a></p>`;
+const LEGAL = `<p class="legal">© 2026 <b>Arnaud de Beukelaer</b>, auteur de ce site · Tous droits réservés.<br>Cette application ne peut être communiquée à des tiers sans l'accord de l'auteur.<br>Contact : <a href="mailto:arnaud.de.beukelaer@gmail.com">arnaud.de.beukelaer@gmail.com</a><br><span class="ver">Version du 2 novembre 2026 (v24)</span></p>`;
 function welcome() {
   CUR = null; X = null; const p = ST.prof;
   const SUITS4 = '<span class="d4"><i>♠</i><i class="r">♥</i><i class="r">♦</i><i>♣</i></span>';
