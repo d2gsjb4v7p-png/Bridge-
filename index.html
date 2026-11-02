@@ -4105,7 +4105,7 @@ function playStart(opt) {
   opt = opt || {}; const mode = opt.mode === 'def' ? 'def' : 'decl'; let H, tr, level, dd = null, decl = 'S', title = opt.title || (mode === 'def' ? 'Défendre une donne' : 'Jouer une donne');
   if (opt.H) { H = opt.H; tr = opt.tr; level = opt.level; dd = opt.dd == null ? null : opt.dd; if (mode === 'decl') { if (opt.decl === 'N') H = rot180(H); } else decl = opt.decl === 'O' ? 'O' : 'E'; }
   else { const P = playPick(); H = parseHands(P.b); tr = P.st === 'N' ? null : P.st; level = P.level; dd = P.dd; if (mode === 'decl') { if (P.decl === 'N') H = rot180(H); } else { H = defRot(H, P.decl); decl = 'E'; } }
-  PG = { G: gNew(H, tr, decl), mode, decl, dummy: PPART(decl), ctrl: mode === 'def' ? ['S'] : ['S', 'N'], open: !!opt.open, level, tr, dd, title, back: opt.back || (mode === 'def' ? 'defense' : 'declarant'), busy: false, ecole: opt.ecole || null, help: opt.help != null ? opt.help : tone() === 'enfant', hint: '', sigTxt: '', last: null, done: false };
+  PG = { G: gNew(H, tr, decl), mode, decl, dummy: PPART(decl), ctrl: mode === 'def' ? ['S'] : ['S', 'N'], open: !!opt.open, level, tr, dd, title, back: opt.back || (mode === 'def' ? 'defense' : 'declarant'), busy: false, ecole: opt.ecole || null, help: opt.help != null ? opt.help : tone() === 'enfant', hint: '', sigTxt: '', last: null, done: false, onEnd: opt.onEnd || null, note: opt.note || '' };
   if (mode === 'def') PG.G.sigSeat = 'N';
   if (!opt.H) PG.again = () => ({ mode, back: PG.back }); else PG.replay = opt;
   if (opt.again) PG.again = opt.again;
@@ -4151,10 +4151,11 @@ function playRender() {
    <div class="ps"><div class="small lab">Vous (Sud)</div>${handRow('S', mine && turn === 'S')}</div>
   </div>
   <p class="turn">${msg}</p>
+  ${PG.note && !(G.tricks.length || G.cur.length) ? `<div class="fb slim">${PG.note}</div>` : ''}
   ${PG.sigTxt ? `<div class="fb ok slim"><b>Le signal de votre partenaire.</b> ${PG.sigTxt}</div>` : ''}
   ${PG.help ? countHelp() : ''}
   ${PG.hint ? `<div class="fb mid slim">${PG.hint}</div>` : ''}
-  <div class="acts">${PG.hist && PG.hist.length && !PG.done ? '<button class="btn sec small" data-pgo="undo">↶ Annuler mon dernier coup</button>' : ''}<button class="btn sec small" data-pgo="hint">💡 Un conseil</button><button class="btn sec small" data-pgo="help">${PG.help ? 'Masquer' : 'Afficher'} l'aide au comptage</button>${PG.open ? '' : '<button class="btn sec small" data-pgo="new">Autre donne</button>'}</div></div>`);
+  <div class="acts">${PG.hist && PG.hist.length && !PG.done ? '<button class="btn sec small" data-pgo="undo">↶ Annuler mon dernier coup</button>' : ''}<button class="btn sec small" data-pgo="hint">💡 Un conseil</button><button class="btn sec small" data-pgo="help">${PG.help ? 'Masquer' : 'Afficher'} l'aide au comptage</button>${PG.open || PG.onEnd ? '' : '<button class="btn sec small" data-pgo="new">Autre donne</button>'}</div></div>`);
   try { const t = document.querySelector('.turn'); if (t) { const r = t.getBoundingClientRect(); if (r.bottom > innerHeight) window.scrollTo(0, scrollY + r.bottom - innerHeight + 10); } } catch (e) { }
 }
 function playAuto() {
@@ -4206,6 +4207,7 @@ function playHint() {
   playRender();
 }
 function playEnd() {
+  if (PG.onEnd) { const ns0 = PG.G.tricks.filter(t => PSIDE(t.win) === 'NS').length; PG.done = true; const f = PG.onEnd, pg = PG, v = PG.mode === 'def' ? 13 - ns0 : ns0; return setTimeout(() => { if (PG === pg) f(v, pg); }, 900); }
   const G = PG.G, need = playNeed(), ns = G.tricks.filter(t => PSIDE(t.win) === 'NS').length, diff = ns - need, def = PG.mode === 'def'; PG.done = true;
   const g = ST.games; if (def) { g.defPlayed = (g.defPlayed || 0) + 1; if (diff >= 0) g.flancOk = (g.flancOk || 0) + 1; } else { g.played = (g.played || 0) + 1; if (diff >= 0) g.made = (g.made || 0) + 1; } save();
   const ctr = `${PG.level}${PG.tr ? SYM[PG.tr] : 'SA'}`, declT = def ? 13 - ns : ns, sc0 = dupScore(PG.level, PG.tr || 'N', 0, false, declT), sc = def ? -sc0 : sc0, ddMine = PG.dd == null ? null : def ? 13 - PG.dd : PG.dd;
@@ -4442,20 +4444,26 @@ function belleOpt() {
   }
   return { back: 'donnes' };
 }
+function belleStart() {
+  const pool = BOARDS.filter(b => b.t === 'chelem').concat(typeof FREAK_BOARDS !== 'undefined' ? FREAK_BOARDS : []).filter(b => { const best = bestNS(b); return best && best.level >= 4; });
+  const b = pick(pool); if (!b) return playStart(belleOpt());
+  ST.tour = { seed: (Date.now() % 1e9) | 0, duel: null, belle: 1, ids: [b.id], k: 0, n: 1, res: [], nsLv: [0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.22], lv: 'bon', mode: 'imp', ewLv: [0, 0, 0, 0, 0, 0, 0].map(() => Math.min(0.6, OPP_LV.bon ? OPP_LV.bon.noise : 0.1)), d: Date.now() };
+  save(); tourBoard();
+}
 function donnesBlock() {
   const e = ST.ecole || {}, g = ST.games || {};
   const steps = ecList().map(m => { const st = e[m] || {}; const done = (st.made || 0) >= 2; return `<li data-ecm="${m}"><span class="num">${done ? '✓' : m}</span><span class="t"><b>${EC_M[m].t}</b></span>${done ? '<span class="pill acq">acquise</span>' : st.tries ? `<span class="pill">${st.made || 0}/${st.tries}</span>` : '<span class="pill">à faire</span>'}</li>`; }).join('');
   const T = ST.tour;
   return `<div class="card"><h2>1 · Par thème, du plus simple au plus difficile</h2><p class="small">Une technique par marche, avec une donne guidée, puis des donnes en autonomie, et à chaque fois un débriefing : ce qui va, ce qui ne va pas, et pourquoi.</p><ul class="cases">${steps}</ul>
    <div class="acts">${tone() !== 'adulte' ? '<button class="btn sec small" data-minib="1">Mini-bridge</button>' : ''}<button class="btn sec small" data-playdef="donnes">Défendre en jouant les cartes</button><button class="btn sec small" data-suivi="1">Suivre les cartes</button></div></div>
-  <div class="card"><h2>2 · Les simulations de tournoi</h2><p class="small">Vous enchérissez contre des adversaires du niveau choisi ; chaque donne est commentée (calcul de la marque, autres tables, vos décisions, mon avis), puis vient le classement final.</p>
+  <div class="card"><h2>2 · Les simulations de tournoi</h2><p class="small">Vous enchérissez contre des adversaires du niveau choisi, puis vous jouez la donne ; chaque donne est commentée (calcul de la marque, autres tables, vos décisions, mon avis), puis vient le classement final.</p>
    ${T ? `<div class="acts"><button class="btn" data-tres="1">Reprendre ${T.duel ? 'le duel ' + T.duel : 'le tournoi'} (donne ${T.k + 1}/${T.n}) ›</button></div>` : ''}
    <div class="acts"><button class="btn sec" data-dmode="mp">🏛 Tournoi au pourcentage (duplicate de club)</button><button class="btn sec" data-dmode="imp">📊 Tournoi en IMP (comme Funbridge)</button><button class="btn sec" data-dmode="freak">🌪 Tournoi de mains folles</button><button class="btn sec" data-dmode="duel">⚔️ Duel en duplicate (à deux)</button></div></div>
-  <div class="card felt-cta"><h2>3 · Les plus belles donnes</h2><p class="small">Des chelems et des mains extraordinaires, à jouer vous-même. À la fin : le nombre de levées possible avec un jeu parfait, et le commentaire de votre jeu.</p><div class="acts"><button class="btn" data-belle="1">Jouer une belle donne ›</button>${g.made ? `<span class="pill acq" style="align-self:center">${g.made} donne${g.made > 1 ? 's' : ''} gagnée${g.made > 1 ? 's' : ''}</span>` : ''}</div></div>`;
+  <div class="card felt-cta"><h2>3 · Les plus belles donnes</h2><p class="small">Des chelems et des mains extraordinaires. D'abord les enchères avec votre partenaire, puis vous jouez la donne, et à la fin mon avis sur les enchères et sur votre jeu de la carte.</p><div class="acts"><button class="btn" data-belle="1">Jouer une belle donne ›</button>${g.made ? `<span class="pill acq" style="align-self:center">${g.made} donne${g.made > 1 ? 's' : ''} gagnée${g.made > 1 ? 's' : ''}</span>` : ''}</div></div>`;
 }
 app.addEventListener('click', e => {
   const t = e.target.closest('[data-belle],[data-dmode]'); if (!t || t.disabled) return; const d = t.dataset;
-  if (d.belle) return playStart(belleOpt());
+  if (d.belle) return belleStart();
   if (d.dmode) {
     if (d.dmode === 'mp' || d.dmode === 'imp') { ST.opt.tmode = d.dmode; ST.opt.tset = 'normal'; }
     if (d.dmode === 'freak') ST.opt.tset = 'freak';
@@ -4855,7 +4863,7 @@ function duelReport(D) {
         if (tr >= need && c.level < gameL && best && best.level < 6 && best.score >= 400) out.push(`<b>manche manquée</b> : ${best.level}${best.st === 'N' ? 'SA' : SYM[best.st]} réussissait (${best.tricks} levées).`);
         if (best && best.level >= 6 && c.level < best.level) cats.push('chelem');
         if (best && best.level >= 6 && c.level < best.level) out.push(`<b>${c.level < 6 ? 'chelem manqué' : 'grand chelem manqué'}</b> : ${best.level}${best.st === 'N' ? 'SA' : SYM[best.st]} était sur table (${best.tricks} levées).`);
-      } else if (c) { if (sc < 0 && b.par > sc) cats.push('defense'); if (sc < 0 && b.par > sc) out.push('les adversaires ont joué la donne : il y avait peut-être mieux à faire (intervenir, disputer, ou contrer).'); }
+      } else if (c) { const ddO = b.dd[ddIdx(c.st, c.decl)]; if (tr > ddO) { cats.push('defense'); out.push(`en défense, ${tr - ddO} levée${tr - ddO > 1 ? 's' : ''} offerte${tr - ddO > 1 ? 's' : ''} au déclarant (${ddO} avec un jeu parfait).`); } else if (sc < 0 && b.par > sc) cats.push('defense'); if (sc < 0 && b.par > sc) out.push('les adversaires ont joué la donne : il y avait peut-être mieux à faire (intervenir, disputer, ou contrer).'); }
       if (err) cats.push('systeme');
       if (err) out.push(`${err} enchère${err > 1 ? 's' : ''} hors système.`);
       return out;
@@ -5324,7 +5332,7 @@ const curLv = () => (ST.opt.lv && OPP_LV[ST.opt.lv] ? ST.opt.lv : 'inter');
 const mpPct = (s, others) => { let p = 0; others.forEach(o => { p += s > o ? 2 : s === o ? 1 : 0; }); return 100 * p / (2 * others.length); };
 function tourBlock() {
   const T = ST.tour, h = ST.tours || [], lv = curLv();
-  return `<div class="card"><h2>Le principe</h2><p class="small">Vous êtes <b>Sud</b>. Votre partenaire (Nord) joue toujours à un très bon niveau et suit le système à la lettre. Vous choisissez le niveau de vos adversaires. Sept autres paires Nord-Sud jouent les mêmes donnes contre des adversaires du même niveau : votre résultat est comparé au leur, comme dans un vrai tournoi. Le jeu de la carte est simulé : votre camp joue parfaitement, les adversaires font les erreurs de leur niveau. Après chaque donne : un commentaire complet. À la fin : le classement et le vainqueur.</p>
+  return `<div class="card"><h2>Le principe</h2><p class="small">Vous êtes <b>Sud</b>. Votre partenaire (Nord) joue toujours à un très bon niveau et suit le système à la lettre. Vous choisissez le niveau de vos adversaires. Sept autres paires Nord-Sud jouent les mêmes donnes contre des adversaires du même niveau : votre résultat est comparé au leur, comme dans un vrai tournoi. Après les enchères, vous jouez vraiment la donne : comme déclarant (même quand votre partenaire a gagné l'enchère, comme sur Funbridge) ou en défense. Puis vient un commentaire complet : les enchères, puis votre jeu de la carte. À la fin : le classement et le vainqueur.</p>
   ${T ? '' : `<div class="label" style="margin-top:10px">Niveau de vos adversaires</div><div class="lvl">${Object.entries(OPP_LV).map(([k, o]) => `<button class="lvb${k === lv ? ' on' : ''}" data-tlv="${k}"><b>${o.t}</b><span class="small">${o.d}</span></button>`).join('')}</div><div class="acts"><button class="btn sec small" data-chap="champion">Qu'est-ce qui distingue un bon joueur d'un champion ?</button></div>
   <div class="label" style="margin-top:12px">Les donnes</div><div class="lvl">${[['normal', 'Donnes variées', 'Manches, chelems, barrages, contres d\'appel, donnes disputées.'], ['freak', 'Répartitions extraordinaires', '6-5, 7-5, chicanes, couleurs de 8 cartes : des donnes folles où il faut annoncer en fonction.']].map(([k, t, d]) => `<button class="lvb${(ST.opt.tset || 'normal') === k ? ' on' : ''}" data-tset="${k}"><b>${t}</b><span class="small">${d}</span></button>`).join('')}</div><div class="acts"><button class="btn sec small" data-chap="excentriques">Fiche : les mains extraordinaires</button></div>
   <div class="label" style="margin-top:12px">Le calcul des scores</div><div class="lvl">${[['mp', 'Duplicate au pourcentage', 'Comme dans votre club : on compte combien de tables vous battez. Chaque dizaine de points compte.'], ['imp', 'En IMP, comme sur Funbridge', 'Votre score est comparé à la moyenne des tables, puis converti en IMP. Les manches et les chelems comptent énormément, les levées de mieux presque pas.']].map(([k, t, d]) => `<button class="lvb${(ST.opt.tmode || 'mp') === k ? ' on' : ''}" data-tmode="${k}"><b>${t}</b><span class="small">${d}</span></button>`).join('')}</div><div class="acts"><button class="btn sec small" data-chap="imp">Fiche : jouer en IMP</button></div>`}
@@ -5352,7 +5360,7 @@ const alertTxt = e => (e.user ? 'votre enchère' : e.mean && e.mean.al ? e.mean.
 function tourRender() {
   const T = ST.tour, b = TB.b, A = TB.A, vul = VULN[b.n];
   const notes = A.ev.filter(e => e.b !== 'P' && !e.user).map(e => `<li><b>${SEATNAME[e.s]}, ${BC(e.b)}</b>${alertTxt(e) ? ' : ' + alertTxt(e) : ''}</li>`).join('');
-  show(`${topBar(`${T.duel ? '⚔️ Duel ' + T.duel : 'Tournoi'} · donne ${T.k + 1}/${T.n}`, `${T.duel ? `Code du duel : ${T.duel} · ` : ''}Adversaires : ${EW_NAMES[TB.oi]} (${tourLv(T).t.toLowerCase()})${T.mode === 'imp' && T.res.length ? ` · total : ${impTxt(T.res.reduce((a, r) => a + (r.imp || 0), 0))}` : ''}`, 'tournoi')}<div class="wrap">
+  show(`${topBar(T.belle ? 'Belle donne · les enchères' : `${T.duel ? '⚔️ Duel ' + T.duel : 'Tournoi'} · donne ${T.k + 1}/${T.n}`, `${T.duel ? `Code du duel : ${T.duel} · ` : ''}Adversaires : ${EW_NAMES[TB.oi]} (${tourLv(T).t.toLowerCase()})${T.mode === 'imp' && T.res.length ? ` · total : ${impTxt(T.res.reduce((a, r) => a + (r.imp || 0), 0))}` : ''}`, 'tournoi')}<div class="wrap">
   <div class="card"><div class="sit">Vous êtes <b>Sud</b> · Donneur : ${SEATNAME[A.dealer]} · Vulnérable : <b>${vulTxt(vul)}</b>${isVul(vul, 'S') ? ' (vous l\'êtes)' : ''}</div><div class="label">Votre main</div>${handBlock(TB.H.S)}${ST.opt.showH ? `<div class="hcp">${hcp(TB.H.S)} points d'honneur</div>` : ''}</div>
   <div class="card"><div class="label">Les enchères</div>${aucSimple(A.dealer, A.ev.map(e => e.b), 'S', true)}${notes ? `<div class="label" style="margin-top:10px">Ce que disent les annonces</div><ul class="notes">${notes}</ul>` : ''}</div>
   <div class="card"><div class="q">À vous.</div>${bidGrid(legalCalls(A.ev, 'S'), 'data-tb')}${TB.dec.length ? '<div class="acts" style="margin-top:10px"><button class="btn sec small" data-tundo="1">↶ Annuler ma dernière enchère</button></div>' : ''}</div></div>`);
@@ -5381,16 +5389,25 @@ function playTable(b, H, noise, seed, lvO, nsErr) {
   return { c, tr, sc: nsScore(b, c, tr), ev: A.ev.map(e => [e.s, e.b]) };
 }
 function tourFinishBoard() {
+  const T = ST.tour, b = TB.b, c = contractOf(TB.A.ev);
+  if (!c) return tourScoreBoard(null, 0, null);
+  const ns = pairOf(c.decl) === 'NS', H0 = TB.H, dd = b.dd[ddIdx(c.st, c.decl)];
+  const who = c.decl === 'S' ? 'Vous êtes le déclarant : à vous de jouer !' : c.decl === 'N' ? 'Votre partenaire est le déclarant. Comme sur Funbridge, c\'est vous qui jouez la donne : sa main passe en bas de l\'écran, la vôtre devient le mort en haut.' : `${SEATNAME[c.decl]} est le déclarant : vous défendez avec votre partenaire (Nord). ${nxt(c.decl) === 'S' ? 'À vous d\'entamer.' : 'Votre partenaire entame.'}`;
+  const opt = { H: H0, tr: c.st === 'N' ? null : c.st, level: c.level, decl: c.decl, dd, mode: ns ? 'decl' : 'def', back: T.belle ? 'donnes' : 'tournoi', title: `${T.belle ? 'Belle donne' : T.duel ? '⚔️ Duel ' + T.duel : 'Tournoi'} · donne ${T.k + 1}/${T.n} · ${cS(c)}`, note: `<b>Les enchères sont finies : ${cS(c)}.</b> ${who} Mon avis sur les enchères et sur votre jeu viendra à la fin de la donne.`, onEnd: (tr, pg) => tourScoreBoard(c, tr, { tr, dd, mode: ns ? 'decl' : 'def', rot: c.decl === 'N', undos: pg.undos || 0, hints: pg.hints || 0, tricks: pg.G.tricks.map(x => x.cards.map(([q, cc]) => q + cc[0] + cc[1]).join(' ') + '>' + x.win) }) };
+  TB.playing = 1; playStart(opt);
+}
+function tourScoreBoard(c, tr, play) {
   const T = ST.tour, b = TB.b, H = TB.H, A = TB.A, s0 = T.seed + b.id * 101;
-  const c = contractOf(A.ev), tr = c ? tricksFor(b, c, mulberry(s0 * 7 + 3), 'user', tourLv(T)) : 0, sc = nsScore(b, c, tr), fe = tourLv(T).noise;
+  const sc = nsScore(b, c, tr), fe = tourLv(T).noise;
   const field = T.nsLv.map((lv, t) => playTable(b, H, { N: lv, S: lv, E: fe, O: fe }, T.seed + b.id * 131 + t * 17, tourLv(T), lv));
   const sys = playTable(b, H, { N: 0, S: 0, E: A.noise.E, O: A.noise.O }, s0, tourLv(T), 0);
   const fs = field.map(f => f.sc), pct = mpPct(sc, fs), sysPct = mpPct(sys.sc, fs);
   const all = [sc].concat(fs), pairsPct = all.map((x, i) => mpPct(x, all.filter((_, j) => j !== i)));
   const avg = Math.round(all.reduce((a, x) => a + x, 0) / all.length), imp = impOf(sc - avg), pairsImp = all.map(x => impOf(x - avg)), sysImp = impOf(sys.sc - avg);
   const errs = A.ev.filter(e => e.err).map(e => `${SEATNAME[e.s]} ${e.err}`);
-  const res = { id: b.id, ev: A.ev.map(e => [e.s, e.b, e.user ? 1 : 0, (e.mean && e.mean.al) || rangeTxt(e.mean) || '']), c, tr, sc, pct, field: field.map(f => ({ c: f.c, tr: f.tr, sc: f.sc })), sys: { c: sys.c, tr: sys.tr, sc: sys.sc, pct: sysPct, imp: sysImp, ev: sys.ev }, dec: TB.dec, errs, pairsPct, avg, imp, pairsImp, opp: TB.oi };
+  const res = { id: b.id, ev: A.ev.map(e => [e.s, e.b, e.user ? 1 : 0, (e.mean && e.mean.al) || rangeTxt(e.mean) || '']), c, tr, sc, pct, field: field.map(f => ({ c: f.c, tr: f.tr, sc: f.sc })), sys: { c: sys.c, tr: sys.tr, sc: sys.sc, pct: sysPct, imp: sysImp, ev: sys.ev }, dec: TB.dec, errs, pairsPct, avg, imp, pairsImp, opp: TB.oi, play };
   TB.dec.forEach(d => { if (!d.sys.accept.includes(d.user) && CTX_CASE[d.sys.ctx]) logErr('case', CTX_CASE[d.sys.ctx]); });
+  if (T.belle) { T.res.push(res); T.k++; ST.belleLast = T; ST.tour = null; save(); return tourResult(0, true, T); }
   T.res.push(res); T.k++; ST.played = (ST.played || []).concat([b.id]).slice(-150); save();
   tourResult(T.res.length - 1, true);
 }
@@ -5419,8 +5436,9 @@ function tourResult(idx, fresh, TT) {
   const same = cS(r.sys.c) === cS(c);
   avis.push(same ? 'Votre table a joué le même contrat que le système aurait choisi.' : `Avec les enchères du système, votre table aurait joué <b>${cS(r.sys.c)}</b> (${resTxt(r.sys.c, r.sys.tr)}, ${sgn(r.sys.sc)} pour Nord-Sud, soit ${T.mode === 'imp' ? impTxt(r.sys.imp) : fmt1(r.sys.pct) + ' %'}).`);
   if (r.errs.length) avis.push(`Les adversaires se sont trompés : ${r.errs.join(' ; ')}.`);
-  if (c) { const dd = b.dd[ddIdx(c.st, c.decl)]; if (r.tr !== dd) avis.push(r.tr > dd === ourSide ? `Au jeu de la carte, les adversaires vous ont offert ${Math.abs(r.tr - dd)} levée${Math.abs(r.tr - dd) > 1 ? 's' : ''} (${dd} levées avec un jeu parfait des deux côtés).` : `Au jeu de la carte, ${r.tr - dd} levée(s) par rapport au jeu parfait.`); }
+  if (c && !r.play) { const dd = b.dd[ddIdx(c.st, c.decl)]; if (r.tr !== dd) avis.push(r.tr > dd === ourSide ? `Au jeu de la carte, les adversaires vous ont offert ${Math.abs(r.tr - dd)} levée${Math.abs(r.tr - dd) > 1 ? 's' : ''} (${dd} levées avec un jeu parfait des deux côtés).` : `Au jeu de la carte, ${r.tr - dd} levée(s) par rapport au jeu parfait.`); }
   const best = bestNS(b);
+  const jeu = r.play ? playAvis(r, b, c) : '';
   avis.push(`En double mort, le <b>par</b> de la donne vaut ${sgn(b.par)} pour Nord-Sud${b.pc && b.pc[0] ? ` (${b.pc[0].replace('NT', 'SA').replace(/W/g, 'O')})` : ''}${best ? ` ; sans adversaires, le meilleur contrat de Nord-Sud était ${best.level}${best.st === 'N' ? 'SA' : SYM[best.st]} (${sgn(best.score)})` : ''}.`);
   const isLast = ST.tour && idx === ST.tour.n - 1;
   show(`${topBar(`Donne ${idx + 1} · résultat`, `${THEME_TXT[b.t]} · ${vulTxt(vul)} vulnérable`, 'tournoi')}<div class="wrap">
@@ -5430,9 +5448,32 @@ function tourResult(idx, fresh, TT) {
   <div class="card"><h2>Les autres tables</h2><table class="mini"><tr><th>Contrat</th><th>Rés.</th><th>N-S</th><th>Tables</th></tr>${rows}</table><p class="small">La ligne surlignée a le même score que vous.</p></div>
   <div class="card"><h2>Les enchères de votre table</h2>${aucSimple(DEALER_OF(b.n), r.ev.map(e => e[1]), 'S', false)}<ul class="notes">${r.ev.filter(e => e[1] !== 'P').map(e => `<li><b>${SEATNAME[e[0]]}, ${BC(e[1])}</b>${e[2] ? ' : votre enchère' : e[3] ? ' : ' + e[3] : ''}</li>`).join('')}</ul></div>
   ${r.dec.length ? `<div class="card"><h2>Vos décisions</h2>${decRows}</div>` : ''}
-  <div class="card"><h2>Mon avis sur la donne</h2>${avis.map(a => `<p>${a}</p>`).join('')}</div>
+  <div class="card"><h2>Mon avis sur les enchères</h2>${avis.map(a => `<p>${a}</p>`).join('')}</div>
+  ${jeu}
   <div class="card"><h2>Les quatre mains</h2>${handsDiagramB(H, c ? c.decl : null, c)}<div class="label" style="margin-top:10px">Levées en double mort (jeu parfait)</div>${ddTable(b)}</div>
-  <div class="acts">${fresh ? (isLast ? '<button class="btn" data-tfinal="1">Classement final ›</button>' : '<button class="btn" data-tnext="1">Donne suivante ›</button>') : '<button class="btn sec" data-nav="tournoi">Retour</button>'}</div></div>`);
+  <div class="acts">${T.belle ? '<button class="btn" data-belle="1">Une autre belle donne ›</button><button class="btn sec" data-nav="donnes">Retour</button>' : fresh ? (isLast ? '<button class="btn" data-tfinal="1">Classement final ›</button>' : '<button class="btn" data-tnext="1">Donne suivante ›</button>') : '<button class="btn sec" data-nav="tournoi">Retour</button>'}</div></div>`);
+}
+function playAvis(r, b, c) {
+  const P = r.play, decl = P.mode === 'decl', need = c.level + 6, dd = P.dd, tr = P.tr, made = tr >= need;
+  const same = r.field.filter(f => f.c && f.c.level === c.level && f.c.st === c.st && pairOf(f.c.decl) === pairOf(c.decl));
+  const avgT = same.length ? same.reduce((a, f) => a + f.tr, 0) / same.length : null;
+  const out = [];
+  if (decl) {
+    out.push(made ? `<b>${tr - need ? `Contrat réussi avec ${tr - need} levée${tr - need > 1 ? 's' : ''} de mieux` : 'Contrat réussi'}</b> : ${tr} levées pour ${need} demandées.` : `<b>Chute de ${need - tr}</b> : ${tr} levées pour ${need} demandées.`);
+    out.push(tr > dd ? `Avec un jeu parfait des deux côtés, le déclarant fait ${dd} levées : les défenseurs vous ont offert ${tr - dd} levée${tr - dd > 1 ? 's' : ''}. Bien joué de les avoir encaissées !` : tr === dd ? `C'est exactement le maximum possible avec un jeu parfait (${dd} levées) : <b>jeu de la carte impeccable</b>. 👏` : `Avec un jeu parfait, ${dd} levées étaient possibles : <b>${dd - tr} levée${dd - tr > 1 ? 's' : ''} vous ${dd - tr > 1 ? 'ont échappé' : 'a échappé'}</b>.${!made && dd >= need ? ' Et le contrat était gagnable : c\'est au jeu de la carte que la donne s\'est perdue.' : ''}`);
+    if (!made && dd < need) out.push('Le contrat ne pouvait pas réussir contre une bonne défense : le problème vient plutôt des enchères.');
+    if (dd > tr) out.push(c.st === 'N' ? PG_TIPS.nt : PG_TIPS.tr);
+  } else {
+    const def = 13 - tr, needD = 14 - need;
+    out.push(tr < need ? `<b>Contrat chuté de ${need - tr}</b> : votre camp a pris ${def} levées.` : `<b>Contrat réussi par ${SEATNAME[c.decl]}</b>${tr > need ? ` avec ${tr - need} de mieux` : ''} : votre camp a pris ${def} levées (il en fallait ${needD} pour le faire chuter).`);
+    out.push(tr < dd ? `Avec un jeu parfait des deux côtés, le déclarant fait ${dd} levées : vous avez pris ${dd - tr} levée${dd - tr > 1 ? 's' : ''} de plus que prévu. <b>Superbe défense</b> (ou déclarant distrait).` : tr === dd ? `C'est exactement le résultat du jeu parfait : <b>défense sans faute</b>. 👏` : `Avec un jeu parfait, la défense prenait ${13 - dd} levées : <b>${tr - dd} levée${tr - dd > 1 ? 's' : ''} offerte${tr - dd > 1 ? 's' : ''} au déclarant</b>.${tr >= need && dd < need ? ' Et le contrat pouvait chuter !' : ''} Les réflexes : bonne entame, 2e main basse, 3e main haute, et suivre les signaux du partenaire.`);
+  }
+  if (avgT != null) out.push(`Aux ${same.length} autre${same.length > 1 ? 's' : ''} table${same.length > 1 ? 's' : ''} qui ont joué le même contrat, le déclarant a fait en moyenne ${fmt1(avgT)} levées.`);
+  if (P.undos) out.push(`<span class="small">Vous avez utilisé ${P.undos} retour${P.undos > 1 ? 's' : ''} en arrière. En vrai tournoi, une carte jouée est jouée !</span>`);
+  const sn = q => SEATNAME[P.rot ? ({ N: 'S', S: 'N', E: 'O', O: 'E' })[q] : q];
+  const plis = (P.tricks || []).map((t, i) => { const [cs, w] = t.split('>'); return `<div class="small mono">Pli ${i + 1} : ${cs.split(' ').map(x => `${sn(x[0])} ${rk(+x.slice(2))}${SYM[x[1]]}`).join(' · ')} → ${sn(w)}</div>`; }).join('');
+  const btns = decl ? `<button class="btn sec small" data-ecm="10">École de la carte : le plan</button><button class="btn sec small" data-chap="jeu">Fiche : le plan du déclarant</button>` : `<button class="btn sec small" data-playdef="tournoi">S'entraîner en défense</button><button class="btn sec small" data-chap="flanc">Fiche : la défense</button>`;
+  return `<div class="card"><h2>Mon avis sur ${decl ? 'votre jeu de la carte' : 'votre défense'}</h2>${out.map(a => `<p>${a}</p>`).join('')}${dd !== tr ? `<div class="acts">${btns}</div>` : ''}${plis ? `<details><summary>Revoir les 13 plis</summary>${plis}</details>` : ''}</div>`;
 }
 function handsDiagramB(hs, decl, c) {
   const box = s => `<div class="hd ${s === 'S' ? 'me' : ''}"><div class="hn">${SEATNAME[s]}${s === 'S' ? ' (vous)' : ''}${decl === s ? ' · déclarant' : ''}</div>${SU.map(x => `<div>${SYM[x]} ${hs[s][x].length ? hs[s][x].map(rk).join(' ') : '—'}</div>`).join('')}<div class="small">${hcp(hs[s])} H</div></div>`;
