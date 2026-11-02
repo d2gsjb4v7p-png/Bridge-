@@ -487,6 +487,19 @@ textarea.mono{width:100%;font:600 14px/1.4 Menlo,Consolas,monospace;padding:8px;
 .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden}.confetti i{position:absolute;top:-20px;width:9px;height:14px;border-radius:2px;animation:confall linear infinite;opacity:.95}
 @keyframes confall{0%{transform:translateY(-20px) rotate(0deg)}100%{transform:translateY(110vh) rotate(720deg)}}
 @media (prefers-reduced-motion: reduce){.confetti{display:none}}
+
+/* ===================== TAPIS SOBRE ===================== */
+.card.felt{background:radial-gradient(140% 110% at 50% 40%,#1a3a57 0%,#122b42 60%,#0b1d2e 100%)!important;border:1px solid #0a1826!important;border-radius:16px!important;box-shadow:inset 0 0 0 1px rgba(201,163,78,.45),inset 0 0 30px rgba(0,0,0,.25),0 6px 18px -8px rgba(0,0,0,.45)!important;padding:16px 10px 14px!important}
+.card.felt::before,.card.felt::after{display:none!important}
+.card.felt .lab{padding-left:4px}
+.felt .tc{box-shadow:0 2px 5px rgba(0,0,0,.35)!important}
+/* le mort du déclarant adverse, à sa vraie place (à gauche ou à droite) */
+.mid3.dl{grid-template-columns:118px 1fr 44px!important}.mid3.dr{grid-template-columns:44px 1fr 118px!important}
+.sdum{background:#fbf6e8;color:#15211c;border:1px solid #b99447;border-radius:8px;padding:5px 6px;text-align:left;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.sdum .lab2{color:#7a5a14!important;font-size:10px!important;text-align:center;margin-bottom:3px;line-height:1.2}
+.sdl{font-family:var(--f-disp);font-size:15px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sdl i{font-style:normal;display:inline-block;width:15px}.sdl i.r{color:#c3132f}
+.mid3.dl .table4,.mid3.dr .table4{grid-template-columns:repeat(3,minmax(0,1fr))}
+.mid3.dl .felt .tc,.mid3.dl .tc,.mid3.dr .tc{min-width:42px!important;font-size:19px!important}
 </style>
 </head>
 <body>
@@ -4140,13 +4153,15 @@ function playRender() {
   const msg = PG.done ? '' : mine ? (def ? (!started ? '<b>À vous d\'entamer.</b>' : '<b>À vous</b> de jouer.') : `<b>À vous</b> de jouer ${turn === 'N' ? 'une carte du <b>mort</b>' : 'une carte de <b>votre main</b>'}.`) : `${SEATNAME[turn]}${def && turn === PG.dummy ? ' (le mort, joué par le déclarant)' : ''} réfléchit…`;
   const sub = def ? `Contrat ${ctr} joué par ${SEATNAME[PG.decl]} · il vous faut ${need} levées pour le faire chuter` : `Contrat ${ctr} par vous (Sud) · il faut ${need} levées`;
   const top = def ? `<div class="pn"><div class="small lab">Votre partenaire (Nord)</div>${PG.open ? handRow('N', false) : `<div class="backs row">${'<i></i>'.repeat(Math.min(13, SU.reduce((a, s) => a + G.live.N[s].length, 0)))}</div>`}</div>` : `<div class="pn"><div class="small lab">Le mort (Nord)</div>${handRow('N', mine && turn === 'N')}</div>`;
-  const side = p => (PG.open || (def && p === PG.dummy && started)) ? `<div class="small lab2">${SEATNAME[p]}${def && p === PG.dummy ? ' · mort' : ''}</div>` : backs(p);
-  const extra = (def && started ? `<div class="pn"><div class="small lab">Le mort (${SEATNAME[PG.dummy]})</div>${handRow(PG.dummy, false)}</div>` : '') + (PG.open ? ['O', 'E'].filter(p => !(def && p === PG.dummy && started)).map(p => `<div class="pn"><div class="small lab">${SEATNAME[p]}${p === PG.decl ? ' · déclarant' : ''}</div>${handRow(p, false)}</div>`).join('') : '');
+  const dumSide = def && started ? PG.dummy : null;
+  const sideDummy = p => { const order = G.tr ? [G.tr].concat(SU.filter(s => s !== G.tr)) : SU; return `<div class="sdum"><div class="lab2">${SEATNAME[p]}<br>le mort</div>${order.map(s => `<div class="sdl"><i class="${s === 'H' || s === 'D' ? 'r' : ''}">${SYM[s]}</i>${G.live[p][s].length ? G.live[p][s].map(rk).join(' ') : '—'}</div>`).join('')}</div>`; };
+  const side = p => p === dumSide ? sideDummy(p) : PG.open ? `<div class="small lab2">${SEATNAME[p]}</div>` : backs(p);
+  const extra = (PG.open ? ['O', 'E'].filter(p => !(def && p === PG.dummy && started)).map(p => `<div class="pn"><div class="small lab">${SEATNAME[p]}${p === PG.decl ? ' · déclarant' : ''}</div>${handRow(p, false)}</div>`).join('') : '');
   show._play = true; show(`${topBar(PG.title, sub, PG.back)}<div class="wrap play">
   <div class="score"><span>Nous <b>${ns}</b></span><span class="need">Objectif ${need}</span><span>Eux <b>${eo}</b></span></div>
   <div class="card felt">
    ${top}
-   <div class="mid3"><div class="pw">${side('O')}</div><div class="table4"><div></div><div>${slot('N')}</div><div></div><div>${slot('O')}</div><div class="tmid">${G.tricks.length < 13 ? `Pli ${G.tricks.length + (G.cur.length || !PG.last ? 1 : 0)}` : ''}</div><div>${slot('E')}</div><div></div><div>${slot('S')}</div><div></div></div><div class="pw">${side('E')}</div></div>
+   <div class="mid3${dumSide ? ' d' + (dumSide === 'O' ? 'l' : 'r') : ''}"><div class="pw">${side('O')}</div><div class="table4"><div></div><div>${slot('N')}</div><div></div><div>${slot('O')}</div><div class="tmid">${G.tricks.length < 13 ? `Pli ${G.tricks.length + (G.cur.length || !PG.last ? 1 : 0)}` : ''}</div><div>${slot('E')}</div><div></div><div>${slot('S')}</div><div></div></div><div class="pw">${side('E')}</div></div>
    ${extra}
    <div class="ps"><div class="small lab">Vous (Sud)</div>${handRow('S', mine && turn === 'S')}</div>
   </div>
