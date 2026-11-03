@@ -6511,13 +6511,17 @@ function tuFix(s) {
   R(/(?<!\p{L})(\p{L}+ez)-vous(?!\p{L})/gu, (m, v, off, str) => { const rest = str.slice(off); const q = rest.search(/[?]/), e = rest.search(/[.!:;]/); return (q >= 0 && (e < 0 || q < e)) ? cap(m, conjQ(v) + '-tu') : m; });
   R(/(?<!\p{L})(\p{L}+)ez-vous(?!\p{L})/gu, (m, v) => cap(m, ({ rappel: 'rappelle', appel: 'appelle', méfi: 'méfie', souven: 'souviens', assur: 'assure' })[v.toLowerCase()] ? ({ rappel: 'rappelle', appel: 'appelle', méfi: 'méfie', souven: 'souviens', assur: 'assure' })[v.toLowerCase()] + '-toi' : v + 'e-toi'));
   R(/\bvous vous\b/gi, m => cap(m, 'tu te'));
-  R(/\b(pour|à|chez|avec|de|sans|que|comme|devant|derrière|selon|sur) vous\b/gi, (m, p) => p + ' toi');
+  R(/(?<!\p{L})vous-mêmes?(?!\p{L})/giu, m => cap(m, 'toi-même'));
+  R(/(?<!\p{L})(pour|de|sans|pas|à|par) vous (?=\p{L}+(?:er|ir|re|oir)(?!\p{L}))/giu, (m, p) => p + ' te ');
+  R(/(?<!\p{L})pas vous(?=\s*[.,;:!?)]|\s*$)/giu, 'pas toi');
+  R(/(?<!\p{L})(pour|à|chez|avec|de|sans|que|comme|devant|derrière|selon|sur|après|entre|contre|vers|par|envers|sauf) vous(?!\p{L})/giu, (m, p) => p + ' toi');
+  R(/(?<!\p{L})c'est vous(?!\p{L})/giu, m => cap(m, "c'est toi"));
   const IRR = { avez: 'as', êtes: 'es', pouvez: 'peux', devez: 'dois', voulez: 'veux', faites: 'fais', dites: 'dis', allez: 'vas', voyez: 'vois', savez: 'sais', prenez: 'prends', mettez: 'mets', tenez: 'tiens', venez: 'viens', lisez: 'lis', suivez: 'suis', attendez: 'attends', rendez: 'rends', défendez: 'défends', descendez: 'descends', apprenez: 'apprends', comprenez: 'comprends', perdez: 'perds', répondez: 'réponds', entendez: 'entends', reprenez: 'reprends', obtenez: 'obtiens', retenez: 'retiens', écrivez: 'écris', vivez: 'vis', battez: 'bats', connaissez: 'connais', croyez: 'crois', recevez: 'reçois' };
   const PRES_R = new Set(['tirez', 'retirez', 'attirez', 'inspirez', 'admirez', 'désirez', 'assurez', 'mesurez', 'durez', 'virez', 'considérez', 'préférez', 'espérez', 'gérez', 'opérez', 'récupérez']);
   const conj = v => { const lv = v.toLowerCase(); if (IRR[lv]) return IRR[lv]; if (/issez$/.test(lv)) return lv.replace(/issez$/, 'is'); if (/(er|ir|ur|rr|dr)ez$/.test(lv) && !PRES_R.has(lv)) return lv.replace(/ez$/, 'as'); if (/iez$/.test(lv)) return lv.replace(/iez$/, 'ais'); if (/ez$/.test(lv)) return lv.replace(/ez$/, 'es'); return lv; };
   R(/\b(vous) ((?:ne |n')?)(\p{L}+)\b/giu, (m, v, ne, verb) => { const tu = cap(v, 'tu'); if (!/ez$|es$/.test(verb.toLowerCase())) return m; return `${tu} ${ne}${conj(verb)}`; });
   R(/\bvous (en|y|le|la|les|l')\s?(\p{L}+ez)\b/giu, (m, o, verb) => `${cap(m, 'tu')} ${o}${o === "l'" ? '' : ' '}${conj(verb)}`);
-  const IMP = { faites: 'fais', dites: 'dis', prenez: 'prends', mettez: 'mets', voyez: 'vois', venez: 'viens', lisez: 'lis', suivez: 'suis', attendez: 'attends', rendez: 'rends', défendez: 'défends', descendez: 'descends', apprenez: 'apprends', allez: 'va', soyez: 'sois', ayez: 'aie', reprenez: 'reprends', retenez: 'retiens', comprenez: 'comprends', répondez: 'réponds', écrivez: 'écris', perdez: 'perds' };
+  const IMP = { partez: 'pars', sortez: 'sors', servez: 'sers', dormez: 'dors', sentez: 'sens', faites: 'fais', dites: 'dis', prenez: 'prends', mettez: 'mets', voyez: 'vois', venez: 'viens', lisez: 'lis', suivez: 'suis', attendez: 'attends', rendez: 'rends', défendez: 'défends', descendez: 'descends', apprenez: 'apprends', allez: 'va', soyez: 'sois', ayez: 'aie', reprenez: 'reprends', retenez: 'retiens', comprenez: 'comprends', répondez: 'réponds', écrivez: 'écris', perdez: 'perds' };
   const NOEZ = new Set(['chez', 'nez', 'assez', 'rez', 'avez', 'êtes']);
   R(/(?<!\p{L})(\p{L}+ez)(?!\p{L})/gu, (m) => { const lv = m.toLowerCase(); if (NOEZ.has(lv)) return m; let o = IMP[lv] || (/issez$/.test(lv) ? lv.replace(/issez$/, 'is') : lv.replace(/ez$/, 'e')); return cap(m, o); });
   R(/(?<!\p{L})(faites|dites)(?!\p{L})/giu, m => cap(m, m.toLowerCase() === 'faites' ? 'fais' : 'dis'));
@@ -6528,7 +6532,9 @@ function tuFix(s) {
   R(/\bte ([aeiouéèêh])/gi, "t'$1");
   R(/\bvous\s*\(/gi, m => cap(m, 'toi ('));
   R(/\bVous\b(?=\s*$|\s*[·:,.!?»)])/g, 'Toi');
-  R(/\bvous\b/gi, m => cap(m, 'tu'));
+  R(/(?<!\p{L})vous (?!(?:aussi|même|seule?s?|tous|deux|trois)(?!\p{L}))(?=\p{L})/giu, m => cap(m, 'te '));
+  R(/(?<!\p{L})vous(?!\p{L})/giu, m => cap(m, 'toi'));
+  R(/(?<!\p{L})te ([aeiouyéèêàh])/giu, (m, v) => cap(m, "t'") + v);
   return s;
 }
 function tuTree(root) {
@@ -6810,7 +6816,7 @@ function lessonPage(id) {
 //  ACCUEIL ET MENU
 // ====================================================================
 const LOGO = `<svg class="logo" viewBox="0 0 80 48" aria-hidden="true"><g transform="rotate(-27 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--ink)">&#9824;</text></g><g transform="rotate(-9 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--red)">&#9829;</text></g><g transform="rotate(9 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--red)">&#9830;</text></g><g transform="rotate(27 40 50)"><rect x="30" y="6" width="20" height="30" rx="3" fill="var(--paper)" stroke="currentColor" stroke-width="1.3"/><text x="40" y="26" font-size="13" text-anchor="middle" fill="var(--ink)">&#9827;</text></g></svg>`;
-const LEGAL = `<p class="legal">© 2026 <b>Arnaud de Beukelaer</b>, auteur de ce site · Tous droits réservés.<br>Cette application ne peut être communiquée à des tiers sans l'accord de l'auteur.<br>Contact : <a href="mailto:arnaud.de.beukelaer@gmail.com">arnaud.de.beukelaer@gmail.com</a><br><span class="ver">Version du 2 novembre 2026 (v35)</span></p>`;
+const LEGAL = `<p class="legal">© 2026 <b>Arnaud de Beukelaer</b>, auteur de ce site · Tous droits réservés.<br>Cette application ne peut être communiquée à des tiers sans l'accord de l'auteur.<br>Contact : <a href="mailto:arnaud.de.beukelaer@gmail.com">arnaud.de.beukelaer@gmail.com</a><br><span class="ver">Version du 2 novembre 2026 (v36)</span></p>`;
 function welcome() {
   CUR = null; X = null; const p = ST.prof;
   const SUITS4 = '<span class="d4"><i>♠</i><i class="r">♥</i><i class="r">♦</i><i>♣</i></span>';
