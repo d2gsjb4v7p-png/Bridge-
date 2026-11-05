@@ -889,6 +889,39 @@ body[data-th=enfant] .fb,body[data-th=ado] .fb{font-size:17px;line-height:1.55}
 body[data-th=enfant] .fb h3,body[data-th=ado] .fb h3{font-size:19px}
 .kidwarn{background:rgba(255,216,77,.18);border:2px dashed #c99419;border-radius:14px;padding:10px 14px;margin-bottom:14px;font-size:17px;line-height:1.5}
 .ptH,.ptD{display:inline-block;padding:1px 8px;border-radius:999px;font-weight:700;white-space:nowrap}.ptH{background:rgba(255,200,40,.22);color:inherit}.ptD{background:rgba(70,140,255,.2);color:inherit}
+
+/* ===== v44 ===== */
+.defx{font-size:.88em;color:var(--muted);font-style:italic}
+/* le pli s'envole vers son gagnant */
+.table4.sweep .tc:not(.empty){animation:sweep .55s cubic-bezier(.55,0,.8,.4) var(--sd,500ms) forwards!important}
+.table4.swN{--tx:0px;--ty:-150px}.table4.swS{--tx:0px;--ty:160px}.table4.swE{--tx:150px;--ty:0px}.table4.swO{--tx:-150px;--ty:0px}
+.table4.sweep .tc.w{box-shadow:0 0 0 3px #ffd84d,0 0 18px 6px rgba(255,216,77,.75)!important}
+@keyframes sweep{0%{transform:translate(0,0) scale(1);opacity:1}60%{opacity:1}100%{transform:translate(var(--tx),var(--ty)) scale(.2) rotate(8deg);opacity:0}}
+/* rikiki : l'atout bien visible, mon annonce, des scores plus compacts */
+.rktrbig{display:flex;flex-direction:column;align-items:center;justify-content:center;width:92px;height:92px;margin:0 auto 8px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff6d0,#e9c25c 60%,#9a7424);color:#14211b;box-shadow:0 0 0 3px rgba(255,255,255,.4),0 0 22px rgba(255,216,77,.55)}
+.rktrbig small{font:800 10px/1.1 var(--f-body);text-transform:uppercase;letter-spacing:.05em;text-align:center}.rktrbig b{font-size:44px;line-height:1}.rktrbig.red b{color:#c3132f}
+.rkbar{grid-template-columns:auto auto 1fr auto!important}
+.rkme{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:62px;padding:3px 6px;border-radius:12px;background:#14533f;color:#fff;border:2px solid #ffd84d}
+.rkme small{font-size:10px;line-height:1.1;text-transform:uppercase;letter-spacing:.04em;color:#ffe9a8}.rkme b{font-family:var(--f-disp);font-size:26px;line-height:1.05}
+.rkmk{gap:2px!important}.rkmk span{padding:0!important;border-radius:8px!important}.rkmk i{font-size:13px!important}.rkmk b{font-size:15px!important}
+.rkbw{display:block;font-size:11px;line-height:1.25;margin-top:3px;padding:2px 6px;border-radius:10px;background:rgba(0,0,0,.35);color:#fff;text-align:center;max-width:100%}.rkbw b{color:#ffd84d}
+
+/* v44 (suite) : scores du rikiki plus étroits, identité du joueur adulte */
+.rktab{width:auto!important;margin:8px auto!important;font-size:14px}.rktab td,.rktab th{padding:4px 7px!important}.rktab th{font-size:11px}
+.rkmk span{min-width:0!important;padding:2px 5px!important}.rkmk b{font-size:16px!important}
+.agewho{grid-column:1/-1;text-align:center;font-family:var(--f-disp);font-size:18px;color:#e3c47a;margin:2px 0 6px}
+
+/* v45 : les fiches des 8-12 ans dans le grimoire */
+.card.th .kidsheet{margin:-20px -18px;padding:6px 0 16px;border-radius:22px;box-shadow:none}
+body[data-th=enfant] .card.th:has(.kidsheet){padding:0;border:2px solid #ffd84d;overflow:hidden;background:#2b1460}
+.kidsheet .escsec h3{border-left:0!important;padding-left:0!important;color:#ffd84d!important;font-size:21px}
+.kidsheet .escsec p,.kidsheet .escsteps li{font-size:18px;line-height:1.6;color:#fff6c8}
+.kidsheet table{background:rgba(255,255,255,.08);border-radius:10px;overflow:hidden;margin:10px 0 4px}
+.kidsheet td,.kidsheet th{border-color:rgba(255,216,77,.35)!important;color:#fff6c8;font-size:16.5px}
+.kidsheet th{background:rgba(255,216,77,.22)!important;color:#ffd84d!important}
+.kidsheet .escprof b{color:#ffd84d}.kidsheet .escprof p{color:#fff6c8}
+.kidsheet .acts{margin:14px 14px 0}
+.kidsheet .ptH,.kidsheet .ptD{color:#fff6c8}
 </style>
 </head>
 <body>
@@ -3810,10 +3843,11 @@ function colorize(html) { return html.replace(/[♥♦]/g, m => `<span class="r"
 const app = document.getElementById('app');
 // les trois univers, selon l'âge
 const THEME_CAST = {
-  enfant: { N: ['Le Sorcier', '🧙'], E: ['L\'Elfe', '🧝'], S: ['Le Nain', '⛏️'], O: ['Le Fantôme', '👻'] },
-  ado: { N: ['Le Spectre', '🌫️'], E: ['L\'Elfe', '🧝'], S: ['Le Nain', '⛏️'], O: ['Le Magicien', '🧙‍♂️'] },
-  adulte: { N: ['Le Capitaine', '⚓'], E: ['La Comtesse', '💎'], S: ['Le Colonel', '🎖️'], O: ['L\'Égyptologue', '🏺'] },
+  enfant: { N: ['Le Nain', '⛏️'], E: ['L\'Elfe', '🧝'], S: ['Le Sorcier', '🧙‍♂️'], O: ['Le Fantôme', '👻'] },
+  ado: { N: ['Le Spectre', '🌫️'], E: ['Le Nain', '⛏️'], S: ['L\'Elfe', '🧝'], O: ['Le Magicien', '🧙‍♂️'] },
+  adulte: { N: ['Le Capitaine', '⚓'], E: ['La Comtesse', '💎'], S: ['Le colonel von Spilkart', '🎖️'], O: ['L\'Égyptologue', '🏺'] },
 };
+Object.defineProperty(THEME_CAST.enfant, 'S', { get() { return typeof ST !== 'undefined' && ST.opt && ST.opt.genre === 'f' ? ['La Sorcière', '🧙‍♀️'] : ['Le Sorcier', '🧙‍♂️']; } });
 const themeOf = () => (typeof tone === 'function' ? tone() : 'adulte');
 const seatAv = p => (THEME_CAST[themeOf()] || THEME_CAST.adulte)[p][1];
 function show(html) { try { document.body.dataset.th = themeOf(); } catch (e) { } if (!show._play && typeof PG !== 'undefined' && PG) PG = null; show._play = false; app.innerHTML = colorize(html); try { if (typeof tuTree === 'function') tuTree(app); } catch (e) { } window.scrollTo(0, 0); }
@@ -4884,11 +4918,13 @@ const RK_ORDER = { S: 'O', O: 'N', N: 'E', E: 'S' };
 // les personnages (originaux) : 3 adversaires tirés au sort à chaque partie selon l'âge
 const RK_CAST = {
   enfant: [
+    { n: 'Le Nain', a: '⛏️', s: t => [`Le Nain frappe la table de son marteau : « ${t} ! »`, `Le Nain lisse sa grande barbe : « ${t}, foi de nain ! »`] },
     { n: 'Le Sorcier', a: '🧙', s: t => [`Le Sorcier agite sa baguette : « ${t}, abracadabra ! »`, `Le Sorcier remonte son chapeau pointu : « ${t} ! »`] },
     { n: 'L\'Elfe', a: '🧝', s: t => [`L'Elfe tend l'oreille, très pointue : « ${t}. »`, `L'Elfe sourit malicieusement : « ${t} ! »`] },
     { n: 'Le Fantôme', a: '👻', s: t => [`Le Fantôme passe à travers la table : « Bouh… ${t} ! »`, `Le Fantôme flotte au-dessus de ses cartes : « ${t}… »`] },
   ],
   ado: [
+    { n: 'Le Nain', a: '⛏️', s: t => [`Le Nain lève sa hache : « ${t}, par ma barbe ! »`, `Le Nain grogne en comptant ses cartes : « ${t}. »`] },
     { n: 'Le Spectre', a: '🌫️', s: t => [`Le Spectre surgit de la brume : « ${t}… »`, `Le Spectre, d'une voix d'outre-tombe : « ${t}. Les runes l'ont dit. »`] },
     { n: 'L\'Elfe', a: '🧝', s: t => [`L'Elfe, de sa voix chantante : « ${t}. »`, `L'Elfe plisse ses yeux perçants : « ${t}, je l'ai vu venir. »`] },
     { n: 'Le Magicien', a: '🧙‍♂️', s: t => [`Le Magicien frappe le sol de son bâton : « ${t} ! »`, `Le Magicien, énigmatique : « ${t}… ni plus, ni moins. »`] },
@@ -4919,9 +4955,9 @@ function rkSetup() {
 function rkNew() {
   const lv = ST.opt.rkLv || (tone() !== 'adulte' ? 'kid' : 'adult'), max = RK_LEN[ST.opt.rkLen || 'courte'];
   const tn = tone(), TC = THEME_CAST[tn], seats = ['O', 'N', 'E'], cast = seats.map(p => RK_CAST[tn].find(c => c.n === TC[p][0]) || RK_CAST[tn][0]);
-  const names = { S: `Vous (${TC.S[0].toLowerCase()})` }, av = { S: TC.S[1] };
+  const names = { S: T3(`Toi (${TC.S[0].toLowerCase()})`, `Toi (${TC.S[0].toLowerCase()})`, 'Vous (le colonel)') }, av = { S: TC.S[1] };
   seats.forEach((p, k) => { names[p] = cast[k].n; av[p] = cast[k].a; });
-  RKG = { lv, tn, castIdx: cast.map(c => RK_CAST[tn].indexOf(c)), av, names, seq: rkSeq(max), i: 0, dealer: 'E', scores: { S: 0, O: 0, N: 0, E: 0 }, rounds: [], over: false };
+  RKG = { lv, tn, castIdx: cast.map(c => RK_CAST[tn].indexOf(c)), av, names, seq: rkSeq(max), i: 0, dealer: pick(['S', 'O', 'N', 'E']), scores: { S: 0, O: 0, N: 0, E: 0 }, rounds: [], over: false };
   rkDeal();
 }
 function rkDeal() {
@@ -5105,7 +5141,7 @@ function rkMiniFan(p) {
 }
 function rkSeat(p) {
   const on = RKG.turn === p && RKG.phase !== 'end';
-  return `<div class="rkp${on ? ' on' : ''}${p === 'S' ? ' me' : ''}"><span class="av">${RKG.av[p]}</span><span class="nm">${rkName(p)}${p === RKG.dealer ? '<em class="dlr">DONNEUR</em>' : ''}</span>${rkPips(p)}</div>${p === 'S' ? '' : rkMiniFan(p)}`;
+  return `<div class="rkp${on ? ' on' : ''}${p === 'S' ? ' me' : ''}"><span class="av">${RKG.av[p]}</span><span class="nm">${rkName(p)}${p === RKG.dealer ? '<em class="dlr">DONNEUR</em>' : ''}</span>${rkPips(p)}${RKG.bids[p] != null ? `<span class="rkbw">${T3('a dit', 'a dit', 'annonce')} <b>${RKG.bids[p]}</b> · ${T3('gagné', 'fait', 'fait')} <b>${RKG.won[p]}</b></span>` : ''}</div>${p === 'S' ? '' : rkMiniFan(p)}`;
 }
 function rkSlot(p) { const src = RKG.cur.length ? RKG.cur : RKG.showLast && RKG.last ? RKG.last.cards : []; const x = src.find(c => c[0] === p); const w = !RKG.cur.length && RKG.showLast && RKG.last && RKG.last.win === p; return x ? `<span class="tc${w ? ' w' : ''}">${rkCard(x[1])}</span>` : '<span class="tc empty"></span>'; }
 function rkLastBox() {
@@ -5116,7 +5152,7 @@ function rkRender() {
   if (!RKG) return rkSetup();
   const mineBid = RKG.phase === 'bid' && RKG.turn === 'S', minePlay = RKG.phase === 'play' && RKG.turn === 'S' && !RKG.showLast;
   const f = rkForbidden('S');
-  const bidPanel = mineBid ? `<div class="rkcbid${RKG.n >= 8 ? ' many' : ''}"><div class="q">${T3('Combien de plis vas-tu gagner ?', 'Combien de plis annoncez-vous ?', 'Votre annonce ?')}</div><div class="rkbids">${Array.from({ length: RKG.n + 1 }, (_, b) => `<button class="jeton" data-rkbid="${b}" ${f === b ? 'disabled' : ''}><span>${b}</span></button>`).join('')}</div>${f != null ? `<div class="fnote">Donneur : ${f} interdit (le total ferait ${RKG.n})</div>` : ''}</div>` : '';
+  const bidPanel = mineBid ? `<div class="rkcbid${RKG.n >= 8 ? ' many' : ''}"><div class="rktrbig${RKG.trump === 'H' || RKG.trump === 'D' ? ' red' : ''}">${RKG.trump ? `<small>${T3('L\'atout magique', 'L\'atout', 'Atout')}</small><b>${SYM[RKG.trump]}</b>` : '<small>Pas d\'atout</small><b>SA</b>'}</div><div class="q">${T3('Combien de plis vas-tu gagner ?', 'Combien de plis annoncez-vous ?', 'Votre annonce ?')}</div><div class="rkbids">${Array.from({ length: RKG.n + 1 }, (_, b) => `<button class="jeton" data-rkbid="${b}" ${f === b ? 'disabled' : ''}><span>${b}</span></button>`).join('')}</div>${f != null ? `<div class="fnote">Donneur : ${f} interdit (le total ferait ${RKG.n})</div>` : ''}</div>` : '';
   let endPanel = '', endActs = '';
   if (RKG.phase === 'end') {
     const r = RKG.rounds[RKG.rounds.length - 1], P = ['S', 'O', 'N', 'E'];
@@ -5126,7 +5162,7 @@ function rkRender() {
     endActs = `<div class="rknext">${RKG.over ? '<button class="btn" data-rkgo="new">Nouvelle partie ›</button>' : `<button class="btn" data-rkgo="next">Donne suivante · ${RKG.seq[RKG.i + 1]} carte${RKG.seq[RKG.i + 1] > 1 ? 's' : ''} ›</button>`}</div>`;
   }
   show(`${topBar('Le rikiki', `Donne ${RKG.i + 1}/${RKG.seq.length} · ${RKG.n} carte${RKG.n > 1 ? 's' : ''} · ${RKG.trump ? 'atout ' + SYM[RKG.trump] : 'sans atout'}`, tone() !== 'adulte' ? 'menu' : 'donnes')}<div class="wrap play rkw">
-  <div class="rkbar"><div class="rktr">${RKG.tcard ? `<span class="cf mini2${RKG.trump === 'H' || RKG.trump === 'D' ? ' red' : ''}">${cfIn(RKG.tcard[0], RKG.tcard[1])}</span><span class="lb">atout</span>` : '<span class="nt">SA</span><span class="lb">sans atout</span>'}</div><div class="rkmk">${['S', 'O', 'N', 'E'].map(p => `<span class="${p === 'S' ? 'me' : ''}"><i>${RKG.av[p]}</i><b>${RKG.scores[p]}</b></span>`).join('')}<div class="lb">Donne ${RKG.i + 1}/${RKG.seq.length} · ${RKG.n} carte${RKG.n > 1 ? 's' : ''}</div></div>${rkLastBox()}</div>
+  <div class="rkbar"><div class="rktr">${RKG.tcard ? `<span class="cf mini2${RKG.trump === 'H' || RKG.trump === 'D' ? ' red' : ''}">${cfIn(RKG.tcard[0], RKG.tcard[1])}</span><span class="lb">atout</span>` : '<span class="nt">SA</span><span class="lb">sans atout</span>'}</div>${RKG.bids.S != null ? `<div class="rkme"><small>${T3('Ton défi', 'Ton annonce', 'Votre annonce')}</small><b>${RKG.bids.S}</b><small>${T3('gagné', 'fait', 'fait')} ${RKG.won.S}</small></div>` : ''}<div class="rkmk">${['S', 'O', 'N', 'E'].map(p => `<span class="${p === 'S' ? 'me' : ''}"><i>${RKG.av[p]}</i><b>${RKG.scores[p]}</b></span>`).join('')}<div class="lb">Donne ${RKG.i + 1}/${RKG.seq.length} · ${RKG.n} carte${RKG.n > 1 ? 's' : ''}</div></div>${rkLastBox()}</div>
   <div class="card felt green rkfelt${RKG.phase === 'end' ? ' done' : ''}">
    <div class="pn">${rkSeat('N')}</div>
    <div class="mid3 rkm"><div class="pw">${rkSeat('O')}</div>${mineBid ? bidPanel : `<div class="table4"><div></div><div>${rkSlot('N')}</div><div></div><div>${rkSlot('O')}</div><div class="tmid rkemb"><span>${RKG.phase === 'play' ? `Pli ${Math.min(RKG.n, RKG.tricks.length + 1)}` : RKG.phase === 'bid' ? 'Annonces' : 'Rikiki'}</span></div><div>${rkSlot('E')}</div><div></div><div>${rkSlot('S')}</div><div></div></div>`}<div class="pw">${rkSeat('E')}</div></div>
@@ -5616,7 +5652,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v43';
+const APP_V = 'v45';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -6303,7 +6339,7 @@ function tourRender() {
   show(`${topBar(T.belle ? 'Belle donne · les enchères' : `${T.duel ? '⚔️ Duel ' + T.duel : 'Tournoi'} · donne ${T.k + 1}/${T.n}`, `${T.duel ? `Code du duel : ${T.duel} · ` : ''}Adversaires : ${EW_NAMES[TB.oi]} (${tourLv(T).t.toLowerCase()})${T.mode === 'imp' && T.res.length ? ` · total : ${impTxt(T.res.reduce((a, r) => a + (r.imp || 0), 0))}` : ''}`, 'tournoi')}<div class="wrap">
   <div class="card"><div class="sit">Vous êtes <b>Sud</b> · Donneur : ${SEATNAME[A.dealer]} · Vulnérable : <b>${vulTxt(vul)}</b>${isVul(vul, 'S') ? ' (vous l\'êtes)' : ''}</div><div class="label">Votre main</div>${handBlock(TB.H.S)}${ST.opt.showH ? `<div class="hcp">${hcp(TB.H.S)} points d'honneur</div>` : ''}</div>
   <div class="card"><div class="label">Les enchères</div>${aucSimple(A.dealer, A.ev.map(e => e.b), 'S', true)}${notes ? `<div class="label" style="margin-top:10px">Ce que disent les annonces</div><ul class="notes">${notes}</ul>` : ''}</div>
-  <div class="card"><div class="q">${T3('Lance ton enchère !', 'À toi, aventurier : ton enchère ?', 'À vous.')}</div>${bidGrid(legalCalls(A.ev, 'S'), 'data-tb')}${TB.dec.length ? '<div class="acts" style="margin-top:10px"><button class="btn sec small" data-tundo="1">↶ Annuler ma dernière enchère</button></div>' : ''}</div></div>`);
+  <div class="card"><div class="q">${T3('Lance ton enchère !', 'À toi, jeune elfe : ton enchère ?', 'À vous.')}</div>${bidGrid(legalCalls(A.ev, 'S'), 'data-tb')}${TB.dec.length ? '<div class="acts" style="margin-top:10px"><button class="btn sec small" data-tundo="1">↶ Annuler ma dernière enchère</button></div>' : ''}</div></div>`);
 }
 function tourUndo() {
   const kept = TB.dec.map(d => d.user).slice(0, -1); if (!TB.dec.length) return;
@@ -6536,7 +6572,7 @@ app.addEventListener('click', e => {
 const THEO_AGE = {
   enfant: {
     bases: { t: 'Les bases du jeu', d: 'La table, le pli, le contrat', h: () => `
-<p>Bienvenue à l'École de magie, ${MAGE()} ! Avant de lancer tes premiers sorts, découvre la table de jeu.</p>
+<p>Bienvenue à l'École de la Carte Magique, ${MAGE()} ! Avant de lancer tes premiers sorts, découvre la table de jeu.</p>
 <h3>🪄 La table</h3><p>On joue à <b>quatre</b> : deux équipes de deux. Ton partenaire est assis <b>en face de toi</b>. Vous êtes Nord et Sud, vos adversaires sont Est et Ouest. Chacun reçoit <b>13 cartes</b>.</p>
 <h3>✨ Le pli</h3><p>Chacun pose une carte, à tour de rôle : ces 4 cartes forment un <b>pli</b>. Règle d'or : tu dois <b>fournir</b>, c'est-à-dire jouer la même couleur que la première carte. La plus grosse carte gagne le pli.</p>
 <p>Tu n'as plus de cartes de la couleur demandée ? Alors tu peux jouer un <b>atout</b> : c'est la couleur magique, plus forte que toutes les autres. On dit que tu <b>coupes</b>.</p>
@@ -7143,16 +7179,16 @@ if (typeof THEO_AGE !== 'undefined') {
 
 // ---------------- Choisir sa tranche d'âge (après le mot de passe) ----------------
 const GN = (m, f) => (ST.opt.genre === 'f' ? f : m);
-const MAGE = () => (tone() === 'enfant' ? GN('petit magicien', 'petite magicienne') : tone() === 'ado' ? GN('aventurier', 'aventurière') : 'voyageur');
+const MAGE = () => (tone() === 'enfant' ? GN('petit sorcier', 'petite sorcière') : tone() === 'ado' ? GN('jeune elfe', 'jeune elfe') : 'colonel');
 let AGE_OK = false;
 function ageGate() {
   AGE_OK = false; const p = ST.prof, g = ST.opt.genre;
   const door = (cls, kick, title, sub, cast, btns) => `<section class="agedoor ${cls}"><div class="agek">${kick}</div><h2>${title}</h2><p>${sub}</p><div class="agecast">${cast}</div><div class="agebtns">${btns}</div></section>`;
   const b = (k, gg, label) => `<button class="btn${p === k && (!gg || g === gg) ? '' : ' sec'}" data-agep="${k}:${gg || ''}">${label}</button>`;
   show(`<div class="agepage"><div class="ageh"><div class="agesuits"><b>♠</b><b class="r">♥</b><b class="r">♦</b><b>♣</b></div><h1>Qui vient jouer ?</h1><p>Choisis ton univers. Les leçons, les fiches, les commentaires et même les cartes s'adaptent à ton âge.</p></div>
-  ${door('kid', '8 à 12 ans', 'L\'École de magie', 'Tu deviens un petit magicien ou une petite magicienne du bridge. Chaque pli gagné est un sort réussi !', '🧙 🧝 ⛏️ 👻', b('enfant', 'm', '🧙‍♂️ Je suis un petit magicien') + b('enfant', 'f', '🧙‍♀️ Je suis une petite magicienne'))}
-  ${door('teen', '13 à 17 ans', 'La Comté des collines', 'Une quête pour aventuriers : chaque contrat réussi est un trésor rapporté.', '🌿 🧝 ⛏️ 🧙‍♂️', b('ado', 'm', '🗡️ Je suis un aventurier') + b('ado', 'f', '🏹 Je suis une aventurière'))}
-  ${door('adult', 'Adultes', 'Le Vapeur du Nil', 'Bienvenue à bord : croisière, tournois et Coupe du Vapeur Caroline.', '⚓ 💎 🎖️ 🏺', b('adulte', '', 'Je débute') + b('confirme', '', 'Je joue déjà') + b('decouverte', '', 'Je découvre le bridge'))}
+  ${door('kid', '8 à 12 ans', 'L\'École de la Carte Magique', 'Tu deviens un petit sorcier ou une petite sorcière du bridge. Chaque pli gagné est un sort réussi !', '🧙 🧝 ⛏️ 👻', b('enfant', 'm', '🧙‍♂️ Je suis un petit sorcier') + b('enfant', 'f', '🧙‍♀️ Je suis une petite sorcière'))}
+  ${door('teen', '13 à 17 ans', 'Les Piques de la Comté', 'Tu deviens un elfe ou une elfe de la Comté : chaque contrat réussi est un trésor rapporté.', '🧝 ⛏️ 🌫️ 🧙‍♂️', b('ado', 'm', '🧝‍♂️ Je suis un Elfe') + b('ado', 'f', '🧝‍♀️ Je suis une Elfe'))}
+  ${door('adult', 'Adultes', 'À bord du Vapeur au Cœur du Nil', 'Bienvenue à bord, colonel von Spilkart : croisière, tournois et Coupe du Vapeur Caroline.', '🎖️ ⚓ 💎 🏺', `<div class="agewho">🎖️ Je suis le colonel von Spilkart</div>` + b('adulte', '', 'Je débute') + b('confirme', '', 'Je joue déjà') + b('decouverte', '', 'Je découvre le bridge'))}
   ${LEGAL}</div>`);
 }
 app.addEventListener('click', e => {
@@ -7486,8 +7522,8 @@ function welcome() {
   show(`<div class="deco-page"><header class="deco-hero"><div class="deco-frame">
    <div class="deco-sun" aria-hidden="true"></div>
    <div class="deco-fan" aria-hidden="true"><b>♠</b><b class="r">♥</b><b class="r">♦</b><b>♣</b></div>
-   <div class="deco-kicker">${p ? T3('L\'École de magie · Salle des cartes', 'La Comté des collines · L\'auberge du bridge', 'Le Vapeur du Nil · Le pont-promenade') : 'Le Vapeur du Nil · Le pont-promenade'}</div>
-   <h1 class="deco-title">${p ? T3('Bienvenue, apprenti sorcier !', 'La quête commence, aventurier !', 'Bienvenue à bord du vapeur') : 'Bienvenue à bord du vapeur'}</h1>
+   <div class="deco-kicker">${p ? T3('L\'École de la Carte Magique · Salle des cartes', 'Les Piques de la Comté · L\'auberge du bridge', 'À bord du Vapeur au Cœur du Nil · Le pont-promenade') : 'Le Vapeur du Nil · Le pont-promenade'}</div>
+   <h1 class="deco-title">${p ? T3('Bienvenue, apprenti sorcier !', GN('La quête commence, jeune elfe !', 'La quête commence, jeune elfe !'), 'Bienvenue à bord du vapeur') : 'Bienvenue à bord du vapeur'}</h1>
    <div class="deco-rule" aria-hidden="true"><span></span>${SUITS4}<span></span></div>
    <p class="deco-tag">Le bridge s'apprend en jouant. Ici, on joue beaucoup.</p>
   </div></header>
@@ -7515,7 +7551,7 @@ function menu() {
   ${typeof carnetBanner === 'function' ? carnetBanner() : ''}
   <div class="grp">${T3('Mes jeux de cartes', 'Les jeux de la taverne', 'Jouer tout de suite')}</div><div class="menu jeux2">
   <button class="tile big" data-minib="1"><span class="tn s3">🂡</span><span class="tt"><b>Le mini-bridge</b><span class="small">${T3('Le bridge sans les enchères : on compte ses points et on joue !', 'Le bridge sans enchères : compte, choisis le contrat, joue.', 'Le bridge sans enchères : on compte les points, on choisit le contrat, on joue.')}</span></span><span class="chev">›</span></button>
-  <button class="tile big" data-rk="1"><span class="tn s2">🎩</span><span class="tt"><b>Le rikiki</b><span class="small">${T3('Annonce tes plis et tiens parole, contre le Sorcier, l\'Elfe et le Fantôme', 'Annonce tes plis et tiens parole, contre l\'Elfe, le Magicien et le Spectre', 'Annoncez vos plis et tenez parole, contre le Capitaine, la Comtesse et l\'Égyptologue')}</span></span><span class="chev">›</span></button></div>
+  <button class="tile big" data-rk="1"><span class="tn s2">🎩</span><span class="tt"><b>Le rikiki</b><span class="small">${T3('Annonce tes plis et tiens parole, contre le Nain, l\'Elfe et le Fantôme', 'Annonce tes plis et tiens parole, contre l\'Elfe, le Magicien et le Spectre', 'Annoncez vos plis et tenez parole, contre le Capitaine, la Comtesse et l\'Égyptologue')}</span></span><span class="chev">›</span></button></div>
   ${t === 'enfant' ? '' : `<div class="quip"><span class="qi">“</span><div><b>Le mot du prof</b><br>${pick(QUIPS)}</div></div>`}
   ${t === 'enfant' ? `<div class="grp">Mes petits jeux</div><div class="menu">${[['ordre', '♠'], ['plisa', '♥'], ['pliat', '♦'], ['nbplis', '♣'], ['pointsH', '♠'], ['distrib', '♥'], ['ouvrir', '♦'], ['fit', '♣']].filter(([k]) => MINI[k]).map(([k, ic], i) => { const r = ((ST.drills || {})['m_' + k] || {}).best; return `<button class="tile" data-mini="${k}"><span class="tn s${i % 4}">${ic}</span><span class="tt"><b>${MINI[k].t}</b><span class="ts">${r != null ? `Ton record : ${r} %` : 'Pas encore joué'}</span></span><span class="chev">›</span></button>`; }).join('')}
   <button class="tile" data-play="menu"><span class="tn s0">🃏</span><span class="tt"><b>Joue une vraie donne</b><span class="small">Tu joues les cartes de Sud et du mort</span></span><span class="chev">›</span></button>
@@ -8382,7 +8418,7 @@ const AGE_FICHES = {
     contres: KA('Le contre', 'Un mot, deux sens', () => `<p>Le mot « contre » a deux sens, ${MAGE()} :</p>${TBL(['Quand ?', 'Ça veut dire'], [['L\'adversaire vient d\'ouvrir, ton copain n\'a rien dit', '« Partenaire, choisis une couleur ! »'], ['Ils ont dit une manche ou plus', '« Ils vont perdre ! » (et ça leur coûte plus cher)']])}<p>Si l'adversaire joue un contrat contré et perd, il perd beaucoup plus de points. Mais s'il gagne, il en gagne plus aussi !</p>${KEEP('Contre au début : « choisis ». Contre à la fin : « ils vont chuter ».')}`),
     chelem: KA('Le chelem', 'Gagner (presque) tous les plis', () => `<p>Le <b>chelem</b>, c'est le plus grand exploit du bridge : <b>12 plis</b> (petit chelem) ou les <b>13</b> (grand chelem) !</p>${TBL(['Points à deux', 'Le contrat'], [['25', 'la manche'], ['33', 'le petit chelem (6)'], ['37', 'le grand chelem (7)']])}<h3>🔑 Les clés du chelem</h3><p>Avant un chelem, on vérifie qu'il ne manque pas trop d'As : on pose la question avec <b>4SA</b> (le Blackwood). Ton partenaire répond combien il en a.</p>${KEEP('33 points → petit chelem. 37 → grand chelem. Et on compte les As avant !')}`),
     tournoi: KA('Le tournoi', 'Tout le monde joue les mêmes cartes', () => `<p>Dans un tournoi, toutes les tables jouent <b>exactement les mêmes donnes</b> : les cartes voyagent de table en table dans des étuis.</p><p>Donc on ne gagne pas parce qu'on a de belles cartes, mais parce qu'on joue <b>mieux que les autres</b> avec les mêmes cartes !</p><p>À la fin, chaque donne donne un pourcentage : 50 %, c'est la moyenne ; 60 %, c'est super !</p>${KEEP('Mêmes cartes pour tout le monde : le meilleur joueur gagne.')}`),
-    lexique: KA('Le dictionnaire du petit magicien', 'Les mots du bridge', () => `${TBL(['Le mot', 'Ce que ça veut dire'], [['Pli', 'les 4 cartes jouées à chaque tour'], ['Atout', 'la couleur la plus forte de la donne'], ['Couper', 'jouer un atout quand on n\'a plus la couleur demandée'], ['Entame', 'la toute première carte'], ['Déclarant', 'celui qui joue le contrat'], ['Mort', 'le partenaire du déclarant, qui étale ses cartes'], ['Fit', '8 cartes ou plus à deux dans une couleur'], ['Manche', 'un grand contrat : 3SA, 4♥, 4♠, 5♣, 5♦'], ['Chicane', 'zéro carte dans une couleur'], ['Singleton', 'une seule carte dans une couleur'], ['Doubleton', 'deux cartes dans une couleur'], ['Impasse', 'jouer vers sa grosse carte en espérant que celle qui manque soit bien placée'], ['Affranchir', 'faire devenir gagnantes ses petites cartes']])}${KEEP('Apprends un mot par jour, et tu parleras bridge comme un grand sorcier !')}`),
+    lexique: KA('Le dictionnaire du petit sorcier', 'Les mots du bridge', () => `${TBL(['Le mot', 'Ce que ça veut dire'], [['Pli', 'les 4 cartes jouées à chaque tour'], ['Atout', 'la couleur la plus forte de la donne'], ['Couper', 'jouer un atout quand on n\'a plus la couleur demandée'], ['Entame', 'la toute première carte'], ['Déclarant', 'celui qui joue le contrat'], ['Mort', 'le partenaire du déclarant, qui étale ses cartes'], ['Fit', '8 cartes ou plus à deux dans une couleur'], ['Manche', 'un grand contrat : 3SA, 4♥, 4♠, 5♣, 5♦'], ['Chicane', 'zéro carte dans une couleur'], ['Singleton', 'une seule carte dans une couleur'], ['Doubleton', 'deux cartes dans une couleur'], ['Impasse', 'jouer vers sa grosse carte en espérant que celle qui manque soit bien placée'], ['Affranchir', 'faire devenir gagnantes ses petites cartes']])}${KEEP('Apprends un mot par jour, et tu parleras bridge comme un grand sorcier !')}`),
     aiguilleur: KA('Quels points compter ?', 'Le bon calcul au bon moment', () => `<p>Les points d'honneur (As 4, Roi 3, Dame 2, Valet 1), tu les comptes <b>toujours</b>. Mais les couleurs courtes, seulement quand il y a un <b>fit</b>.</p>${TBL(['La situation', 'Tu comptes'], [['Tu ouvres', 'les points d\'honneur seulement'], ['Pas de fit avec ton partenaire', 'les points d\'honneur seulement'], ['Fit dans la majeure de ton partenaire', 'points d\'honneur + courtes (doubleton 1, singleton 2, chicane 3)']])}${KEEP('Pas de fit = pas de points pour les couleurs courtes.')}`),
     maniement: KA('Les petits secrets d\'une couleur', 'Comment jouer une couleur', () => `<h3>🔢 Compter ses plis sûrs</h3><p>As, Roi, Dame qui se suivent = autant de plis sûrs (mais pas plus que les cartes de la main la plus longue).</p><h3>🕵️ L'impasse</h3><p>Tu as l'As et la Dame, il te manque le Roi. Joue <b>vers</b> ton As-Dame depuis l'autre main : si l'adversaire de gauche a le Roi, ta Dame gagne !</p><h3>🌱 Affranchir</h3><p>Avec Roi, Dame, Valet, 10 : joue le Roi pour faire sortir l'As de l'adversaire. Ensuite, tes autres cartes sont gagnantes.</p><h3>🛡️ Laisser passer</h3><p>À Sans-Atout, quand l'adversaire attaque sa couleur, ne prends pas tout de suite avec ton As : son copain n'aura bientôt plus de cartes de cette couleur.</p>${KEEP('Compte, joue vers tes honneurs, fais sortir leurs As.')}`),
     deuxtr: KA('L\'ouverture de 2♣', 'Pour les mains énormes', () => `<p>Quand ta main est <b>énorme</b>, tu ouvres <b>2♣</b>. Attention : ça ne veut pas dire que tu as des trèfles ! C'est un mot de passe pour dire « ma main est géante ».</p><p>Ton partenaire répond <b>2♦</b>, toujours, même avec 0 point. Puis tu racontes ta main : 2SA si elle est bien ronde, sinon ta couleur longue.</p>${KEEP('2♣ = « j\'ai une main géante ». Le partenaire répond 2♦.')}`),
@@ -8436,6 +8472,178 @@ MINI.total = { t: 'Honneur ou distribution ?', n: 8, gen() {
 { const st = { id: 'j6b', t: 'Honneur ou distribution ?', d: '⭐ et 🔷 : les deux sortes de points', steps: [S_('chap', 'aiguilleur', 'Fiche : quels points compter ?'), S_('mini', 'total', 'Jeu : honneur ou distribution ?')] };
   [JUNIOR_PATH, typeof ADO_PATH !== 'undefined' ? ADO_PATH : null].forEach(P => { if (!P) return; const i = P.findIndex(l => l.id === 'j6'); if (i >= 0 && !P.some(l => l.id === 'j6b')) P.splice(i + 1, 0, st); });
   const n2 = MAIN_PATH.find(p => p.id === 'n2'); if (n2 && !n2.steps.some(s => s.id === 'total')) { const k = n2.steps.findIndex(s => s.id === 'distrib' && s.k === 'mini'); n2.steps.splice(k + 1, 0, S_('mini', 'total', 'Jeu : honneur ou distribution ?')); } }
+
+// ====================================================================
+//  v44 — règles des 8-12 ans plus simples · « défausser » expliqué · le pli qui s'envole vers son gagnant
+// ====================================================================
+// ---------------- les règles des 4 jeux, en très simple pour les 8-12 ans ----------------
+Object.assign(ESC_RULES.rk.enfant, { but: 'Deviner combien de plis tu vas gagner. Pas un de plus, pas un de moins !', steps: ['Chacun reçoit des cartes : 1 carte au premier tour, puis 2, puis 3…', 'On retourne une carte au milieu. Sa couleur, c\'est l\'<b>atout</b> : la couleur la plus forte !', 'Tu regardes tes cartes et tu dis : « Je vais gagner 0 pli », ou 1, ou 2…', 'Le premier joueur pose une carte. Les autres doivent poser une carte de la <b>même couleur</b>, s\'ils en ont.', 'Tu n\'en as pas ? Tu poses un <b>atout</b> pour gagner, ou une autre carte pour perdre exprès.', 'La plus grosse carte gagne le pli. Mais un atout bat toujours les autres couleurs !'], gagne: 'Tu as gagné <b>exactement</b> le nombre de plis que tu avais dit ? Bravo, tu marques des points ! Sinon, tu en perds un peu.', conseil: 'Tes As et tes atouts gagnent souvent. Tes petites cartes perdent souvent. Compte-les avant de parler !' });
+Object.assign(ESC_RULES.mb.enfant, { but: 'Jouer au bridge, sans avoir besoin de parler en code.', steps: ['Chacun compte ses points : As = 4, Roi = 3, Dame = 2, Valet = 1.', 'L\'équipe qui a le plus de points joue.', 'Dans cette équipe, celui qui a le plus de points joue les cartes. Son copain pose toutes ses cartes sur la table : on l\'appelle le <b>mort</b>.', 'Tu choisis le contrat : avec 25 points dans ton équipe, tu vises un grand contrat, la <b>manche</b> !', 'Tu joues tes cartes ET celles du mort. L\'autre équipe essaie de t\'en empêcher.'], gagne: 'Tu dois gagner le nombre de plis promis : le chiffre de ton contrat + 6.', conseil: 'Avant de jouer, compte les plis que tu es sûr de gagner : tes As !' });
+Object.assign(ESC_RULES.maj.enfant, { but: 'Ton premier vrai contrat : gagner 10 plis, avec ♥ ou ♠ comme atout.', steps: ['Tu as 12 points d\'honneur et 5 cœurs (ou 5 piques) : tu dis <b>1♥</b>.', 'Ton copain a 3 cœurs ou plus : à vous deux, 8 cœurs ! C\'est votre couleur d\'équipe, le <b>fit</b>.', 'Il a aussi beaucoup de points : il dit tout de suite <b>4♥</b>.', 'Tu joues d\'abord tes atouts, pour enlever ceux des adversaires.', 'Ensuite, tu gagnes des plis avec tes grosses cartes.'], gagne: 'Il faut gagner <b>10 plis</b> (4 + 6).', conseil: 'Compte les atouts des adversaires. Quand ils n\'en ont plus, tes belles cartes sont protégées !' });
+Object.assign(ESC_RULES.sa.enfant, { but: 'Gagner 9 plis… sans atout !', steps: ['Tu as 15, 16 ou 17 points d\'honneur, et des cartes dans toutes les couleurs : tu dis <b>1SA</b> (sans atout).', 'Ton copain a 10 points ou plus : il dit <b>3SA</b>.', 'Sans atout, personne ne peut couper : la plus grosse carte de la couleur jouée gagne.', 'Compte les plis que tu es sûr de gagner : tes As, et tes Rois quand l\'As est parti.', 'Il en manque ? Joue ta couleur la plus longue : à la fin, tes petites cartes gagnent aussi !'], gagne: 'Il faut gagner <b>9 plis</b> (3 + 6).', conseil: 'Ne joue pas tes As trop vite : fais d\'abord pousser ta couleur longue.' });
+// les règles du rikiki pendant la partie
+{ const _rr = rkRulesHtml; rkRulesHtml = function () { if (tone() !== 'enfant') return _rr(); const r = ESC_RULES.rk.enfant; return `<p><b>${r.but}</b></p><ol class="escsteps">${r.steps.map((s, i) => `<li><i class="escnum">${i + 1}</i><span>${s}</span></li>`).join('')}</ol><p>${r.gagne}</p>`; }; }
+
+// ---------------- « défausser » : un mot expliqué (ou remplacé pour les 8-12 ans) ----------------
+function kidDefausse(v) {
+  return v.replace(/(D comme |D — |D = )Défausser(?! \()/g, '$1Défauss\u200Ber (c\'est-à-dire jeter une carte)').replace(/\b([Oo]n|[Ii]l|[Ee]lle) se défausse\b/g, '$1 jette une carte').replace(/\btu te défausses\b/g, 'tu jettes une carte').replace(/\b([Tt]e|[Ss]e|[Vv]ous) défausser\b/g, 'jeter une carte').replace(/\bdéfausser\b/g, 'jeter').replace(/\bDéfausser\b/g, 'Jeter')
+    .replace(/\bdéfausses\b/g, 'jettes').replace(/\bdéfaussez\b/g, 'jetez').replace(/\bdéfaussé(e?s?)\b/g, 'jeté$1').replace(/\bDéfaussé(e?s?)\b/g, 'Jeté$1')
+    .replace(/\b([Ll]a|[Uu]ne|[Tt]a|[Ss]a|[Vv]otre) défausse\b/g, (m, a) => ({ la: 'la carte jetée', La: 'La carte jetée', une: 'une carte jetée', Une: 'Une carte jetée', ta: 'ta carte jetée', Ta: 'Ta carte jetée', sa: 'sa carte jetée', Sa: 'Sa carte jetée', votre: 'votre carte jetée', Votre: 'Votre carte jetée' })[a])
+    .replace(/\bdéfausses?\b/g, 'jette').replace(/\bDéfausse\b/g, 'Jette');
+}
+function defausseText(root) {
+  const t = themeOf(); if (!root) return; let first = t !== 'enfant';
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => (n.parentElement && n.parentElement.closest('script,style,input,textarea,.felt,.defx') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) });
+  const L = []; while (w.nextNode()) L.push(w.currentNode);
+  L.forEach(n => {
+    const v = n.nodeValue; if (!/[Dd]éfauss/.test(v)) return;
+    if (t === 'enfant') { const o = kidDefausse(v); if (o !== v) n.nodeValue = o; return; }
+    if (!first) return; const m = /[Dd]éfauss\w*/.exec(v); if (!m) return; first = false;
+    const end = m.index + m[0].length, after = document.createTextNode(v.slice(end)); n.nodeValue = v.slice(0, end);
+    const sp = document.createElement('span'); sp.className = 'defx'; sp.textContent = t === 'ado' ? ' (jeter une carte d\'une autre couleur, sans couper)' : ' (jouer une carte d\'une autre couleur, sans couper, quand on n\'a plus la couleur demandée)';
+    n.parentNode.insertBefore(sp, n.nextSibling); sp.parentNode.insertBefore(after, sp.nextSibling);
+  });
+}
+{ const _s2 = show; show = function (html) { const r = _s2(html); try { defausseText(app); } catch (e) { } return r; }; Object.defineProperty(show, '_play', { get() { return _s2._play; }, set(v) { _s2._play = v; } }); }
+// les explications des exercices et du professeur, pour les 8-12 ans
+{ const _kv = kidVocab; kidVocab = s => (typeof s === 'string' ? kidDefausse(_kv(s)) : s); }
+
+// ---------------- le pli s'envole vers celui qui l'a gagné ----------------
+function sweepTo(sel, win, pause) {
+  const t = document.querySelector(sel); if (!t || !win) return;
+  t.style.setProperty('--sd', Math.max(150, (pause || 1000) - 650) + 'ms'); t.classList.add('sweep', 'sw' + win);
+}
+{ const _pr = playRender; playRender = function () { _pr(); try { if (PG && PG.last && !PG.G.cur.length && PG.G.tricks.length) sweepTo('.wrap.play .table4', PG.last.win, spd()[1]); } catch (e) { } }; }
+{ const _rr2 = rkRender; rkRender = function () { _rr2(); try { if (RKG && RKG.showLast && RKG.last && !RKG.cur.length) sweepTo('.rkw .table4', RKG.last.win, spd()[1]); } catch (e) { } }; }
+
+// ====================================================================
+//  v45 — Toutes les fiches des 8-12 ans, en très simple, dans le grimoire de l'École de la Carte Magique
+// ====================================================================
+// une fiche = le but, des étapes numérotées, un exemple, le secret du professeur Dumblebridge
+function kidSheet(o) {
+  const sec = (ic, t, inner) => `<section class="escsec"><h3>${ic} ${t}</h3>${inner}</section>`;
+  const steps = L => `<ol class="escsteps">${L.map((s, i) => `<li><i class="escnum">${i + 1}</i><span>${s}</span></li>`).join('')}</ol>`;
+  const body = (o.blocks || []).map(b => sec(b.ic || '✨', b.t, (b.p ? `<p>${b.p}</p>` : '') + (b.steps ? steps(b.steps) : '') + (b.tbl ? TBL(b.tbl[0], b.tbl[1]) : '') + (b.after ? `<p>${b.after}</p>` : ''))).join('');
+  return `<div class="escbook esc-enfant kidsheet">${o.but ? sec('🎯', 'Le but', `<p>${o.but}</p>`) : ''}${body}${o.ex ? sec('🧪', 'Un exemple', `<p>${o.ex}</p>`) : ''}
+  <div class="escprof"><span class="av">🧙‍♂️</span><div><b>Le secret du professeur Dumblebridge</b><p>${o.secret}</p></div></div>${o.acts ? `<div class="acts">${o.acts}</div>` : ''}</div>`;
+}
+const KF = (t, d, o) => ({ t, d, h: () => kidSheet(typeof o === 'function' ? o() : o) });
+const KIDF = {
+  bases: KF('Les bases du bridge', 'Comment on joue', { but: 'Avec ton copain, gagner le plus de plis possible.', blocks: [
+    { ic: '👥', t: 'Les joueurs', steps: ['On joue à 4. Ton copain est assis <b>en face</b> de toi : vous êtes une équipe.', 'Les deux autres joueurs forment l\'autre équipe.', 'Chacun reçoit <b>13 cartes</b>.'] },
+    { ic: '🃏', t: 'Un pli', steps: ['Un joueur pose une carte au milieu.', 'Chacun pose une carte, l\'un après l\'autre, dans le sens des aiguilles d\'une montre.', 'Il faut poser la <b>même couleur</b> que la première carte, si tu en as.', 'La plus grosse carte gagne les 4 cartes : c\'est un <b>pli</b>.'] },
+    { ic: '📣', t: 'Le contrat', p: 'Avant de jouer, on parle : c\'est les <b>enchères</b>. L\'équipe qui gagne les enchères promet un nombre de plis : c\'est le <b>contrat</b>. Celui qui joue s\'appelle le <b>déclarant</b>. Son copain pose ses cartes sur la table : on l\'appelle le <b>mort</b>.' }],
+    secret: 'Au bridge, tu n\'es jamais seul : tu joues toujours avec ton copain d\'en face.' }),
+  points: KF('Compter ses points d\'honneur', 'Combien vaut ta main ?', { but: 'Savoir si ta main est forte.', blocks: [
+    { ic: '⭐', t: 'Les points d\'honneur', tbl: [['As', 'Roi', 'Dame', 'Valet'], [['4', '3', '2', '1']]], p: 'Seules les 4 plus grosses cartes donnent des points. Retiens : <b>4-3-2-1</b>, comme une fusée qui décolle ! 🚀' },
+    { ic: '🔢', t: 'Les chiffres à retenir', steps: ['Il y a <b>40 points</b> dans tout le jeu.', 'Avec <b>12 points</b> ou plus, tu peux commencer les enchères.', 'Avec <b>25 points</b> à deux, ton équipe peut jouer un grand contrat : la manche.'] }],
+    ex: '♠ A R 7 · ♥ D 5 3 · ♦ V 9 8 2 · ♣ 6 4 2 → 4 + 3 + 2 + 1 = <b>10 points d\'honneur</b>.',
+    secret: 'Compte couleur par couleur, en commençant par les As : tu ne te tromperas jamais.' }),
+  ouvrir: KF('Ouvrir les enchères', 'Ta première enchère', { but: 'Dire le premier mot des enchères, quand ta main est assez forte.', blocks: [
+    { ic: '🪜', t: 'L\'escalier', p: 'Descends l\'escalier et arrête-toi à la <b>première marche</b> qui va avec ta main.', steps: ['Moins de 12 points d\'honneur ? Tu dis <b>passe</b>.', '5 piques ou plus ? Tu dis <b>1♠</b>. 5 cœurs ou plus ? <b>1♥</b>.', '15, 16 ou 17 points et des cartes dans toutes les couleurs ? <b>1SA</b>.', '4 carreaux ou plus ? <b>1♦</b>.', 'Rien de tout ça ? <b>1♣</b>.'] },
+    { ic: '🐉', t: 'Les mains géantes', tbl: [['Tes points', 'Tu dis'], [['20 ou 21, main bien ronde', '2SA'], ['22 ou 23', '2♣'], ['24 et plus', '2♦']]] }],
+    ex: '♠ A R 8 7 4 · ♥ D 3 · ♦ R 9 2 · ♣ 6 5 → 12 points et 5 piques : tu dis <b>1♠</b>.',
+    secret: 'Pour ouvrir, on compte seulement les ⭐ points d\'honneur.', acts: '<button class="btn" data-mini="ouvrir">Le jeu : j\'ouvre ou je passe ? ›</button>' }),
+  repondre: KF('Répondre à ton copain', 'Il a ouvert, à toi de parler', { but: 'Dire à ton copain si vous avez une couleur en commun, et combien de points tu as.', blocks: [
+    { ic: '❓', t: 'Trois questions, dans l\'ordre', steps: ['Avons-nous un <b>fit</b> ? (8 cartes ou plus à nous deux dans sa couleur)', 'Ai-je une couleur de 4 cartes à lui montrer ?', 'Combien ai-je de points ?'] },
+    { ic: '🤝', t: 'Il a ouvert 1♥ ou 1♠ et tu as 3 cartes ou plus', p: 'C\'est un fit ! Tu ajoutes les 🔷 points de distribution.', tbl: [['Tes points', 'Tu dis'], [['0 à 5', 'passe'], ['6 à 10', '2 dans sa couleur'], ['11 ou 12', '3 dans sa couleur'], ['13 à 15', '4 : la manche !']]] },
+    { ic: '🔀', t: 'Pas de fit', steps: ['Moins de 6 points ? <b>Passe</b>.', '4 cartes dans une autre couleur ? Dis-la au niveau 1.', 'Sinon, avec 6 à 10 points : <b>1SA</b>.'] }],
+    secret: 'Le fit d\'abord ! Une couleur commune, c\'est le plus beau cadeau du bridge.' }),
+  sa: KF('Quand ton copain ouvre 1SA', 'Deux codes secrets', { but: 'Choisir le bon contrat, car tu connais déjà presque toute la main de ton copain.', blocks: [
+    { ic: '🪄', t: 'Code n°1 : le Texas', p: 'Tu as <b>5 cœurs</b> ? Dis <b>2♦</b>. Tu as <b>5 piques</b> ? Dis <b>2♥</b>. Tu dis la couleur juste en dessous de la tienne, et ton copain dit ta couleur. Ça marche même avec 0 point !' },
+    { ic: '🔍', t: 'Code n°2 : le Stayman', p: 'Tu as <b>4 cœurs ou 4 piques</b> et <b>8 points</b> ou plus ? Dis <b>2♣</b>. Ça veut dire : « As-tu 4 cartes à cœur ou à pique ? »', tbl: [['Il répond', 'Ça veut dire'], [['2♦', 'non'], ['2♥', 'j\'ai 4 cœurs'], ['2♠', 'j\'ai 4 piques']]] },
+    { ic: '🔢', t: 'Sinon, tu comptes', tbl: [['Tes points', 'Tu dis'], [['0 à 7', 'passe'], ['8 ou 9', '2SA'], ['10 à 15', '3SA']]] }],
+    secret: '5 cartes → Texas. 4 cartes et 8 points → Stayman. Sinon, on compte.' }),
+  jeu: KF('Jouer le contrat', 'Le plan du sorcier', { but: 'Gagner tous les plis promis.', blocks: [
+    { ic: '🔮', t: 'Avant de jouer', steps: ['Regarde les cartes du mort : vous êtes une équipe.', 'Compte tes plis sûrs : tes As, et tes Rois quand l\'As est parti.', 'Il en manque ? Choisis un sort pour en fabriquer.'] },
+    { ic: '🪄', t: 'Les sorts pour fabriquer des plis', steps: ['<b>Faire tomber les atouts</b> : joue atout jusqu\'à ce que les adversaires n\'en aient plus.', '<b>Couper chez le mort</b> : le mort n\'a plus de cartes dans une couleur ? Il coupe avec un petit atout.', '<b>Faire pousser ta couleur longue</b> : à la fin, tes petites cartes gagnent aussi.', '<b>L\'impasse</b> : joue vers ta grosse carte, en espérant que l\'adversaire ait mal placé la sienne.'] }],
+    secret: 'Un sorcier qui fait un plan gagne bien plus souvent qu\'un sorcier pressé.' }),
+  entame: KF('L\'entame', 'La toute première carte', { but: 'Bien choisir la première carte du jeu.', blocks: [
+    { ic: '👆', t: 'Qui entame ?', p: 'Le joueur assis <b>à gauche du déclarant</b>. Il joue avant de voir le mort.' },
+    { ic: '🌙', t: 'Contre Sans-Atout', steps: ['Choisis ta <b>couleur la plus longue</b>.', 'Tu as Roi-Dame-Valet ? Joue le Roi.', 'Sinon, compte depuis la plus grosse et joue la <b>4e carte</b>.'] },
+    { ic: '☀️', t: 'Contre un atout', steps: ['Une carte <b>toute seule</b> dans une couleur ? Joue-la : tu pourras couper au tour suivant !', 'Deux gros honneurs qui se suivent (Roi-Dame) ? Le plus gros.', 'Ton copain a parlé d\'une couleur ? Joue-la.'] }],
+    secret: '⚠️ Ne joue jamais une petite carte quand tu as l\'As de cette couleur : ton As risquerait de ne jamais gagner.' }),
+  flanc: KF('La défense', 'Empêcher l\'autre équipe de gagner', { but: 'Gagner assez de plis pour que l\'autre équipe ne fasse pas son contrat.', blocks: [
+    { ic: '🎯', t: 'Combien de plis ?', p: 'Contre 4♠ (10 plis), il te faut <b>4 plis</b> avec ton copain. Contre 3SA (9 plis), il en faut <b>5</b>.' },
+    { ic: '🛡️', t: 'Les 4 réflexes', steps: ['Tu joues en 2e ? Une <b>petite</b> carte.', 'Tu joues en 3e ? Une <b>grosse</b> carte.', 'Une grosse carte arrive devant toi ? Mets ta grosse carte dessus.', 'Tu prends la main ? Rejoue la couleur de ton copain.'] }],
+    secret: 'Écoute les messages de ton copain : une grosse petite carte veut dire « j\'aime », une toute petite « change ».', acts: '<button class="btn" data-chap="cartedef">Les sorts de la défense ›</button>' }),
+  comptage: KF('Compter les cartes', 'La mémoire du sorcier', { but: 'Savoir combien d\'atouts il reste aux adversaires.', blocks: [
+    { ic: '🔢', t: 'Le nombre magique', steps: ['Compte tes atouts et ceux du mort.', 'Fais <b>13 moins ce nombre</b> : ce sont les atouts des adversaires.', 'Retiens ce seul nombre dans ta tête.'] },
+    { ic: '⬇️', t: 'Fais-le descendre', steps: ['Les deux adversaires jouent atout ? <b>Moins 2</b>.', 'Un adversaire ne joue plus atout ? L\'autre a tous ceux qui restent.', 'À <b>zéro</b>, tu arrêtes de jouer atout.'] }],
+    ex: 'Tu as 5 atouts, le mort 3 : 13 − 8 = <b>5</b>. Un tour d\'atout : 3. Deux tours : 1. Trois tours : 0 !',
+    secret: 'Ne retiens qu\'un seul nombre à la fois. Même les champions font comme ça.' }),
+  marque: KF('Les points de la partie', 'Ce que rapporte un contrat', { but: 'Savoir ce que rapporte un contrat gagné.', blocks: [
+    { ic: '🏆', t: 'Ce que ça rapporte', tbl: [['Tu as gagné…', 'Environ'], [['un petit contrat (par exemple 2♥)', '100 points'], ['la manche (3SA, 4♥, 4♠)', '400 points'], ['un petit chelem (12 plis)', '1 000 points'], ['un grand chelem (13 plis)', '1 500 points']]] },
+    { ic: '💥', t: 'Si tu perds', p: 'Si tu ne fais pas tous tes plis, c\'est l\'autre équipe qui gagne des points : 50 par pli qui manque (ou 100 quand tu es « vulnérable »).' }],
+    secret: 'La manche rapporte beaucoup : avec 25 points à deux, ose la manche !' }),
+  regles: KF('Les grands sorts du jeu de la carte', 'C-D-I avec un atout, A-L-C sans atout', () => ({ but: 'Trouver les plis qui te manquent, avec les bons sorts.', blocks: [
+    { ic: '⛵', t: 'Avec un atout : compte tes trous', p: 'Un <b>trou</b>, c\'est un pli que tu risques de perdre. Pour boucher les trous, 3 sorts, dans cet ordre :', steps: ['<b>C comme Couper</b> : le mort n\'a plus de cartes dans une couleur ? Il coupe avec un petit atout. Un trou de moins !', '<b>D comme jeter une carte</b> : le mort a une grosse carte de trop ? Tu la joues et tu jettes une mauvaise carte. Fais-le <b>vite</b>, avant que les adversaires prennent la main.', '<b>I comme Impasse</b> : le pari, une chance sur deux. On le garde pour la fin.'] },
+    { ic: '🏝️', t: 'Sans atout : compte tes trésors', p: 'Un <b>trésor</b>, c\'est un pli sûr. Il en faut 9 pour 3SA. Il en manque ? 3 sorts :', steps: ['<b>A comme Affranchir</b> : joue tout de suite ta couleur la plus longue. Tes petites cartes deviendront des trésors.', '<b>L comme Laisser passer</b> : ne prends pas tout de suite avec ton As. Le copain de l\'adversaire n\'aura plus de cartes pour l\'aider.', '<b>C comme Chemin</b> : garde un As pour pouvoir passer chez le mort.'] }],
+    secret: 'Avec un atout : couper avant de faire tomber tous les atouts. Sans atout : fais pousser ta couleur avant de jouer tes As.', acts: '<button class="btn" data-qz="cdiq">⚡ Le défi des sorts ›</button><button class="btn sec" data-qz="regleq">Le quiz ›</button>' })),
+  comms: KF('Couper les fils magiques', 'Laisser passer', { but: 'Empêcher les deux adversaires de s\'aider.', blocks: [
+    { ic: '✂️', t: 'Le sort', steps: ['Les adversaires jouent leur couleur longue. Tu as l\'As.', '<b>Ne le joue pas tout de suite</b> : laisse-les gagner un ou deux plis.', 'Quand le copain de l\'entameur n\'a plus de cette couleur, le fil est coupé !', 'Maintenant, tu peux prendre avec ton As.'] },
+    { ic: '🔢', t: 'Combien de fois ?', p: 'Compte tes cartes et celles du mort dans la couleur. Fais <b>7 moins ce nombre</b>.' }],
+    ex: 'Tu as 3 cartes, le mort 2 : 7 − 5 = <b>2 fois</b>. Tu laisses passer deux fois, et tu prends la troisième.',
+    secret: 'Laisser passer, ce n\'est pas perdre : c\'est couper le fil des adversaires.' }),
+  entpart: KF('Jouer la couleur de ton copain', 'La carte qui parle', { but: 'Jouer la couleur de ton copain, avec la carte qui lui envoie un message.', blocks: [
+    { ic: '📨', t: 'Quelle carte ?', steps: ['Tu as deux gros honneurs qui se suivent (Roi-Dame) ? Le plus gros.', 'Tu as l\'As (avec un atout) ? L\'As.', 'Tu as 2 cartes ? La plus grosse.', 'Tu as 4 cartes ? L\'avant-dernière.', 'Tu as 3 ou 5 cartes ? La plus petite.'] },
+    { ic: '🔐', t: 'Le code secret', p: 'Ta 2e carte termine le message : si elle est <b>plus petite</b>, tu en avais un nombre <b>pair</b> ; si elle est <b>plus grosse</b>, un nombre <b>impair</b>.' }],
+    secret: 'Ta carte parle à ton copain : choisis-la bien !' }),
+  compter2: KF('Compter les atouts et les cartes', 'Le sort du comptage', { but: 'Savoir quand les adversaires n\'ont plus d\'atouts (ou plus de cartes dans ta couleur).', blocks: [
+    { ic: '🪄', t: 'Avec un atout', steps: ['13 − tes atouts − ceux du mort = les atouts des adversaires.', 'Chaque tour où les deux jouent atout : moins 2.', 'À zéro : tes belles cartes sont protégées.'] },
+    { ic: '✨', t: 'Sans atout', steps: ['Même calcul avec ta couleur la plus longue.', 'Quand les adversaires n\'en ont plus, tes petites cartes gagnent !'] }],
+    secret: '13 moins les tiennes, puis moins 2 à chaque tour.', acts: '<button class="btn" data-mini="cptat">Compte les atouts ›</button><button class="btn sec" data-mini="cptsa">Compte la couleur longue ›</button>' }),
+  cartedef: KF('Les sorts de la défense', 'Quelle carte jouer', { but: 'Avec ton copain, faire perdre l\'autre équipe.', blocks: [
+    { ic: '🛡️', t: 'Les réflexes', steps: ['Tu joues en 2e ? 🐭 Une petite carte : ton copain joue après toi.', 'Tu joues en 3e ? 🦁 Une grosse carte, pour forcer l\'adversaire.', 'Une grosse carte arrive devant toi ? 🛡️ Mets ta grosse carte dessus.', 'Ton copain gagne déjà le pli ? 🤫 Garde ta grosse carte.', 'Tu prends la main ? 🔁 Rejoue la couleur de ton copain.'] }],
+    secret: '2e petite, 3e grosse : retiens ça et tu deviendras un grand gardien.', acts: '<button class="btn" data-qz="cartedefq">Le quiz des gardiens ›</button><button class="btn sec" data-chap="signaux">Les messages secrets</button>' }),
+  fortes: KF('Les mains géantes et la tempête', 'Quand ta main est énorme… ou toute petite', { but: 'Deux sorts spéciaux : un pour les mains énormes, un pour gêner les adversaires.', blocks: [
+    { ic: '🐉', t: 'Les mains géantes', tbl: [['Ta main', 'Tu dis', 'Ton copain répond'], [['20 ou 21 points, bien ronde', '2SA', 'comme sur 1SA'], ['22 ou 23 points', '2♣', 'toujours 2♦'], ['24 points et plus', '2♦', 'toujours 2♥']]] },
+    { ic: '🌪️', t: 'La tempête (le barrage)', p: 'Peu de points (6 à 10), mais une couleur très longue avec 2 gros honneurs ? Tu montes très haut pour gêner les adversaires.', tbl: [['Ta couleur', 'Tu dis'], [['6 cœurs ou 6 piques', '2'], ['7 cartes', '3'], ['8 cartes', '4']]] }],
+    secret: 'Plus ta couleur est longue, plus ta tempête monte haut.' }),
+  troisieme: KF('Le capitaine', 'Qui choisit le contrat ?', { but: 'Choisir le bon contrat avec ton copain.', blocks: [
+    { ic: '👑', t: 'Le capitaine', p: 'Le <b>capitaine</b>, c\'est celui qui connaît le mieux les points des deux mains. C\'est lui qui décide.' },
+    { ic: '🚦', t: 'Le feu du capitaine', steps: ['🔴 <b>Rouge</b> : même au mieux, pas 25 points à deux ? On s\'arrête.', '🟠 <b>Orange</b> : peut-être 25 points ? On demande à son copain.', '🟢 <b>Vert</b> : sûr d\'avoir 25 points ? On dit la manche !'] }],
+    secret: 'Le capitaine additionne, puis regarde la couleur du feu.' }),
+  intervenir: KF('Parler après l\'adversaire', 'Quand l\'adversaire a ouvert', { but: 'Entrer dans les enchères, même quand l\'adversaire a parlé le premier.', blocks: [
+    { ic: '🗣️', t: 'Tu peux parler si…', steps: ['Tu as 8 points et 5 belles cartes : dis ta couleur au niveau 1.', 'Tu as 11 points et 6 cartes : dis ta couleur au niveau 2.', 'Tu as 16 à 18 points, une main bien ronde, et une grosse carte dans leur couleur : <b>1SA</b>.', 'Tu as 12 points et presque rien dans leur couleur : <b>contre</b> (« copain, choisis ! »).', 'Sinon : <b>passe</b>.'] }],
+    secret: 'Ton copain a contré ? Tu dois répondre, même avec 0 point : dis ta plus longue couleur.' }),
+  contres: KF('Le contre', 'Un mot, deux sens', { but: 'Comprendre ce que veut dire « contre ».', blocks: [
+    { ic: '📣', t: 'Les deux sens', steps: ['Au début des enchères, après l\'ouverture de l\'adversaire : « <b>Copain, choisis une couleur !</b> »', 'À la fin, sur un grand contrat : « <b>Ils vont perdre !</b> » Et ils perdent plus de points.'] }],
+    secret: 'Un contre au début demande ; un contre à la fin punit.' }),
+  chelem: KF('Le chelem', 'Gagner presque tous les plis', { but: 'Le plus grand exploit du bridge : 12 ou 13 plis !', blocks: [
+    { ic: '👑', t: 'Combien de points ?', tbl: [['Points à deux', 'Le contrat'], [['25', 'la manche'], ['33', 'le petit chelem (12 plis)'], ['37', 'le grand chelem (13 plis)']]] },
+    { ic: '🔑', t: 'Les clés', p: 'Avant un chelem, on vérifie qu\'il ne manque pas d\'As. On demande avec <b>4SA</b> : ton copain répond combien il en a.' }],
+    secret: 'Pas de chelem si les adversaires ont deux As !' }),
+  tournoi: KF('Le tournoi', 'Tout le monde joue les mêmes cartes', { but: 'Jouer mieux que les autres avec les mêmes cartes.', blocks: [
+    { ic: '🏟️', t: 'Comment ça marche', steps: ['Toutes les tables jouent <b>exactement les mêmes donnes</b>.', 'Après chaque donne, les cartes voyagent vers la table suivante.', 'On compare : qui a fait le mieux avec les mêmes cartes ?'] }],
+    secret: 'Pas besoin de belles cartes pour gagner un tournoi : il faut bien jouer les cartes qu\'on a.' }),
+  lexique: KF('Le dictionnaire du sorcier', 'Les mots du bridge', { blocks: [{ ic: '📖', t: 'Les mots', tbl: [['Le mot', 'Ce que ça veut dire'], [['Pli', 'les 4 cartes jouées à chaque tour'], ['Atout', 'la couleur la plus forte de la donne'], ['Couper', 'jouer un atout quand on n\'a plus la couleur demandée'], ['Jeter une carte (se défausser)', 'jouer une autre couleur, sans couper, quand on n\'a plus la couleur demandée'], ['Entame', 'la toute première carte'], ['Déclarant', 'celui qui joue le contrat'], ['Mort', 'le copain du déclarant, qui pose ses cartes sur la table'], ['Fit', '8 cartes ou plus à deux dans une couleur'], ['Manche', 'un grand contrat : 3SA, 4♥, 4♠, 5♣, 5♦'], ['Singleton', 'une seule carte dans une couleur'], ['Chicane', 'zéro carte dans une couleur'], ['Impasse', 'jouer vers sa grosse carte en espérant que celle qui manque soit bien placée']]] }],
+    secret: 'Apprends un mot par jour : bientôt, tu parleras bridge comme un grand sorcier.' }),
+  aiguilleur: KF('Quels points compter ?', '⭐ ou ⭐ + 🔷', { but: 'Savoir quand ajouter les points de distribution.', blocks: [
+    { ic: '⭐', t: 'Toujours', p: 'Les points d\'honneur (As 4, Roi 3, Dame 2, Valet 1) se comptent <b>toujours</b>.' },
+    { ic: '🔷', t: 'Seulement avec un fit', steps: ['Tu ouvres ? Seulement les ⭐.', 'Pas de fit avec ton copain ? Seulement les ⭐.', 'Fit dans la couleur de ton copain ? ⭐ + 🔷 (doubleton 1, singleton 2, chicane 3).'] }],
+    secret: 'Pas de fit = pas de 🔷. C\'est le piège le plus connu du bridge !', acts: '<button class="btn" data-mini="total">Le jeu : honneur ou distribution ? ›</button>' }),
+  maniement: KF('Les secrets d\'une couleur', 'Comment jouer une couleur', { but: 'Faire le plus de plis possible dans une couleur.', blocks: [
+    { ic: '🔢', t: 'Les plis sûrs', p: 'As, Roi, Dame qui se suivent = autant de plis sûrs.' },
+    { ic: '🕵️', t: 'L\'impasse', p: 'Tu as l\'As et la Dame, mais pas le Roi ? Joue <b>vers</b> ton As-Dame depuis l\'autre main. Si l\'adversaire de gauche a le Roi, ta Dame gagne !' },
+    { ic: '🌱', t: 'Faire sortir l\'As', p: 'Tu as Roi, Dame, Valet, 10 ? Joue le Roi : l\'adversaire prend avec son As. Ensuite, toutes tes autres cartes gagnent.' }],
+    secret: 'Joue vers tes grosses cartes, ne les lance pas toi-même.' }),
+  deuxtr: KF('L\'ouverture de 2♣', 'Le mot de passe des mains géantes', { but: 'Dire à ton copain que ta main est énorme.', blocks: [
+    { ic: '🗝️', t: 'Comment ça marche', steps: ['Ta main est énorme ? Tu dis <b>2♣</b>. Attention : ça ne veut pas dire que tu as des trèfles !', 'Ton copain répond <b>2♦</b>, toujours, même avec 0 point.', 'Ensuite, tu racontes ta main : 2SA si elle est bien ronde, sinon ta couleur longue.'] }],
+    secret: '2♣ est un mot de passe : « j\'ai une main géante ! »' }),
+  defench: KF('Écouter les enchères en défense', 'Les indices des adversaires', { but: 'Deviner les cartes cachées grâce aux enchères.', blocks: [
+    { ic: '🔍', t: 'Les indices', tbl: [['Ils ont dit…', 'Le déclarant a…'], [['1SA', '15 à 17 points, une main bien ronde'], ['1♥ puis 2♥', '6 cœurs'], ['une tempête (barrage)', 'peu de points et une couleur très longue']]] },
+    { ic: '🧮', t: 'Le calcul du détective', p: '40 − tes points − ceux du mort − ceux du déclarant = les points de ton copain.' }],
+    secret: 'Ton copain a parlé d\'une couleur ? Joue-la en premier !' }),
+  signaux: KF('Les messages secrets', 'Parler avec ses petites cartes', { but: 'Parler à ton copain sans dire un mot.', blocks: [
+    { ic: '📨', t: 'Les messages', steps: ['« J\'aime, continue ! » : une carte assez grosse (7, 8, 9).', '« Je n\'aime pas, change ! » : ta plus petite carte.', '« J\'ai un nombre pair de cartes » : une grosse, puis une petite.', '« J\'ai un nombre impair » : une petite, puis une plus grosse.'] }],
+    secret: 'Regarde toujours la carte de ton copain : est-ce la plus petite qu\'il avait ? Sinon, c\'est un message !', acts: '<button class="btn" data-qz="sigq">Le quiz des messages secrets ›</button>' }),
+  palier1: KF('Étape 1 : l\'apprenti sorcier', 'Ce qu\'il faut savoir', { blocks: [{ ic: '📜', t: 'Pour passer à l\'étape 2', steps: ['Savoir ce qu\'est un pli, l\'atout, le contrat, le mort.', 'Compter tes points d\'honneur sans te tromper.', 'Ouvrir et répondre.', 'Les premières marches de l\'École de la carte.'] }], secret: 'Un petit peu chaque jour : 15 minutes, c\'est parfait.' }),
+  palier2: KF('Étape 2 : le sorcier', 'Ce qu\'il faut savoir', { blocks: [{ ic: '📜', t: 'Pour devenir un grand sorcier', steps: ['Le capitaine et son feu.', 'Parler quand l\'adversaire a ouvert.', 'Choisir la bonne première carte.', 'Couper chez le mort et faire des impasses.'] }], secret: 'Les règles deviennent des réflexes : c\'est ça, la magie !' }),
+  bicolores: KF('Deux couleurs en un seul sort', 'Pour les grands sorciers', { but: 'Montrer deux couleurs de 5 cartes d\'un seul coup.', blocks: [{ ic: '✌️', t: 'Le sort', steps: ['L\'adversaire a ouvert.', 'Tu as deux couleurs de 5 cartes.', 'Tu dis <b>leur couleur</b> au niveau 2, ou <b>2SA</b> : c\'est un code.', 'Ton copain choisit la couleur qu\'il préfère.'] }], secret: 'Ce sort se joue seulement si ton copain le connaît aussi !' }),
+  spoutnik: KF('Le contre Spoutnik', 'Pour les grands sorciers', { but: 'Montrer 4 cartes en ♥ ou en ♠ après l\'intervention de l\'adversaire.', blocks: [{ ic: '🛰️', t: 'Le sort', steps: ['Ton copain a ouvert.', 'L\'adversaire parle.', 'Tu dis <b>contre</b> : « j\'ai 4 cartes dans la couleur ♥ ou ♠ dont personne n\'a parlé, et au moins 6 points ».'] }], secret: 'Ici, le contre n\'est pas une punition : c\'est un message.' }),
+};
+Object.entries(KIDF).forEach(([id, f]) => { if (THEORY.find(t => t.id === id)) THEO_AGE.enfant[id] = f; });
 
 </script>
 <script>if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) { try { navigator.serviceWorker.register("sw.js"); } catch (e) {} }</script>
