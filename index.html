@@ -965,6 +965,17 @@ body[data-th=ado] .card.felt::after,body[data-th=ado] .card.felt.rkfelt::after{b
 /* v53 accueil : archiduc / archiduchesse */
 .agesex{display:flex;gap:8px;justify-content:center;margin:2px 0 6px}.agesex button{flex:1;max-width:190px;padding:9px 10px;border-radius:999px;border:1.5px solid #e3c47a;background:transparent;color:#e3c47a;font:700 15px/1.2 var(--f-body);cursor:pointer}.agesex button.on{background:#e3c47a;color:#14211b}
 .agefull{font:italic 14px/1.35 var(--f-body);color:#f3e6c2;opacity:.9;margin-top:4px}
+/* v58 petits écrans (iPhone 7, SE) */
+@media (max-width:400px){
+.rkbar{grid-template-columns:auto 1fr auto!important;row-gap:6px!important}
+.rkbar .rktr{grid-row:1;grid-column:1}.rkbar .rkme{grid-row:1;grid-column:2;justify-self:center}.rkbar .lastt{grid-row:1;grid-column:3}
+.rkbar .rkmk{grid-row:2;grid-column:1/-1;grid-template-columns:repeat(4,1fr)!important;gap:6px!important}
+.rkmk span{flex-direction:row!important;justify-content:center;gap:5px;padding:3px 0!important}
+.rkmk b{font-size:17px!important}
+.rkme .rkdf b{font-size:21px}
+.wrap.play .card.felt .lab,.wrap.play .card.felt .lab2{font-size:11px!important;letter-spacing:.02em!important}
+.wrap.play .card.felt .pn>.lab{padding:0 26px!important;text-align:center}
+}
 </style>
 </head>
 <body>
@@ -3901,6 +3912,7 @@ const THEME_CAST = {
 Object.defineProperty(THEME_CAST.enfant, 'S', { get() { return typeof ST !== 'undefined' && ST.opt && ST.opt.genre === 'f' ? ['La Sorcière', '🧙‍♀️'] : ['Le Sorcier', '🧙‍♂️']; } });
 const themeOf = () => (typeof tone === 'function' ? tone() : 'adulte');
 const seatAv = p => (THEME_CAST[themeOf()] || THEME_CAST.adulte)[p][1];
+const seatSh = p => (THEME_CAST[themeOf()] || THEME_CAST.adulte)[p][0];
 const seatNm = p => `${(THEME_CAST[themeOf()] || THEME_CAST.adulte)[p][0]} (${SEATNAME[p]})`;
 function show(html) { try { document.body.dataset.th = themeOf(); } catch (e) { } if (!show._play && typeof PG !== 'undefined' && PG) PG = null; show._play = false; app.innerHTML = colorize(html); try { if (typeof tuTree === 'function') tuTree(app); } catch (e) { } window.scrollTo(0, 0); }
 function toast(msg) { const d = document.createElement('div'); d.className = 'toast'; d.textContent = msg; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); }
@@ -5432,7 +5444,7 @@ function mbStart() {
 }
 function mbRender(fb) {
   const H = MB.H, P = p => hcp(H[p]);
-  const seat = (p, me) => `<div class="mbs2 mb${p}${me ? ' me' : ''}"><span class="av">${seatAv(p)}</span><span class="nm">${me ? T3('Toi (Sud)', 'Toi (Sud)', 'Vous (Sud)') : seatNm(p)}</span><b>${P(p)}</b><small>points</small></div>`;
+  const seat = (p, me) => `<div class="mbs2 mb${p}${me ? ' me' : ''}"><span class="av">${seatAv(p)}</span><span class="nm">${me ? T3('Toi (Sud)', 'Toi (Sud)', 'Vous (Sud)') : seatSh(p)}</span><b>${P(p)}</b><small>points</small></div>`;
   const seats = `<div class="card felt mbfelt"><div class="mbgrid">${seat('N')}${seat('O')}<div class="mbmid"><b>40</b><small>points dans le jeu</small></div>${seat('E')}${seat('S', true)}</div></div>`;
   let body = '';
   if (MB.step === 0) body = `${seats}<div class="card"><p>Chacun annonce ses points d'honneur.</p><div class="q">Quelle équipe joue le contrat ?</div><div class="reasons"><button class="reason" data-mba="ns">Nord-Sud : votre équipe</button><button class="reason" data-mba="eo">Est-Ouest</button></div></div>`;
@@ -5717,7 +5729,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v57';
+const APP_V = 'v58';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -8932,7 +8944,7 @@ const HERO = {
 const HERO_FULL = () => (FEM() ? 'Son Altesse l\'archiduchesse Augusta-Theresia Ludovica von Spilkarte' : 'Son Altesse l\'archiduc Friedrich-Wilhelm Maximilian von Spilkarte');
 Object.assign(THEME_CAST.enfant, { N: ['Grognon le Nain', '⛏️'], E: ['Lirelune l\'Elfe', '🧝'], O: ['Flottin le Fantôme', '👻'] });
 Object.assign(THEME_CAST.ado, { N: ['Vaelmor le Spectre', '🌫️'], E: ['Borbak le Nain', '⛏️'], O: ['Orlavin le Magicien', '🧙‍♂️'] });
-Object.assign(THEME_CAST.adulte, { N: ['L\'Archbishop of Beukbury', '⛪'], E: ['Le colonel Surcontre', '🎖️'], O: ['Lady Amelia Chicane', '🪭'] });
+Object.assign(THEME_CAST.adulte, { N: ['L\'Archbishop', '⛪'], E: ['Le colonel Surcontre', '🎖️'], O: ['Lady Chicane', '🪭'] });
 ['enfant', 'ado', 'adulte'].forEach(t => Object.defineProperty(THEME_CAST[t], 'S', { configurable: true, get() { const h = HERO[t](); return [h[0], h[1]]; } }));
 // rikiki : mêmes personnages, avec leurs petites phrases
 RK_CAST.enfant = [
@@ -8946,9 +8958,9 @@ RK_CAST.ado = [
   { n: 'Orlavin le Magicien', a: '🧙‍♂️', s: t => [`Orlavin frappe le sol de son bâton : « ${t} ! »`, `Orlavin aux Étoiles, énigmatique : « ${t}… ni plus, ni moins. »`] },
 ];
 RK_CAST.adulte = [
-  { n: 'L\'Archbishop of Beukbury', a: '⛪', s: t => [`L'Archbishop of Beukbury joint les mains : « ${t}, et que le Ciel y pourvoie. »`, `L'Archbishop, après une courte prière : « ${t}. Amen. »`] },
+  { n: 'L\'Archbishop', a: '⛪', s: t => [`L'Archbishop of Beukbury joint les mains : « ${t}, et que le Ciel y pourvoie. »`, `L'Archbishop, après une courte prière : « ${t}. Amen. »`] },
   { n: 'Le colonel Surcontre', a: '🎖️', s: t => [`Le colonel Surcontre lisse sa moustache : « ${t}, et je tiens la position ! »`, `Le colonel Archibald Surcontre, au garde-à-vous : « ${t}. Rompez ! »`] },
-  { n: 'Lady Amelia Chicane', a: '🪭', s: t => [`Lady Amelia Chicane, derrière son éventail : « ${t}, darling. »`, `Lady Chicane ajuste son casque colonial : « ${t}. Quelle aventure ! »`] },
+  { n: 'Lady Chicane', a: '🪭', s: t => [`Lady Amelia Chicane, derrière son éventail : « ${t}, darling. »`, `Lady Chicane ajuste son casque colonial : « ${t}. Quelle aventure ! »`] },
 ];
 MAGE = () => (tone() === 'enfant' ? HERO.enfant()[2] : tone() === 'ado' ? HERO.ado()[2] : GN('Votre Altesse', 'Votre Altesse'));
 // l'écran d'accueil
