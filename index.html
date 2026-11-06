@@ -279,7 +279,7 @@ body{background:radial-gradient(1200px 500px at 50% -200px,rgba(14,90,67,.10),tr
 /* boutons */
 .btn{background:linear-gradient(180deg,var(--felt-l),var(--felt));box-shadow:0 2px 0 var(--felt-d),inset 0 1px 0 rgba(255,255,255,.18)}
 .btn:hover{filter:brightness(1.06)}
-.btn.sec{background:var(--paper);color:var(--felt);border:1.5px solid color-mix(in srgb,var(--felt) 35%,var(--line));box-shadow:none;font-weight:700}
+.btn.sec{background:var(--paper);color:var(--felt);border:1.5px solid var(--line);border:1.5px solid color-mix(in srgb,var(--felt) 35%,var(--line));box-shadow:none;font-weight:700}
 :root[data-theme="dark"] .btn.sec{color:var(--ink)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.sec{color:var(--ink)}}
 /* le parcours */
@@ -288,7 +288,7 @@ body{background:radial-gradient(1200px 500px at 50% -200px,rgba(14,90,67,.10),tr
 .prog i{background:linear-gradient(90deg,var(--felt-l),var(--ok) 60%,var(--gold));border-radius:6px;position:relative;overflow:hidden}
 .prog i::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);animation:shine 2.6s ease-in-out infinite}
 @keyframes shine{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
-.quip{background:linear-gradient(135deg,var(--on),color-mix(in srgb,var(--on) 60%,var(--paper)));border:1px solid color-mix(in srgb,var(--gold) 30%,transparent)}
+.quip{background:var(--on);border:1px solid var(--line);background:linear-gradient(135deg,var(--on),color-mix(in srgb,var(--on) 60%,var(--paper)));border:1px solid color-mix(in srgb,var(--gold) 30%,transparent)}
 /* retours */
 .fb{box-shadow:var(--card-shadow)}
 .fb.ok h3::before{content:"♣ ";color:var(--ok)}.fb.bad h3::before{content:"♦ ";color:var(--bad)}
@@ -3883,6 +3883,14 @@ function cs(id) { return ST.cases[id] || (ST.cases[id] = { streak: 0, acq: false
 const caseById = id => CASES.find(c => c.id === id);
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 function colorize(html) { return html.replace(/[♥♦]/g, m => `<span class="r">${m}\uFE0E</span>`).replace(/[♠♣]/g, m => `<span class="k">${m}\uFE0E</span>`); }
+// iOS 15 (iPhone 7) ne connaît pas le « regard en arrière » des expressions régulières : on l'imite
+function NL(re) { re._nlb = true; return re; }
+(function () { const R0 = String.prototype.replace; String.prototype.replace = function (re, f) {
+  if (!(re && re._nlb)) return R0.apply(this, arguments); const str = String(this);
+  return R0.call(str, re, function () { const a = arguments, n = a.length, off = a[n - 2];
+    if (off > 0 && /\p{L}/u.test(str[off - 1])) return a[0];
+    if (typeof f === 'function') return f.apply(this, a);
+    return R0.call(String(f), /\$(\d|&)/g, (_, d) => (d === '&' ? a[0] : (a[+d] == null ? '' : a[+d]))); }); }; })();
 const app = document.getElementById('app');
 // les trois univers, selon l'âge
 const THEME_CAST = {
@@ -5709,7 +5717,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v55';
+const APP_V = 'v57';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -7264,14 +7272,14 @@ function tuFix(s) {
   const conjQ = v => { const lv = v.toLowerCase(), M = { avez: 'as', êtes: 'es', pouvez: 'peux', devez: 'dois', voulez: 'veux', faites: 'fais', dites: 'dis', allez: 'vas', voyez: 'vois', savez: 'sais', prenez: 'prends', mettez: 'mets' }; return M[lv] || (/issez$/.test(lv) ? lv.replace(/issez$/, 'is') : lv.replace(/ez$/, 'es')); };
   R(/\(vous\)/gi, '(toi)');
   R(/s'il vous plaît/gi, m => cap(m, 's\'il te plaît'));
-  R(/(?<!\p{L})(\p{L}+ez)-vous(?!\p{L})/gu, (m, v, off, str) => { const rest = str.slice(off); const q = rest.search(/[?]/), e = rest.search(/[.!:;]/); return (q >= 0 && (e < 0 || q < e)) ? cap(m, conjQ(v) + '-tu') : m; });
-  R(/(?<!\p{L})(\p{L}+)ez-vous(?!\p{L})/gu, (m, v) => cap(m, ({ rappel: 'rappelle', appel: 'appelle', méfi: 'méfie', souven: 'souviens', assur: 'assure' })[v.toLowerCase()] ? ({ rappel: 'rappelle', appel: 'appelle', méfi: 'méfie', souven: 'souviens', assur: 'assure' })[v.toLowerCase()] + '-toi' : v + 'e-toi'));
+  R(NL(/(\p{L}+ez)-vous(?!\p{L})/gu), (m, v, off, str) => { const rest = str.slice(off); const q = rest.search(/[?]/), e = rest.search(/[.!:;]/); return (q >= 0 && (e < 0 || q < e)) ? cap(m, conjQ(v) + '-tu') : m; });
+  R(NL(/(\p{L}+)ez-vous(?!\p{L})/gu), (m, v) => cap(m, ({ rappel: 'rappelle', appel: 'appelle', méfi: 'méfie', souven: 'souviens', assur: 'assure' })[v.toLowerCase()] ? ({ rappel: 'rappelle', appel: 'appelle', méfi: 'méfie', souven: 'souviens', assur: 'assure' })[v.toLowerCase()] + '-toi' : v + 'e-toi'));
   R(/\bvous vous\b/gi, m => cap(m, 'tu te'));
-  R(/(?<!\p{L})vous-mêmes?(?!\p{L})/giu, m => cap(m, 'toi-même'));
-  R(/(?<!\p{L})(pour|de|sans|pas|à|par) vous (?=\p{L}+(?:er|ir|re|oir)(?!\p{L}))/giu, (m, p) => p + ' te ');
-  R(/(?<!\p{L})pas vous(?=\s*[.,;:!?)]|\s*$)/giu, 'pas toi');
-  R(/(?<!\p{L})(pour|à|chez|avec|de|sans|que|comme|devant|derrière|selon|sur|après|entre|contre|vers|par|envers|sauf) vous(?!\p{L})/giu, (m, p) => p + ' toi');
-  R(/(?<!\p{L})c'est vous(?!\p{L})/giu, m => cap(m, "c'est toi"));
+  R(NL(/vous-mêmes?(?!\p{L})/giu), m => cap(m, 'toi-même'));
+  R(NL(/(pour|de|sans|pas|à|par) vous (?=\p{L}+(?:er|ir|re|oir)(?!\p{L}))/giu), (m, p) => p + ' te ');
+  R(NL(/pas vous(?=\s*[.,;:!?)]|\s*$)/giu), 'pas toi');
+  R(NL(/(pour|à|chez|avec|de|sans|que|comme|devant|derrière|selon|sur|après|entre|contre|vers|par|envers|sauf) vous(?!\p{L})/giu), (m, p) => p + ' toi');
+  R(NL(/c'est vous(?!\p{L})/giu), m => cap(m, "c'est toi"));
   const IRR = { avez: 'as', êtes: 'es', pouvez: 'peux', devez: 'dois', voulez: 'veux', faites: 'fais', dites: 'dis', allez: 'vas', voyez: 'vois', savez: 'sais', prenez: 'prends', mettez: 'mets', tenez: 'tiens', venez: 'viens', lisez: 'lis', suivez: 'suis', attendez: 'attends', rendez: 'rends', défendez: 'défends', descendez: 'descends', apprenez: 'apprends', comprenez: 'comprends', perdez: 'perds', répondez: 'réponds', entendez: 'entends', reprenez: 'reprends', obtenez: 'obtiens', retenez: 'retiens', écrivez: 'écris', vivez: 'vis', battez: 'bats', connaissez: 'connais', croyez: 'crois', recevez: 'reçois' };
   const PRES_R = new Set(['tirez', 'retirez', 'attirez', 'inspirez', 'admirez', 'désirez', 'assurez', 'mesurez', 'durez', 'virez', 'considérez', 'préférez', 'espérez', 'gérez', 'opérez', 'récupérez']);
   const conj = v => { const lv = v.toLowerCase(); if (IRR[lv]) return IRR[lv]; if (/issez$/.test(lv)) return lv.replace(/issez$/, 'is'); if (/(er|ir|ur|rr|dr)ez$/.test(lv) && !PRES_R.has(lv)) return lv.replace(/ez$/, 'as'); if (/iez$/.test(lv)) return lv.replace(/iez$/, 'ais'); if (/ez$/.test(lv)) return lv.replace(/ez$/, 'es'); return lv; };
@@ -7279,8 +7287,8 @@ function tuFix(s) {
   R(/\bvous (en|y|le|la|les|l')\s?(\p{L}+ez)\b/giu, (m, o, verb) => `${cap(m, 'tu')} ${o}${o === "l'" ? '' : ' '}${conj(verb)}`);
   const IMP = { partez: 'pars', sortez: 'sors', servez: 'sers', dormez: 'dors', sentez: 'sens', faites: 'fais', dites: 'dis', prenez: 'prends', mettez: 'mets', voyez: 'vois', venez: 'viens', lisez: 'lis', suivez: 'suis', attendez: 'attends', rendez: 'rends', défendez: 'défends', descendez: 'descends', apprenez: 'apprends', allez: 'va', soyez: 'sois', ayez: 'aie', reprenez: 'reprends', retenez: 'retiens', comprenez: 'comprends', répondez: 'réponds', écrivez: 'écris', perdez: 'perds' };
   const NOEZ = new Set(['chez', 'nez', 'assez', 'rez', 'avez', 'êtes']);
-  R(/(?<!\p{L})(\p{L}+ez)(?!\p{L})/gu, (m) => { const lv = m.toLowerCase(); if (NOEZ.has(lv)) return m; let o = IMP[lv] || (/issez$/.test(lv) ? lv.replace(/issez$/, 'is') : lv.replace(/ez$/, 'e')); return cap(m, o); });
-  R(/(?<!\p{L})(faites|dites)(?!\p{L})/giu, m => cap(m, m.toLowerCase() === 'faites' ? 'fais' : 'dis'));
+  R(NL(/(\p{L}+ez)(?!\p{L})/gu), (m) => { const lv = m.toLowerCase(); if (NOEZ.has(lv)) return m; let o = IMP[lv] || (/issez$/.test(lv) ? lv.replace(/issez$/, 'is') : lv.replace(/ez$/, 'e')); return cap(m, o); });
+  R(NL(/(faites|dites)(?!\p{L})/giu), m => cap(m, m.toLowerCase() === 'faites' ? 'fais' : 'dis'));
   R(/\b(le|la|les) vôtres?\b/gi, (m, a) => cap(m, a.toLowerCase() === 'le' ? 'le tien' : a.toLowerCase() === 'la' ? 'la tienne' : 'les tiens'));
   R(/\bvotre (\p{L}+)/giu, (m, n) => { const w = n.toLowerCase(); const a = /^[aeiouyéèêàâîôûh]/.test(w) ? 'ton' : TU_FEM.has(w) ? 'ta' : 'ton'; return cap(m, a) + ' ' + n; });
   R(/\bvos\b/gi, m => cap(m, 'tes'));
@@ -7288,9 +7296,9 @@ function tuFix(s) {
   R(/\bte ([aeiouéèêh])/gi, "t'$1");
   R(/\bvous\s*\(/gi, m => cap(m, 'toi ('));
   R(/\bVous\b(?=\s*$|\s*[·:,.!?»)])/g, 'Toi');
-  R(/(?<!\p{L})vous (?!(?:aussi|même|seule?s?|tous|deux|trois)(?!\p{L}))(?=\p{L})/giu, m => cap(m, 'te '));
-  R(/(?<!\p{L})vous(?!\p{L})/giu, m => cap(m, 'toi'));
-  R(/(?<!\p{L})te ([aeiouyéèêàh])/giu, (m, v) => cap(m, "t'") + v);
+  R(NL(/vous (?!(?:aussi|même|seule?s?|tous|deux|trois)(?!\p{L}))(?=\p{L})/giu), m => cap(m, 'te '));
+  R(NL(/vous(?!\p{L})/giu), m => cap(m, 'toi'));
+  R(NL(/te ([aeiouyéèêàh])/giu), (m, v) => cap(m, "t'") + v);
   return s;
 }
 function tuTree(root) {
@@ -8293,9 +8301,9 @@ let PROF_AV = () => ({ enfant: '🧙‍♂️', ado: '🔮', adulte: '🎩' })[t
 const cap1 = s => s[0].toUpperCase() + s.slice(1);
 function profRename(root) {
   const t = themeOf(); if (!root) return;
-  const rules = t === 'enfant' ? [[/(?<![\p{L}])([Pp])rofesseur(?! Dumblebridge)/gu, '$1rofesseur Dumblebridge']]
-    : t === 'ado' ? [[/(?<![\p{L}])([LlDdAa][eu]?) professeur(?![\p{L}])/gu, '$1 mage éclairé'], [/(?<![\p{L}])Professeur(?![\p{L}])/gu, 'Mage éclairé'], [/(?<![\p{L}])professeur(?![\p{L}])/gu, 'mage éclairé'], [/(?<![\p{L}])([Ll])e mentor(?![\p{L}])/gu, '$1e mage éclairé'], [/(?<![\p{L}])du mentor(?![\p{L}])/gu, 'du mage éclairé']]
-      : [[/(?<![\p{L}])([Pp])rofesseur(?![\p{L}])/gu, (m, p) => (p === 'P' ? 'Maître du Nil' : 'Maître du Nil')]];
+  const rules = t === 'enfant' ? [[NL(/([Pp])rofesseur(?! Dumblebridge)/gu), '$1rofesseur Dumblebridge']]
+    : t === 'ado' ? [[NL(/([LlDdAa][eu]?) professeur(?![\p{L}])/gu), '$1 mage éclairé'], [NL(/Professeur(?![\p{L}])/gu), 'Mage éclairé'], [NL(/professeur(?![\p{L}])/gu), 'mage éclairé'], [NL(/([Ll])e mentor(?![\p{L}])/gu), '$1e mage éclairé'], [NL(/du mentor(?![\p{L}])/gu), 'du mage éclairé']]
+      : [[NL(/([Pp])rofesseur(?![\p{L}])/gu), (m, p) => (p === 'P' ? 'Maître du Nil' : 'Maître du Nil')]];
   const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => (n.parentElement && n.parentElement.closest('.noprof,script,style,input,textarea') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) });
   const L = []; while (w.nextNode()) L.push(w.currentNode);
   L.forEach(n => { let v = n.nodeValue; if (!/rofesseur|mentor/.test(v)) return; rules.forEach(([re, to]) => { v = v.replace(re, to); }); if (v !== n.nodeValue) n.nodeValue = v; });
@@ -8399,11 +8407,11 @@ const PROF_DE = () => ({ enfant: 'du professeur Dumblebridge', ado: 'de Merlimpa
 profRename = function (root) {
   const t = themeOf(); if (!root) return;
   const W = t === 'enfant' ? 'professeur Dumblebridge' : t === 'ado' ? 'Merlimpasse' : 'Duke of Blackwood';
-  const rules = t === 'enfant' ? [[/(?<![\p{L}])([Pp])rofesseur(?! Dumblebridge)/gu, '$1rofesseur Dumblebridge'], [/(?<![\p{L}])([Ll])e mentor(?![\p{L}])/gu, '$1e professeur Dumblebridge']]
-    : [[/(?<![\p{L}])([Ll])e (professeur|mentor|mage éclairé)(?![\p{L}])/gu, (m, l) => (t === 'ado' ? W : `${l}e ${W}`)],
-      [/(?<![\p{L}])du (professeur|mentor|mage éclairé)(?![\p{L}])/gu, t === 'ado' ? `de ${W}` : `du ${W}`],
-      [/(?<![\p{L}])au (professeur|mentor|mage éclairé)(?![\p{L}])/gu, t === 'ado' ? `à ${W}` : `au ${W}`],
-      [/(?<![\p{L}])[Pp]rofesseur(?![\p{L}])/gu, W], [/(?<![\p{L}])[Mm]age éclairé(?![\p{L}])/gu, W]];
+  const rules = t === 'enfant' ? [[NL(/([Pp])rofesseur(?! Dumblebridge)/gu), '$1rofesseur Dumblebridge'], [NL(/([Ll])e mentor(?![\p{L}])/gu), '$1e professeur Dumblebridge']]
+    : [[NL(/([Ll])e (professeur|mentor|mage éclairé)(?![\p{L}])/gu), (m, l) => (t === 'ado' ? W : `${l}e ${W}`)],
+      [NL(/du (professeur|mentor|mage éclairé)(?![\p{L}])/gu), t === 'ado' ? `de ${W}` : `du ${W}`],
+      [NL(/au (professeur|mentor|mage éclairé)(?![\p{L}])/gu), t === 'ado' ? `à ${W}` : `au ${W}`],
+      [NL(/[Pp]rofesseur(?![\p{L}])/gu), W], [NL(/[Mm]age éclairé(?![\p{L}])/gu), W]];
   const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => (n.parentElement && n.parentElement.closest('.noprof,script,style,input,textarea') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) });
   const L = []; while (w.nextNode()) L.push(w.currentNode);
   L.forEach(n => { let v = n.nodeValue; if (!/rofesseur|mentor|mage éclairé/.test(v)) return; rules.forEach(([re, to]) => { v = v.replace(re, to); }); if (v !== n.nodeValue) n.nodeValue = v; });
