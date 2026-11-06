@@ -5709,7 +5709,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v54';
+const APP_V = 'v55';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -8955,6 +8955,8 @@ MAGE = () => (tone() === 'enfant' ? HERO.enfant()[2] : tone() === 'ado' ? HERO.a
   const w = ad.querySelector('.agewho'); if (w) w.outerHTML = `<div class="agewho"><div class="agesex"><button class="${f ? '' : 'on'}" data-agesex="m">👑 Archiduc</button><button class="${f ? 'on' : ''}" data-agesex="f">👑 Archiduchesse</button></div><div class="agefull">${HERO_FULL()}</div></div>`;
 }; }
 app.addEventListener('click', e => { const t = e.target.closest('[data-agesex]'); if (!t) return; ST.opt.genre = t.dataset.agesex; save(); ageGate(); }, true);
+// au démarrage, l'écran d'accueil est affiché avant le chargement de ce module : on le redessine
+try { if (app.querySelector('.agepage')) ageGate(); } catch (e) { }
 
 </script>
 <script>if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) { try { navigator.serviceWorker.register("sw.js"); } catch (e) {} }</script>
