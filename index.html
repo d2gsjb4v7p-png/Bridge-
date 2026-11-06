@@ -962,6 +962,9 @@ body[data-th=ado] .card.felt::after,body[data-th=ado] .card.felt.rkfelt::after{b
 .rkbar .rktr .lb.hj{font-size:9px;letter-spacing:0;text-transform:none;line-height:1.1;max-width:70px;text-align:center;opacity:.85}
 .rktrbig b{font-size:34px!important;white-space:nowrap}
 .rktnote{margin:2px auto 10px;max-width:320px;padding:7px 10px;border-radius:10px;background:rgba(255,233,168,.16);border:1px solid rgba(255,216,77,.45);font-size:14px;line-height:1.35;text-align:center}
+/* v53 accueil : archiduc / archiduchesse */
+.agesex{display:flex;gap:8px;justify-content:center;margin:2px 0 6px}.agesex button{flex:1;max-width:190px;padding:9px 10px;border-radius:999px;border:1.5px solid #e3c47a;background:transparent;color:#e3c47a;font:700 15px/1.2 var(--f-body);cursor:pointer}.agesex button.on{background:#e3c47a;color:#14211b}
+.agefull{font:italic 14px/1.35 var(--f-body);color:#f3e6c2;opacity:.9;margin-top:4px}
 </style>
 </head>
 <body>
@@ -4995,7 +4998,7 @@ function rkSetup() {
 function rkNew() {
   const lv = ST.opt.rkLv || (tone() !== 'adulte' ? 'kid' : 'adult'), max = RK_LEN[ST.opt.rkLen || 'courte'];
   const tn = tone(), TC = THEME_CAST[tn], seats = ['O', 'N', 'E'], cast = seats.map(p => RK_CAST[tn].find(c => c.n === TC[p][0]) || RK_CAST[tn][0]);
-  const names = { S: T3(`Toi (${TC.S[0].toLowerCase()})`, `Toi (${TC.S[0].toLowerCase()})`, 'Vous (le colonel)') }, av = { S: TC.S[1] };
+  const hh = HERO[tn] ? HERO[tn]() : [TC.S[0], TC.S[1], TC.S[0]], names = { S: T3(`Toi (${hh[2]})`, `Toi (${hh[2]})`, `Vous (${hh[2]})`) }, av = { S: hh[1] };
   seats.forEach((p, k) => { names[p] = cast[k].n; av[p] = cast[k].a; });
   RKG = { lv, tn, castIdx: cast.map(c => RK_CAST[tn].indexOf(c)), av, names, seq: rkSeq(max), i: 0, dealer: pick(['S', 'O', 'N', 'E']), scores: { S: 0, O: 0, N: 0, E: 0 }, rounds: [], over: false };
   rkDeal();
@@ -5705,7 +5708,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v52';
+const APP_V = 'v53';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -7232,7 +7235,7 @@ if (typeof THEO_AGE !== 'undefined') {
 
 // ---------------- Choisir sa tranche d'âge (après le mot de passe) ----------------
 const GN = (m, f) => (ST.opt.genre === 'f' ? f : m);
-const MAGE = () => (tone() === 'enfant' ? GN('petit sorcier', 'petite sorcière') : tone() === 'ado' ? GN('jeune elfe', 'jeune elfe') : 'colonel');
+let MAGE = () => (tone() === 'enfant' ? GN('petit sorcier', 'petite sorcière') : tone() === 'ado' ? GN('jeune elfe', 'jeune elfe') : 'colonel');
 let AGE_OK = false;
 function ageGate() {
   AGE_OK = false; const p = ST.prof, g = ST.opt.genre;
@@ -8907,6 +8910,50 @@ escBlock = (orig => function () {
   const prog = k => (k === 'maj' || k === 'sa') ? ` · ${((st[k] || {}).made || 0)} ${T3('gagnée', 'réussie', 'réussie')}${((st[k] || {}).made || 0) > 1 ? 's' : ''}` : '';
   return `<div class="grp">${T3('🧗 Ma grande escalade', '🧗 L\'ascension', '🧗 L\'escalade : du rikiki au bridge')}</div><div class="esclad">${keys.map((k, i) => `<div class="escstep${done[k] ? ' done' : ''}"><span class="escn">${done[k] ? '✓' : i + 1}</span><button class="escgo" ${ESC_RULES[k].go}><span class="escic2">${ESC_RULES[k].ic}</span><span><b>${ESC_RULES[k].t}</b><small>${sub[k]}${prog(k)}</small></span></button><button class="escrb" data-escr="${k}" aria-label="Les règles">📜</button></div>`).join('')}</div>`;
 })(escBlock);
+
+// ====================================================================
+//  v53 — les personnages ont un nom
+// ====================================================================
+const FEM = () => typeof ST !== 'undefined' && ST.opt && ST.opt.genre === 'f';
+const HERO = {
+  enfant: () => (FEM() ? ['Mirabelle Chaudron', '🧙‍♀️', 'Mirabelle'] : ['Barnabé Grimoire', '🧙‍♂️', 'Barnabé']),
+  ado: () => (FEM() ? ['Aëlira', '🧝‍♀️', 'Aëlira'] : ['Thalindor', '🧝‍♂️', 'Thalindor']),
+  adulte: () => (FEM() ? ['L\'archiduchesse von Spilkarte', '👑', 'l\'archiduchesse'] : ['L\'archiduc von Spilkarte', '👑', 'l\'archiduc']),
+};
+const HERO_FULL = () => (FEM() ? 'Son Altesse l\'archiduchesse Augusta-Theresia Ludovica von Spilkarte' : 'Son Altesse l\'archiduc Friedrich-Wilhelm Maximilian von Spilkarte');
+Object.assign(THEME_CAST.enfant, { N: ['Grognon le Nain', '⛏️'], E: ['Lirelune l\'Elfe', '🧝'], O: ['Flottin le Fantôme', '👻'] });
+Object.assign(THEME_CAST.ado, { N: ['Vaelmor le Spectre', '🌫️'], E: ['Borbak le Nain', '⛏️'], O: ['Orlavin le Magicien', '🧙‍♂️'] });
+Object.assign(THEME_CAST.adulte, { N: ['L\'Archbishop of Beukbury', '⛪'], E: ['Le colonel Surcontre', '🎖️'], O: ['Lady Amelia Chicane', '🪭'] });
+['enfant', 'ado', 'adulte'].forEach(t => Object.defineProperty(THEME_CAST[t], 'S', { configurable: true, get() { const h = HERO[t](); return [h[0], h[1]]; } }));
+// rikiki : mêmes personnages, avec leurs petites phrases
+RK_CAST.enfant = [
+  { n: 'Grognon le Nain', a: '⛏️', s: t => [`Grognon frappe la table de son marteau : « ${t} ! »`, `Grognon lisse sa grande barbe : « ${t}, foi de Barbefer ! »`] },
+  { n: 'Lirelune l\'Elfe', a: '🧝', s: t => [`Lirelune tend l'oreille, très pointue : « ${t}. »`, `Lirelune sourit malicieusement : « ${t} ! »`] },
+  { n: 'Flottin le Fantôme', a: '👻', s: t => [`Flottin passe à travers la table : « Bouh… ${t} ! »`, `Flottin flotte au-dessus de ses cartes : « ${t}… »`] },
+];
+RK_CAST.ado = [
+  { n: 'Vaelmor le Spectre', a: '🌫️', s: t => [`Vaelmor surgit de la brume : « ${t}… »`, `Vaelmor, d'une voix d'outre-tombe : « ${t}. Les runes l'ont dit. »`] },
+  { n: 'Borbak le Nain', a: '⛏️', s: t => [`Borbak lève sa hache : « ${t}, par ma barbe ! »`, `Borbak Marteau-de-Pierre grogne en comptant ses cartes : « ${t}. »`] },
+  { n: 'Orlavin le Magicien', a: '🧙‍♂️', s: t => [`Orlavin frappe le sol de son bâton : « ${t} ! »`, `Orlavin aux Étoiles, énigmatique : « ${t}… ni plus, ni moins. »`] },
+];
+RK_CAST.adulte = [
+  { n: 'L\'Archbishop of Beukbury', a: '⛪', s: t => [`L'Archbishop of Beukbury joint les mains : « ${t}, et que le Ciel y pourvoie. »`, `L'Archbishop, après une courte prière : « ${t}. Amen. »`] },
+  { n: 'Le colonel Surcontre', a: '🎖️', s: t => [`Le colonel Surcontre lisse sa moustache : « ${t}, et je tiens la position ! »`, `Le colonel Archibald Surcontre, au garde-à-vous : « ${t}. Rompez ! »`] },
+  { n: 'Lady Amelia Chicane', a: '🪭', s: t => [`Lady Amelia Chicane, derrière son éventail : « ${t}, darling. »`, `Lady Chicane ajuste son casque colonial : « ${t}. Quelle aventure ! »`] },
+];
+MAGE = () => (tone() === 'enfant' ? HERO.enfant()[2] : tone() === 'ado' ? HERO.ado()[2] : GN('Votre Altesse', 'Votre Altesse'));
+// l'écran d'accueil
+{ const _ag = ageGate; ageGate = function () {
+  _ag(); const f = FEM();
+  const tt = app.querySelector('.agedoor.teen h2'); if (tt) tt.textContent = 'À l\'Assaut des Piques de la Comté';
+  const L = { 'enfant:m': '🧙‍♂️ Je suis Barnabé Grimoire, petit sorcier', 'enfant:f': '🧙‍♀️ Je suis Mirabelle Chaudron, petite sorcière', 'ado:m': '🧝‍♂️ Je suis Thalindor, un Elfe', 'ado:f': '🧝‍♀️ Je suis Aëlira, une Elfe' };
+  Object.keys(L).forEach(k => { const b = app.querySelector(`[data-agep="${k}"]`); if (b) b.textContent = L[k]; });
+  const ad = app.querySelector('.agedoor.adult'); if (!ad) return;
+  const p = ad.querySelector('p'); if (p) p.textContent = 'Bienvenue à bord, Votre Altesse : croisière, tournois et Coupe du Vapeur Caroline, avec l\'Archbishop of Beukbury pour partenaire.';
+  const c = ad.querySelector('.agecast'); if (c) c.textContent = '👑 ⛪ 🎖️ 🪭';
+  const w = ad.querySelector('.agewho'); if (w) w.outerHTML = `<div class="agewho"><div class="agesex"><button class="${f ? '' : 'on'}" data-agesex="m">👑 Archiduc</button><button class="${f ? 'on' : ''}" data-agesex="f">👑 Archiduchesse</button></div><div class="agefull">${HERO_FULL()}</div></div>`;
+}; }
+app.addEventListener('click', e => { const t = e.target.closest('[data-agesex]'); if (!t) return; ST.opt.genre = t.dataset.agesex; save(); ageGate(); }, true);
 
 </script>
 <script>if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) { try { navigator.serviceWorker.register("sw.js"); } catch (e) {} }</script>
