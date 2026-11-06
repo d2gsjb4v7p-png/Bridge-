@@ -3893,6 +3893,7 @@ const THEME_CAST = {
 Object.defineProperty(THEME_CAST.enfant, 'S', { get() { return typeof ST !== 'undefined' && ST.opt && ST.opt.genre === 'f' ? ['La Sorcière', '🧙‍♀️'] : ['Le Sorcier', '🧙‍♂️']; } });
 const themeOf = () => (typeof tone === 'function' ? tone() : 'adulte');
 const seatAv = p => (THEME_CAST[themeOf()] || THEME_CAST.adulte)[p][1];
+const seatNm = p => `${(THEME_CAST[themeOf()] || THEME_CAST.adulte)[p][0]} (${SEATNAME[p]})`;
 function show(html) { try { document.body.dataset.th = themeOf(); } catch (e) { } if (!show._play && typeof PG !== 'undefined' && PG) PG = null; show._play = false; app.innerHTML = colorize(html); try { if (typeof tuTree === 'function') tuTree(app); } catch (e) { } window.scrollTo(0, 0); }
 function toast(msg) { const d = document.createElement('div'); d.className = 'toast'; d.textContent = msg; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); }
 
@@ -4675,7 +4676,7 @@ function lastTrickBox(big) {
   const cell = p => { if (!t) return '<span></span>'; const x = t.cards.find(c => c[0] === p); return `<span class="${t.win === p ? 'w' : ''}">${x ? rk(x[1][1]) + SYM[x[1][0]] : ''}</span>`; };
   return `<button class="lastt${big ? ' big' : ''}" data-pgo="lastt" aria-label="Dernier pli"><span class="lth">${t ? `Pli ${G.tricks.length}` : 'Dernier pli'}</span><span class="ltg"><span></span>${cell('N')}<span></span>${cell('O')}<span class="ltc">${t ? '' : '—'}</span>${cell('E')}<span></span>${cell('S')}<span></span></span></button>`;
 }
-function backs(p) { const k = SU.reduce((a, s) => a + PG.G.live[p][s].length, 0); return `<div class="bkc" aria-label="${k} cartes">${k ? `<b>${k}</b>` : ''}</div><div class="small" style="margin-top:12px">${seatAv(p)} ${SEATNAME[p]}</div>`; }
+function backs(p) { const k = SU.reduce((a, s) => a + PG.G.live[p][s].length, 0); return `<div class="bkc" aria-label="${k} cartes">${k ? `<b>${k}</b>` : ''}</div><div class="small" style="margin-top:12px">${seatAv(p)} ${seatNm(p)}</div>`; }
 function slot(p) { const G = PG.G, src = G.cur.length ? G.cur : PG.last ? PG.last.cards : []; const x = src.find(c => c[0] === p); const win = !G.cur.length && PG.last && PG.last.win === p; return x ? `<span class="tc${win ? ' w' : ''}">${rk(x[1][1])}${SYM[x[1][0]]}</span>` : '<span class="tc empty"></span>'; }
 function countHelp() {
   const G = PG.G, rows = SU.map(s => { const opp = G.live.E[s].length + G.live.O[s].length; return `<span>${SYM[s]} <b>${opp}</b></span>`; }).join('');
@@ -4692,11 +4693,11 @@ function playRender() {
   const ctr = `${PG.level}${PG.tr ? SYM[PG.tr] : 'SA'}`;
   const msg = PG.done ? '' : mine ? (def ? (!started ? '<b>À vous d\'entamer.</b>' : '<b>À vous</b> de jouer.') : `<b>À vous</b> de jouer ${turn === 'N' ? 'une carte du <b>mort</b>' : 'une carte de <b>votre main</b>'}.`) : `${SEATNAME[turn]}${def && turn === PG.dummy ? ' (le mort, joué par le déclarant)' : ''} réfléchit…`;
   const sub = def ? `Contrat ${ctr} joué par ${SEATNAME[PG.decl]} · il vous faut ${need} levées pour le faire chuter` : `Contrat ${ctr} par vous (Sud) · il faut ${need} levées`;
-  const top = def ? `<div class="pn"><div class="small lab">${seatAv('N')} Votre partenaire (Nord)</div>${PG.open ? handRow('N', false) : `<div class="backs row">${'<i></i>'.repeat(Math.min(13, SU.reduce((a, s) => a + G.live.N[s].length, 0)))}</div>`}</div>` : `<div class="pn"><div class="small lab">${seatAv('N')} Le mort (Nord)</div>${dummyCols('N', mine && turn === 'N')}</div>`;
+  const top = def ? `<div class="pn"><div class="small lab">${seatAv('N')} ${seatNm('N')} · votre partenaire</div>${PG.open ? handRow('N', false) : `<div class="backs row">${'<i></i>'.repeat(Math.min(13, SU.reduce((a, s) => a + G.live.N[s].length, 0)))}</div>`}</div>` : `<div class="pn"><div class="small lab">${seatAv('N')} ${seatNm('N')} · le mort</div>${dummyCols('N', mine && turn === 'N')}</div>`;
   const dumSide = def && started ? PG.dummy : null;
-  const sideDummy = p => `<div class="sdum2"><div class="lab2">${seatAv(p)} ${SEATNAME[p]} · le mort</div>${dummyCols(p, false, true)}</div>`;
-  const side = p => p === dumSide ? sideDummy(p) : PG.open ? `<div class="small lab2">${SEATNAME[p]}</div>` : backs(p);
-  const extra = (PG.open ? ['O', 'E'].filter(p => !(def && p === PG.dummy && started)).map(p => `<div class="pn"><div class="small lab">${SEATNAME[p]}${p === PG.decl ? ' · déclarant' : ''}</div>${handRow(p, false)}</div>`).join('') : '');
+  const sideDummy = p => `<div class="sdum2"><div class="lab2">${seatAv(p)} ${seatNm(p)} · le mort</div>${dummyCols(p, false, true)}</div>`;
+  const side = p => p === dumSide ? sideDummy(p) : PG.open ? `<div class="small lab2">${seatAv(p)} ${seatNm(p)}</div>` : backs(p);
+  const extra = (PG.open ? ['O', 'E'].filter(p => !(def && p === PG.dummy && started)).map(p => `<div class="pn"><div class="small lab">${seatAv(p)} ${seatNm(p)}${p === PG.decl ? ' · déclarant' : ''}</div>${handRow(p, false)}</div>`).join('') : '');
   show._play = true; show(`${topBar(PG.title, sub, PG.back)}<div class="wrap play">
   <div class="pbar"><div class="pctr"><small>${T3('Ton contrat', 'Ta quête', def ? 'Leur contrat' : 'Votre contrat')}</small><b>${ctr}</b><span>${def ? `joué par ${SEATNAME[PG.decl]}` : T3('par toi (Sud)', 'par toi (Sud)', 'par vous (Sud)')}</span></div><div class="pcnt"><div class="pgl"><span>${T3('Il te faut', 'Objectif', def ? 'Pour chuter' : 'Il faut')} <b>${need}</b> ${def ? 'levées' : 'levées'}</span><i><b style="width:${Math.min(100, Math.round(100 * ns / need))}%"></b></i></div><div class="pns"><div class="pn1 ok"><b>${ns}</b><small>${T3('Nous', 'Nous', 'Nous')}</small></div><div class="pn1"><b>${eo}</b><small>Eux</small></div></div></div>${lastTrickBox()}</div>
   <div class="card felt">
@@ -5423,12 +5424,12 @@ function mbStart() {
 }
 function mbRender(fb) {
   const H = MB.H, P = p => hcp(H[p]);
-  const seat = (p, me) => `<div class="mbs2 mb${p}${me ? ' me' : ''}"><span class="av">${seatAv(p)}</span><span class="nm">${me ? T3('Toi (Sud)', 'Toi (Sud)', 'Vous (Sud)') : SEATNAME[p]}</span><b>${P(p)}</b><small>points</small></div>`;
+  const seat = (p, me) => `<div class="mbs2 mb${p}${me ? ' me' : ''}"><span class="av">${seatAv(p)}</span><span class="nm">${me ? T3('Toi (Sud)', 'Toi (Sud)', 'Vous (Sud)') : seatNm(p)}</span><b>${P(p)}</b><small>points</small></div>`;
   const seats = `<div class="card felt mbfelt"><div class="mbgrid">${seat('N')}${seat('O')}<div class="mbmid"><b>40</b><small>points dans le jeu</small></div>${seat('E')}${seat('S', true)}</div></div>`;
   let body = '';
   if (MB.step === 0) body = `${seats}<div class="card"><p>Chacun annonce ses points d'honneur.</p><div class="q">Quelle équipe joue le contrat ?</div><div class="reasons"><button class="reason" data-mba="ns">Nord-Sud : votre équipe</button><button class="reason" data-mba="eo">Est-Ouest</button></div></div>`;
   if (MB.step === 1) body = `${seats}<div class="card"><div class="q">Dans votre équipe, qui est le <b>déclarant</b> (celui qui joue les cartes) ?</div><div class="reasons"><button class="reason" data-mba="s">Moi (Sud)</button><button class="reason" data-mba="n">Mon partenaire (Nord)</button></div></div>`;
-  if (MB.step === 2) body = `<div class="card felt mbfelt"><div class="mbh"><div class="label">${seatAv('N')} Le mort (Nord)</div>${handBlock(H.N)}</div><div class="mbh"><div class="label">${seatAv('S')} ${T3('Toi', 'Toi', 'Vous')} (Sud)</div>${handBlock(H.S)}</div></div><div class="card"><p>Votre partenaire étale ses cartes : c'est le <b>mort</b>. <span class="notu">Vous avez <b>${MB.ns} points</b> à vous deux.</span></p><div class="q">Quel contrat choisissez-vous ?</div><div class="reasons">${MB.opts.map((x, k) => `<button class="reason" data-mba="c${k}">${x.level}${x.tr ? SYM[x.tr] : 'SA'}</button>`).join('')}</div></div>`;
+  if (MB.step === 2) body = `<div class="card felt mbfelt"><div class="mbh"><div class="label">${seatAv('N')} ${seatNm('N')} · le mort</div>${handBlock(H.N)}</div><div class="mbh"><div class="label">${seatAv('S')} ${T3('Toi', 'Toi', 'Vous')} (Sud)</div>${handBlock(H.S)}</div></div><div class="card"><p>Votre partenaire étale ses cartes : c'est le <b>mort</b>. <span class="notu">Vous avez <b>${MB.ns} points</b> à vous deux.</span></p><div class="q">Quel contrat choisissez-vous ?</div><div class="reasons">${MB.opts.map((x, k) => `<button class="reason" data-mba="c${k}">${x.level}${x.tr ? SYM[x.tr] : 'SA'}</button>`).join('')}</div></div>`;
   show(`${topBar('Le mini-bridge', `Étape ${Math.min(MB.step + 1, 3)}/3`, MB.back || 'ecole')}<div class="wrap">${fb || ''}${body}${MB.step === 3 ? `<div class="acts"><button class="btn" data-mbplay="1">On joue ! ›</button></div>` : ''}</div>`);
 }
 function mbAnswer(v) {
@@ -5708,7 +5709,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v53';
+const APP_V = 'v54';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -7600,7 +7601,7 @@ function menu() {
   CUR = null; X = null; checkLevels(); const hh = new Date().getHours(), t = tone();
   const groups = []; SECTIONS.forEach((s, i) => { let g = groups.find(x => x.t === s.g); if (!g) groups.push(g = { t: s.g, l: [] }); g.l.push([s, i]); });
   const hello = hh < 6 ? 'Encore debout ?' : hh < 12 ? 'Bonjour' : hh < 18 ? 'Bon après-midi' : 'Bonsoir';
-  show(`<div class="hero"><div class="in">${LOGO}<div><h1>${t === 'adulte' ? `${hello}${ST.opt.name ? ', ' + escA(ST.opt.name) : ''}` : T3(`Salut, ${ST.opt.name ? escA(ST.opt.name) + ', ' : ''}${MAGE()} !`, `Salut, ${ST.opt.name ? escA(ST.opt.name) + ', ' : ''}${MAGE()} !`, hello)}</h1><div class="sub">${t === 'adulte' ? 'Entraîneur de bridge · système 5e majeure' : T3('Le bridge des Juniors', 'Le bridge, version ados', '')}</div></div></div></div>
+  show(`<div class="hero"><div class="in">${LOGO}<div><h1>${t === 'adulte' ? `${hello}${ST.opt.name ? ', ' + escA(ST.opt.name) : ', Votre Altesse'}` : T3(`Salut, ${ST.opt.name ? escA(ST.opt.name) + ', ' : ''}${MAGE()} !`, `Salut, ${ST.opt.name ? escA(ST.opt.name) + ', ' : ''}${MAGE()} !`, hello)}</h1><div class="sub">${t === 'adulte' ? 'Entraîneur de bridge · système 5e majeure' : T3('Le bridge des Juniors', 'Le bridge, version ados', '')}</div></div></div></div>
   <div class="wrap">
   ${!CLOUD && !LS_OK ? '<div class="fb mid"><b>Attention :</b> ici, la progression ne s\'enregistre pas toute seule. Utilisez le code de sauvegarde (Ma progression).</div>' : ''}
   ${parcoursHero()}
@@ -7748,7 +7749,7 @@ QZ_SETS.regleq = { t: 'Les grandes règles du jeu de la carte', items: REGLE_Q, 
 // ====================================================================
 const KQ = () => typeof tone === 'function' && tone() !== 'adulte';
 function kqCard(s, r, attrs, cls) { const red = s === 'H' || s === 'D'; return `<button class="kqc${red ? ' red' : ''}${cls ? ' ' + cls : ''}" ${attrs}><span class="kqr">${rk(r)}</span><span class="kqs">${SYM[s]}</span><span class="kqbig">${SYM[s]}</span></button>`; }
-const kqSeat = p => `${typeof seatAv === 'function' ? seatAv(p) + ' ' : ''}${SEATNAME[p]}`;
+const kqSeat = p => `${typeof seatAv === 'function' ? seatAv(p) + ' ' : ''}${seatNm(p)}`;
 function kqTrump(tr) { return tr ? `<div class="kqtr"><small>Atout</small><b class="${tr === 'H' || tr === 'D' ? 'red' : ''}">${SYM[tr]}</b></div>` : `<div class="kqtr sa"><small>Sans</small><b>SA</b><small>atout</small></div>`; }
 function kqTrick(q) {
   const t = q.trick, done = !!MS.fb;
