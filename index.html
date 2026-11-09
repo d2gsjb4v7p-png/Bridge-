@@ -1123,6 +1123,17 @@ body[data-th=adulte]{--back-nouv:url("data:image/svg+xml,%3Csvg xmlns='http://ww
 .cghand .cf em{display:none!important}
 /* v70 Spades, whist, dame : dans la main, seulement l'index en haut à gauche */
 .cghand .cf em{display:none!important}
+/* v71 les personnages */
+.casthero h2{margin:0 0 4px}.casthero p{margin:0;color:var(--muted)}
+.castgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-top:12px}
+.castc{display:flex;gap:14px;align-items:flex-start;margin:0!important;animation:castin .55s cubic-bezier(.2,1.2,.4,1) both}
+@keyframes castin{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+.castav{flex:none;width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;background:radial-gradient(circle at 35% 30%,#fff8e0,#e9d29a);box-shadow:0 0 0 2px #c9a34e,0 4px 12px rgba(0,0,0,.2)}
+.castb small{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:#ece6d6;color:#6b5a2e}
+.castc.cme .castb small{background:#ffe9a8;color:#5a4206}.castc.cpa .castb small{background:#d8f0e2;color:#14533f}.castc.cpr .castb small{background:#e6dcf7;color:#4a2f7a}
+.castb h3{margin:4px 0 4px;font-size:18px}.castb p{margin:0;line-height:1.45}
+.castlink{display:flex;align-items:center;gap:10px;width:100%;text-align:left;cursor:pointer;font:inherit;color:inherit;border:1.5px solid var(--line)}
+.castlink span{font-size:26px}.castlink b{flex:1;font-size:16px}.castlink small{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -5876,7 +5887,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v70';
+const APP_V = 'v72';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -9789,6 +9800,63 @@ TLESSONS.splice(TLESSONS.findIndex(L => L.id === 'entame') + 1, 0, { id: 'entame
   { deal: { O: 'KQT9.743.A82.J95' }, up: 'O', auction: { d: 'S', b: ['1S', 'P', '1N', 'P', '2H', 'P', 'P', 'P'] }, contract: '2♥ par Sud', q: '1♠ – 1SA – 2♥ – passe. Quelle entame ?', a: '<b>Atout</b> ! Le mort préfère les cœurs : il est court à pique. Le déclarant voudra couper ses piques au mort.', ra: { hl: ['H7', 'H4', 'H3'] } },
   { hide: 1, big: `<div class="tsum"><h3>Les entames-cadeaux</h3>${TTAB([['Sous un As (A x x)', 'contre une couleur'], ['Dans une fourchette', 'A D x, R V x'], ['Sous un Roi', 'R x x contre une couleur'], ['Doubleton d\'honneur', 'R x, D x'], ['As sec', 'contre Sans-Atout'], ['Atout singleton', 'il ruine l\'honneur du partenaire']])}</div>`, say: 'Six cadeaux à ne jamais faire au déclarant.' },
 ] });
+
+// ====================================================================
+//  v71 — Faites connaissance : les personnages de chaque univers, présentés avec humour
+//  (une fois, juste après le choix de l'univers ; ensuite depuis l'accueil)
+// ====================================================================
+const CAST_TXT = {
+  enfant: {
+    titre: 'Bienvenue à l\'École de la Carte Magique !', intro: 'Avant ton premier cours, voici les drôles de personnages avec qui tu vas jouer.',
+    S: () => [FEM() ? 'Élève de première année, la plus maligne de sa promotion (enfin, c\'est ce que dit sa maman). Sa baguette ? Un crayon pour noter les points. Son sort préféré : « Pli-Pla-Plo, ce pli est pour moi ! »' : 'Élève de première année, le plus malin de sa promotion (enfin, c\'est ce que dit sa maman). Sa baguette ? Un crayon pour noter les points. Son sort préféré : « Pli-Pla-Plo, ce pli est pour moi ! »', 'C\'est toi !'],
+    N: ['Ton partenaire. Il ronchonne tout le temps… sauf quand il gagne un pli. Il compte ses points comme ses pièces d\'or : deux fois, puis une troisième pour être sûr. Ne touche jamais à sa barbe quand il réfléchit !', 'Ton partenaire · Nord'],
+    E: ['Elle a des oreilles si fines qu\'elle entend les cartes se poser… avant même qu\'on les joue. Très polie : elle dit « merci » même quand elle te prend ton As.', 'Adversaire · Est'],
+    O: ['Il passe à travers les murs, mais jamais à travers les règles. Son seul problème : on voit parfois ses cartes à travers lui. Chut, ne lui dis rien !', 'Adversaire · Ouest'],
+    P: ['Le professeur Dumblebridge', 'Directeur de l\'école depuis 347 ans. Sa barbe est si longue qu\'il y range trois jeux de cartes et un sandwich. Quand tu te trompes, il ne gronde jamais : il lisse sa barbe et dit « Intéressant ! Essayons encore. »'],
+    go: 'À la table, petit sorcier !', goF: 'À la table, petite sorcière !',
+  },
+  ado: {
+    titre: 'À l\'Assaut des Piques de la Comté', intro: 'Ta compagnie est réunie. Petit tour de table avant l\'aventure, en commençant par l\'Elfe du Trèfle : toi.',
+    S: () => [FEM() ? 'Jeune elfe de la Comté, archère d\'élite et bientôt joueuse de bridge redoutée. Elle vise juste : pas une flèche, pas une carte de perdue. Son défaut : elle trouve que les nains comptent trop lentement.' : 'Jeune elfe de la Comté, archer d\'élite et bientôt joueur de bridge redouté. Il vise juste : pas une flèche, pas une carte de perdue. Son défaut : il trouve que les nains comptent trop lentement.', 'C\'est toi'],
+    N: ['Ton partenaire. Il parle peu, flotte beaucoup et apparaît toujours au moment où on l\'attend le moins… surtout pour couper ton As. Heureusement, il est de ton côté. En principe.', 'Ton partenaire · Nord'],
+    E: ['Nain mineur, champion de bras de fer et de comptage d\'atouts. Il annonce fort, il joue fort, il perd fort. Il soutient que le singleton est une invention elfique destinée à l\'humilier.', 'Adversaire · Est'],
+    O: ['Magicien vagabond qui lit l\'avenir dans les étoiles… et dans le reflet de tes lunettes. Il dit toujours « Je l\'avais prévu ». Toujours après coup.', 'Adversaire · Ouest'],
+    P: ['Merlimpasse, le mage éclairé', 'Gardien des Grimoires du Pli. On raconte qu\'il a inventé l\'impasse en coinçant un dragon entre deux montagnes. Il parle par énigmes, mais la réponse est toujours dans tes cartes. Toujours.'],
+    go: 'En route pour la Comté !', goF: 'En route pour la Comté !',
+  },
+  adulte: {
+    titre: 'À bord du Vapeur au Cœur du Nil', intro: 'Le steward, un certain Mr. Pennyworth-Smythe, vous présente vos compagnons de traversée. Le thé est servi à cinq heures précises ; le bridge, à toute heure ; les excuses, jamais.',
+    S: () => [FEM() ? 'Souveraine d\'une principauté si petite qu\'elle tient en entier sur une carte de convention — recto seulement. Embarquée au Caire avec quatorze malles, une femme de chambre, une seconde femme de chambre pour surveiller la première, et une théière en argent qui voyage en première classe. A appris le bridge à six ans, l\'humilité jamais. Lorsqu\'elle chute, ce n\'est pas une chute : c\'est « une généreuse redistribution des levées au profit des classes moyennes ».' : 'Souverain d\'une principauté si petite qu\'elle tient en entier sur une carte de convention — recto seulement. Embarqué au Caire avec quatorze malles, un valet de chambre, un second valet pour surveiller le premier, et une théière en argent qui voyage en première classe. A appris le bridge à six ans, l\'humilité jamais. Lorsqu\'il chute, ce n\'est pas une chute : c\'est « une généreuse redistribution des levées au profit des classes moyennes ».', 'Vous-même'],
+    N: ['Votre partenaire. Prélat d\'une patience infinie, sauf lorsque vous oubliez son fit, auquel cas il cite le Lévitique, chapitre et verset. Il bénit le paquet avant chaque donne, le bat trois fois « en l\'honneur de la Sainte Trinité », puis une quatrième « au cas où ». Tient le Blackwood pour une forme de prière et le contre punitif pour un péché véniel — surtout quand c\'est lui qui contre. A fait vœu de ne jamais mentir ; ses enchères mettent ce vœu à rude épreuve.', 'Votre partenaire · Nord'],
+    E: ['Trente ans aux Indes, dont vingt-neuf à jouer au bridge sous une moustache qui touche sa propre pension militaire. Il a surcontré un maharadjah, deux généraux, un tigre du Bengale et, dit-on, sa belle-mère — qui a gagné. Tient toute enchère adverse pour une déclaration de guerre, et tout retard du thé pour un acte de haute trahison. Dort avec ses cartes, « au cas où l\'ennemi attaquerait de nuit ».', 'Adversaire · Est'],
+    O: ['Aventurière, archéologue amateur, fiancée trois fois — au même lord. A perdu une momie au poker à Louxor et l\'a regagnée le lendemain… mais pas la bonne. Son éventail transmet des signaux à son partenaire selon un code qu\'elle-même a oublié. Elle n\'a jamais, au grand jamais, de carte dans la couleur demandée : « Quelle extraordinaire coïncidence, darling. Encore une. »', 'Adversaire · Ouest'],
+    P: ['The Duke of Blackwood', 'Votre professeur. Gentleman, membre de onze clubs londoniens, dont neuf l\'ont élu président pour qu\'il cesse enfin de corriger leurs enchères. N\'élève jamais la voix : son sourcil gauche s\'en charge, le droit assure le service après-vente. Sa plus grande colère connue tient en un mot : « Intéressant. » Une impasse ratée ? De la malchance. Une impasse non tentée ? Un manque de caractère. Une carte jouée trop vite ? Une offense à la Couronne.'],
+    go: 'Prendre place à la table de jeu', goF: 'Prendre place à la table de jeu',
+  },
+};
+function castIntro(first) {
+  const th = tone() === 'enfant' || tone() === 'ado' ? tone() : 'adulte', C = CAST_TXT[th], TC = THEME_CAST[th], h = HERO[th]();
+  const full = th === 'adulte' ? HERO_FULL() : th === 'ado' ? `${h[0]}, l'Elfe du Trèfle` : h[0];
+  const S = C.S(), ppl = [
+    [h[1], full, S[1], S[0], 'me'],
+    [TC.N[1], th === 'adulte' ? 'The Archbishop of Beukbury' : th === 'ado' ? 'Vaelmor, le Spectre des Brumes' : 'Grognon Barbefer, le Nain', C.N[1], C.N[0], 'pa'],
+    [TC.E[1], th === 'adulte' ? 'Le colonel Archibald Surcontre' : th === 'ado' ? 'Borbak Marteau-de-Pierre, le Nain' : 'Lirelune, l\'Elfe', C.E[1], C.E[0], 'op'],
+    [TC.O[1], th === 'adulte' ? 'Lady Amelia Chicane' : th === 'ado' ? 'Orlavin aux Étoiles, le Magicien' : 'Flottin, le Fantôme', C.O[1], C.O[0], 'op'],
+    [PROF_AV(), C.P[0], th === 'adulte' ? 'Votre professeur' : 'Ton professeur', C.P[1], 'pr'],
+  ];
+  show(`<div class="top"><div class="in">${first ? '' : '<button class="back" data-nav="menu">‹ Menu</button>'}<div><h1 style="font-size:17px">Les personnages</h1><div class="sub">${C.titre}</div></div></div></div>
+  <div class="wrap castw"><div class="card casthero"><h2>${C.titre}</h2><p>${C.intro}</p></div>
+  <div class="castgrid">${ppl.map(([av, nm, role, txt, k], i) => `<div class="card castc c${k}${k === 'pr' ? ' noprof' : ''}" style="animation-delay:${i * 140}ms"><div class="castav">${av}</div><div class="castb"><small>${role}</small><h3>${nm}</h3><p>${txt}</p></div></div>`).join('')}</div>
+  <div class="acts"><button class="btn big" data-castgo="1">${FEM() ? C.goF : C.go} ›</button></div></div>`);
+}
+{ const _h2 = home; home = function () {
+  try { const th = tone(); if (ST.prof !== 'enseignant' && ['enfant', 'ado', 'adulte'].includes(th)) { ST.opt.castSeen = ST.opt.castSeen || {}; if (!ST.opt.castSeen[th + '2']) { ST.opt.castSeen[th + '2'] = 1; save(); return castIntro(true); } } } catch (e) { }
+  return _h2.apply(this, arguments);
+}; }
+{ const _m2 = menu; menu = function () { const r = _m2.apply(this, arguments); try {
+  if (ST.prof === 'enseignant') return r; const w = app.querySelector('.wrap'); if (w && !w.querySelector('.castlink')) { const c = document.createElement('button'); c.className = 'card castlink'; c.dataset.cast = '1'; c.innerHTML = `<span>🎭</span><b>${tone() === 'adulte' ? 'Vos compagnons de traversée' : 'Les personnages'}</b><small>${tone() === 'adulte' ? 'Faites plus ample connaissance' : 'Qui sont-ils ? Fais connaissance'} ›</small>`; const hero = w.querySelector('.phero,.card'); if (hero) hero.after(c); else w.prepend(c); }
+} catch (e) { } return r; }; }
+app.addEventListener('click', e => { const t = e.target.closest('[data-cast],[data-castgo]'); if (!t) return; if (t.dataset.cast) return castIntro(false); home(); });
 
 // ====================================================================
 //  v60 — grands écrans (iPad en paysage, ordinateur) : la table en deux panneaux
