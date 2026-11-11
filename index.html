@@ -1142,6 +1142,17 @@ body[data-th=adulte]{--back-nouv:url("data:image/svg+xml,%3Csvg xmlns='http://ww
 img.eav{width:1.2em;height:1.2em;vertical-align:-.25em;object-fit:contain;display:inline-block}
 /* v77 accueil adulte : deux grands boutons nominatifs */
 .agesex{flex-direction:column;align-items:stretch}.agesex button{max-width:none!important;white-space:normal;line-height:1.25;padding:11px 14px!important}
+/* v79 compteurs de plis au centre de la table */
+.bcnt{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:58px;padding:4px 6px;border-radius:10px;background:rgba(0,0,0,.38);border:1.5px solid rgba(255,216,77,.55);color:#fff;line-height:1.1;text-align:center}
+.bcnt b{font:800 13px var(--f-body);letter-spacing:.08em;color:#ffd84d}.bcnt .n{font:700 22px/1.05 var(--f-disp)}.bcnt small{font-size:9px;opacity:.85;text-transform:uppercase;letter-spacing:.04em}
+.bcnt.dec{border-color:#ffd84d;box-shadow:0 0 0 1px rgba(255,216,77,.3)}
+.bcnt.bump,.tcnt.bump{animation:bbump .5s ease-out}
+@keyframes bbump{0%{transform:scale(1)}40%{transform:scale(1.25);box-shadow:0 0 18px 6px rgba(255,216,77,.7)}100%{transform:scale(1)}}
+.tcnt.bump{animation:tbump .5s ease-out}@keyframes tbump{0%{transform:translate(-50%,-50%) scale(1)}40%{transform:translate(-50%,-50%) scale(1.25)}100%{transform:translate(-50%,-50%) scale(1)}}
+.tcnt{position:absolute;transform:translate(-50%,-50%);min-width:120px;padding:8px 14px;border-radius:16px;background:rgba(0,0,0,.42);border:2px solid rgba(255,216,77,.6);color:#fff;text-align:center;display:flex;flex-direction:column;align-items:center}
+.tcnt b{font:800 22px var(--f-body);letter-spacing:.1em;color:#ffd84d}.tcnt .n{font:700 40px/1.05 var(--f-disp)}.tcnt small{font:700 13px var(--f-body);text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.tcnt.dec{border-color:#ffd84d}
+.tq .ta b,.tq .ta i{display:inline}
 </style>
 </head>
 <body>
@@ -5895,7 +5906,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v77';
+const APP_V = 'v79';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -9133,7 +9144,7 @@ MAGE = () => (tone() === 'enfant' ? HERO.enfant()[2] : tone() === 'ado' ? HERO.a
 { const _ag = ageGate; ageGate = function () {
   _ag(); const f = FEM();
   const tt = app.querySelector('.agedoor.teen h2'); if (tt) tt.textContent = 'À l\'Assaut des Piques de la Comté';
-  const L = { 'enfant:m': '🧙‍♂️ Barnabé Grimoire, le petit sorcier de l\'école de Bridgelart', 'enfant:f': '🧙‍♀️ Eulalie Potion de Petitgrain, la petite sorcière de l\'école de Bridgelart', 'ado:m': '🧝‍♂️ Je suis Thalindor, un jeune elfe tréflique du sud de la Comté', 'ado:f': '🧝‍♀️ Je suis Aëlira, une jeune elfe tréflique du sud de la Comté' };
+  const L = { 'enfant:m': '🧙‍♂️ Barnabé Grimoire, le petit sorcier de l\'école de Bridgelart', 'enfant:f': '🧙‍♀️ Eulalie Potion de Petitgrain, la petite sorcière de l\'école de Bridgelart', 'ado:m': '🧝‍♂️ Je suis Thalindor, le jeune elfe tréflique du sud de la Comté', 'ado:f': '🧝‍♀️ Je suis Aëlira, la jeune elfe tréflique du sud de la Comté' };
   Object.keys(L).forEach(k => { const b = app.querySelector(`[data-agep="${k}"]`); if (b) b.textContent = L[k]; });
   const ad = app.querySelector('.agedoor.adult'); if (!ad) return;
   const p = ad.querySelector('p'); if (p) p.textContent = 'Bienvenue à bord, Votre Altesse : croisière, tournois et Coupe du Vapeur Caroline, avec l\'Archbishop of Beukbury pour partenaire.';
@@ -9560,11 +9571,11 @@ const TLESSONS = [
 
 // ---------------- l'état d'une étape (on rejoue les étapes depuis le début) ----------------
 function tState(L, i) {
-  const st = { hands: {}, up: 'S', trick: [], dummy: null, auction: null, contract: null, nb: 0 }; let clear = false;
+  const st = { hands: {}, up: 'S', trick: [], dummy: null, auction: null, contract: null, nb: 0, won: { NS: 0, EO: 0 } }; let clear = false;
   for (let k = 0; k <= i; k++) {
     const p = L.steps[k]; st.nb = 0;
     if (clear) { st.trick = []; clear = false; }
-    if (p.deal) { st.hands = {}; Object.entries(p.deal).forEach(([s, h]) => { st.hands[s] = tHand(h); }); st.trick = []; st.dummy = null; st.contract = null; }
+    if (p.deal) { st.hands = {}; Object.entries(p.deal).forEach(([s, h]) => { st.hands[s] = tHand(h); }); st.trick = []; st.dummy = null; st.contract = null; st.won = { NS: 0, EO: 0 }; }
     if (p.up != null) st.up = p.up;
     if ('dummy' in p) st.dummy = p.dummy;
     if ('contract' in p) st.contract = p.contract;
@@ -9572,10 +9583,18 @@ function tState(L, i) {
     if (p.bid && st.auction) { st.auction.b.push(...p.bid); if (k === i) st.nb = p.bid.length; }
     if (p.auction && k === i) st.nb = p.auction.b.length;
     if (p.play) p.play.forEach(([s, c]) => { if (st.hands[s]) st.hands[s] = st.hands[s].filter(x => x !== c); st.trick.push([s, c]); });
-    if (p.win && k < i) clear = true;
+    if (p.win && k < i) { clear = true; st.won[/[NS]/.test(p.win) ? 'NS' : 'EO']++; }
   }
   return st;
 }
+// ---------------- les compteurs de plis : à gauche le camp du déclarant, à droite la défense ----------------
+const TCNT = {
+  info(st) { const m = /^(\d).*par (Nord|Sud|Est|Ouest)/.exec(st.contract || ''); if (!m) return { L: 'NS', R: 'EO', t: null }; const d = /Nord|Sud/.test(m[2]) ? 'NS' : 'EO'; return { L: d, R: d === 'NS' ? 'EO' : 'NS', t: +m[1] + 6 }; },
+  pos(st, side) { const I = TCNT.info(st), y = st.dummy ? 640 : 590; return side === I.L ? [648, y] : [952, y]; },
+  html(st) { const I = TCNT.info(st), y = st.dummy ? 640 : 590;
+    const one = (side, x, dec) => `<div class="tcnt${dec ? ' dec' : ''}" data-s="${side}" style="left:${x}px;top:${y}px"><b>${side}</b><span class="n" data-v="${st.won[side]}" data-t="${dec && I.t ? I.t : ''}">${st.won[side]}${dec && I.t ? '/' + I.t : ''}</span><small>${I.t ? (dec ? 'contrat' : 'défense') : 'plis'}</small></div>`;
+    return one(I.L, 648, true) + one(I.R, 952, false); },
+};
 // ---------------- la scène ----------------
 const TW = 104, TH = 148, TSLOT = { N: [748, 268], S: [748, 500], O: [596, 384], E: [900, 384] }, TSLOTD = { N: [748, 330], S: [748, 540], O: [596, 436], E: [900, 436] };
 let TCH = null;
@@ -9629,13 +9648,16 @@ function tRender(anim) {
   // le pli s'envole vers le gagnant
   if (p0.win && st.trick.length && !hide) {
     const w = p0.win, wait = anim ? plays * 650 + 1100 : 250;
-    TCH.tm.push(setTimeout(() => { st.trick.forEach(([s, c]) => { const e = cards.querySelector(`[data-id="${c}"]`); if (!e) return; e.style.transitionDelay = '0ms'; e.style.transform = `translate(${TSEATXY[w][0] - TW / 2}px,${TSEATXY[w][1] - TH / 2}px) scale(.35)`; e.style.opacity = 0; }); tPop(ov, TPOPXY[w][0], TPOPXY[w][1], `+1 pli · ${SEATN[w]}`, 'tplus'); }, wait));
+    const ws = /[NS]/.test(w) ? 'NS' : 'EO', tg = TCNT.pos(st, ws);
+    TCH.tm.push(setTimeout(() => { st.trick.forEach(([s, c]) => { const e = cards.querySelector(`[data-id="${c}"]`); if (!e) return; e.style.transitionDelay = '0ms'; e.style.transform = `translate(${tg[0] - TW / 2}px,${tg[1] - TH / 2}px) scale(.3)`; e.style.opacity = 0; });
+      TCH.tm.push(setTimeout(() => { const b = ov.querySelector(`.tcnt[data-s="${ws}"]`); if (b) { const n = b.querySelector('.n'); n.textContent = (+n.dataset.v + 1) + (n.dataset.t ? '/' + n.dataset.t : ''); b.classList.add('bump'); } tPop(ov, tg[0], tg[1] - 50, `+1 pli · ${SEATN[w]}`, 'tplus'); }, 650)); }, wait));
   }
   // superpositions : sièges, partenaires, points, total, contrat, enchères, grand titre, bulle
   let h = '';
   if (!hide) ['N', 'E', 'S', 'O'].forEach(s => { const [x, y] = TSEATXY[s]; const has = st.hands[s] && st.hands[s].length; const yy = s === 'N' ? (has ? (st.dummy === 'N' ? 12 : 172) : 60) : s === 'S' ? (has ? 700 : 820) : (has ? 340 : 440); h += `<div class="tseat t${s}" style="left:${x}px;top:${yy}px">${SEATN[s]}</div>`; });
   if (p.pairs) h += `<svg class="tpairs" viewBox="0 0 1600 900"><line x1="800" y1="150" x2="800" y2="760"/><line class="eo" x1="340" y1="450" x2="1260" y2="450"/></svg><div class="tpl ns">Nord + Sud</div><div class="tpl eo">Est + Ouest</div>`;
   if (st.contract && !hide) h += `<div class="tcontract">${st.contract}</div>`;
+  if (!hide && (st.trick.length || st.won.NS || st.won.EO || /par /.test(st.contract || ''))) h += TCNT.html(st);
   if (st.auction && !hide) { const cols = ['O', 'N', 'E', 'S'], off = cols.indexOf(st.auction.d), cells = Array(off).fill('').concat(st.auction.b), n0 = cells.length - st.nb;
     h += `<div class="tauc"><div class="tah">${cols.map(c => `<b>${SEATN[c]}</b>`).join('')}</div><div class="tab">${cells.map((b, k) => `<span class="${k >= n0 && anim ? 'tnew' : ''}" style="animation-delay:${(k - n0) * 450}ms">${b ? tBid(b) : ''}</span>`).join('')}</div></div>`; }
   if (p.big) h += `<div class="tbigw">${p.big}</div>`;
@@ -9939,6 +9961,34 @@ const VAEL_IMG = GM('vaelmor', 'Vaelmor'), NAIN_IMG = GM('nain', 'Grognon'), BOR
   const k = app.querySelector('.agedoor.kid .agecast'); if (k) k.innerHTML = k.innerHTML.replace(/⛏️?/, NAIN_IMG);
 } catch (e) { } }; }
 try { if (app.querySelector('.agepage')) ageGate(); } catch (e) { }
+
+// ====================================================================
+//  v79 — Au bridge : deux compteurs de plis au centre de la table
+//  en bas à gauche : le camp du déclarant (NS ou EO), plis faits / plis à faire
+//  en bas à droite : la défense, plis faits. Le pli gagné s'envole vers son compteur.
+// ====================================================================
+function bcntInject() {
+  const w = app.querySelector('.wrap.play'); if (!w || typeof PG === 'undefined' || !PG || !PG.G) return;
+  const t4 = w.querySelector('.table4'); if (!t4 || t4.children.length < 9) return;
+  const G = PG.G, ds = PSIDE(PG.decl), os = ds === 'NS' ? 'EO' : 'NS', target = PG.level + 6;
+  const made = s => G.tricks.filter(t => PSIDE(t.win) === s).length;
+  const sweeping = t4.classList.contains('sweep') && PG.last && !G.cur.length;
+  const ws = sweeping ? PSIDE(PG.last.win) : null;
+  const who = s => (s === 'NS' ? T3('ton équipe', 'ton équipe', 'vous') : T3('eux', 'eux', 'eux'));
+  const box = (s, dec) => { const v = made(s) - (s === ws ? 1 : 0);
+    return `<div class="bcnt${dec ? ' dec' : ''}${s === 'NS' ? ' us' : ''}" data-s="${s}"><b>${s}</b><span class="n">${v}${dec ? '/' + target : ''}</span><small>${dec ? 'contrat' : 'défense'} · ${who(s)}</small></div>`; };
+  const L = t4.children[6], R = t4.children[8];
+  L.innerHTML = box(ds, true); R.innerHTML = box(os, false);
+  if (!sweeping) return;
+  // chaque carte du pli vole vers le compteur du camp gagnant
+  const tgt = (ws === ds ? L : R).firstElementChild, tr = tgt.getBoundingClientRect();
+  const k = t4.getBoundingClientRect().width / (t4.offsetWidth || 1) || 1;
+  t4.querySelectorAll('.tc:not(.empty)').forEach(c => { const r = c.getBoundingClientRect();
+    c.style.setProperty('--tx', ((tr.left + tr.width / 2 - (r.left + r.width / 2)) / k) + 'px'); c.style.setProperty('--ty', ((tr.top + tr.height / 2 - (r.top + r.height / 2)) / k) + 'px'); });
+  const sd = parseInt(t4.style.getPropertyValue('--sd')) || 500;
+  setTimeout(() => { if (!tgt.isConnected) return; const n = tgt.querySelector('.n'); n.textContent = made(ws) + (ws === ds ? '/' + target : ''); tgt.classList.add('bump'); }, sd + 520);
+}
+{ const _prc = playRender; playRender = function () { _prc(); try { bcntInject(); } catch (e) { } }; }
 
 // ====================================================================
 //  v60 — grands écrans (iPad en paysage, ordinateur) : la table en deux panneaux
