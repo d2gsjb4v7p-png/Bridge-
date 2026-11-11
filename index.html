@@ -5895,7 +5895,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v78';
+const APP_V = 'v77';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -9133,7 +9133,7 @@ MAGE = () => (tone() === 'enfant' ? HERO.enfant()[2] : tone() === 'ado' ? HERO.a
 { const _ag = ageGate; ageGate = function () {
   _ag(); const f = FEM();
   const tt = app.querySelector('.agedoor.teen h2'); if (tt) tt.textContent = 'À l\'Assaut des Piques de la Comté';
-  const L = { 'enfant:m': '🧙‍♂️ Barnabé Grimoire, le petit sorcier de l\'école de Bridgelart', 'enfant:f': '🧙‍♀️ Eulalie Potion de Petitgrain, la petite sorcière de l\'école de Bridgelart', 'ado:m': '🧝‍♂️ Je suis Thalindor, le jeune elfe tréflique du sud de la Comté', 'ado:f': '🧝‍♀️ Je suis Aëlira, la jeune elfe tréflique du sud de la Comté' };
+  const L = { 'enfant:m': '🧙‍♂️ Barnabé Grimoire, le petit sorcier de l\'école de Bridgelart', 'enfant:f': '🧙‍♀️ Eulalie Potion de Petitgrain, la petite sorcière de l\'école de Bridgelart', 'ado:m': '🧝‍♂️ Je suis Thalindor, un jeune elfe tréflique du sud de la Comté', 'ado:f': '🧝‍♀️ Je suis Aëlira, une jeune elfe tréflique du sud de la Comté' };
   Object.keys(L).forEach(k => { const b = app.querySelector(`[data-agep="${k}"]`); if (b) b.textContent = L[k]; });
   const ad = app.querySelector('.agedoor.adult'); if (!ad) return;
   const p = ad.querySelector('p'); if (p) p.textContent = 'Bienvenue à bord, Votre Altesse : croisière, tournois et Coupe du Vapeur Caroline, avec l\'Archbishop of Beukbury pour partenaire.';
