@@ -5912,7 +5912,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v81';
+const APP_V = 'v82';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -8223,10 +8223,32 @@ ${TBL(['Quand ?', 'Le message', 'La carte'], [['Sur l\'entame de mon partenaire 
 ${KEEP('Sur son entame : grosse = j\'aime, petite = je n\'aime pas. Sur le déclarant : haut-bas = pair, bas-haut = impair. En défausse : grosse = j\'aime.')}
 <p class="small">Ce sont les signaux classiques des clubs. Certaines paires jouent l'inverse (« petite = appel ») : on se met d'accord avec son partenaire.</p>
 <div class="acts"><button class="btn" data-qz="sigq">Quiz : les signaux ›</button><button class="btn sec" data-playdef="defense">Défendre une donne ›</button></div>` });
-THEORY.push({ id: 'cartedef', t: 'Quelle carte jouer en défense', d: 'Les réflexes du défenseur', cases: [], html: `
-${TBL(['Situation', 'Le réflexe', 'Pourquoi'], [['2e à jouer (le déclarant vient de jouer)', '<b>petite carte</b>', 'votre partenaire joue en dernier : il décidera'], ['3e à jouer (après le mort)', '<b>forte</b> : la plus petite des cartes qui se suivent', 'forcer le déclarant à donner une grosse carte'], ['Un honneur est joué devant vous', '<b>honneur sur honneur</b> (couvrir)', 'cela fait monter les petites cartes de votre camp'], ['Votre partenaire gagne déjà le pli', '<b>jouez petit</b>', 'ne gaspillez pas deux honneurs sur le même pli'], ['Vous prenez la main', '<b>rejouez la couleur de votre partenaire</b>', 'c\'est là qu\'il a ses levées'], ['Le mort a une couleur faible', 'jouez <b>vers la faiblesse</b> du mort, à travers la force du déclarant', 'les honneurs du déclarant sont pris en sandwich'], ['Vous défaussez', 'gardez la même longueur que le mort dans ses couleurs, et vos gardes', 'sinon ses petites cartes deviennent maîtresses']])}
-<h3>Avant chaque carte : compter</h3><p>Combien de levées faut-il pour faire chuter ? Combien en a-t-on ? D'où peuvent venir les autres ? Une défense qui compte devient une défense qui fait chuter.</p>
-${KEEP('2e main petite, 3e main forte, honneur sur honneur, rejouer la couleur du partenaire, et compter les levées qui manquent.')}
+THEORY.push({ id: 'cartedef', t: 'Quelle carte jouer en défense', d: 'Une seule question : qui joue en dernier ?', cases: [], html: `
+<p>En défense, une seule question suffit presque toujours : <b>« Qui va jouer en dernier sur ce pli ? »</b></p>
+<p>Le dernier à jouer a un énorme avantage : il voit les trois autres cartes avant de choisir la sienne. Il ne gaspille rien et prend seulement si c'est utile.</p>
+<h3>Le tour de table, en défense</h3>
+<p>Les cartes tournent toujours dans le même sens. En défense, vous et votre partenaire êtes assis en alternance avec les adversaires : <b>adversaire → vous → adversaire → partenaire</b>.</p>
+${TBL(['Vous jouez…', 'Qui joue en dernier ?', 'Donc'], [['<b>2e</b> (un adversaire vient d\'attaquer)', 'votre <b>partenaire</b>', '<b>petite carte</b> : il finira le travail'], ['<b>3e</b> (votre partenaire a attaqué)', 'le <b>déclarant</b>', '<b>carte forte</b> : vous êtes le dernier espoir de votre camp'], ['<b>4e</b>', '<b>vous</b>', 'gagnez au plus juste, ou jouez petit si le pli est déjà à vous']])}
+<h3>Règle 1 · En 2e position : petite carte</h3>
+<p>Votre partenaire jouera après vous, en dernier, et il verra tout. Si vous mettez un honneur maintenant, l'adversaire qui joue 3e n'a qu'à mettre un honneur plus gros pour le capturer.</p>
+<div class="ex">Le déclarant joue petit vers ♣ A D du mort. Vous avez ♣ R 7 4. Si vous mettez le Roi, l'As le prend : perdu. Si vous jouez le <b>4</b>, le déclarant doit deviner, et votre Roi reste caché derrière l'As.</div>
+<p><b>L'exception : honneur sur honneur.</b> Si l'adversaire juste avant vous joue lui-même un honneur (Dame, Valet…), <b>couvrez-le</b> avec un honneur plus fort. Il devra dépenser deux honneurs pour un seul des vôtres, et les cartes moyennes de votre camp (10, 9) prennent de la valeur.</p>
+<div class="ex">Le mort joue la <b>Dame</b> de carreau. Vous avez ♦ R 6 3. Vous couvrez avec le <b>Roi</b>. Le déclarant doit mettre son As. Il a donc dépensé l'As et la Dame pour prendre votre Roi seul, et le Valet ou le 10 de votre partenaire peut devenir maître.</div>
+<h3>Règle 2 · En 3e position : carte forte</h3>
+<p>Après vous, il ne reste que le déclarant. Personne de votre camp ne pourra plus rien ajouter. Vous mettez donc <b>votre carte la plus forte</b>, pour obliger le déclarant à sortir une grosse carte s'il veut le pli.</p>
+<p>Si vous avez <b>plusieurs cartes qui se suivent</b> (Roi-Dame, Dame-Valet…), elles ont toutes la même force. Mettez <b>la plus petite</b> d'entre elles. Votre partenaire en déduira que vous avez aussi la suivante.</p>
+<div class="ex">Votre partenaire entame le 4 de pique, le mort fournit le 2. Vous avez ♠ R V 5. Mettez le <b>Valet</b> : il fait le travail du Roi s'il le peut. Si le déclarant prend avec la Dame, votre partenaire sait que le Roi est chez vous.</div>
+<p><b>L'exception : le pli est déjà gagné.</b> Si votre partenaire a mis une carte que personne ne peut battre, jouez <b>petit</b>. Deux gros honneurs sur le même pli, c'est un pli de moins pour votre camp.</p>
+<div class="ex">Votre partenaire entame l'As de trèfle. Vous avez ♣ R 4 : le <b>4</b>. Gardez le Roi pour le pli suivant.</div>
+<h3>Règle 3 · Quand vous attaquez (1re position)</h3>
+<p>C'est vous qui ouvrez le pli. Dans l'ordre :</p>
+<p>1. <b>Rejouez la couleur de votre partenaire</b>, celle qu'il a entamée. C'est là qu'il a ses levées.</p>
+<p>2. Sinon, si le mort est à votre gauche, attaquez la couleur où <b>le mort est faible</b> (♥ 7 4 2 par exemple). Le mort ne pourra pas aider le déclarant, et votre partenaire, qui joue après le mort, peut poser son honneur en sachant ce qu'il y a au mort.</p>
+<h3>Règle 4 · Quand vous défaussez</h3>
+<p>Vous n'avez plus la couleur demandée et vous ne coupez pas. Gardez <b>autant de cartes que le mort</b> dans ses couleurs longues : si vous lâchez, ses petites cartes deviennent maîtresses. Et gardez les petites cartes qui protègent vos honneurs (R x, D x x).</p>
+<h3>Avant chaque carte : compter</h3>
+<p>Combien de levées faut-il pour faire chuter ? Le déclarant doit faire 6 + le niveau du contrat ; il vous en faut une de plus que ce qu'il lui reste. Contre 4♠ : il doit faire 10 levées, vous en voulez 4. Combien en avez-vous déjà ? D'où viendront les autres ? Une défense qui compte devient une défense qui fait chuter.</p>
+${KEEP('Qui joue en dernier ? Mon partenaire : je joue petit. Le déclarant : je joue fort. Sauf honneur sur honneur, et sauf si le pli est déjà à nous.')}
 <div class="acts"><button class="btn" data-qz="cartedefq">Quiz : quelle carte ? ›</button><button class="btn sec" data-playdef="defense">Défendre une donne ›</button><button class="btn sec" data-chap="signaux">Les signaux</button></div>` });
 if (typeof THEO_AGE !== 'undefined') {
   THEO_AGE.enfant.cartedef = { t: 'Les sorts de la défense', d: 'Faire perdre les adversaires', h: () => `<p>En défense, ton copain et toi, vous êtes une <b>équipe de gardiens</b> : votre mission, empêcher le déclarant de gagner ses plis.</p>${TBL(['Quand ?', 'Le sort'], [['Tu joues en 2e', '🐭 petite carte : ton copain joue après toi, il décidera'], ['Tu joues en 3e', '🦁 grosse carte : force le déclarant à sortir la sienne'], ['Une grosse carte arrive devant toi', '🛡️ grosse carte sur grosse carte'], ['Ton copain gagne déjà', '🤫 petite carte : ne gâche pas ta grosse'], ['Tu prends la main', '🔁 rejoue la couleur de ton copain']])}<h3>📨 Les messages secrets</h3><p>Sur la première carte de ton copain : une carte assez grosse (7, 8, 9) veut dire « j'aime, continue ! », la plus petite veut dire « change ! ».</p>${KEEP('2e petite, 3e grosse, et rejoue la couleur de ton copain.')}<div class="acts"><button class="btn" data-qz="cartedefq">Le quiz des gardiens ›</button></div>` };
