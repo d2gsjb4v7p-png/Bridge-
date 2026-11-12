@@ -1379,6 +1379,29 @@ body[data-th=enfant] .card.th:not(:has(.kidsheet)) .secn{background:rgba(255,216
 .cleg>b{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#555}
 .cahier.mono .ctn{background:#222}.cahier.mono .ctrc .ctn{background:#fff;color:#222;border-color:#222}
 @media print{.cleg{flex-direction:row;flex-wrap:wrap;gap:1.5mm 6mm;break-inside:avoid;margin-top:5mm}.cleg>b{width:100%}.ctocl{margin-bottom:4mm!important}.ctr{padding:2.5mm 1mm;break-inside:avoid}.ctt b{font-size:13pt}.ctt small{font-size:10.5pt}.ctn{-webkit-print-color-adjust:exact;print-color-adjust:exact}.cleg{font-size:10.5pt}}
+/* v90 le diaporama reprend le tapis de chaque univers */
+.tstage .tfelt.card.felt{position:absolute!important;inset:0!important;margin:0!important;padding:0!important;width:auto!important;max-width:none!important;min-height:0!important;height:auto!important;border-radius:34px!important;overflow:hidden}
+body[data-th=adulte] .tstage .tfelt.card.felt::before{background-size:min(460px,29%) auto!important}
+body[data-th=ado] .tstage .tfelt.card.felt::before,body[data-th=ado] .tstage .tfelt.card.felt::after{background-size:120px 120px!important;height:124px!important;opacity:.95}
+body[data-th=adulte] .tstage .tfelt.card.felt::after{background-size:110px 55px,110px 55px,55px 110px,55px 110px!important}
+/* v91 l'aide du professeur, exercices chez soi dans l'application */
+.cprof{margin-top:14px;padding:12px 14px;border-radius:12px;background:rgba(201,154,30,.12);border:1px dashed rgba(201,154,30,.8)}
+body[data-th=enfant] .cprof{background:rgba(255,216,77,.12);border-color:#ffd84d}
+.cpn{font:800 13px var(--f-body);letter-spacing:.04em;margin-bottom:4px;opacity:.85}
+.cprof p{margin:4px 0!important;font-size:17px!important}
+.cpsec{margin-top:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.55);border-left:4px solid var(--cacc,#0b5c32)}
+body[data-th=enfant] .cpsec{background:rgba(255,255,255,.08)}
+.cpsl{font:800 11px var(--f-body);letter-spacing:.12em;text-transform:uppercase;opacity:.7}
+.card.th .cpsec h3{font-size:18px!important;margin:4px 0 6px!important;text-align:left!important}.card.th .cpsec h3::after{display:none!important}
+.card.th .cpsec p,.card.th .cpsec td{font-size:16px!important}
+.cqfb .cpn{margin-bottom:2px}
+.cdots i.h{background:#c99a1e}.cdots i.x{background:#c0392b}
+.cbil{display:flex;flex-direction:column;gap:6px;margin:10px 0;font-size:18px}
+.cbpre{white-space:pre-wrap;font:15px/1.5 var(--f-body);background:rgba(255,255,255,.5);padding:12px;border-radius:10px;color:inherit}
+.chome{display:grid;grid-template-columns:96px 1fr;gap:14px;align-items:center;margin-top:18px;padding:12px 14px;border:2px dashed var(--cacc2,#0b5c32);border-radius:12px;break-inside:avoid}
+.chq svg{width:96px;height:96px;display:block}
+.chome b{font-size:17px}.chome p{margin:4px 0!important}
+.cours:not(.cahier) .chome{display:none}
 </style>
 </head>
 <body>
@@ -6132,7 +6155,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v89';
+const APP_V = 'v91';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -9936,7 +9959,7 @@ function tGo(dir) {
 function teachStart(id) {
   const L = TLESSONS.find(x => x.id === id); if (!L) return; TCH = { L, i: 0, rev: false, tm: [] };
   show(`<div class="teach notu"><div class="tbar"><button class="back" data-tgo="home">‹ Leçons</button><b>${L.ic} ${L.t}</b><div class="tprog"></div><button class="tfs" data-tgo="fs" title="Plein écran">⛶</button></div>
-  <div class="tbox"><div class="tstage" data-tgo="next"><div class="tfelt"></div><div class="tcards"></div><div class="tov"></div></div></div>
+  <div class="tbox"><div class="tstage" data-tgo="next"><div class="tfelt card felt"></div><div class="tcards"></div><div class="tov"></div></div></div>
   <div class="tfoot"><button class="btn sec tprev" data-tgo="prev">‹</button><div class="tnar"></div><button class="btn tnext" data-tgo="next">Suivant ›</button></div></div>`);
   document.body.classList.add('teaching'); tFit(); tRender(true);
 }
@@ -10645,6 +10668,7 @@ function coursHome() {
   </div>`);
 }
 // ---------------- un chapitre ----------------
+const C_LAB = { q: 'Questions sur la théorie', e: 'Exercices pendant le cours', m: 'Exercices à faire chez soi' }, C_PFX = { q: 'Q', e: 'E', m: 'M' };
 let C_LAST = null;
 function coursChap(id) {
   const [L, c] = cFind(id); if (!c) return coursHome(); C_LAST = id; const k = L.ch.indexOf(c), P = cProg()[c.id] || {};
@@ -10654,7 +10678,8 @@ function coursChap(id) {
   <div class="csteps">
    <button class="cstep" data-cslide="${c.id}"><span>▶️</span><b>Le diaporama animé</b><small>La leçon en scènes, avec des questions</small></button>
    <button class="cstep" data-cquiz="${c.id}:q"><span>❓</span><b>Questions sur la théorie</b><small>Q ${k + 1}.1 à ${k + 1}.${c.qs.length}${P.q != null ? ` · meilleur : ${P.q}/${c.qs.length}` : ''}</small></button>
-   <button class="cstep" data-cquiz="${c.id}:e"><span>🃏</span><b>Exercices pratiques</b><small>E ${k + 1}.1 à ${k + 1}.${c.ex.length}${P.e != null ? ` · meilleur : ${P.e}/${c.ex.length}` : ''}</small></button>
+   <button class="cstep" data-cquiz="${c.id}:e"><span>🃏</span><b>Exercices pendant le cours</b><small>E ${k + 1}.1 à ${k + 1}.${c.ex.length}${P.e != null ? ` · meilleur : ${P.e}/${c.ex.length}` : ''}</small></button>
+   ${c.hw && c.hw.length ? `<button class="cstep" data-cquiz="${c.id}:m"><span>🏠</span><b>Exercices à faire chez soi</b><small>M ${k + 1}.1 à ${k + 1}.${c.hw.length}${P.m != null ? ` · meilleur : ${P.m}/${c.hw.length}` : ''}</small></button>` : ''}
    ${c.mini ? `<button class="cstep" data-cmini="${c.mini}"><span>🎲</span><b>S'entraîner encore</b><small>Des exercices tirés au hasard, sans fin</small></button>` : ''}
   </div>
   <div class="acts">${k ? `<button class="btn sec" data-cch="${L.ch[k - 1].id}">‹ Chapitre ${k}</button>` : ''}${nx ? `<button class="btn" data-cch="${nx.id}">Chapitre ${k + 2} ›</button>` : `<button class="btn" data-nav="cours">Le cours ›</button>`}</div>
@@ -10663,15 +10688,15 @@ function coursChap(id) {
 // ---------------- questions et exercices ----------------
 let CQ = null;
 function coursQuiz(id, kind) {
-  const [, c] = cFind(id); if (!c) return; const items = (kind === 'q' ? c.qs : c.ex).map(x => kind === 'q' ? { q: x[0], h: null, o: x[1], a: x[2], e: x[3] } : { q: x[0], h: x[1], o: x[2], a: x[3], e: x[4] });
+  const [, c] = cFind(id); if (!c) return; const items = (kind === 'q' ? c.qs : kind === 'm' ? c.hw : c.ex).map(x => kind === 'q' ? { q: x[0], h: null, o: x[1], a: x[2], e: x[3] } : { q: x[0], h: x[1], o: x[2], a: x[3], e: x[4], s: x[5] });
   CQ = { id, kind, items, i: 0, ok: 0, pick: null }; cqRender();
 }
 function cqRender() {
   const [, c] = cFind(CQ.id), it = CQ.items[CQ.i], n = CQ.items.length, done = CQ.pick != null;
-  const lab = CQ.kind === 'q' ? 'Questions sur la théorie' : 'Exercices pratiques';
+  const lab = C_LAB[CQ.kind];
   show(`${topBar(`${c.ic} ${c.t}`, `${lab} · ${CQ.i + 1} / ${n}`, 'cchap')}<div class="wrap cours">
   <div class="cdots">${CQ.items.map((_, k) => `<i class="${k < CQ.i ? 'd' : k === CQ.i ? 'c' : ''}"></i>`).join('')}</div>
-  <div class="card th cq"><div class="lkick">${lab} · ${CQ.kind === 'q' ? 'Q' : 'E'} ${cNo(CQ.id)}.${CQ.i + 1}</div><p class="cqq">${it.q}</p>${it.h ? cH(it.h, 'Votre main') : ''}
+  <div class="card th cq"><div class="lkick">${lab} · ${C_PFX[CQ.kind]} ${cNo(CQ.id)}.${CQ.i + 1}</div><p class="cqq">${it.q}</p>${it.h ? cH(it.h, 'Votre main') : ''}
    <div class="cqo">${it.o.map((o, k) => `<button class="cqb${done ? (k === it.a ? ' good' : k === CQ.pick ? ' bad' : '') : ''}" data-cqa="${k}" ${done ? 'disabled' : ''}>${o}</button>`).join('')}</div>
    ${done ? `<div class="cqfb ${CQ.pick === it.a ? 'ok' : 'ko'}"><b>${CQ.pick === it.a ? T3('Bravo, sort réussi ! ✨', 'Bien joué !', 'Exact.') : T3('Raté, mais on apprend ! 💨', 'Pas tout à fait.', 'Pas tout à fait.')}</b> ${it.e}</div>` : ''}
   </div>
@@ -10682,10 +10707,10 @@ function cqEnd() {
   const [, c] = cFind(CQ.id), n = CQ.items.length, P = cProg(); P[c.id] = P[c.id] || {}; const k = CQ.kind;
   if (P[c.id][k] == null || CQ.ok > P[c.id][k]) P[c.id][k] = CQ.ok; save();
   const r = CQ.ok / n, stars = r === 1 ? 3 : r >= .7 ? 2 : r >= .4 ? 1 : 0;
-  show(`${topBar(`${c.ic} ${c.t}`, k === 'q' ? 'Questions sur la théorie' : 'Exercices pratiques', 'cchap')}<div class="wrap cours">
+  show(`${topBar(`${c.ic} ${c.t}`, C_LAB[k], 'cchap')}<div class="wrap cours">
   <div class="card th cres"><div class="cstars">${'⭐'.repeat(stars)}${'☆'.repeat(3 - stars)}</div><h2>${CQ.ok} / ${n}</h2>
   <p>${r === 1 ? T3('Parfait ! Tu maîtrises ce chapitre comme un vrai sorcier.', 'Parfait ! Ce chapitre est conquis.', 'Parfait : ce chapitre est acquis.') : r >= .7 ? 'Très bien. Relisez l\'explication des erreurs, et ce sera parfait.' : 'Relisez la théorie, puis recommencez : c\'est en répétant qu\'on retient.'}</p></div>
-  <div class="acts"><button class="btn sec" data-cquiz="${c.id}:${k}">Recommencer</button>${k === 'q' ? `<button class="btn" data-cquiz="${c.id}:e">Les exercices ›</button>` : ''}<button class="btn sec" data-cch="${c.id}">Le chapitre</button></div></div>`);
+  <div class="acts"><button class="btn sec" data-cquiz="${c.id}:${k}">Recommencer</button>${k === 'q' ? `<button class="btn" data-cquiz="${c.id}:e">Les exercices ›</button>` : k === 'e' && c.hw && c.hw.length ? `<button class="btn" data-cquiz="${c.id}:m">À faire chez soi ›</button>` : ''}<button class="btn sec" data-cch="${c.id}">Le chapitre</button></div></div>`);
 }
 // ---------------- le diaporama ----------------
 function coursSlides(id) {
@@ -10730,7 +10755,8 @@ function coursCahier(n) {
   let who = ''; try { who = tone() === 'adulte' ? HERO_FULL() : HERO[tone()]()[0]; } catch (e) { }
   const qsH = (c, k0) => c.qs.map((x, k) => `<div class="cpq"><b>Q ${k0}.${k + 1}</b> ${x[0]}<div class="cpo">${x[1].map(o => `<span>☐ ${o}</span>`).join('')}</div></div>`).join('');
   const exH = (c, k0) => c.ex.map((x, k) => `<div class="cpq"><b>E ${k0}.${k + 1}</b> ${x[0]}${x[1] ? cH(x[1]) : ''}<div class="cpo">${x[2].map(o => `<span>☐ ${o}</span>`).join('')}</div></div>`).join('');
-  const cor = L.ch.map((c, i) => `<div class="cpc"><b>Chapitre ${i + 1} · ${c.t}</b><div><i>Questions :</i> ${c.qs.map((x, k) => `Q ${i + 1}.${k + 1} <b>${x[1][x[2]]}</b>`).join(' · ')}</div><div><i>Exercices :</i> ${c.ex.map((x, k) => `E ${i + 1}.${k + 1} <b>${x[2][x[3]]}</b> (${x[4]})`).join(' · ')}</div></div>`).join('');
+  const hwH = (c, k0) => c.hw.map((x, k) => `<div class="cpq"><b>M ${k0}.${k + 1}</b> ${x[0]}${x[1] ? cH(x[1]) : ''}<div class="cpo">${x[2].map(o => `<span>☐ ${o}</span>`).join('')}</div></div>`).join('');
+  const cor = L.ch.map((c, i) => `<div class="cpc"><b>Chapitre ${i + 1} · ${c.t}</b><div><i>Questions :</i> ${c.qs.map((x, k) => `Q ${i + 1}.${k + 1} <b>${x[1][x[2]]}</b>`).join(' · ')}</div><div><i>Exercices :</i> ${c.ex.map((x, k) => `E ${i + 1}.${k + 1} <b>${x[2][x[3]]}</b> (${x[4]})`).join(' · ')}</div>}</div>`).join('');
   show(`${topBar(`🖨 Le cahier · ${cLvlName(L)}`, 'Imprimer ou enregistrer en PDF (A4)', 'cours')}<div class="wrap cours cahier${CMONO ? ' mono' : ''}">
   <div class="acts noprint"><button class="btn" data-print="1">🖨 Imprimer ou enregistrer en PDF</button><button class="btn sec" data-cmono="1">${CMONO ? '🎨 Couverture en couleur' : '⚫ Couverture noir et blanc'}</button></div>
   <div class="card th ccover"><div class="cvlab">${T3('L\'École de la Carte Magique · Bridgelart', 'À l\'Assaut des Piques de la Comté', 'À bord du Vapeur au Cœur du Nil')}</div>
@@ -10739,14 +10765,15 @@ function coursCahier(n) {
    ${who ? `<p class="cvw">Cahier de ${who}</p>` : '<p class="cvw">Cahier de : ……………………………………</p>'}
    <p class="cvp noprof">${T3('Professeur Aldous Dumblebridge', 'Ambroise Merlimpasse, le mage éclairé', 'The Duke of Blackwood')}</p></div>
   <div class="card th cpch ctocp"><h2 class="ltit">Sommaire</h2><p class="ctocl">${cLvlName(L)} · ${L.ch.length} chapitres, dans le même ordre que le cours de l'application.</p><div class="ctoc2">${L.ch.map((c, i) => `<div class="ctr"><span class="ctn">${i + 1}</span><span class="cti">${c.ic}</span><div class="ctt"><b>${c.t}</b><small>${c.d}</small></div></div>`).join('')}<div class="ctr ctrc"><span class="ctn">✓</span><span class="cti">📗</span><div class="ctt"><b>Les corrigés</b><small>Toutes les réponses, expliquées</small></div></div></div>
-   <div class="cleg"><b>Dans chaque chapitre</b><span>📖 <b>La théorie</b>, en parties numérotées : 1.1, 1.2…</span><span>❓ <b>Q</b> : les questions sur la théorie</span><span>✏️ <b>E</b> : les exercices pratiques</span></div></div>
+   <div class="cleg"><b>Dans chaque chapitre</b><span>📖 <b>La théorie</b>, en parties numérotées : 1.1, 1.2…</span><span>❓ <b>Q</b> : les questions sur la théorie</span><span>✏️ <b>E</b> : les exercices pendant le cours</span><span>🏠 <b>M</b> : les exercices à faire chez soi, dans l'application</span></div></div>
   ${L.ch.map((c, i) => `<div class="card th cpch"><div class="lkick">Chapitre ${i + 1}</div><h2 class="ltit">${c.ic} ${c.t}</h2>${cTh(c, i + 1)}
-   <h3>Questions sur la théorie</h3>${qsH(c, i + 1)}<h3>Exercices pratiques</h3>${exH(c, i + 1)}</div>`).join('')}
+   <h3>Questions sur la théorie</h3>${qsH(c, i + 1)}<h3>Exercices pendant le cours</h3>${exH(c, i + 1)}${c.hw && c.hw.length ? `<div class="chome"><div class="chq">${C_QR}</div><div><b>🏠 À faire chez soi : dans l'application</b><p>Ouvrez l'application, puis 📚 Le cours › ${cLvlName(L)} › chapitre ${i + 1}, « ${c.t} » › 🏠 Exercices à faire chez soi.</p><p class="small">${c.hw.length} exercices (M ${i + 1}.1 à ${i + 1}.${c.hw.length}), corrigés tout de suite, avec l'aide du professeur si besoin.</p></div></div>` : ''}</div>`).join('')}
   <div class="card th cpch"><h2 class="ltit">Les corrigés</h2>${cor}</div>
   </div>`);
   const cv = app.querySelector('[data-cv]'); if (cv) cv.innerHTML = cCoverArt(+cv.dataset.cv);
 }
 
+const C_QR = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-rendering="crispEdges"><rect width="31" height="31" fill="#fff"/><path d="M1 1h1v1h-1zM2 1h1v1h-1zM3 1h1v1h-1zM4 1h1v1h-1zM5 1h1v1h-1zM6 1h1v1h-1zM7 1h1v1h-1zM9 1h1v1h-1zM11 1h1v1h-1zM17 1h1v1h-1zM18 1h1v1h-1zM19 1h1v1h-1zM20 1h1v1h-1zM23 1h1v1h-1zM24 1h1v1h-1zM25 1h1v1h-1zM26 1h1v1h-1zM27 1h1v1h-1zM28 1h1v1h-1zM29 1h1v1h-1zM1 2h1v1h-1zM7 2h1v1h-1zM9 2h1v1h-1zM10 2h1v1h-1zM17 2h1v1h-1zM19 2h1v1h-1zM23 2h1v1h-1zM29 2h1v1h-1zM1 3h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM5 3h1v1h-1zM7 3h1v1h-1zM12 3h1v1h-1zM14 3h1v1h-1zM17 3h1v1h-1zM21 3h1v1h-1zM23 3h1v1h-1zM25 3h1v1h-1zM26 3h1v1h-1zM27 3h1v1h-1zM29 3h1v1h-1zM1 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM5 4h1v1h-1zM7 4h1v1h-1zM9 4h1v1h-1zM10 4h1v1h-1zM11 4h1v1h-1zM14 4h1v1h-1zM15 4h1v1h-1zM18 4h1v1h-1zM23 4h1v1h-1zM25 4h1v1h-1zM26 4h1v1h-1zM27 4h1v1h-1zM29 4h1v1h-1zM1 5h1v1h-1zM3 5h1v1h-1zM4 5h1v1h-1zM5 5h1v1h-1zM7 5h1v1h-1zM11 5h1v1h-1zM13 5h1v1h-1zM15 5h1v1h-1zM16 5h1v1h-1zM17 5h1v1h-1zM18 5h1v1h-1zM20 5h1v1h-1zM23 5h1v1h-1zM25 5h1v1h-1zM26 5h1v1h-1zM27 5h1v1h-1zM29 5h1v1h-1zM1 6h1v1h-1zM7 6h1v1h-1zM15 6h1v1h-1zM17 6h1v1h-1zM18 6h1v1h-1zM19 6h1v1h-1zM20 6h1v1h-1zM23 6h1v1h-1zM29 6h1v1h-1zM1 7h1v1h-1zM2 7h1v1h-1zM3 7h1v1h-1zM4 7h1v1h-1zM5 7h1v1h-1zM6 7h1v1h-1zM7 7h1v1h-1zM9 7h1v1h-1zM11 7h1v1h-1zM13 7h1v1h-1zM15 7h1v1h-1zM17 7h1v1h-1zM19 7h1v1h-1zM21 7h1v1h-1zM23 7h1v1h-1zM24 7h1v1h-1zM25 7h1v1h-1zM26 7h1v1h-1zM27 7h1v1h-1zM28 7h1v1h-1zM29 7h1v1h-1zM9 8h1v1h-1zM10 8h1v1h-1zM11 8h1v1h-1zM12 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM19 8h1v1h-1zM20 8h1v1h-1zM1 9h1v1h-1zM3 9h1v1h-1zM4 9h1v1h-1zM6 9h1v1h-1zM7 9h1v1h-1zM8 9h1v1h-1zM12 9h1v1h-1zM13 9h1v1h-1zM15 9h1v1h-1zM18 9h1v1h-1zM19 9h1v1h-1zM23 9h1v1h-1zM26 9h1v1h-1zM28 9h1v1h-1zM29 9h1v1h-1zM2 10h1v1h-1zM3 10h1v1h-1zM4 10h1v1h-1zM5 10h1v1h-1zM6 10h1v1h-1zM8 10h1v1h-1zM9 10h1v1h-1zM10 10h1v1h-1zM12 10h1v1h-1zM17 10h1v1h-1zM18 10h1v1h-1zM19 10h1v1h-1zM20 10h1v1h-1zM21 10h1v1h-1zM22 10h1v1h-1zM23 10h1v1h-1zM24 10h1v1h-1zM25 10h1v1h-1zM29 10h1v1h-1zM1 11h1v1h-1zM3 11h1v1h-1zM4 11h1v1h-1zM5 11h1v1h-1zM7 11h1v1h-1zM9 11h1v1h-1zM10 11h1v1h-1zM12 11h1v1h-1zM13 11h1v1h-1zM18 11h1v1h-1zM21 11h1v1h-1zM23 11h1v1h-1zM25 11h1v1h-1zM27 11h1v1h-1zM28 11h1v1h-1zM1 12h1v1h-1zM2 12h1v1h-1zM6 12h1v1h-1zM8 12h1v1h-1zM10 12h1v1h-1zM12 12h1v1h-1zM14 12h1v1h-1zM15 12h1v1h-1zM16 12h1v1h-1zM17 12h1v1h-1zM19 12h1v1h-1zM20 12h1v1h-1zM29 12h1v1h-1zM1 13h1v1h-1zM2 13h1v1h-1zM4 13h1v1h-1zM5 13h1v1h-1zM6 13h1v1h-1zM7 13h1v1h-1zM8 13h1v1h-1zM11 13h1v1h-1zM12 13h1v1h-1zM13 13h1v1h-1zM14 13h1v1h-1zM16 13h1v1h-1zM18 13h1v1h-1zM21 13h1v1h-1zM24 13h1v1h-1zM26 13h1v1h-1zM27 13h1v1h-1zM1 14h1v1h-1zM5 14h1v1h-1zM6 14h1v1h-1zM9 14h1v1h-1zM12 14h1v1h-1zM14 14h1v1h-1zM15 14h1v1h-1zM17 14h1v1h-1zM18 14h1v1h-1zM19 14h1v1h-1zM20 14h1v1h-1zM23 14h1v1h-1zM27 14h1v1h-1zM28 14h1v1h-1zM29 14h1v1h-1zM1 15h1v1h-1zM6 15h1v1h-1zM7 15h1v1h-1zM9 15h1v1h-1zM10 15h1v1h-1zM13 15h1v1h-1zM14 15h1v1h-1zM15 15h1v1h-1zM19 15h1v1h-1zM20 15h1v1h-1zM21 15h1v1h-1zM23 15h1v1h-1zM24 15h1v1h-1zM25 15h1v1h-1zM27 15h1v1h-1zM28 15h1v1h-1zM29 15h1v1h-1zM5 16h1v1h-1zM9 16h1v1h-1zM10 16h1v1h-1zM11 16h1v1h-1zM12 16h1v1h-1zM15 16h1v1h-1zM17 16h1v1h-1zM19 16h1v1h-1zM21 16h1v1h-1zM22 16h1v1h-1zM23 16h1v1h-1zM24 16h1v1h-1zM25 16h1v1h-1zM28 16h1v1h-1zM1 17h1v1h-1zM2 17h1v1h-1zM4 17h1v1h-1zM5 17h1v1h-1zM7 17h1v1h-1zM9 17h1v1h-1zM10 17h1v1h-1zM11 17h1v1h-1zM13 17h1v1h-1zM14 17h1v1h-1zM15 17h1v1h-1zM16 17h1v1h-1zM19 17h1v1h-1zM20 17h1v1h-1zM21 17h1v1h-1zM24 17h1v1h-1zM25 17h1v1h-1zM26 17h1v1h-1zM28 17h1v1h-1zM2 18h1v1h-1zM3 18h1v1h-1zM4 18h1v1h-1zM6 18h1v1h-1zM8 18h1v1h-1zM9 18h1v1h-1zM12 18h1v1h-1zM16 18h1v1h-1zM17 18h1v1h-1zM18 18h1v1h-1zM22 18h1v1h-1zM24 18h1v1h-1zM26 18h1v1h-1zM27 18h1v1h-1zM28 18h1v1h-1zM1 19h1v1h-1zM3 19h1v1h-1zM4 19h1v1h-1zM6 19h1v1h-1zM7 19h1v1h-1zM8 19h1v1h-1zM9 19h1v1h-1zM11 19h1v1h-1zM12 19h1v1h-1zM14 19h1v1h-1zM15 19h1v1h-1zM16 19h1v1h-1zM17 19h1v1h-1zM19 19h1v1h-1zM27 19h1v1h-1zM3 20h1v1h-1zM4 20h1v1h-1zM8 20h1v1h-1zM10 20h1v1h-1zM12 20h1v1h-1zM13 20h1v1h-1zM16 20h1v1h-1zM17 20h1v1h-1zM18 20h1v1h-1zM21 20h1v1h-1zM24 20h1v1h-1zM27 20h1v1h-1zM2 21h1v1h-1zM6 21h1v1h-1zM7 21h1v1h-1zM8 21h1v1h-1zM9 21h1v1h-1zM10 21h1v1h-1zM12 21h1v1h-1zM14 21h1v1h-1zM16 21h1v1h-1zM17 21h1v1h-1zM18 21h1v1h-1zM19 21h1v1h-1zM20 21h1v1h-1zM21 21h1v1h-1zM22 21h1v1h-1zM23 21h1v1h-1zM24 21h1v1h-1zM25 21h1v1h-1zM26 21h1v1h-1zM27 21h1v1h-1zM9 22h1v1h-1zM10 22h1v1h-1zM12 22h1v1h-1zM14 22h1v1h-1zM17 22h1v1h-1zM20 22h1v1h-1zM21 22h1v1h-1zM25 22h1v1h-1zM26 22h1v1h-1zM27 22h1v1h-1zM28 22h1v1h-1zM29 22h1v1h-1zM1 23h1v1h-1zM2 23h1v1h-1zM3 23h1v1h-1zM4 23h1v1h-1zM5 23h1v1h-1zM6 23h1v1h-1zM7 23h1v1h-1zM9 23h1v1h-1zM11 23h1v1h-1zM12 23h1v1h-1zM13 23h1v1h-1zM14 23h1v1h-1zM17 23h1v1h-1zM18 23h1v1h-1zM19 23h1v1h-1zM20 23h1v1h-1zM21 23h1v1h-1zM23 23h1v1h-1zM25 23h1v1h-1zM26 23h1v1h-1zM28 23h1v1h-1zM1 24h1v1h-1zM7 24h1v1h-1zM9 24h1v1h-1zM10 24h1v1h-1zM11 24h1v1h-1zM12 24h1v1h-1zM13 24h1v1h-1zM17 24h1v1h-1zM19 24h1v1h-1zM21 24h1v1h-1zM25 24h1v1h-1zM26 24h1v1h-1zM28 24h1v1h-1zM29 24h1v1h-1zM1 25h1v1h-1zM3 25h1v1h-1zM4 25h1v1h-1zM5 25h1v1h-1zM7 25h1v1h-1zM11 25h1v1h-1zM13 25h1v1h-1zM15 25h1v1h-1zM18 25h1v1h-1zM21 25h1v1h-1zM22 25h1v1h-1zM23 25h1v1h-1zM24 25h1v1h-1zM25 25h1v1h-1zM27 25h1v1h-1zM28 25h1v1h-1zM29 25h1v1h-1zM1 26h1v1h-1zM3 26h1v1h-1zM4 26h1v1h-1zM5 26h1v1h-1zM7 26h1v1h-1zM9 26h1v1h-1zM11 26h1v1h-1zM13 26h1v1h-1zM14 26h1v1h-1zM15 26h1v1h-1zM16 26h1v1h-1zM17 26h1v1h-1zM18 26h1v1h-1zM20 26h1v1h-1zM22 26h1v1h-1zM25 26h1v1h-1zM26 26h1v1h-1zM29 26h1v1h-1zM1 27h1v1h-1zM3 27h1v1h-1zM4 27h1v1h-1zM5 27h1v1h-1zM7 27h1v1h-1zM9 27h1v1h-1zM10 27h1v1h-1zM11 27h1v1h-1zM13 27h1v1h-1zM14 27h1v1h-1zM17 27h1v1h-1zM18 27h1v1h-1zM22 27h1v1h-1zM27 27h1v1h-1zM29 27h1v1h-1zM1 28h1v1h-1zM7 28h1v1h-1zM10 28h1v1h-1zM11 28h1v1h-1zM15 28h1v1h-1zM17 28h1v1h-1zM19 28h1v1h-1zM20 28h1v1h-1zM21 28h1v1h-1zM25 28h1v1h-1zM26 28h1v1h-1zM28 28h1v1h-1zM1 29h1v1h-1zM2 29h1v1h-1zM3 29h1v1h-1zM4 29h1v1h-1zM5 29h1v1h-1zM6 29h1v1h-1zM7 29h1v1h-1zM9 29h1v1h-1zM11 29h1v1h-1zM12 29h1v1h-1zM13 29h1v1h-1zM15 29h1v1h-1zM16 29h1v1h-1zM21 29h1v1h-1zM23 29h1v1h-1zM28 29h1v1h-1z" fill="#000"/></svg>`;
 // ---------------- les couvertures (traits nets et aplats clairs : belles en couleur comme en noir et blanc) ----------------
 function cCoverArt(n) {
   const th = tone(), N = ['', 'I', 'II', 'III'][n] || n;
@@ -11217,6 +11244,218 @@ ${KEEP('Une convention ne vaut que si les deux partenaires la connaissent. On le
       ['Votre partenaire ne connaît pas le Lebensohl. Vous :', null, ['Ne le jouez pas', 'Le jouez quand même'], 0, 'Les deux partenaires doivent le connaître.']] },
 ];
 COURS[1].ch = C2; COURS[2].ch = C3;
+
+// ====================================================================
+//  v90 — les exercices « à faire chez soi » (M), différents de ceux « pendant le cours » (E)
+//  format : [question, main « S.H.D.C » ou null, options, index de la bonne réponse, explication]
+// ====================================================================
+const SE4 = ['Nord', 'Est', 'Sud', 'Ouest'];
+const C_HOME = {
+  c1: [['Sans atout. Nord joue ♣5, Est ♣V, Sud ♣R, Ouest ♣2. Qui gagne le pli ?', null, SE4, 2, 'Le Roi est le plus fort trèfle.'],
+    ['Sans atout. Sud joue ♥3, Ouest ♠A, Nord ♥7, Est ♥4. Qui gagne le pli ?', null, SE4, 0, 'L\'As de pique ne compte pas : le plus fort cœur est le 7 de Nord.'],
+    ['Ouest joue ♦8. Voici la main de Sud. Que peut-il jouer ?', 'KQ7.A642.95.J832', ['Le ♦9 ou le ♦5', 'N\'importe quelle carte', 'Seulement l\'♥A'], 0, 'Sud a des carreaux : il doit fournir.'],
+    ['Combien de plis y a-t-il dans une donne ?', null, ['4', '13', '52'], 1, '52 cartes, 4 par pli : 13 plis.']],
+  c2: [['Atout ♦. Nord joue ♣R, Est ♦2, Sud ♣A, Ouest ♣4. Qui gagne le pli ?', null, SE4, 1, 'Est a coupé avec un atout.'],
+    ['Atout ♥. Est joue ♠V, Sud ♥5, Ouest ♥8, Nord ♠2. Qui gagne le pli ?', null, SE4, 3, 'Deux atouts : le plus gros, le 8, gagne. Ouest a surcoupé.'],
+    ['Atout ♠. Ouest joue ♦A. Voici la main de Sud. Peut-il couper ?', 'KJ84.QT73.6.A952', ['Non : il a un carreau, il doit le jouer', 'Oui', 'Seulement avec le ♠R'], 0, 'Il a encore le 6 de carreau : il fournit.']],
+  c3: [['Combien de plis faut-il pour réussir 5♦ ?', null, ['5', '10', '11', '12'], 2, '6 + 5 = 11.'],
+    ['Est 1♠ – Sud 2♥ – Ouest 2♠ – Nord 4♥ – tous passent. Qui est le déclarant ?', null, SE4, 2, 'Sud a dit cœur le premier dans son camp.'],
+    ['Même donne. Qui est le mort ?', null, SE4, 0, 'Le partenaire du déclarant : Nord.'],
+    ['Quelle enchère est la plus haute ?', null, ['2♠', '2♦', '2♣', '2♥'], 0, 'À un même palier : ♣ ♦ ♥ ♠ SA.']],
+  c4: [['Combien de points d\'honneur ?', 'AJ5.Q862.KJ4.Q73', ['12', '13', '14'], 1, '4 + 1 + 2 + 3 + 1 + 2 = 13.'],
+    ['Combien de points d\'honneur ?', 'T7.KQJ93.A852.64', ['9', '10', '11'], 1, '3 + 2 + 1 + 4 = 10.'],
+    ['Votre partenaire a ouvert 1♥ ; vous avez 4 cœurs. Combien vaut votre main ?', 'K842.QJ63.K952.4', ['9', '11', '12'], 1, '9 points d\'honneur + 2 pour le singleton trèfle = 11.', 2],
+    ['Vous avez 13 points, votre partenaire en promet 12 à 14. Pouvez-vous jouer la manche ?', null, ['Oui : au moins 25', 'Non'], 0, '13 + 12 = 25 au minimum.']],
+  c5: [['Que dites-vous ?', 'KQ4.AJ853.Q72.84', ['1♥', '1SA', '1♦', 'Passe'], 0, '12 points et cinq cœurs : 1♥.'],
+    ['Que dites-vous ?', 'AJ5.KQ3.KJ84.Q92', ['1♦', '1SA', '1♣', 'Passe'], 1, '16 points, régulière : 1SA.'],
+    ['Que dites-vous ?', 'KJ5.A4.QJ84.K973', ['1♦', '1SA', '1♣', 'Passe'], 0, '14 points, pas de majeure 5e, 4 carreaux : 1♦.'],
+    ['Que dites-vous ?', 'J753.Q84.K95.Q62', ['1♣', '1♠', 'Passe'], 2, '8 points : passe.']],
+  c6: [['Nord ouvre 1♠. Que répondez-vous ?', 'K84.Q73.J962.874', ['2♠', '3♠', '1SA', 'Passe'], 0, 'Fit (3 piques) et 6 points : 2♠.', 2],
+    ['Nord ouvre 1♠. Que répondez-vous ?', 'KJ84.AQ7.962.K74', ['2♠', '3♠', '4♠', '1SA'], 2, 'Fit et 13 points : la manche, 4♠.', 2],
+    ['Nord ouvre 1♣. Que répondez-vous ?', 'Q973.84.KJ62.Q74', ['1♠', '1♦', '1SA', '2♣'], 0, '8 points et 4 piques : la majeure d\'abord.', 3],
+    ['Nord ouvre 1♥. Que répondez-vous ?', 'K94.82.Q752.J964', ['1SA', '2♥', 'Passe'], 0, 'Pas de fit (2 cœurs), 6 points : 1SA.']],
+  c7: [['1♣ – 1♠ – ? Que dites-vous ?', 'KQ74.A5.84.AJ962', ['2♠', '3♠', '1SA', '2♣'], 0, 'Fit (4 piques) et 14 points : 2♠.'],
+    ['1♥ – 1♠ – ? Que dites-vous ?', 'A5.AKJ974.K82.93', ['2♥', '3♥', '1SA'], 1, 'Six cœurs et 15 points : je saute à 3♥.'],
+    ['1♦ – 1♥ – ? Que dites-vous ?', 'K82.Q4.AJ853.K63', ['1SA', '2♦', '2♥', '2SA'], 0, 'Régulière, 13 points, 2 cœurs : 1SA.', 2]],
+  c8: [['Non vulnérable : 3SA avec une levée de mieux.', null, ['430', '400', '460'], 0, '40 + 30 + 30 + 30 = 130, + 300.'],
+    ['Non vulnérable : 2♦ juste fait.', null, ['90', '40', '140'], 0, '2 × 20 = 40, + 50 de partielle.'],
+    ['Vulnérable : 3SA chute de 2 levées.', null, ['Les adversaires marquent 200', 'Les adversaires marquent 100', 'On marque 200'], 0, '2 × 100.'],
+    ['Non vulnérable : 5♣ juste fait.', null, ['400', '100', '150'], 0, '5 × 20 = 100 : manche, + 300.']],
+  c9: [['Nord : ♣ A R D — Sud : ♣ 6 5. Combien de levées sûres à trèfle ?', null, ['2', '3', '4'], 1, 'As, Roi, Dame.'],
+    ['Nord : ♠ D V 10 9 — Sud : ♠ 6 4 3. Combien de plis une fois l\'As et le Roi chassés ?', null, ['1', '2', '3'], 1, 'Quatre tours ; l\'As et le Roi adverses en prennent deux : il vous en reste 2.'],
+    ['Nord : ♥ A R — Sud : ♥ D V 8 7 3. Par quoi commencer ?', null, ['L\'As ou le Roi de Nord', 'La Dame de Sud', 'Le 3 de Sud'], 0, 'La main courte est Nord : ses honneurs d\'abord.'],
+    ['Contrat 4♠. Vous comptez 8 levées sûres. Combien en manque-t-il ?', null, ['1', '2', '3'], 1, 'Il en faut 10.']],
+  c10: [['1SA – 3SA. Votre entame ?', 'QJ93.854.K72.T63', ['♠D', '♠3', '♦R', '♣10'], 0, 'Séquence D V : la Dame.'],
+    ['1♠ – 4♠. Votre entame ?', 'A852.KQJ.9643.72', ['♥R', '♠2', '♦3', '♣7'], 0, 'La séquence R D V à cœur.'],
+    ['1SA – 3SA. Votre entame ?', '84.J97532.A6.K42', ['♥5', '♥V', '♦A', '♠8'], 0, 'Votre longue sans séquence : V, 9, 7, 5 — la 4e meilleure.']],
+  d1: [['Que dites-vous en ouverture ?', 'AK4.KQ5.AJ63.K92', ['2SA', '2♣', '1SA', '1♦'], 0, '20 points, régulière : 2SA.', 1],
+    ['Votre partenaire ouvre 2♦ (24 H et plus). Vous avez 1 point. Vous dites :', null, ['2♥', 'Passe', '2SA'], 0, 'Le relais 2♥ est obligatoire.'],
+    ['Votre partenaire ouvre 2SA. Vous avez 5 piques et 4 points. Vous dites :', null, ['3♥ (Texas pique)', '3♠', 'Passe'], 0, 'Le Texas, un palier plus haut.']],
+  d2: [['1SA – ? Que répondez-vous ?', 'K7.Q98653.J4.T72', ['2♦', '2♥', 'Passe', '2♣'], 0, 'Six cœurs : Texas 2♦.'],
+    ['1SA – ? Que répondez-vous ?', 'Q74.KJ83.A95.T64', ['2♣', '2SA', '3SA'], 0, '4 cœurs et 10 points : Stayman.'],
+    ['1SA – 2♣ – 2♦ – ? Vous avez :', 'KJ74.Q85.A73.964', ['3SA', '4♠', '2SA'], 0, 'Pas de fit pique, 10 points : 3SA.']],
+  d3: [['1SA – ? Que répondez-vous ?', '7.952.84.QJT9632', ['2♠', '3♣', 'Passe'], 0, 'Sept trèfles, faible : 2♠, puis passe sur 3♣.'],
+    ['1SA – ? Que répondez-vous ?', 'T84.7.KJ9642.853', ['3♣', '2♠', 'Passe'], 0, 'Six carreaux, faible : 3♣.'],
+    ['1SA – 3♣ – 3♦ – ? Vous avez six carreaux et 4 points. Vous :', null, ['Passez', 'Dites 3SA', 'Dites 4♦'], 0, 'Le contrat est trouvé.']],
+  d4: [['Vous êtes donneur. Que dites-vous ?', '84.7.KQT9853.J62', ['3♦', '2♦', '1♦', 'Passe'], 0, 'Sept carreaux, 6 points : 3♦.'],
+    ['Vous êtes donneur. Que dites-vous ?', 'AQJ976.84.73.952', ['2♠', '1♠', '3♠', 'Passe'], 0, 'Six beaux piques, 7 points : 2♠.'],
+    ['Partenaire 2♥ (faible). Vous avez 4 cœurs et 5 points. Vous dites :', null, ['4♥', 'Passe', '2SA'], 0, 'Beaucoup d\'atouts : on monte pour gêner.']],
+  d5: [['Ils ouvrent 1♣. Que dites-vous ?', 'AQJ75.84.K72.963', ['1♠', 'Passe', 'Contre', '1SA'], 0, '10 H, cinq beaux piques : 1♠.', 1],
+    ['Ils ouvrent 1♦. Que dites-vous ?', 'KQ4.A93.KJ7.QJ85', ['1SA', 'Contre', 'Passe'], 0, '16 H, régulier, arrêt carreau (R V) : 1SA.'],
+    ['Ils ouvrent 1♠. Que dites-vous ?', '84.KQ9.AQ7642.73', ['2♦', 'Passe', 'Contre'], 0, '11 H, six carreaux : 2♦.', 1]],
+  d6: [['Ils ouvrent 1♣. Que dites-vous ?', 'AJ74.KQ83.A962.5', ['Contre', '1♥', '1SA', 'Passe'], 0, '14 H, un singleton trèfle, les autres couleurs : contre.', 1],
+    ['1♥ – contre – passe – ? Que dites-vous ?', '842.73.QJ65.T874', ['2♦', 'Passe', '1SA'], 0, 'On répond toujours : sans majeure, 2♦.'],
+    ['1♦ – contre – passe – ? Que dites-vous ?', 'KJ84.Q73.962.K74', ['2♠', '1♠', 'Passe'], 0, '9 H : le saut, 2♠.']],
+  d7: [['Nord : ♥ A D 3 — Sud : ♥ 7 4 2. Vous jouez petit de Sud, Ouest met petit. Vous mettez :', null, ['La Dame', 'L\'As', 'Le 3'], 0, 'L\'impasse au Roi.'],
+    ['Nord : ♠ 7 4 — Sud : ♠ A D. De quelle main jouez-vous vers A D ?', null, ['De Nord', 'De Sud'], 0, 'De la main faible vers la main forte.'],
+    ['Nord : ♣ A V 10 — Sud : ♣ 5 3 2. Il manque le Roi et la Dame. Au premier tour, vous passez :', null, ['Le 10', 'Le Valet', 'L\'As'], 0, 'D\'abord la plus petite carte de la fourchette.']],
+  d8: [['Vous avez 8 atouts. Les adversaires ont fourni deux fois chacun. Combien leur en reste-t-il ?', null, ['1', '0', '2'], 0, '5 − 4 = 1.'],
+    ['Sud : ♥ A R D V 4 3 — Nord : ♥ 7 2. Où une coupe rapporte-t-elle un pli de plus ?', null, ['Chez Nord', 'Chez Sud'], 0, 'Dans la main courte en atout.'],
+    ['Vous avez 10 atouts. Combien les adversaires en ont-ils ?', null, ['3', '4', '2'], 0, '13 − 10.']],
+  d9: [['Le déclarant joue petit vers ♥ R V du mort. Vous avez ♥ A 8 3, en 2e. Vous jouez :', null, ['Le 3', 'L\'As', 'Le 8'], 0, 'Petite carte en 2e.'],
+    ['Partenaire entame ♦3, le mort met le 5. Vous avez ♦ D V 8, en 3e. Vous jouez :', null, ['Le Valet', 'La Dame', 'Le 8'], 0, 'Fort, la plus petite des cartes qui se suivent.', 2],
+    ['Le mort joue le Valet de pique. Vous avez ♠ D 7 4. Vous jouez :', null, ['La Dame', 'Le 4'], 0, 'Honneur sur honneur.', 1]],
+  d10: [['Partenaire entame l\'As de pique. Vous avez ♠ D 9 2. Vous jouez :', null, ['Le 9', 'Le 2', 'La Dame'], 0, 'Appel : vous avez la Dame.'],
+    ['Le déclarant joue carreau. Vous avez ♦ 8 5 3. Vous jouez d\'abord :', null, ['Le 3', 'Le 8'], 0, 'Impair : bas.'],
+    ['Vous défaussez. Vous voulez que votre partenaire rejoue trèfle. Vous défaussez :', null, ['Un gros trèfle', 'Un petit trèfle', 'Un atout'], 0, 'Grosse carte = j\'aime.']],
+  d11: [['Votre partenaire dit 2♣ Stayman sur 1SA. Vous :', null, ['Alertez', 'Ne dites rien'], 0, 'Enchère conventionnelle.'],
+    ['Vous avez joué un cœur alors qu\'il vous restait un pique sur une entame pique. C\'est :', null, ['Une renonce', 'Une défausse'], 0, 'Il fallait fournir.'],
+    ['Votre adversaire a exposé une carte par erreur. Vous :', null, ['Appelez l\'arbitre', 'Exigez qu\'il la joue'], 0, 'L\'arbitre applique la règle.']],
+  e1: [['1♦ – passe – passe – ? Que dites-vous ?', 'KQ853.84.J72.Q63', ['1♠', 'Passe', 'Contre'], 0, '8 H et cinq piques : en réveil, 1♠.'],
+    ['Ils ouvrent 3♠. Partenaire muet. Que dites-vous ?', '5.AQ84.KJ83.AJ64', ['Contre', 'Passe', '4♥'], 0, '15 H, court à pique : contre d\'appel.'],
+    ['Votre partenaire a réveillé 1SA (11 à 14). Vous avez 5 H. Que dites-vous ?', null, ['Passe', '3SA', '2SA'], 0, '5 + 11 à 14 = 16 à 19 : loin de la manche, passe.']],
+  e2: [['Ils jouent 3SA. Vous avez deux As et ♣ R D V 10 9, entame à vous. Vous :', null, ['Contrez', 'Passez'], 0, 'Beaucoup de levées de défense.'],
+    ['1 de chute contré, vulnérable :', null, ['200', '100', '300'], 0, '1 de chute contré vulnérable.'],
+    ['Ils ouvrent 1SA. Vous avez 16 H. Contre est :', null, ['Punitif', 'D\'appel'], 0, 'Contre 1SA : punitif.']],
+  e3: [['Combien de HL ?', 'AKQ842.A5.K93.72', ['16', '18', '19'], 1, '16 H + 2 (5e et 6e piques) = 18 HL.'],
+    ['Votre partenaire soutient vos piques avec 3 cartes. Combien de HLD ?', 'AKQ842.A5.K93.72', ['18', '20', '22'], 2, '18 HL + 9e atout 2 + deux doubletons 2 = 22 HLD.'],
+    ['Réponse au Blackwood 5 clés avec 2 clés et la Dame d\'atout :', null, ['5♠', '5♥', '5♦'], 0, '2 clés avec la Dame : 5♠.', 3],
+    ['Total HL à deux : 37. Vous jouez :', null, ['7SA', '6SA', '4SA'], 0, '37 : le grand chelem.']],
+  e4: [['Ouest a 4 piques, 4 cœurs et 2 carreaux. Combien de trèfles ?', null, ['3', '2', '4'], 0, '13 − 10.', 2],
+    ['Vous et le mort avez 27 points. Ouest a ouvert. Combien Est a-t-il au plus ?', null, ['1', '13', '6'], 0, '40 − 27 = 13 ; Ouest en a au moins 12.'],
+    ['Est n\'a pas fourni au 2e tour de cœur. Combien de cœurs avait-il ?', null, ['1', '2', '0'], 0, 'Il a fourni une fois, puis n\'en avait plus.', 2]],
+  e5: [['Vous avez ♣ A 6 3 face à ♣ 8 4 2. Combien de coups à blanc ?', null, ['1', '2', '0'], 0, '7 − 6 = 1.'],
+    ['Vous avez ♦ A 5 face à ♦ 9 7 3. Combien de coups à blanc ?', null, ['2', '1', '3'], 0, '7 − 5 = 2.'],
+    ['Le coup à blanc est-il utile si vous ne devez jamais rendre la main ?', null, ['Non', 'Oui'], 0, 'Le danger, c\'est de rendre la main au défenseur qui a les cartes affranchies.']],
+  e6: [['Dans quel ordre fait-on une élimination ?', null, ['Purger, éliminer, mettre en main', 'Mettre en main, purger, éliminer', 'Éliminer, mettre en main, purger'], 0, 'Les trois étapes.'],
+    ['L\'adversaire en main joue une couleur où vous et le mort êtes chicane. Vous :', null, ['Coupez d\'un côté, défaussez de l\'autre', 'Fournissez'], 0, 'Coupe et défausse.'],
+    ['Vous avez ♠ R 4 3 face à ♠ A 6 2 et voulez la Dame chez l\'adversaire. Le mieux est que :', null, ['L\'adversaire attaque la couleur', 'Vous l\'attaquiez'], 0, 'La couleur se joue mieux quand l\'adversaire l\'attaque.']],
+  e7: [['Le maniement de sécurité sacrifie :', null, ['Parfois une levée de mieux', 'Le contrat', 'Un atout'], 0, 'Pour assurer le contrat.'],
+    ['L\'atout 4-0 vous ferait chuter. Vous choisissez :', null, ['Le jeu qui survit au 4-0', 'Le jeu le plus rapide'], 0, 'La sécurité.'],
+    ['En match par quatre, ce qui compte avant tout est :', null, ['Réussir le contrat', 'Faire des levées de mieux'], 0, 'C\'est là que la sécurité rapporte.']],
+  e8: [['Le mort n\'a aucune longue couleur. Vous jouez :', null, ['Passif', 'Actif, en attaquant sous vos honneurs'], 0, 'Rien ne presse.'],
+    ['Le pli est déjà gagné par le Roi de votre partenaire. Vous n\'avez plus la couleur. Vous :', null, ['Défaussez', 'Coupez'], 0, 'Gardez votre atout.'],
+    ['Il vous faut 2 levées de chute ; vous avez 2 As. Le mort a une longue couleur affranchie. Vous :', null, ['Encaissez vos As tout de suite', 'Attendez'], 0, 'Sinon les perdantes du déclarant partent.']],
+  e9: [['Combien de menaces faut-il pour un squeeze simple ?', null, ['2', '1', '3'], 0, 'Deux menaces.'],
+    ['Vous avez 11 levées sûres et 2 perdantes. Avant le squeeze, vous :', null, ['Rendez une levée', 'Jouez toutes vos maîtresses'], 0, 'Il ne doit rester qu\'une perdante.'],
+    ['Le squeeze fonctionne quand l\'adversaire :', null, ['Doit garder deux couleurs avec trop peu de cartes', 'A beaucoup d\'atouts'], 0, 'Il doit lâcher une garde.']],
+  e10: [['1♥ – 4♣ (splinter). Votre partenaire a :', null, ['Un fit cœur et une courte à trèfle', 'Cinq trèfles'], 0, 'Le saut montre la courte.'],
+    ['1♣ – 1♥ – 1♠ – 2♦ (4e couleur forcing). 2♦ demande :', null, ['De décrire encore sa main', 'De passer'], 0, 'Forcing : « dis-m\'en plus ».'],
+    ['Avant de jouer une convention avec un nouveau partenaire, il faut :', null, ['Se mettre d\'accord', 'L\'essayer en silence'], 0, 'Les deux partenaires doivent la connaître.']],
+};
+COURS.forEach(L => L.ch.forEach(c => { c.hw = C_HOME[c.id] || []; }));
+
+// ====================================================================
+//  v91 — les exercices « à faire chez soi » se font dans l'application, avec l'aide du professeur
+//  Aide en étapes : 1. un indice  2. le rappel de la partie de théorie utile  3. après une erreur : l'explication et « réessayer »
+// ====================================================================
+const C_HINT = {
+  c1: 'Repérez d\'abord la couleur demandée : c\'est la première carte du pli. Seules les cartes de cette couleur peuvent gagner.',
+  c2: 'Un atout a-t-il été joué ? Si oui, seul le plus gros atout compte. Sinon, regardez la couleur demandée.',
+  c3: 'Plis à faire = 6 + le palier. Pour le déclarant, cherchez qui a nommé la couleur le premier dans le camp gagnant.',
+  c4: 'Comptez couleur par couleur : As 4, Roi 3, Dame 2, Valet 1. Les courtes ne comptent qu\'avec un fit.',
+  c5: 'Suivez les étapes dans l\'ordre : 12 points ? Régulière à 15-17 ? Cinq cartes en majeure ? Sinon, la mineure.',
+  c6: 'Moins de 6 points : passe. Puis dans l\'ordre : un fit ? une majeure de 4 cartes ? sinon, mes points en Sans-Atout.',
+  c7: 'Trois questions : fit avec le répondant ? quelle forme ? quelle zone (12-14, 15-17, 18 et plus) ?',
+  c8: 'Mineure 20, majeure 30, SA 40 puis 30. Si le total atteint 100 : manche. Sinon : partielle.',
+  c9: 'Une levée sûre se gagne tout de suite. Pour débloquer, commencez par les honneurs de la main qui a le moins de cartes.',
+  c10: 'Contre SA : couleur du partenaire, sinon votre longue. Contre une couleur : séquence, partenaire, singleton, atout.',
+  d1: '20-21 régulier : 2SA. 22-23 : 2♣. 24 et plus : 2♦. Les relais (2♦, 2♥) sont obligatoires.',
+  d2: 'Quatre questions dans l\'ordre : 5 cartes en majeure ? mineure 6e faible ? 4 cartes en majeure et 8 points ? sinon, mes points.',
+  d3: 'Main faible avec 6 cartes en mineure : 2♠ pour les trèfles, 3♣ pour les carreaux.',
+  d4: 'La longueur fixe le palier : 6 cartes au palier 2, 7 au palier 3, 8 au palier 4. Et une main faible.',
+  d5: 'Palier 1 : 8 H et 5 belles cartes. Palier 2 : 11 H et 6 cartes. 1SA : 16-18 avec un arrêt.',
+  d6: 'Le contre d\'appel : 12 H et court dans leur couleur. En réponse, on parle toujours : majeure d\'abord.',
+  d7: 'On joue de la main faible vers la fourchette, et l\'on passe la plus petite carte de la fourchette.',
+  d8: 'Comptez les atouts : 13 moins les vôtres. Une coupe ne rapporte que dans la main courte en atout.',
+  d9: 'Qui joue en dernier ? Mon partenaire : je joue petit. Le déclarant : je joue fort. Sauf honneur sur honneur.',
+  d10: 'Sur l\'entame du partenaire : grosse = j\'aime. Sur le déclarant : pair = haut puis bas, impair = bas puis haut.',
+  d11: 'Le réflexe du tournoi : en cas de doute, on appelle l\'arbitre. On alerte toute enchère conventionnelle.',
+  e1: 'En réveil, on prête un Roi (3 points) à son partenaire. Contre un barrage, le contre est d\'appel.',
+  e2: 'Partenaire muet et palier bas : appel. Partenaire qui a parlé, 1SA, manche ou chelem : punitif.',
+  e3: 'HL : 1 point par carte à partir de la 5e. HLD : ajoutez les courtes et le 9e atout. 33 : petit chelem.',
+  e4: '13 cartes par main, 40 points dans le jeu. Soustrayez ce que vous voyez.',
+  e5: 'Règle de 7 : 7 moins le nombre de cartes que vous avez à deux dans la couleur.',
+  e6: 'Purger, éliminer, mettre en main. L\'adversaire doit jouer pour vous.',
+  e7: 'Le contrat d\'abord. Cherchez le jeu qui gagne même avec la pire répartition.',
+  e8: 'Le mort a une longue couleur ? Il faut encaisser vite. Sinon, on peut rester passif.',
+  e9: 'Une seule perdante, deux menaces, les communications.',
+  e10: 'Une convention n\'est utile que si les deux partenaires la connaissent.',
+};
+const C_PROF = () => T3('🧙‍♂️ Professeur Aldous Dumblebridge', '🧝 Ambroise Merlimpasse', '🎩 The Duke of Blackwood');
+// la partie de théorie la plus proche de l'exercice (mots en commun)
+function cBestSec(c, k, txt, force) {
+  const d = document.createElement('div'); d.innerHTML = cTh(c, k); const secs = []; let cur = null;
+  [...d.children].forEach(el => { if (el.tagName === 'H3') { cur = { h: el.innerHTML, b: '', t: el.textContent, ti: el.textContent }; secs.push(cur); } else if (cur && !el.classList.contains('keep')) { cur.b += el.outerHTML; cur.t += ' ' + el.textContent; } });
+  const W = s => new Set((s.toLowerCase().match(/[a-zàâçéèêëîïôûùüÿœ♠♥♦♣0-9]{3,}/g) || []).filter(w => !/^(les|des|une|que|qui|pour|dans|avec|est|pas|vous|votre|vos|sur|plus|par|son|ses|aux|elle|tout)$/.test(w)));
+  if (force && secs[force - 1]) return secs[force - 1];
+  const q = W(txt); let best = secs[0], bs = -1;
+  secs.forEach(s => { const w = W(s.t), wt = W(s.ti); let n = 0; q.forEach(x => { if (w.has(x)) n++; if (wt.has(x)) n += 3; }); if (n > bs) { bs = n; best = s; } });
+  return best;
+}
+{ const _r = cqRender; cqRender = function () {
+  if (!CQ || CQ.kind !== 'm') return _r();
+  if (!CQ.help) { CQ.help = CQ.items.map(() => 0); CQ.retry = CQ.items.map(() => 0); CQ.res = CQ.items.map(() => null); }
+  const [L, c] = cFind(CQ.id), it = CQ.items[CQ.i], n = CQ.items.length, done = CQ.pick != null, k = L.ch.indexOf(c) + 1, h = CQ.help[CQ.i], good = done && CQ.pick === it.a;
+  if (done && CQ.res[CQ.i] !== 'solo' && CQ.res[CQ.i] !== 'aide') CQ.res[CQ.i] = good ? (h || CQ.retry[CQ.i] ? 'aide' : 'solo') : 'ko';
+  const sec = h >= 2 ? cBestSec(c, k, it.q + ' ' + it.e, it.s) : null;
+  show(`${topBar(`${c.ic} ${c.t}`, `${C_LAB.m} · ${CQ.i + 1} / ${n}`, 'cchap')}<div class="wrap cours">
+  <div class="cdots">${CQ.items.map((_, j) => `<i class="${j < CQ.i ? (CQ.res[j] === 'solo' ? 'd' : CQ.res[j] === 'aide' ? 'd h' : 'd x') : j === CQ.i ? 'c' : ''}"></i>`).join('')}</div>
+  <div class="card th cq"><div class="lkick">${C_LAB.m} · M ${k}.${CQ.i + 1}</div><p class="cqq">${it.q}</p>${it.h ? cH(it.h, 'Votre main') : ''}
+   <div class="cqo">${it.o.map((o, j) => `<button class="cqb${done ? (j === it.a && good ? ' good' : j === CQ.pick ? ' bad' : '') : ''}" data-cqa="${j}" ${done ? 'disabled' : ''}>${o}</button>`).join('')}</div>
+   ${h >= 1 ? `<div class="cprof"><div class="cpn noprof">${C_PROF()}</div><p><b>Indice :</b> ${C_HINT[c.id] || c.d}</p>${sec ? `<div class="cpsec"><div class="cpsl">Rappel de la théorie</div><h3>${sec.h}</h3>${sec.b}</div>` : ''}</div>` : ''}
+   ${done ? (good ? `<div class="cqfb ok"><b>${CQ.res[CQ.i] === 'solo' ? T3('Bravo, sort réussi tout seul ! ⭐', 'Bien joué, sans aide ! ⭐', 'Exact, sans aide. ⭐') : T3('Réussi avec l\'aide du professeur 🧙', 'Réussi avec l\'aide du mage 🧙', 'Exact, avec l\'aide du professeur. 🧙')}</b> ${it.e}</div>`
+     : `<div class="cqfb ko"><div class="cpn noprof">${C_PROF()}</div><b>${T3('Pas tout à fait, jeune sorcier.', 'Pas tout à fait, jeune elfe.', 'Pas tout à fait.')}</b> ${it.e}</div>`) : ''}
+  </div>
+  <div class="acts">${!done && h < 2 ? `<button class="btn sec chelp" data-cqh="1">🧙 ${h ? 'Le rappel de la théorie' : 'L\'aide du professeur'}</button>` : ''}
+   ${done && !good ? `<button class="btn" data-cqr="1">↺ Réessayer</button>` : ''}
+   ${done ? `<button class="btn${good ? '' : ' sec'}" data-cqn="1">${CQ.i + 1 >= n ? 'Voir le résultat' : 'Suivant'} ›</button>` : ''}</div>
+  </div>`);
+}; }
+{ const _e = cqEnd; cqEnd = function () {
+  if (!CQ || CQ.kind !== 'm') return _e();
+  const [L, c] = cFind(CQ.id), n = CQ.items.length, P = cProg(); P[c.id] = P[c.id] || {};
+  const solo = CQ.res.filter(x => x === 'solo').length, aide = CQ.res.filter(x => x === 'aide').length, ko = n - solo - aide;
+  const pr = P[c.id]; if (pr.m == null || solo + aide > pr.m || (solo + aide === pr.m && solo > (pr.ms || 0))) { pr.m = solo + aide; pr.ms = solo; } save();
+  show(`${topBar(`${c.ic} ${c.t}`, C_LAB.m, 'cchap')}<div class="wrap cours">
+  <div class="card th cres"><h2>${solo + aide} / ${n}</h2>
+   <div class="cbil"><span>⭐ <b>${solo}</b> réussi${solo > 1 ? 's' : ''} seul</span><span>🧙 <b>${aide}</b> avec l'aide du professeur</span><span>✗ <b>${ko}</b> à revoir</span></div>
+   <p>${solo === n ? T3('Parfait, et tout seul ! Tu es prêt pour le chapitre suivant.', 'Parfait, et sans aide ! Le sentier continue.', 'Parfait, et sans aide : chapitre acquis.') : ko ? 'Relisez la théorie des exercices à revoir, puis recommencez.' : 'Tout est réussi. Recommencez plus tard sans l\'aide du professeur : c\'est le vrai test.'}</p></div>
+  <div class="acts"><button class="btn sec" data-cquiz="${c.id}:m">Recommencer</button>${L.ch[L.ch.indexOf(c) + 1] ? `<button class="btn" data-cch="${L.ch[L.ch.indexOf(c) + 1].id}">Chapitre suivant ›</button>` : ''}<button class="btn sec" data-cch="${c.id}">Le chapitre</button></div></div>`);
+}; }
+app.addEventListener('click', e => {
+  const t = e.target.closest('[data-cqh],[data-cqr],[data-cbilan]'); if (!t) return; e.stopImmediatePropagation();
+  if (t.dataset.cqh && CQ) { CQ.help[CQ.i] = Math.min(2, CQ.help[CQ.i] + 1); return cqRender(); }
+  if (t.dataset.cqr && CQ) { CQ.retry[CQ.i] = 1; CQ.res[CQ.i] = null; CQ.pick = null; if (CQ.help[CQ.i] < 2) CQ.help[CQ.i] = 2; return cqRender(); }
+  if (t.dataset.cbilan) return cBilan();
+}, true);
+// la ligne du chapitre affiche ⭐ seul / 🧙 aidé pour les exercices chez soi
+{ const _ch = coursChap; coursChap = function (id) { _ch(id); try { const [, c] = cFind(id), p = cProg()[id] || {}; const b = app.querySelector(`[data-cquiz="${id}:m"] small`); if (b && p.m != null) b.innerHTML = `M ${cNo(id)}.1 à ${cNo(id)}.${c.hw.length} · ⭐ ${p.ms || 0} seul · 🧙 ${p.m - (p.ms || 0)} aidé`; } catch (e) { } }; }
+// ---------------- le bilan à envoyer au professeur ----------------
+function cBilanTxt() {
+  const P = cProg(); let who = ''; try { who = tone() === 'adulte' ? HERO_FULL() : HERO[tone()]()[0]; } catch (e) { }
+  const L = COURS.map(Lv => { const rows = Lv.ch.map((c, i) => { const p = P[c.id] || {}; if (p.q == null && p.e == null && p.m == null) return null; return `  ${i + 1}. ${c.t} — Q ${p.q ?? '–'}/${c.qs.length} · E ${p.e ?? '–'}/${c.ex.length} · M ${p.m ?? '–'}/${c.hw.length}${p.m != null ? ` (⭐ ${p.ms || 0} seul, 🧙 ${p.m - (p.ms || 0)} aidé)` : ''}`; }).filter(Boolean); return rows.length ? `${cLvlName(Lv)}\n${rows.join('\n')}` : null; }).filter(Boolean);
+  return `Bilan du cours de bridge${who ? ' — ' + who : ''}\n${new Date().toLocaleDateString('fr-BE')}\n\n${L.length ? L.join('\n\n') : 'Aucun exercice fait pour l\'instant.'}\n\nQ = questions sur la théorie · E = exercices pendant le cours · M = exercices à faire chez soi`;
+}
+function cBilan() {
+  const t = cBilanTxt();
+  show(`${topBar('📤 Mon bilan', 'À envoyer à mon professeur', 'cours')}<div class="wrap cours"><div class="card th"><h2 class="ltit">Mon bilan</h2><pre class="cbpre">${t.replace(/</g, '&lt;')}</pre></div>
+  <div class="acts"><button class="btn" data-cbshare="1">📤 Envoyer</button><button class="btn sec" data-cbcopy="1">Copier le texte</button></div></div>`);
+  app.querySelector('[data-cbshare]').onclick = () => { if (navigator.share) navigator.share({ title: 'Bilan du cours de bridge', text: t }).catch(() => { }); else cCopy(t); };
+  app.querySelector('[data-cbcopy]').onclick = () => cCopy(t);
+}
+function cCopy(t) { try { navigator.clipboard.writeText(t).then(() => { const b = app.querySelector('[data-cbcopy]'); if (b) b.textContent = 'Copié ✓'; }); } catch (e) { } }
+{ const _ch2 = coursHome; coursHome = function () { _ch2(); try { const w = app.querySelector('.wrap.cours'); if (w && !w.querySelector('[data-cbilan]')) { const d = document.createElement('div'); d.className = 'acts'; d.innerHTML = '<button class="btn sec" data-cbilan="1">📤 Mon bilan, pour mon professeur</button>'; w.appendChild(d); } } catch (e) { } }; }
 
 </script>
 <script>if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) { try { navigator.serviceWorker.register("sw.js"); } catch (e) {} }</script>
