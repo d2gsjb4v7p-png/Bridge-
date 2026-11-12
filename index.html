@@ -1363,6 +1363,22 @@ html body[data-th] .cahier .card.th.ccover h2.cvt{text-align:center!important;bo
  .cahier h3{break-after:avoid}
  .cahier .ex,.cahier .keep,.cahier table,.cahier .chand{break-inside:avoid}
 }
+/* v89 numérotation commune et sommaire aéré */
+.secn{display:inline-block;min-width:2.2em;margin-right:.35em;padding:1px 8px;border-radius:8px;background:rgba(127,127,127,.14);font:800 .72em var(--f-body);vertical-align:.12em;text-align:center}
+body[data-th=enfant] .card.th:not(:has(.kidsheet)) .secn{background:rgba(255,216,77,.22);color:#ffd84d}
+.tsum .secn{font-size:.7em}
+.ctocl{color:#555!important;font-size:16px!important;margin:4px 0 18px!important}
+.ctoc2{display:flex;flex-direction:column}
+.ctr{display:grid;grid-template-columns:44px 36px 1fr;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px dotted #bbb}
+.ctr:first-child{border-top:1px dotted #bbb}
+.ctn{width:36px;height:36px;border-radius:50%;background:var(--cacc2,#0b5c32);color:#fff;display:flex;align-items:center;justify-content:center;font:800 17px var(--f-body)}
+.cti{font-size:24px;text-align:center}
+.ctt b{display:block;font:700 19px/1.3 var(--f-body);color:#111}.ctt small{display:block;font-size:14.5px;color:#555;line-height:1.35;margin-top:2px}
+.ctrc .ctn{background:#fff;color:var(--cacc2,#0b5c32);border:2px solid var(--cacc2,#0b5c32)}
+.cleg{margin-top:22px;padding:14px 16px;border:1px solid #ccc;border-radius:10px;display:flex;flex-direction:column;gap:6px;font-size:15.5px;color:#222}
+.cleg>b{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#555}
+.cahier.mono .ctn{background:#222}.cahier.mono .ctrc .ctn{background:#fff;color:#222;border-color:#222}
+@media print{.cleg{flex-direction:row;flex-wrap:wrap;gap:1.5mm 6mm;break-inside:avoid;margin-top:5mm}.cleg>b{width:100%}.ctocl{margin-bottom:4mm!important}.ctr{padding:2.5mm 1mm;break-inside:avoid}.ctt b{font-size:13pt}.ctt small{font-size:10.5pt}.ctn{-webkit-print-color-adjust:exact;print-color-adjust:exact}.cleg{font-size:10.5pt}}
 </style>
 </head>
 <body>
@@ -6116,7 +6132,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v87';
+const APP_V = 'v89';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -10614,6 +10630,9 @@ const COURS = [
 const cFind = id => { for (const L of COURS) { const c = L.ch.find(x => x.id === id); if (c) return [L, c]; } return [null, null]; };
 const cProg = () => (ST.cours = ST.cours || {});
 const cLvlName = L => `Niveau ${L.n} · ${L.t}`;
+// la théorie avec ses parties numérotées (N.1, N.2…) : la même numérotation dans l'application, le diaporama et le cahier
+const cTh = (c, k) => { let j = 0; return c.th.replace(/<h3>(?:\d+ · )?/g, () => `<h3><span class="secn">${k}.${++j}</span> `); };
+const cNo = id => { const [L, c] = cFind(id); return L ? L.ch.indexOf(c) + 1 : 0; };
 
 // ---------------- l'accueil du cours ----------------
 function coursHome() {
@@ -10631,11 +10650,11 @@ function coursChap(id) {
   const [L, c] = cFind(id); if (!c) return coursHome(); C_LAST = id; const k = L.ch.indexOf(c), P = cProg()[c.id] || {};
   const nx = L.ch[k + 1];
   show(`${topBar(`${c.ic} ${c.t}`, `${cLvlName(L)} · chapitre ${k + 1}`, 'cours')}<div class="wrap cours">
-  <div class="card th"><div class="lkick">Chapitre ${k + 1}</div><h2 class="ltit">${c.t}</h2>${c.th}</div>
+  <div class="card th"><div class="lkick">Chapitre ${k + 1}</div><h2 class="ltit">${c.t}</h2>${cTh(c, k + 1)}</div>
   <div class="csteps">
    <button class="cstep" data-cslide="${c.id}"><span>▶️</span><b>Le diaporama animé</b><small>La leçon en scènes, avec des questions</small></button>
-   <button class="cstep" data-cquiz="${c.id}:q"><span>❓</span><b>Questions sur la théorie</b><small>${c.qs.length} questions${P.q != null ? ` · meilleur : ${P.q}/${c.qs.length}` : ''}</small></button>
-   <button class="cstep" data-cquiz="${c.id}:e"><span>🃏</span><b>Exercices pratiques</b><small>${c.ex.length} exercices${P.e != null ? ` · meilleur : ${P.e}/${c.ex.length}` : ''}</small></button>
+   <button class="cstep" data-cquiz="${c.id}:q"><span>❓</span><b>Questions sur la théorie</b><small>Q ${k + 1}.1 à ${k + 1}.${c.qs.length}${P.q != null ? ` · meilleur : ${P.q}/${c.qs.length}` : ''}</small></button>
+   <button class="cstep" data-cquiz="${c.id}:e"><span>🃏</span><b>Exercices pratiques</b><small>E ${k + 1}.1 à ${k + 1}.${c.ex.length}${P.e != null ? ` · meilleur : ${P.e}/${c.ex.length}` : ''}</small></button>
    ${c.mini ? `<button class="cstep" data-cmini="${c.mini}"><span>🎲</span><b>S'entraîner encore</b><small>Des exercices tirés au hasard, sans fin</small></button>` : ''}
   </div>
   <div class="acts">${k ? `<button class="btn sec" data-cch="${L.ch[k - 1].id}">‹ Chapitre ${k}</button>` : ''}${nx ? `<button class="btn" data-cch="${nx.id}">Chapitre ${k + 2} ›</button>` : `<button class="btn" data-nav="cours">Le cours ›</button>`}</div>
@@ -10652,7 +10671,7 @@ function cqRender() {
   const lab = CQ.kind === 'q' ? 'Questions sur la théorie' : 'Exercices pratiques';
   show(`${topBar(`${c.ic} ${c.t}`, `${lab} · ${CQ.i + 1} / ${n}`, 'cchap')}<div class="wrap cours">
   <div class="cdots">${CQ.items.map((_, k) => `<i class="${k < CQ.i ? 'd' : k === CQ.i ? 'c' : ''}"></i>`).join('')}</div>
-  <div class="card th cq"><div class="lkick">${lab} · ${CQ.i + 1}</div><p class="cqq">${it.q}</p>${it.h ? cH(it.h, 'Votre main') : ''}
+  <div class="card th cq"><div class="lkick">${lab} · ${CQ.kind === 'q' ? 'Q' : 'E'} ${cNo(CQ.id)}.${CQ.i + 1}</div><p class="cqq">${it.q}</p>${it.h ? cH(it.h, 'Votre main') : ''}
    <div class="cqo">${it.o.map((o, k) => `<button class="cqb${done ? (k === it.a ? ' good' : k === CQ.pick ? ' bad' : '') : ''}" data-cqa="${k}" ${done ? 'disabled' : ''}>${o}</button>`).join('')}</div>
    ${done ? `<div class="cqfb ${CQ.pick === it.a ? 'ok' : 'ko'}"><b>${CQ.pick === it.a ? T3('Bravo, sort réussi ! ✨', 'Bien joué !', 'Exact.') : T3('Raté, mais on apprend ! 💨', 'Pas tout à fait.', 'Pas tout à fait.')}</b> ${it.e}</div>` : ''}
   </div>
@@ -10679,7 +10698,7 @@ function coursSlides(id) {
 }
 // un diaporama construit à partir de la théorie : une scène par partie
 function cAutoSlides(c, k) {
-  const d = document.createElement('div'); d.innerHTML = c.th; const steps = []; let cur = null, intro = '';
+  const d = document.createElement('div'); d.innerHTML = cTh(c, k); const steps = []; let cur = null, intro = '';
   [...d.children].forEach(el => {
     if (el.tagName === 'H3') { cur = { h: el.innerHTML, b: '' }; steps.push(cur); return; }
     if (el.classList.contains('keep')) { steps.push({ keep: el.innerHTML }); cur = null; return; }
@@ -10709,9 +10728,9 @@ function coursCahier(n) {
   CCAH = n;
   const L = COURS.find(x => x.n === n); if (!L || !L.ch.length) return coursHome();
   let who = ''; try { who = tone() === 'adulte' ? HERO_FULL() : HERO[tone()]()[0]; } catch (e) { }
-  const qsH = (c, k0) => c.qs.map((x, k) => `<div class="cpq"><b>${k0}.${k + 1}</b> ${x[0]}<div class="cpo">${x[1].map(o => `<span>☐ ${o}</span>`).join('')}</div></div>`).join('');
-  const exH = (c, k0) => c.ex.map((x, k) => `<div class="cpq"><b>${k0}.${k + 1}</b> ${x[0]}${x[1] ? cH(x[1]) : ''}<div class="cpo">${x[2].map(o => `<span>☐ ${o}</span>`).join('')}</div></div>`).join('');
-  const cor = L.ch.map((c, i) => `<div class="cpc"><b>Chapitre ${i + 1} · ${c.t}</b><div><i>Questions :</i> ${c.qs.map((x, k) => `${i + 1}.${k + 1} <b>${x[1][x[2]]}</b>`).join(' · ')}</div><div><i>Exercices :</i> ${c.ex.map((x, k) => `${i + 1}.${k + 1} <b>${x[2][x[3]]}</b> (${x[4]})`).join(' · ')}</div></div>`).join('');
+  const qsH = (c, k0) => c.qs.map((x, k) => `<div class="cpq"><b>Q ${k0}.${k + 1}</b> ${x[0]}<div class="cpo">${x[1].map(o => `<span>☐ ${o}</span>`).join('')}</div></div>`).join('');
+  const exH = (c, k0) => c.ex.map((x, k) => `<div class="cpq"><b>E ${k0}.${k + 1}</b> ${x[0]}${x[1] ? cH(x[1]) : ''}<div class="cpo">${x[2].map(o => `<span>☐ ${o}</span>`).join('')}</div></div>`).join('');
+  const cor = L.ch.map((c, i) => `<div class="cpc"><b>Chapitre ${i + 1} · ${c.t}</b><div><i>Questions :</i> ${c.qs.map((x, k) => `Q ${i + 1}.${k + 1} <b>${x[1][x[2]]}</b>`).join(' · ')}</div><div><i>Exercices :</i> ${c.ex.map((x, k) => `E ${i + 1}.${k + 1} <b>${x[2][x[3]]}</b> (${x[4]})`).join(' · ')}</div></div>`).join('');
   show(`${topBar(`🖨 Le cahier · ${cLvlName(L)}`, 'Imprimer ou enregistrer en PDF (A4)', 'cours')}<div class="wrap cours cahier${CMONO ? ' mono' : ''}">
   <div class="acts noprint"><button class="btn" data-print="1">🖨 Imprimer ou enregistrer en PDF</button><button class="btn sec" data-cmono="1">${CMONO ? '🎨 Couverture en couleur' : '⚫ Couverture noir et blanc'}</button></div>
   <div class="card th ccover"><div class="cvlab">${T3('L\'École de la Carte Magique · Bridgelart', 'À l\'Assaut des Piques de la Comté', 'À bord du Vapeur au Cœur du Nil')}</div>
@@ -10719,8 +10738,9 @@ function coursCahier(n) {
    <h2 class="cvt">Le cahier de bridge</h2><p class="cvl">${cLvlName(L)}</p>
    ${who ? `<p class="cvw">Cahier de ${who}</p>` : '<p class="cvw">Cahier de : ……………………………………</p>'}
    <p class="cvp noprof">${T3('Professeur Aldous Dumblebridge', 'Ambroise Merlimpasse, le mage éclairé', 'The Duke of Blackwood')}</p></div>
-  <div class="card th cpch ctocp"><h2 class="ltit">Sommaire</h2><ol class="ctoc">${L.ch.map(c => `<li>${c.ic} ${c.t}</li>`).join('')}</ol><p class="small">Chaque chapitre : la théorie, des questions sur la théorie, des exercices pratiques. Les corrigés sont à la fin du cahier.</p></div>
-  ${L.ch.map((c, i) => `<div class="card th cpch"><div class="lkick">Chapitre ${i + 1}</div><h2 class="ltit">${c.ic} ${c.t}</h2>${c.th}
+  <div class="card th cpch ctocp"><h2 class="ltit">Sommaire</h2><p class="ctocl">${cLvlName(L)} · ${L.ch.length} chapitres, dans le même ordre que le cours de l'application.</p><div class="ctoc2">${L.ch.map((c, i) => `<div class="ctr"><span class="ctn">${i + 1}</span><span class="cti">${c.ic}</span><div class="ctt"><b>${c.t}</b><small>${c.d}</small></div></div>`).join('')}<div class="ctr ctrc"><span class="ctn">✓</span><span class="cti">📗</span><div class="ctt"><b>Les corrigés</b><small>Toutes les réponses, expliquées</small></div></div></div>
+   <div class="cleg"><b>Dans chaque chapitre</b><span>📖 <b>La théorie</b>, en parties numérotées : 1.1, 1.2…</span><span>❓ <b>Q</b> : les questions sur la théorie</span><span>✏️ <b>E</b> : les exercices pratiques</span></div></div>
+  ${L.ch.map((c, i) => `<div class="card th cpch"><div class="lkick">Chapitre ${i + 1}</div><h2 class="ltit">${c.ic} ${c.t}</h2>${cTh(c, i + 1)}
    <h3>Questions sur la théorie</h3>${qsH(c, i + 1)}<h3>Exercices pratiques</h3>${exH(c, i + 1)}</div>`).join('')}
   <div class="card th cpch"><h2 class="ltit">Les corrigés</h2>${cor}</div>
   </div>`);
@@ -11042,20 +11062,32 @@ ${KEEP('Partenaire muet et palier bas : appel. Partenaire qui a parlé, 1SA, man
       ['2♥ contré réussi, non vulnérable. Est-ce une manche ?', null, ['Oui : 2 × 30 × 2 = 120', 'Non'], 0, 'Contré, les levées valent le double : 120.']] },
   { id: 'e3', ic: '🏔️', t: 'Les chelems', d: '33, 37 et le Blackwood 5 clés', slides: null, th: `
 <p>Un chelem rapporte gros. Il faut <b>les points</b> et <b>les contrôles</b> : que les adversaires ne puissent pas encaisser deux As.</p>
-<h3>À Sans-Atout : on additionne</h3>
-${TBL(['Total à deux', 'Je dis'], [['25 à 32', '3SA'], ['33 seulement face au maximum', '4SA quantitatif (proposition)'], ['33 à 36', '6SA'], ['37 et plus', '7SA']])}
+<h3>Compter en HL et HLD (règles FFB)</h3>
+<p>Pour le chelem, on compte plus finement qu'avec les seuls points d'honneur.</p>
+${TBL(['Compte', 'Quand', 'Ce qu\'on compte'], [['<b>HL</b>', 'pas de fit', 'H + 1 point par carte à partir de la 5e d\'une couleur'], ['<b>HLD</b>', 'avec un fit', 'HL + chicane 3, singleton 2, doubleton 1, et le 9e atout du camp 2 (puis +1 par atout de plus)']])}
+<div class="ex">${cH('AKJ752.K4.A93.62', 'Votre main')}<b>H</b> : As 4 + Roi 3 + Valet 1 + Roi 3 + As 4 = 15.<br><b>HL</b> : six piques, donc +1 pour la 5e et +1 pour la 6e : 15 + 2 = <b>17 HL</b>.<br><b>HLD</b> : votre partenaire soutient pique avec 3 cartes, le camp a 9 atouts (+2) ; deux doubletons, cœur et trèfle (+1 +1) : 17 + 4 = <b>21 HLD</b>.</div>
+<p>Puis on additionne : <b>mes points exacts + la fourchette du partenaire</b>. Si le total atteint 33, le petit chelem est en vue.</p>
+<h3>À Sans-Atout : on additionne les HL</h3>
+${TBL(['Total à deux (HL)', 'Je dis'], [['25 à 32', '3SA'], ['33 seulement face au maximum', '4SA quantitatif (proposition)'], ['33 à 36', '6SA'], ['37 et plus', '7SA']])}
 <p>Après une enchère à Sans-Atout, 4SA n'est <b>jamais</b> un Blackwood : c'est une proposition.</p>
 <h3>À la couleur : trois étapes</h3>
-<p><b>1.</b> Fixer l'atout. <b>2.</b> Vérifier le potentiel (33 points avec la distribution) et les contrôles. <b>3.</b> Le Blackwood 5 clés : les quatre As et le Roi d'atout.</p>
+<p><b>1.</b> Fixer l'atout. <b>2.</b> Vérifier le potentiel (33 HLD à deux) et les contrôles. <b>3.</b> Le Blackwood 5 clés : les quatre As et le Roi d'atout.</p>
 ${TBL(['Clés', 'Réponse à 4SA'], BW_ROWS)}
 <p>Il faut <b>4 clés et la Dame d'atout</b> pour le petit chelem. Toutes les clés, la Dame et les Rois pour le grand.</p>
-<div class="ex">Fit cœur, 34 points. Vous dites 4SA. Le partenaire répond 5♥ : 2 clés sans la Dame. Vous avez 2 clés : 4 en tout. Il manque la Dame d'atout… avec 10 atouts, on tente 6♥.</div>
-${KEEP('33 : petit chelem. 37 : grand chelem. Blackwood quand l\'atout est fixé et les contrôles vérifiés.')}`,
+<div class="ex">Fit cœur, 34 HLD à deux. Vous dites 4SA. Le partenaire répond 5♥ : 2 clés sans la Dame. Vous avez 2 clés : 4 en tout. Il manque la Dame d'atout… avec 10 atouts, on tente 6♥.</div>
+${KEEP('Sans fit : HL. Avec fit : HLD. 33 : petit chelem. 37 : grand chelem. Blackwood quand l\'atout est fixé et les contrôles vérifiés.')}`,
     qs: [['Combien de points pour un petit chelem ?', ['33', '25', '37'], 0, '33 à deux.'],
+      ['En HL, que vaut la 6e carte d\'une couleur ?', ['1 point', '0 point', '2 points'], 0, '1 point par carte à partir de la 5e : la 5e et la 6e valent 1 chacune.'],
+      ['En HLD, le 9e atout du camp vaut :', ['2 points', '1 point', '0 point'], 0, 'Puis +1 par atout de plus.'],
+      ['Quand passe-t-on des HL aux HLD ?', ['Quand le fit est trouvé', 'Toujours', 'Jamais'], 0, 'Sans fit, une couleur courte ne vaut rien.'],
       ['Après 1SA – 4SA, 4SA est :', ['Une proposition de 6SA', 'Un Blackwood'], 0, 'Après SA, jamais Blackwood.'],
       ['Les 5 clés sont :', ['Les 4 As et le Roi d\'atout', 'Les 4 Rois et l\'As d\'atout', 'Les 5 plus gros atouts'], 0, 'Roi d\'atout compris.'],
       ['Réponse 5♦ au Blackwood 5 clés :', ['1 ou 4 clés', '0 ou 3 clés', '2 clés'], 0, '5♣ 0/3, 5♦ 1/4, 5♥ 2 sans D, 5♠ 2 avec D.']],
-    ex: [['1SA (15-17) – ? Vous avez 18 H, régulier. Vous dites :', null, ['6SA', '4SA', '3SA'], 0, '15 + 18 = 33 au minimum : 6SA.'],
+    ex: [['Combien de HL ?', 'AQJ84.K73.KQ5.A2', ['19', '20', '21'], 1, '19 H + 1 pour la 5e carte de pique = 20 HL.'],
+      ['Combien de HL ?', 'KQJ9632.A5.K4.72', ['13', '15', '16'], 2, '13 H + 3 (5e, 6e et 7e cartes de pique) = 16 HL.'],
+      ['Votre partenaire soutient vos cœurs avec 3 cartes (9 atouts à deux). Combien de HLD ?', 'A4.KQ9853.7.AJ62', ['16', '19', '21'], 2, '14 H + 2 (six cœurs) = 16 HL ; + doubleton pique 1, singleton carreau 2, 9e atout 2 = 21 HLD.'],
+      ['Vous avez 21 HLD. Votre partenaire a montré 12 à 15 points. Que faites-vous ?', null, ['J\'explore le petit chelem', '3SA', 'Je passe'], 0, '21 + 12 à 15 = 33 à 36 : le petit chelem est en vue. Vérifiez les contrôles, puis le Blackwood.'],
+      ['1SA (15-17) – ? Vous avez 18 H, régulier. Vous dites :', null, ['6SA', '4SA', '3SA'], 0, '15 + 18 = 33 au minimum : 6SA.'],
       ['1SA – ? Vous avez 16 H, régulier. Vous dites :', null, ['4SA', '6SA', '3SA'], 0, '31 à 33 : 4SA propose, il passe au minimum.'],
       ['Vous avez l\'As de pique et le Roi d\'atout (cœur). Réponse au Blackwood 5 clés, sans la Dame :', null, ['5♥', '5♦', '5♠'], 0, '2 clés sans la Dame : 5♥.'],
       ['Vous avez 3 As. Réponse au Blackwood :', null, ['5♣', '5♦', '5♥'], 0, '0 ou 3 clés : 5♣.']] },
