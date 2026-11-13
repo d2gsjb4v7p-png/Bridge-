@@ -1419,6 +1419,12 @@ body[data-th=ado] .tspk{background:rgba(127,174,74,.2);border-color:rgba(127,174
 .tsum.tstory .tsc{font-size:84px;letter-spacing:18px;margin-bottom:8px}
 .tsum.tstory h3{font-size:46px}
 .tsum.tstory p{font-size:44px;line-height:1.4;margin:14px 0 0}
+/* v97 compter les levées sûres */
+.cnt3{margin:16px 0;padding:14px 16px;border-radius:14px;border:2px solid var(--cgold,#c99a1e);background:rgba(201,154,30,.08)}
+.cnt3h{font:800 18px var(--f-body);margin-bottom:6px}
+.cnt3 ol{margin:6px 0 10px 1.2em;padding:0}.cnt3 li{margin:6px 0;line-height:1.5}
+html body[data-th] .cahier .card.th .cnt3{background:#fff!important;border:2px solid var(--cacc2,#0b5c32)!important;break-inside:avoid}
+.cnt3 td:nth-child(-n+2),.cnt3 th:nth-child(-n+2){white-space:nowrap}.cnt3 table{width:100%}
 </style>
 </head>
 <body>
@@ -5801,7 +5807,7 @@ function ecoleBlock() {
 const ecTitle = m => (isNaN(m) ? EC_M[m].t : `Marche ${m} · ${EC_M[m].t}`);
 function ecLessonPage(m) {
   const st = ecState(m);
-  show(`${topBar(ecTitle(m), T3('La leçon', 'La leçon', 'La leçon'), isNaN(m) ? 'donnes' : 'ecole')}<div class="wrap"><div class="card th lesson">${isNaN(m) ? '' : `<div class="lkick">${T3('Marche', 'Étape', 'Leçon')} ${m}</div><h2 class="ltit">${EC_M[m].t}</h2>`}${ecLesson(m)}<p class="lsig noprof">${T3('— Professeur Aldous Dumblebridge', '— Ambroise Merlimpasse, le mage éclairé', '— The Duke of Blackwood')}</p></div>
+  show(`${topBar(ecTitle(m), T3('La leçon', 'La leçon', 'La leçon'), isNaN(m) ? 'donnes' : 'ecole')}<div class="wrap"><div class="card th lesson">${isNaN(m) ? '' : `<div class="lkick">${T3('Marche', 'Étape', 'Leçon')} ${m}</div><h2 class="ltit">${EC_M[m].t}</h2>`}${ecLesson(m)}<p class="lsig noprof">${T3('— Professeur Aldous Dumblebridge', '— Chelemdor le Carromage', '— The Duke of Blackwood')}</p></div>
   <div class="acts"><button class="btn" data-ecgo="${m}">${st.tries ? T3('Une nouvelle donne ›', 'Nouvelle donne ›', 'Nouvelle donne ›') : T3('À moi de jouer ! (avec de l\'aide) ›', 'Donne guidée ›', 'Donne guidée ›')}</button><button class="btn sec" data-nav="ecole">Retour</button></div></div>`);
 }
 function ecGo(m) {
@@ -6172,7 +6178,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v96';
+const APP_V = 'v99';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -8878,12 +8884,12 @@ app.addEventListener('click', e => {
 //  v42 — Tout dans la langue de chaque âge : professeurs, remarques en jeu, corrections, fiches
 // ====================================================================
 // ---------------- les trois professeurs ----------------
-PROF_NAME = () => ({ enfant: 'le professeur Dumblebridge', ado: 'Merlimpasse', adulte: 'le Duke of Blackwood' })[themeOf()] || 'le professeur';
+PROF_NAME = () => ({ enfant: 'le professeur Dumblebridge', ado: 'Chelemdor', adulte: 'le Duke of Blackwood' })[themeOf()] || 'le professeur';
 PROF_AV = () => ({ enfant: '🧙‍♂️', ado: '🔮', adulte: '🎩' })[themeOf()] || '🎓';
-const PROF_DE = () => ({ enfant: 'du professeur Dumblebridge', ado: 'de Merlimpasse', adulte: 'du Duke of Blackwood' })[themeOf()] || 'du professeur';
+const PROF_DE = () => ({ enfant: 'du professeur Dumblebridge', ado: 'de Chelemdor', adulte: 'du Duke of Blackwood' })[themeOf()] || 'du professeur';
 profRename = function (root) {
   const t = themeOf(); if (!root) return;
-  const W = t === 'enfant' ? 'professeur Dumblebridge' : t === 'ado' ? 'Merlimpasse' : 'Duke of Blackwood';
+  const W = t === 'enfant' ? 'professeur Dumblebridge' : t === 'ado' ? 'Chelemdor' : 'Duke of Blackwood';
   const rules = t === 'enfant' ? [[NL(/([Pp])rofesseur(?! Dumblebridge)/gu), '$1rofesseur Dumblebridge'], [NL(/([Ll])e mentor(?![\p{L}])/gu), '$1e professeur Dumblebridge']]
     : [[NL(/([Ll])e (professeur|mentor|mage éclairé)(?![\p{L}])/gu), (m, l) => (t === 'ado' ? W : `${l}e ${W}`)],
       [NL(/du (professeur|mentor|mage éclairé)(?![\p{L}])/gu), t === 'ado' ? `de ${W}` : `du ${W}`],
@@ -10147,7 +10153,7 @@ const CAST_TXT = {
     N: ['Vaelmor, le Mystérieux Spectre des Brumes', 'Ton partenaire. Il parle peu, flotte beaucoup et apparaît toujours au moment où on l\'attend le moins… surtout pour couper ton As. Heureusement, il est de ton côté. Enfin, quand il joue bien.', 'Ton partenaire · Nord'],
     E: ['Borbak Marteau-de-Pierre, le Nain', 'Mineur courageux, champion de bras de fer et de comptage d\'atouts. Il annonce fort, il joue fort, il perd fort. Il soutient que le singleton est une invention elfique destinée à l\'humilier. Il n\'a jamais accepté qu\'une Dame batte un Valet : « Dans la mine, c\'est le plus costaud qui doit gagner ! »', 'Adversaire · Est'],
     O: ['Orlavin aux Étoiles, le Magicien', 'Magicien ermite qui lit l\'avenir dans les étoiles… et dans le reflet de tes lunettes. Sa phrase préférée : « Tu vois, je l\'avais prévu. » Bien entendu, toujours après coup. Sa boule de cristal est rayée : elle ne voit que les petits trèfles.', 'Adversaire · Ouest'],
-    P: ['Ambroise Merlimpasse, le mage éclairé', 'Gardien des Grimoires des Enchères. On raconte qu\'il a inventé l\'impasse en coinçant un dragon entre deux montagnes. Il parle par énigmes, mais la réponse est toujours dans tes cartes. Toujours. Le dragon joue d\'ailleurs encore au bridge avec lui, le jeudi. Il perd toujours… à l\'impasse.'],
+    P: ['Chelemdor le Carromage', 'Gardien des Grimoires des Enchères. On raconte qu\'il a inventé l\'impasse en coinçant un dragon entre deux montagnes. Il parle par énigmes, mais la réponse est toujours dans tes cartes. Toujours. Le dragon joue d\'ailleurs encore au bridge avec lui, le jeudi. Il perd toujours… à l\'impasse.'],
     go: 'En route pour la Comté !', goF: 'En route pour la Comté !',
   },
   adulte: {
@@ -10381,6 +10387,15 @@ wideLayout();
 //  Niveau 1 · Débutant (10 chapitres). Niveaux 2 et 3 : à venir.
 //  Le texte est écrit au « vous » ; tuTree() le passe au « tu » pour les 8-17 ans.
 // ====================================================================
+// ---- la méthode pour compter les levées sûres (cours, école de la carte, cahier) ----
+const COUNT_SURE = `<div class="cnt3"><div class="cnt3h">🧮 Compter ses levées sûres : la méthode en 3 gestes</div>
+<p>Une <b>levée sûre</b> est un pli <b>gagné tout de suite</b>, sans jamais rendre la main. On les compte <b>couleur par couleur</b> :</p>
+<ol><li><b>Regroupez</b> : prenez ensemble vos cartes et celles du mort dans la couleur.</li>
+<li><b>Descendez depuis l'As</b> : As, Roi, Dame, Valet, 10… Comptez les cartes qui se suivent <b>sans trou</b>. Au premier trou, on s'arrête. Pas d'As : zéro.</li>
+<li><b>Le plafond</b> : jamais plus de levées que de cartes dans la <b>main la plus longue</b> de cette couleur.</li></ol>
+${TBL(['Vous', 'Le mort', 'On compte…', 'Sûres'], [['A R 3', '7 4 2', 'As, Roi… la Dame manque : stop', '<b>2</b>'], ['A R D', '5 4', 'As, Roi, Dame', '<b>3</b>'], ['A D 5', '7 4', 'As… le Roi manque : stop', '<b>1</b>'], ['R D V', '5 4 3', 'pas d\'As : on ne commence pas', '<b>0</b>'], ['A R', 'D', 'As, Roi, Dame… mais 2 cartes au plus d\'un côté', '<b>2</b>'], ['A R D V', '5 3 2', 'As, Roi, Dame, Valet', '<b>4</b>']])}
+<p><b>Puis on additionne les quatre couleurs</b>, et l'on compare avec les plis à faire.</p>
+<div class="ex">Contrat 3SA, il faut 9 plis. ♠ A R 3 / 7 4 2 : <b>2</b>. ♥ A D 5 / 7 4 : <b>1</b>. ♦ A R D / 5 4 : <b>3</b>. ♣ R D V / 5 4 3 : <b>0</b>. Total : <b>6 levées sûres</b>. Il en manque 3 : on les trouvera en affranchissant les trèfles (l'As adverse pris, R D V font 3 plis).</div></div>`;
 const cRk = c => ({ A: 'A', K: 'R', Q: 'D', J: 'V', T: '10' })[c] || c;
 // une main « S.H.D.C » affichée en 4 lignes
 const cH = (str, who) => `<div class="chand">${who ? `<div class="chw">${who}</div>` : ''}${str.split('.').map((g, i) => `<div><span class="${i === 1 || i === 2 ? 'red' : ''}">${'♠♥♦♣'[i]}</span> ${g ? g.split('').map(cRk).join(' ') : '—'}</div>`).join('')}</div>`;
@@ -10627,6 +10642,7 @@ ${KEEP('Mineure 20, majeure 30, SA 40 puis 30. 100 et plus : manche. Chute : 50 
 <p>Une <b>levée sûre</b> se gagne tout de suite, sans rendre la main : un As, un As-Roi…</p>
 ${DIA('♠ A R 3', '♠ 7 4 2')}
 <p>Ici, <b>2 levées sûres</b> à pique : l'As et le Roi.</p>
+${COUNT_SURE}
 <h3>3 · Où trouver les plis qui manquent ?</h3>
 <p><b>Affranchir</b> : jouer une couleur pour chasser la carte maîtresse adverse. Vos cartes suivantes deviennent maîtresses.</p>
 ${DIA('♥ R D V 10', '♥ 5 3 2')}
@@ -10797,7 +10813,7 @@ function coursCahier(n) {
    <div class="cvart" data-cv="${L.n}"></div>
    <h2 class="cvt">Le cahier de bridge</h2><p class="cvl">${cLvlName(L)}</p>
    ${who ? `<p class="cvw">Cahier de ${who}</p>` : '<p class="cvw">Cahier de : ……………………………………</p>'}
-   <p class="cvp noprof">${T3('Professeur Aldous Dumblebridge', 'Ambroise Merlimpasse, le mage éclairé', 'The Duke of Blackwood')}</p></div>
+   <p class="cvp noprof">${T3('Professeur Aldous Dumblebridge', 'Chelemdor le Carromage', 'The Duke of Blackwood')}</p></div>
   <div class="card th cpch ctocp"><h2 class="ltit">Sommaire</h2><p class="ctocl">${cLvlName(L)} · ${L.ch.length} chapitres, dans le même ordre que le cours de l'application.</p><div class="ctoc2">${L.ch.map((c, i) => `<div class="ctr"><span class="ctn">${i + 1}</span><span class="cti">${c.ic}</span><div class="ctt"><b>${c.t}</b><small>${c.d}</small></div></div>`).join('')}<div class="ctr ctrc"><span class="ctn">✓</span><span class="cti">📗</span><div class="ctt"><b>Les corrigés</b><small>Toutes les réponses, expliquées</small></div></div></div>
    <div class="cleg"><b>Dans chaque chapitre</b><span>📖 <b>La théorie</b>, en parties numérotées : 1.1, 1.2…</span><span>❓ <b>Q</b> : les questions sur la théorie</span><span>✏️ <b>E</b> : les exercices pendant le cours</span><span>🏠 <b>M</b> : les exercices à faire chez soi, dans l'application</span></div></div>
   ${L.ch.map((c, i) => `<div class="card th cpch"><div class="lkick">Chapitre ${i + 1}</div><h2 class="ltit">${c.ic} ${c.t}</h2>${cTh(c, i + 1)}
@@ -10863,6 +10879,9 @@ app.addEventListener('click', e => {
 } catch (e) { } return r; }; }
 // et pour l'enseignant, depuis son accueil
 { const _th2 = teachHome; teachHome = function () { const r = _th2.apply(this, arguments); try { const h = app.querySelector('.teachh .thero'); if (h && !app.querySelector('.courslink')) { const c = document.createElement('button'); c.className = 'card courslink'; c.dataset.cours = '1'; c.innerHTML = '<span>📚</span><b>Le cours en quatre niveaux</b><small>Théorie, questions, exercices, diaporama, cahier à imprimer ›</small>'; h.after(c); } } catch (e) { } return r; }; }
+
+// la même méthode dans l'école de la carte, marche 1
+{ const _el = ecLesson; ecLesson = function (m) { const h = _el(m); return +m === 1 ? h + COUNT_SURE : h; }; }
 
 // ====================================================================
 //  v87 — LE COURS, niveaux 2 et 3 (même structure que le niveau 1)
@@ -11315,7 +11334,9 @@ const C_HOME = {
     ['Non vulnérable : 2♦ juste fait.', null, ['90', '40', '140'], 0, '2 × 20 = 40, + 50 de partielle.'],
     ['Vulnérable : 3SA chute de 2 levées.', null, ['Les adversaires marquent 200', 'Les adversaires marquent 100', 'On marque 200'], 0, '2 × 100.'],
     ['Non vulnérable : 5♣ juste fait.', null, ['400', '100', '150'], 0, '5 × 20 = 100 : manche, + 300.']],
-  c9: [['Nord : ♣ A R D — Sud : ♣ 6 5. Combien de levées sûres à trèfle ?', null, ['2', '3', '4'], 1, 'As, Roi, Dame.'],
+  c9: [['Vous : ♥ A D 5 — le mort : ♥ 7 4. Combien de levées sûres à cœur ?', null, ['1', '2', '3'], 0, 'As… le Roi manque : on s\'arrête. La Dame n\'est pas sûre.', 2],
+    ['Vous : ♣ A R — le mort : ♣ D. Combien de levées sûres à trèfle ?', null, ['2', '3', '1'], 0, 'As, Roi, Dame se suivent, mais la main la plus longue n\'a que 2 cartes : plafond 2.', 2],
+    ['Nord : ♣ A R D — Sud : ♣ 6 5. Combien de levées sûres à trèfle ?', null, ['2', '3', '4'], 1, 'As, Roi, Dame.'],
     ['Nord : ♠ D V 10 9 — Sud : ♠ 6 4 3. Combien de plis une fois l\'As et le Roi chassés ?', null, ['1', '2', '3'], 1, 'Quatre tours ; l\'As et le Roi adverses en prennent deux : il vous en reste 2.'],
     ['Nord : ♥ A R — Sud : ♥ D V 8 7 3. Par quoi commencer ?', null, ['L\'As ou le Roi de Nord', 'La Dame de Sud', 'Le 3 de Sud'], 0, 'La main courte est Nord : ses honneurs d\'abord.'],
     ['Contrat 4♠. Vous comptez 8 levées sûres. Combien en manque-t-il ?', null, ['1', '2', '3'], 1, 'Il en faut 10.']],
@@ -11429,7 +11450,7 @@ const C_HINT = {
   e9: 'Une seule perdante, deux menaces, les communications.',
   e10: 'Une convention n\'est utile que si les deux partenaires la connaissent.',
 };
-const C_PROF = () => T3('🧙‍♂️ Professeur Aldous Dumblebridge', '🧝 Ambroise Merlimpasse', '🎩 The Duke of Blackwood');
+const C_PROF = () => T3('🧙‍♂️ Professeur Aldous Dumblebridge', '🧙 Chelemdor le Carromage', '🎩 The Duke of Blackwood');
 // la partie de théorie la plus proche de l'exercice (mots en commun)
 function cBestSec(c, k, txt, force) {
   const d = document.createElement('div'); d.innerHTML = cTh(c, k); const secs = []; let cur = null;
@@ -11580,7 +11601,7 @@ Object.assign(C_SLIDES, {
 [['d1', 'c_fortes'], ['d3', 'c_texmin'], ['d4', 'c_barr'], ['d5', 'c_interv'], ['d6', 'c_cappel'], ['d8', 'c_purge'], ['d9', 'c_def'], ['d10', 'c_sign']].forEach(([id, s]) => { const [, c] = cFind(id); if (c) c.slides = s; });
 
 // ---- les personnages prennent la parole (8-12 et 13-17 ans) ----
-const ENS_PROF = { enfant: ['🧙‍♂️', 'Professeur Dumblebridge'], ado: ['🧝', 'Ambroise Merlimpasse'] };
+const ENS_PROF = { enfant: ['🧙‍♂️', 'Professeur Dumblebridge'], ado: ['🧙', 'Chelemdor le Carromage'] };
 function ensSeatName(t, s) {
   if (s === 'S') { try { const h = HERO[t](); return ['🃏', h[0].split(' ')[0]]; } catch (e) { return ['🃏', 'Sud']; } }
   const c = THEME_CAST[t] && THEME_CAST[t][s]; return c ? [c[1], c[0].split(' ')[0]] : ['', SEATN[s]];
@@ -11687,7 +11708,7 @@ const C_STORY = {
     ado: ['Dans l\'auberge du Sanglier Rieur, Borbak le Nain jure qu\'un As gagne toujours. Orlavin lève un sourcil. {H} va devoir trancher.', 'Borbak a perdu son pari, et paie une tournée d\'hydromel. Le pli a ses lois.'],
     adulte: ['Sur le pont du Vapeur, le colonel Surcontre affirme qu\'un As gagne toujours, « by Jove ». Lady Chicane sourit derrière son éventail.', 'Le colonel a reconnu son erreur. Il l\'a fait en anglais, ce qui, selon lui, ne compte pas.'] },
   c2: { enfant: ['Le Professeur Dumblebridge a lancé un sort : une couleur devient magique et bat toutes les autres. Lirelune l\'Elfe veut savoir laquelle.', 'Grognon a coupé l\'As de Flottin avec un tout petit 2. Il en parle encore.'],
-    ado: ['Merlimpasse le dit : « Une couleur règnera sur les autres. » Vaelmor le Spectre murmure qu\'elle s\'appelle l\'atout.', 'Ce soir, Borbak a surcoupé Orlavin. Il a fait graver la date sur sa hache.'],
+    ado: ['Chelemdor le dit : « Une couleur règnera sur les autres. » Vaelmor le Spectre murmure qu\'elle s\'appelle l\'atout.', 'Ce soir, Borbak a surcoupé Orlavin. Il a fait graver la date sur sa hache.'],
     adulte: ['L\'Archbishop bénit une couleur : « Celle-ci sera atout. » Le colonel demande s\'il peut faire appel.', 'Lady Chicane a surcoupé le colonel. On dit qu\'il a avalé son monocle.'] },
   c3: { enfant: ['Avant de jouer, chacun promet combien de plis il va gagner. Grognon a promis treize plis. Le Professeur a toussé très fort.', 'Grognon a promis huit plis, il en a fait huit. Il s\'est offert un gâteau au chocolat.'],
     ado: ['Au Conseil de la Comté, on ne joue pas avant d\'avoir prêté serment : c\'est le contrat. Borbak jure toujours trop haut.', 'Le serment tenu, {H} a gagné le respect de la Comté… et un sac de galettes.'],
