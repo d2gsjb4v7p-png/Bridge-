@@ -1402,6 +1402,18 @@ body[data-th=enfant] .cpsec{background:rgba(255,255,255,.08)}
 .chq svg{width:96px;height:96px;display:block}
 .chome b{font-size:17px}.chome p{margin:4px 0!important}
 .cours:not(.cahier) .chome{display:none}
+/* v94 enseignement en 4 niveaux, personnages */
+.tlvls{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0 6px}
+.tlvls button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;border-radius:14px;border:1.5px solid rgba(201,154,30,.45);background:transparent;color:inherit;font:700 14px var(--f-body);cursor:pointer}
+.tlvls button span{font-size:24px}.tlvls button.on{background:rgba(201,154,30,.2);border-color:#c99a1e}
+@media (max-width:420px){.tlvls{grid-template-columns:1fr 1fr}}
+.tlvd{opacity:.8;margin:0 0 10px!important;text-align:center}
+.tl.tlb{border-style:dashed}
+.tspk{display:inline-flex;align-items:center;gap:6px;margin-right:10px;padding:2px 12px;border-radius:20px;background:rgba(255,216,77,.18);border:1px solid rgba(255,216,77,.5);font-size:.82em;white-space:nowrap;vertical-align:.08em}
+body[data-th=ado] .tspk{background:rgba(127,174,74,.2);border-color:rgba(127,174,74,.6)}
+.tseat i{font-style:normal;opacity:.65;font-size:.8em;margin-left:4px}
+.courslink{display:grid!important;grid-template-columns:40px 1fr;align-items:center;gap:2px 10px;text-align:left}
+.courslink span{grid-row:span 2}.courslink b{display:block}.courslink small{display:block;opacity:.8}
 </style>
 </head>
 <body>
@@ -6155,7 +6167,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v91';
+const APP_V = 'v94';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -9949,7 +9961,11 @@ function tRender(anim) {
   tFit();
 }
 function tPop(ov, x, y, txt, cls) { const e = document.createElement('div'); e.className = 'tpop ' + (cls || ''); e.style.left = x + 'px'; e.style.top = y + 'px'; e.textContent = txt; ov.appendChild(e); }
-function tFit() { const st = document.querySelector('.tstage'), box = document.querySelector('.tbox'); if (!st || !box) return; const z = Math.min(box.clientWidth / 1600, box.clientHeight / 900); st.style.zoom = Math.max(.2, z).toFixed(4); }
+function tFit() { const st = document.querySelector('.tstage'), box = document.querySelector('.tbox'); if (!st || !box) return;
+  // hauteur réellement visible : on ne se fie pas seulement à la boîte (sur iPhone en paysage, elle peut être plus haute que l'écran)
+  const ft = document.querySelector('.tfoot'), vh = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+  const avail = Math.max(120, Math.min(box.clientHeight, vh - box.getBoundingClientRect().top - (ft ? ft.offsetHeight : 0) - 6));
+  const z = Math.min(box.clientWidth / 1600, avail / 900); st.style.zoom = Math.max(.15, z).toFixed(4); }
 function tClear() { if (TCH) { TCH.tm.forEach(t => { clearTimeout(t); clearInterval(t); }); TCH.tm = []; } }
 function tGo(dir) {
   if (!TCH) return; tClear(); const L = TCH.L, p = L.steps[TCH.i];
@@ -10003,6 +10019,8 @@ document.addEventListener('keydown', e => {
   if (hit) { e.preventDefault(); e.stopImmediatePropagation(); }
 }, true);
 window.addEventListener('resize', tFit);
+window.addEventListener('orientationchange', () => { setTimeout(tFit, 120); setTimeout(tFit, 450); });
+if (window.visualViewport) window.visualViewport.addEventListener('resize', tFit);
 // ---------------- l'écran d'accueil adulte : 4 rubriques ----------------
 { const _ag = ageGate; ageGate = function () {
   _ag(); const ad = app.querySelector('.agedoor.adult'); if (!ad) return;
@@ -10197,7 +10215,7 @@ const TPRINC = {
   levees: ['Compter ses levées', [['À Sans-Atout', 'personne ne coupe : on gagne par la force ou par la longueur.'], ['Pourquoi compter d\'abord ?', 'pour savoir combien de plis manquent, et où les trouver.'], ['Affranchir tôt', 'on donne la main tant qu\'on garde les arrêts dans les autres couleurs.']]],
   impasse: ['L\'impasse', [['L\'ordre de jeu est une arme', 'celui qui joue avant doit se découvrir.'], ['Pourquoi jouer VERS la fourchette ?', 'l\'adversaire assis devant doit jouer son honneur… ou le laisser passer.'], ['Une chance sur deux', 'et souvent la meilleure.']]],
   dimpasse: ['La double impasse', [['Il manque deux honneurs', 'une seule impasse ne suffit pas.'], ['On recommence', 'chaque impasse a une chance sur deux ; il suffit qu\'une seule réussisse.'], ['Résultat', 'environ 3 chances sur 4. Il faut deux reprises dans la main d\'en face.']]],
-  entame: ['L\'entame', [['La seule carte jouée sans voir le mort', 'elle doit rapporter sans rien offrir.'], ['La séquence', 'elle ne donne rien et prépare des plis.'], ['La couleur du partenaire, avec la parité', 'il y a des honneurs, et il compte vos cartes.']]],
+  entame: ['L\'entame', [['La seule carte jouée sans voir le mort', 'elle doit rapporter sans rien offrir.'], ['La séquence', 'elle ne donne rien et prépare des plis.'], ['La couleur du partenaire, avec la parité', 'il a annoncé cette couleur : il y a ses honneurs. Et la carte choisie selon la parité lui dit combien vous en avez.']]],
   entames2: ['Bonnes et mauvaises entames', [['Le déclarant joue en dernier', 'tout honneur qui part le premier risque d\'être capturé.'], ['Une mauvaise entame', 'offre un pli qu\'on ne récupère jamais.'], ['Les enchères', 'elles vous disent où sont leurs faiblesses : écoutez-les.']]],
 };
 TLESSONS.forEach(L => {
@@ -10623,7 +10641,7 @@ ${KEEP('Avant de jouer : combien de plis faut-il, combien en ai-je, où trouver 
       ['Nord : ♦ A R 2 — Sud : ♦ D V 10 9 8. Par quoi commencer ?', null, ['L\'As ou le Roi de Nord', 'La Dame de Sud', 'Le 8 de Sud'], 0, 'Nord est la main courte : ses honneurs d\'abord.'],
       ['Contrat 3SA. Vous comptez 7 levées sûres. Combien en manque-t-il ?', null, ['1', '2', '3'], 1, '9 − 7 = 2.'],
       ['Nord : ♣ A R 6 5 4 — Sud : ♣ 3 2. Les adversaires ont 6 trèfles, partagés 3-3. Combien de plis à trèfle ?', null, ['2', '3', '4', '5'], 2, 'As, Roi, un tour perdu : les adversaires n\'en ont plus. Les deux derniers trèfles sont maîtres : 4 plis.']] },
-  { id: 'c10', ic: '🗡️', t: 'L\'entame de base', d: 'La première carte de la défense', slides: 'entame', th: `
+  { id: 'c10', ic: '🗡️', t: 'L\'entame de base', d: 'La première carte de la défense', slides: 'entame', case: 'entpart', th: `
 <p>L'<b>entame</b> est la première carte de la donne. Elle est jouée par le joueur à gauche du déclarant, <b>avant</b> de voir le mort. On choisit d'abord la couleur, puis la carte.</p>
 <h3>1 · La couleur</h3>
 ${TBL(['Contre Sans-Atout', 'Contre un contrat à la couleur'], [['1. La couleur du partenaire', '1. Une séquence (R D V, D V 10)'], ['2. Votre couleur la plus longue', '2. La couleur du partenaire'], ['', '3. Un singleton, pour couper'], ['', '4. Sinon, un atout']])}
@@ -10631,19 +10649,30 @@ ${TBL(['Contre Sans-Atout', 'Contre un contrat à la couleur'], [['1. La couleur
 <p>• Une <b>séquence</b> d'honneurs (R D V) : la plus haute, le <b>Roi</b>.</p>
 <p>• Contre SA, une longue sans séquence : la <b>4e meilleure</b> (la 4e carte en partant du haut).</p>
 <p>• Dans la couleur du partenaire, la <b>parité</b> : nombre pair de cartes, l'avant-dernière ; impair, la plus petite.</p>
+<h3>La parité, en détail</h3>
+<p>Dans la couleur de votre partenaire, la carte d'entame lui dit <b>combien de cartes</b> vous avez dans sa couleur. Deux cas, à retenir par cœur :</p>
+${TBL(['Vous avez', 'Vous entamez', 'Exemple'], [['un nombre <b>pair</b> de cartes (2 ou 4)', 'l\'<b>avant-dernière</b>', '<b>8</b> 3 → le <b>8</b> · 8 6 <b>4</b> 2 → le <b>4</b>'], ['un nombre <b>impair</b> de cartes (3 ou 5)', 'la <b>plus petite</b>', 'D 8 <b>2</b> → le <b>2</b> · 9 7 5 4 <b>2</b> → le <b>2</b>']])}
+<p><b>Le message se termine au 2e tour.</b> Si votre carte suivante est <b>plus petite</b>, vous <b>descendez</b> : nombre pair. Si elle est <b>plus haute</b>, vous <b>montez</b> : nombre impair.</p>
+<p><b>Pourquoi c'est utile ?</b> Votre partenaire voit le mort et ses propres cartes. En connaissant les vôtres, il <b>compte la couleur</b> : il sait combien en a le déclarant, donc combien de tours il peut encaisser avant une coupe.</p>
+<p><b>Les exceptions</b>, plus fortes que la parité : avec deux honneurs qui se suivent (R D, D V), le plus haut ; contre un contrat à la couleur, l'As si vous l'avez.</p>
+<div class="ex">Votre partenaire a annoncé les cœurs. Vous avez ♥ 9 6 4 2 (quatre cartes, pair) : entamez le <b>4</b>, puis le <b>2</b> au tour suivant. En voyant le 4 puis le 2, votre partenaire sait : « il descend, il en avait 2 ou 4 ».</div>
 <div class="ex">${cH('Q4.KT753.J62.874', 'Votre main')}1SA – 3SA. Votre plus longue est cœur, sans séquence : R, 10, 7, <b>5</b>. Entamez le 5 de cœur.</div>
 <h3>À éviter</h3>
 <p>Contre un contrat à la couleur, n'entamez pas une petite carte <b>sous un As</b> (A 7 4) : le Roi du déclarant ferait un pli. N'entamez pas la couleur annoncée par le déclarant.</p>
-${KEEP('Contre SA : le partenaire, puis ma longue. Contre une couleur : séquence, partenaire, singleton, atout.')}`,
+${KEEP('Contre SA : le partenaire, puis ma longue. Contre une couleur : séquence, partenaire, singleton, atout. Dans la couleur du partenaire : pair, l\'avant-dernière ; impair, la plus petite.')}`,
     qs: [['Qui entame ?', ['Le joueur à gauche du déclarant', 'Le déclarant', 'Le mort'], 0, 'Avant de voir le mort.'],
       ['Avec ♠ R D V 4, vous entamez :', ['Le Roi', 'Le 4', 'Le Valet'], 0, 'Le haut de la séquence.'],
       ['Contre SA, avec ♥ R 10 7 5 3, vous entamez :', ['Le 5 (4e meilleure)', 'Le Roi', 'Le 3'], 0, 'R, 10, 7, 5 : la 4e en partant du haut.'],
       ['Contre 4♠, entamer une petite avec A 7 4 ?', ['Non', 'Oui'], 0, 'Jamais sous un As contre une couleur.'],
-      ['Votre partenaire a annoncé cœur. Contre SA, vous entamez :', ['Cœur', 'Votre plus longue', 'Un As'], 0, 'La couleur du partenaire passe en premier.']],
+      ['Votre partenaire a annoncé cœur. Contre SA, vous entamez :', ['Cœur', 'Votre plus longue', 'Un As'], 0, 'La couleur du partenaire passe en premier.'],
+      ['Dans la couleur du partenaire, avec un nombre impair de cartes (sans séquence), vous entamez :', ['La plus petite', 'L\'avant-dernière', 'La plus haute'], 0, 'Impair : la plus petite. Pair : l\'avant-dernière.'],
+      ['À quoi sert la parité ?', ['À dire au partenaire combien de cartes on a dans sa couleur', 'À montrer ses points', 'À demander un changement de couleur'], 0, 'Il peut alors compter la couleur.']],
     ex: [['1SA – 3SA. Votre entame ?', 'KQJ4.83.A72.9653', ['♠R', '♣3', '♦A', '♥8'], 0, 'Une séquence R D V : le Roi.'],
       ['1SA – 3SA. Votre entame ?', 'Q4.KT753.J62.874', ['♥5', '♥R', '♠D', '♣8'], 0, 'Votre longue, 4e meilleure : le 5.'],
       ['1♥ – 4♥. Votre entame ?', 'A74.82.KQJ6.T953', ['♦R', '♠4', '♠A', '♥8'], 0, 'La séquence R D V à carreau. Pas de petite sous l\'As.'],
-      ['Votre partenaire a annoncé cœur ; ils jouent 4♠. Votre entame ?', 'J73.Q82.K964.T52', ['♥2', '♥D', '♦4', '♠3'], 0, 'La couleur du partenaire. Trois cartes (impair) : la plus petite.']] },
+      ['Votre partenaire a annoncé cœur ; ils jouent 4♠. Votre entame ?', 'J73.Q82.K964.T52', ['♥2', '♥D', '♦4', '♠3'], 0, 'La couleur du partenaire. Trois cartes (impair) : la plus petite.'],
+      ['Votre partenaire a annoncé pique ; ils jouent 3SA. Vous avez ♠ 8 6 4 2. Votre entame ?', null, ['♠4', '♠8', '♠2', '♠6'], 0, 'Quatre cartes, nombre pair : l\'avant-dernière, le 4.'],
+      ['Votre partenaire voit votre entame du 4, puis votre 2 au tour suivant. Que sait-il ?', null, ['Vous aviez un nombre pair de cartes', 'Vous aviez un nombre impair', 'Vous aviez un honneur'], 0, 'Vous êtes descendu : pair (2 ou 4).']] },
 ];
 const COURS = [
   { n: 1, t: 'Débutant', ic: '🌱', d: 'Les fondations : le pli, l\'atout, compter, ouvrir, répondre, le plan du déclarant, l\'entame.', ch: C1 },
@@ -10660,8 +10689,8 @@ const cNo = id => { const [L, c] = cFind(id); return L ? L.ch.indexOf(c) + 1 : 0
 // ---------------- l'accueil du cours ----------------
 function coursHome() {
   const P = cProg();
-  show(`${topBar(T3('Le cours de magie', 'Le cours de la Comté', 'Le cours'), T3('Trois niveaux, pas à pas', 'Trois niveaux, pas à pas', 'Trois niveaux, pas à pas'), 'menu')}<div class="wrap cours">
-  <div class="card th chero"><h2>${T3('📚 Le grand grimoire du bridge', '📚 Le livre des trois sentiers', '📚 Le cours en trois niveaux')}</h2><p>Chaque chapitre suit le même chemin : <b>la théorie</b>, des <b>questions</b> pour vérifier qu'elle est comprise, des <b>exercices</b> sur de vraies cartes, et un <b>diaporama animé</b>. Chaque niveau a son <b>cahier imprimable</b>, avec les corrigés.</p></div>
+  show(`${topBar(T3('Le cours de magie', 'Le cours de la Comté', 'Le cours'), T3('Quatre niveaux, pas à pas', 'Quatre niveaux, pas à pas', 'Quatre niveaux, pas à pas'), 'menu')}<div class="wrap cours">
+  <div class="card th chero"><h2>${T3('📚 Le grand grimoire du bridge', '📚 Le livre des quatre sentiers', '📚 Le cours en quatre niveaux')}</h2><p>Chaque chapitre suit le même chemin : <b>la théorie</b>, des <b>questions</b> pour vérifier qu'elle est comprise, des <b>exercices</b> sur de vraies cartes, et un <b>diaporama animé</b>. Chaque niveau a son <b>cahier imprimable</b>, avec les corrigés.</p></div>
   ${COURS.map(L => { const done = L.ch.filter(c => P[c.id] && P[c.id].e != null).length; return `<div class="clvl${L.ch.length ? '' : ' soon'}"><div class="clh"><span class="cli">${L.ic}</span><div><b>${cLvlName(L)}</b><small>${L.d}</small></div></div>
    ${L.ch.length ? `<div class="cbar"><i style="width:${Math.round(100 * done / L.ch.length)}%"></i></div><div class="cchs">${L.ch.map((c, k) => { const p = P[c.id] || {}; return `<button class="cch" data-cch="${c.id}"><span class="ccn">${k + 1}</span><span class="cci">${c.ic}</span><span class="cct"><b>${c.t}</b><small>${c.d}</small></span><span class="ccs">${p.q != null ? `❓ ${p.q}/${c.qs.length}` : ''}${p.e != null ? ` 🃏 ${p.e}/${c.ex.length}` : ''}</span></button>`; }).join('')}</div>
    <div class="acts"><button class="btn sec" data-ccahier="${L.n}">🖨 Le cahier du niveau ${L.n}</button></div>` : `<p class="small csoon">En préparation.</p>`}</div>`; }).join('')}
@@ -10680,7 +10709,7 @@ function coursChap(id) {
    <button class="cstep" data-cquiz="${c.id}:q"><span>❓</span><b>Questions sur la théorie</b><small>Q ${k + 1}.1 à ${k + 1}.${c.qs.length}${P.q != null ? ` · meilleur : ${P.q}/${c.qs.length}` : ''}</small></button>
    <button class="cstep" data-cquiz="${c.id}:e"><span>🃏</span><b>Exercices pendant le cours</b><small>E ${k + 1}.1 à ${k + 1}.${c.ex.length}${P.e != null ? ` · meilleur : ${P.e}/${c.ex.length}` : ''}</small></button>
    ${c.hw && c.hw.length ? `<button class="cstep" data-cquiz="${c.id}:m"><span>🏠</span><b>Exercices à faire chez soi</b><small>M ${k + 1}.1 à ${k + 1}.${c.hw.length}${P.m != null ? ` · meilleur : ${P.m}/${c.hw.length}` : ''}</small></button>` : ''}
-   ${c.mini ? `<button class="cstep" data-cmini="${c.mini}"><span>🎲</span><b>S'entraîner encore</b><small>Des exercices tirés au hasard, sans fin</small></button>` : ''}
+   ${c.case ? `<button class="cstep" data-case="${c.case}"><span>🎲</span><b>S'entraîner : la parité</b><small>Des donnes sans fin : quelle carte dans la couleur du partenaire ?</small></button>` : ''}${c.mini ? `<button class="cstep" data-cmini="${c.mini}"><span>🎲</span><b>S'entraîner encore</b><small>Des exercices tirés au hasard, sans fin</small></button>` : ''}
   </div>
   <div class="acts">${k ? `<button class="btn sec" data-cch="${L.ch[k - 1].id}">‹ Chapitre ${k}</button>` : ''}${nx ? `<button class="btn" data-cch="${nx.id}">Chapitre ${k + 2} ›</button>` : `<button class="btn" data-nav="cours">Le cours ›</button>`}</div>
   </div>`);
@@ -10719,7 +10748,7 @@ function coursSlides(id) {
   const S = Object.assign({}, base, { id: '__c_' + c.id, cours: c.id, ic: c.ic, t: c.t });
   const ex = cSlideEx(c); S.steps = base.steps.concat(ex);
   TLESSONS.push(S); try { teachStart(S.id); } finally { TLESSONS.pop(); }
-  const tb = document.querySelector('.teach'); if (tb) { tb.classList.add('cteach'); if (tone() !== 'adulte') tb.classList.remove('notu'); const b = tb.querySelector('[data-tgo="home"]'); if (b) b.textContent = '‹ Chapitre'; }
+  const tb = document.querySelector('.teach'); if (tb) { tb.classList.add('cteach'); if (tone() !== 'adulte' && ST.prof !== 'enseignant') tb.classList.remove('notu'); const b = tb.querySelector('[data-tgo="home"]'); if (b) b.textContent = '‹ Chapitre'; }
 }
 // un diaporama construit à partir de la théorie : une scène par partie
 function cAutoSlides(c, k) {
@@ -10745,7 +10774,7 @@ function cSlideEx(c) {
   return out;
 }
 { const _th = teachHome; teachHome = function () { if (TCH && TCH.L && TCH.L.cours) { const id = TCH.L.cours; tClear(); TCH = null; document.body.classList.remove('teaching'); return coursChap(id); } return _th.apply(this, arguments); }; }
-{ const _tr = tRender; tRender = function (a) { _tr(a); try { if (TCH && TCH.L && TCH.L.cours && tone() !== 'adulte') { const n = document.querySelector('.tnar'); if (n) tuTree(n); const o = document.querySelector('.tov'); if (o) tuTree(o); } } catch (e) { } }; }
+{ const _tr = tRender; tRender = function (a) { _tr(a); try { if (TCH && TCH.L && TCH.L.cours && tone() !== 'adulte' && ST.prof !== 'enseignant') { const n = document.querySelector('.tnar'); if (n) tuTree(n); const o = document.querySelector('.tov'); if (o) tuTree(o); } } catch (e) { } }; }
 
 // ---------------- le cahier imprimable ----------------
 let CMONO = false, CCAH = 1;
@@ -10776,7 +10805,7 @@ function coursCahier(n) {
 const C_QR = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-rendering="crispEdges"><rect width="31" height="31" fill="#fff"/><path d="M1 1h1v1h-1zM2 1h1v1h-1zM3 1h1v1h-1zM4 1h1v1h-1zM5 1h1v1h-1zM6 1h1v1h-1zM7 1h1v1h-1zM9 1h1v1h-1zM11 1h1v1h-1zM17 1h1v1h-1zM18 1h1v1h-1zM19 1h1v1h-1zM20 1h1v1h-1zM23 1h1v1h-1zM24 1h1v1h-1zM25 1h1v1h-1zM26 1h1v1h-1zM27 1h1v1h-1zM28 1h1v1h-1zM29 1h1v1h-1zM1 2h1v1h-1zM7 2h1v1h-1zM9 2h1v1h-1zM10 2h1v1h-1zM17 2h1v1h-1zM19 2h1v1h-1zM23 2h1v1h-1zM29 2h1v1h-1zM1 3h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM5 3h1v1h-1zM7 3h1v1h-1zM12 3h1v1h-1zM14 3h1v1h-1zM17 3h1v1h-1zM21 3h1v1h-1zM23 3h1v1h-1zM25 3h1v1h-1zM26 3h1v1h-1zM27 3h1v1h-1zM29 3h1v1h-1zM1 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM5 4h1v1h-1zM7 4h1v1h-1zM9 4h1v1h-1zM10 4h1v1h-1zM11 4h1v1h-1zM14 4h1v1h-1zM15 4h1v1h-1zM18 4h1v1h-1zM23 4h1v1h-1zM25 4h1v1h-1zM26 4h1v1h-1zM27 4h1v1h-1zM29 4h1v1h-1zM1 5h1v1h-1zM3 5h1v1h-1zM4 5h1v1h-1zM5 5h1v1h-1zM7 5h1v1h-1zM11 5h1v1h-1zM13 5h1v1h-1zM15 5h1v1h-1zM16 5h1v1h-1zM17 5h1v1h-1zM18 5h1v1h-1zM20 5h1v1h-1zM23 5h1v1h-1zM25 5h1v1h-1zM26 5h1v1h-1zM27 5h1v1h-1zM29 5h1v1h-1zM1 6h1v1h-1zM7 6h1v1h-1zM15 6h1v1h-1zM17 6h1v1h-1zM18 6h1v1h-1zM19 6h1v1h-1zM20 6h1v1h-1zM23 6h1v1h-1zM29 6h1v1h-1zM1 7h1v1h-1zM2 7h1v1h-1zM3 7h1v1h-1zM4 7h1v1h-1zM5 7h1v1h-1zM6 7h1v1h-1zM7 7h1v1h-1zM9 7h1v1h-1zM11 7h1v1h-1zM13 7h1v1h-1zM15 7h1v1h-1zM17 7h1v1h-1zM19 7h1v1h-1zM21 7h1v1h-1zM23 7h1v1h-1zM24 7h1v1h-1zM25 7h1v1h-1zM26 7h1v1h-1zM27 7h1v1h-1zM28 7h1v1h-1zM29 7h1v1h-1zM9 8h1v1h-1zM10 8h1v1h-1zM11 8h1v1h-1zM12 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM19 8h1v1h-1zM20 8h1v1h-1zM1 9h1v1h-1zM3 9h1v1h-1zM4 9h1v1h-1zM6 9h1v1h-1zM7 9h1v1h-1zM8 9h1v1h-1zM12 9h1v1h-1zM13 9h1v1h-1zM15 9h1v1h-1zM18 9h1v1h-1zM19 9h1v1h-1zM23 9h1v1h-1zM26 9h1v1h-1zM28 9h1v1h-1zM29 9h1v1h-1zM2 10h1v1h-1zM3 10h1v1h-1zM4 10h1v1h-1zM5 10h1v1h-1zM6 10h1v1h-1zM8 10h1v1h-1zM9 10h1v1h-1zM10 10h1v1h-1zM12 10h1v1h-1zM17 10h1v1h-1zM18 10h1v1h-1zM19 10h1v1h-1zM20 10h1v1h-1zM21 10h1v1h-1zM22 10h1v1h-1zM23 10h1v1h-1zM24 10h1v1h-1zM25 10h1v1h-1zM29 10h1v1h-1zM1 11h1v1h-1zM3 11h1v1h-1zM4 11h1v1h-1zM5 11h1v1h-1zM7 11h1v1h-1zM9 11h1v1h-1zM10 11h1v1h-1zM12 11h1v1h-1zM13 11h1v1h-1zM18 11h1v1h-1zM21 11h1v1h-1zM23 11h1v1h-1zM25 11h1v1h-1zM27 11h1v1h-1zM28 11h1v1h-1zM1 12h1v1h-1zM2 12h1v1h-1zM6 12h1v1h-1zM8 12h1v1h-1zM10 12h1v1h-1zM12 12h1v1h-1zM14 12h1v1h-1zM15 12h1v1h-1zM16 12h1v1h-1zM17 12h1v1h-1zM19 12h1v1h-1zM20 12h1v1h-1zM29 12h1v1h-1zM1 13h1v1h-1zM2 13h1v1h-1zM4 13h1v1h-1zM5 13h1v1h-1zM6 13h1v1h-1zM7 13h1v1h-1zM8 13h1v1h-1zM11 13h1v1h-1zM12 13h1v1h-1zM13 13h1v1h-1zM14 13h1v1h-1zM16 13h1v1h-1zM18 13h1v1h-1zM21 13h1v1h-1zM24 13h1v1h-1zM26 13h1v1h-1zM27 13h1v1h-1zM1 14h1v1h-1zM5 14h1v1h-1zM6 14h1v1h-1zM9 14h1v1h-1zM12 14h1v1h-1zM14 14h1v1h-1zM15 14h1v1h-1zM17 14h1v1h-1zM18 14h1v1h-1zM19 14h1v1h-1zM20 14h1v1h-1zM23 14h1v1h-1zM27 14h1v1h-1zM28 14h1v1h-1zM29 14h1v1h-1zM1 15h1v1h-1zM6 15h1v1h-1zM7 15h1v1h-1zM9 15h1v1h-1zM10 15h1v1h-1zM13 15h1v1h-1zM14 15h1v1h-1zM15 15h1v1h-1zM19 15h1v1h-1zM20 15h1v1h-1zM21 15h1v1h-1zM23 15h1v1h-1zM24 15h1v1h-1zM25 15h1v1h-1zM27 15h1v1h-1zM28 15h1v1h-1zM29 15h1v1h-1zM5 16h1v1h-1zM9 16h1v1h-1zM10 16h1v1h-1zM11 16h1v1h-1zM12 16h1v1h-1zM15 16h1v1h-1zM17 16h1v1h-1zM19 16h1v1h-1zM21 16h1v1h-1zM22 16h1v1h-1zM23 16h1v1h-1zM24 16h1v1h-1zM25 16h1v1h-1zM28 16h1v1h-1zM1 17h1v1h-1zM2 17h1v1h-1zM4 17h1v1h-1zM5 17h1v1h-1zM7 17h1v1h-1zM9 17h1v1h-1zM10 17h1v1h-1zM11 17h1v1h-1zM13 17h1v1h-1zM14 17h1v1h-1zM15 17h1v1h-1zM16 17h1v1h-1zM19 17h1v1h-1zM20 17h1v1h-1zM21 17h1v1h-1zM24 17h1v1h-1zM25 17h1v1h-1zM26 17h1v1h-1zM28 17h1v1h-1zM2 18h1v1h-1zM3 18h1v1h-1zM4 18h1v1h-1zM6 18h1v1h-1zM8 18h1v1h-1zM9 18h1v1h-1zM12 18h1v1h-1zM16 18h1v1h-1zM17 18h1v1h-1zM18 18h1v1h-1zM22 18h1v1h-1zM24 18h1v1h-1zM26 18h1v1h-1zM27 18h1v1h-1zM28 18h1v1h-1zM1 19h1v1h-1zM3 19h1v1h-1zM4 19h1v1h-1zM6 19h1v1h-1zM7 19h1v1h-1zM8 19h1v1h-1zM9 19h1v1h-1zM11 19h1v1h-1zM12 19h1v1h-1zM14 19h1v1h-1zM15 19h1v1h-1zM16 19h1v1h-1zM17 19h1v1h-1zM19 19h1v1h-1zM27 19h1v1h-1zM3 20h1v1h-1zM4 20h1v1h-1zM8 20h1v1h-1zM10 20h1v1h-1zM12 20h1v1h-1zM13 20h1v1h-1zM16 20h1v1h-1zM17 20h1v1h-1zM18 20h1v1h-1zM21 20h1v1h-1zM24 20h1v1h-1zM27 20h1v1h-1zM2 21h1v1h-1zM6 21h1v1h-1zM7 21h1v1h-1zM8 21h1v1h-1zM9 21h1v1h-1zM10 21h1v1h-1zM12 21h1v1h-1zM14 21h1v1h-1zM16 21h1v1h-1zM17 21h1v1h-1zM18 21h1v1h-1zM19 21h1v1h-1zM20 21h1v1h-1zM21 21h1v1h-1zM22 21h1v1h-1zM23 21h1v1h-1zM24 21h1v1h-1zM25 21h1v1h-1zM26 21h1v1h-1zM27 21h1v1h-1zM9 22h1v1h-1zM10 22h1v1h-1zM12 22h1v1h-1zM14 22h1v1h-1zM17 22h1v1h-1zM20 22h1v1h-1zM21 22h1v1h-1zM25 22h1v1h-1zM26 22h1v1h-1zM27 22h1v1h-1zM28 22h1v1h-1zM29 22h1v1h-1zM1 23h1v1h-1zM2 23h1v1h-1zM3 23h1v1h-1zM4 23h1v1h-1zM5 23h1v1h-1zM6 23h1v1h-1zM7 23h1v1h-1zM9 23h1v1h-1zM11 23h1v1h-1zM12 23h1v1h-1zM13 23h1v1h-1zM14 23h1v1h-1zM17 23h1v1h-1zM18 23h1v1h-1zM19 23h1v1h-1zM20 23h1v1h-1zM21 23h1v1h-1zM23 23h1v1h-1zM25 23h1v1h-1zM26 23h1v1h-1zM28 23h1v1h-1zM1 24h1v1h-1zM7 24h1v1h-1zM9 24h1v1h-1zM10 24h1v1h-1zM11 24h1v1h-1zM12 24h1v1h-1zM13 24h1v1h-1zM17 24h1v1h-1zM19 24h1v1h-1zM21 24h1v1h-1zM25 24h1v1h-1zM26 24h1v1h-1zM28 24h1v1h-1zM29 24h1v1h-1zM1 25h1v1h-1zM3 25h1v1h-1zM4 25h1v1h-1zM5 25h1v1h-1zM7 25h1v1h-1zM11 25h1v1h-1zM13 25h1v1h-1zM15 25h1v1h-1zM18 25h1v1h-1zM21 25h1v1h-1zM22 25h1v1h-1zM23 25h1v1h-1zM24 25h1v1h-1zM25 25h1v1h-1zM27 25h1v1h-1zM28 25h1v1h-1zM29 25h1v1h-1zM1 26h1v1h-1zM3 26h1v1h-1zM4 26h1v1h-1zM5 26h1v1h-1zM7 26h1v1h-1zM9 26h1v1h-1zM11 26h1v1h-1zM13 26h1v1h-1zM14 26h1v1h-1zM15 26h1v1h-1zM16 26h1v1h-1zM17 26h1v1h-1zM18 26h1v1h-1zM20 26h1v1h-1zM22 26h1v1h-1zM25 26h1v1h-1zM26 26h1v1h-1zM29 26h1v1h-1zM1 27h1v1h-1zM3 27h1v1h-1zM4 27h1v1h-1zM5 27h1v1h-1zM7 27h1v1h-1zM9 27h1v1h-1zM10 27h1v1h-1zM11 27h1v1h-1zM13 27h1v1h-1zM14 27h1v1h-1zM17 27h1v1h-1zM18 27h1v1h-1zM22 27h1v1h-1zM27 27h1v1h-1zM29 27h1v1h-1zM1 28h1v1h-1zM7 28h1v1h-1zM10 28h1v1h-1zM11 28h1v1h-1zM15 28h1v1h-1zM17 28h1v1h-1zM19 28h1v1h-1zM20 28h1v1h-1zM21 28h1v1h-1zM25 28h1v1h-1zM26 28h1v1h-1zM28 28h1v1h-1zM1 29h1v1h-1zM2 29h1v1h-1zM3 29h1v1h-1zM4 29h1v1h-1zM5 29h1v1h-1zM6 29h1v1h-1zM7 29h1v1h-1zM9 29h1v1h-1zM11 29h1v1h-1zM12 29h1v1h-1zM13 29h1v1h-1zM15 29h1v1h-1zM16 29h1v1h-1zM21 29h1v1h-1zM23 29h1v1h-1zM28 29h1v1h-1z" fill="#000"/></svg>`;
 // ---------------- les couvertures (traits nets et aplats clairs : belles en couleur comme en noir et blanc) ----------------
 function cCoverArt(n) {
-  const th = tone(), N = ['', 'I', 'II', 'III'][n] || n;
+  const th = tone(), N = ['', 'I', 'II', 'III', 'IV'][n] || n;
   const suits = (cx, cy, r, col) => ['♠', '♥', '♦', '♣'].map((x, k) => { const a = -Math.PI / 2 + k * Math.PI / 2, red = k === 1 || k === 2; return `<text x="${cx + r * Math.cos(a)}" y="${cy + r * Math.sin(a) + 11}" text-anchor="middle" font-size="34" fill="${red ? '#c0392b' : col}">${x}</text>`; }).join('');
   if (th === 'enfant') return `<svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="6" width="588" height="408" rx="26" fill="#f3edff" stroke="#5b33b0" stroke-width="5"/>
    ${[[60, 60], [520, 80], [110, 330], [500, 320], [300, 40], [200, 90], [420, 60], [60, 200], [545, 210]].map(([x, y], k) => `<path transform="translate(${x} ${y}) scale(${k % 3 ? .8 : 1.3})" d="M0 -10L2.6 -2.6 10 0 2.6 2.6 0 10 -2.6 2.6 -10 0 -2.6 -2.6Z" fill="#ffd84d" stroke="#b07c00" stroke-width="1"/>`).join('')}
@@ -10824,11 +10853,11 @@ app.addEventListener('click', e => {
 // le bouton du menu
 { const _m3 = menu; menu = function () { const r = _m3.apply(this, arguments); try {
   if (ST.prof === 'enseignant') return r; const w = app.querySelector('.wrap'); if (w && !w.querySelector('.courslink')) { const c = document.createElement('button'); c.className = 'card courslink'; c.dataset.cours = '1';
-    c.innerHTML = `<span>📚</span><b>${T3('Le cours de magie', 'Le cours de la Comté', 'Le cours en trois niveaux')}</b><small>${T3('Pas à pas, avec un cahier à imprimer', 'Pas à pas, avec un cahier à imprimer', 'Théorie, questions, exercices, diaporama, cahier')} ›</small>`;
+    c.innerHTML = `<span>📚</span><b>${T3('Le cours de magie', 'Le cours de la Comté', 'Le cours en quatre niveaux')}</b><small>${T3('Pas à pas, avec un cahier à imprimer', 'Pas à pas, avec un cahier à imprimer', 'Théorie, questions, exercices, diaporama, cahier')} ›</small>`;
     const hero = w.querySelector('.castlink') || w.querySelector('.phero,.card'); if (hero) hero.after(c); else w.prepend(c); tuTree(c); }
 } catch (e) { } return r; }; }
 // et pour l'enseignant, depuis son accueil
-{ const _th2 = teachHome; teachHome = function () { const r = _th2.apply(this, arguments); try { const h = app.querySelector('.teachh .thero'); if (h && !app.querySelector('.courslink')) { const c = document.createElement('button'); c.className = 'card courslink'; c.dataset.cours = '1'; c.innerHTML = '<span>📚</span><b>Le cours en trois niveaux</b><small>Théorie, questions, exercices, diaporama, cahier à imprimer ›</small>'; h.after(c); } } catch (e) { } return r; }; }
+{ const _th2 = teachHome; teachHome = function () { const r = _th2.apply(this, arguments); try { const h = app.querySelector('.teachh .thero'); if (h && !app.querySelector('.courslink')) { const c = document.createElement('button'); c.className = 'card courslink'; c.dataset.cours = '1'; c.innerHTML = '<span>📚</span><b>Le cours en quatre niveaux</b><small>Théorie, questions, exercices, diaporama, cahier à imprimer ›</small>'; h.after(c); } } catch (e) { } return r; }; }
 
 // ====================================================================
 //  v87 — LE COURS, niveaux 2 et 3 (même structure que le niveau 1)
@@ -11285,7 +11314,10 @@ const C_HOME = {
     ['Nord : ♠ D V 10 9 — Sud : ♠ 6 4 3. Combien de plis une fois l\'As et le Roi chassés ?', null, ['1', '2', '3'], 1, 'Quatre tours ; l\'As et le Roi adverses en prennent deux : il vous en reste 2.'],
     ['Nord : ♥ A R — Sud : ♥ D V 8 7 3. Par quoi commencer ?', null, ['L\'As ou le Roi de Nord', 'La Dame de Sud', 'Le 3 de Sud'], 0, 'La main courte est Nord : ses honneurs d\'abord.'],
     ['Contrat 4♠. Vous comptez 8 levées sûres. Combien en manque-t-il ?', null, ['1', '2', '3'], 1, 'Il en faut 10.']],
-  c10: [['1SA – 3SA. Votre entame ?', 'QJ93.854.K72.T63', ['♠D', '♠3', '♦R', '♣10'], 0, 'Séquence D V : la Dame.'],
+  c10: [['Votre partenaire a annoncé carreau ; ils jouent 4♥. Vous avez ♦ 9 7 3. Votre entame ?', null, ['♦3', '♦9', '♦7'], 0, 'Trois cartes, nombre impair : la plus petite.', 3],
+    ['Votre partenaire a annoncé trèfle ; ils jouent 3SA. Vous avez ♣ R 8 6 2. Votre entame ?', null, ['♣6', '♣R', '♣2', '♣8'], 0, 'Quatre cartes, pas de séquence : l\'avant-dernière, le 6.', 3],
+    ['Votre partenaire a annoncé pique. Vous avez ♠ D V 5. Votre entame ?', null, ['♠D', '♠5', '♠V'], 0, 'Deux honneurs qui se suivent : le plus haut. La séquence passe avant la parité.', 3],
+    ['1SA – 3SA. Votre entame ?', 'QJ93.854.K72.T63', ['♠D', '♠3', '♦R', '♣10'], 0, 'Séquence D V : la Dame.'],
     ['1♠ – 4♠. Votre entame ?', 'A852.KQJ.9643.72', ['♥R', '♠2', '♦3', '♣7'], 0, 'La séquence R D V à cœur.'],
     ['1SA – 3SA. Votre entame ?', '84.J97532.A6.K42', ['♥5', '♥V', '♦A', '♠8'], 0, 'Votre longue sans séquence : V, 9, 7, 5 — la 4e meilleure.']],
   d1: [['Que dites-vous en ouverture ?', 'AK4.KQ5.AJ63.K92', ['2SA', '2♣', '1SA', '1♦'], 0, '20 points, régulière : 2SA.', 1],
@@ -11456,6 +11488,125 @@ function cBilan() {
 }
 function cCopy(t) { try { navigator.clipboard.writeText(t).then(() => { const b = app.querySelector('[data-cbcopy]'); if (b) b.textContent = 'Copié ✓'; }); } catch (e) { } }
 { const _ch2 = coursHome; coursHome = function () { _ch2(); try { const w = app.querySelector('.wrap.cours'); if (w && !w.querySelector('[data-cbilan]')) { const d = document.createElement('div'); d.className = 'acts'; d.innerHTML = '<button class="btn sec" data-cbilan="1">📤 Mon bilan, pour mon professeur</button>'; w.appendChild(d); } } catch (e) { } }; }
+
+// ====================================================================
+//  v94 — L'ENSEIGNEMENT EN 4 NIVEAUX (même découpage que le cours et les cahiers)
+//  • l'accueil de l'enseignant classe toutes les leçons par niveau
+//  • diaporamas animés faits à la main pour le niveau 2
+//  • 8-12 et 13-17 ans : les personnages de l'univers prennent la parole et s'assoient à la table
+// ====================================================================
+// ---- 4 niveaux : le niveau 3 actuel est coupé en Intermédiaire / Confirmé ----
+(() => {
+  const all = C3.slice();
+  COURS[2] = { n: 3, t: 'Intermédiaire', ic: '🧭', d: 'Réveil, contre punitif, chelems en HL/HLD, compter la main, coup à blanc.', ch: all.slice(0, 5) };
+  COURS[3] = { n: 4, t: 'Joueur confirmé', ic: '🏆', d: 'Élimination, sécurité, défense avancée, squeeze, conventions européennes.', ch: all.slice(5) };
+  COURS.forEach(L => L.ch.forEach(c => { c.hw = C_HOME[c.id] || c.hw || []; }));
+})();
+
+// ---- diaporamas animés du niveau 2 ----
+Object.assign(C_SLIDES, {
+  c_fortes: { ic: '💪', t: 'Les ouvertures fortes', steps: [
+    { big: TBIG('Les ouvertures fortes', 'Niveau 2 · chapitre 1'), say: 'Avec une très grosse main, on ouvre au <b>palier 2</b> : sinon le partenaire pourrait passer, alors que la manche est sur table.' },
+    { hide: 1, big: `<div class="tsum"><h3>L'échelle</h3>${TTAB([['20 à 21, régulier', '<b>2SA</b>'], ['22 à 23', '<b>2♣</b> (relais 2♦)'], ['24 et plus', '<b>2♦</b> (relais 2♥, manche obligatoire)']])}</div>`, say: 'Trois marches, à retenir dans l\'ordre.' },
+    { deal: { S: 'AQ5.KJ4.AQ63.KQ2' }, up: 'S', pts: 'S', tally: { S: 21 }, q: 'Sud compte 21 points, main régulière. Que dit-il ?', a: '<b>2SA</b> : 20 à 21, régulier.' },
+    { auction: { d: 'S', b: ['2N', 'P'] }, say: 'Le partenaire passe seulement avec 0 à 4 points. Dès 5 points : la manche.' },
+    { deal: { S: 'AK5.KQ4.AQJ6.AJ3' }, up: 'S', pts: 'S', tally: { S: 24 }, auction: null, q: 'Et avec 24 points ?', a: '<b>2♦</b> : 24 et plus. La manche est obligatoire.' },
+    { auction: { d: 'S', b: ['2D', 'P', '2H', 'P', '2N'] }, say: 'Nord dit <b>2♥</b> : le relais, même avec 0 point. Il pose simplement la question. Sud répond 2SA : régulier.' },
+    { hide: 1, big: `<div class="tsum"><h3>À retenir</h3><ol><li>20-21 régulier : 2SA.</li><li>22-23 : 2♣, le partenaire dit 2♦.</li><li>24 et plus : 2♦, le partenaire dit 2♥, et l'on va jusqu'à la manche.</li></ol></div>`, say: 'Les ouvertures fortes, en trois lignes.' },
+  ] },
+  c_texmin: { ic: '🔀', t: 'Les Texas mineurs', steps: [
+    { big: TBIG('Les Texas mineurs', 'Niveau 2 · chapitre 3'), say: 'Main faible et longue mineure, face à 1SA : on préfère jouer 3♣ ou 3♦ que chuter à 1SA.' },
+    { deal: { S: '84.73.952.KJ9643' }, up: 'S', pts: 'S', tally: { S: 4 }, auction: { d: 'N', b: ['1N', 'P'] }, hl: ['C13', 'C11', 'C9', 'C6', 'C4', 'C3'], q: 'Nord ouvre 1SA. Sud a six trèfles et 4 points. Que dit-il ?', a: '<b>2♠</b> : le Texas mineur pour les trèfles.' },
+    { auction: { d: 'N', b: ['1N', 'P', '2S', 'P', '3C', 'P', 'P', 'P'] }, contract: '3♣ par Nord', say: 'Nord complète à 3♣, Sud passe. Le contrat est trouvé, joué par la main forte.' },
+    { deal: { S: '84.7.QJ9642.9853' }, up: 'S', pts: 'S', tally: { S: 3 }, auction: { d: 'N', b: ['1N', 'P'] }, contract: null, q: 'Et avec six carreaux ?', a: '<b>3♣</b> : le Texas mineur pour les carreaux. Nord dira 3♦.' },
+    { auction: { d: 'N', b: ['1N', 'P', '3C', 'P', '3D', 'P', 'P', 'P'] }, contract: '3♦ par Nord', say: 'Une fois de plus : l\'ouvreur complète, le répondant passe.' },
+    { hide: 1, big: `<div class="tsum"><h3>À retenir</h3>${TTAB([['6 trèfles, faible', '<b>2♠</b> → 3♣'], ['6 carreaux, faible', '<b>3♣</b> → 3♦']])}</div>`, say: 'Deux Texas, toujours suivis d\'un passe.' },
+  ] },
+  c_barr: { ic: '🌊', t: 'Les deux faibles et les barrages', steps: [
+    { big: TBIG('Le barrage', 'Niveau 2 · chapitre 4'), say: 'Main faible, mais longue couleur : on ouvre haut pour <b>voler de la place</b> aux adversaires.' },
+    { hide: 1, big: `<div class="tsum"><h3>La longueur fixe le palier</h3>${TTAB([['6 cartes', 'palier 2 (deux faible)'], ['7 cartes', 'palier 3'], ['8 cartes', 'palier 4']])}</div>`, say: 'Une main faible : 6 à 10 points.' },
+    { deal: { S: '7.KQT864.J52.973' }, up: 'S', pts: 'S', tally: { S: 6 }, hl: ['H13', 'H12', 'H10', 'H8', 'H6', 'H4'], q: 'Sud est donneur : six beaux cœurs, 6 points. Que dit-il ?', a: '<b>2♥</b> : le deux faible.' },
+    { auction: { d: 'S', b: ['2H'] }, say: 'Ouest doit maintenant parler au palier 2 ou 3, avec moins d\'espace pour s\'expliquer.' },
+    { deal: { S: 'QJ98753.4.K82.73' }, up: 'S', pts: 'S', tally: { S: 6 }, auction: null, q: 'Sept piques, 6 points ?', a: '<b>3♠</b> : sept cartes, palier 3.' },
+    { deal: { S: 'K84.Q73.9652.J86' }, up: 'S', pts: 'S', tally: { S: 6 }, auction: { d: 'N', b: ['2S', 'P'] }, q: 'Nord a ouvert 2♠ faible. Sud a trois piques et 6 points. Que fait-il ?', a: '<b>3♠</b> : avec trois atouts, il prolonge le barrage. On pense atouts, pas points.' },
+    { hide: 1, big: `<div class="tsum"><h3>À retenir</h3><ol><li>6 cartes : palier 2. 7 : palier 3. 8 : palier 4.</li><li>Une belle couleur, une main faible.</li><li>Sur le barrage du partenaire : je compte mes atouts.</li></ol></div>`, say: 'Le barrage, en trois lignes.' },
+  ] },
+  c_interv: { ic: '⚔️', t: 'Intervenir', steps: [
+    { big: TBIG('Intervenir', 'Niveau 2 · chapitre 5'), say: 'L\'adversaire a ouvert. On peut encore parler : pour jouer, pour gêner, et pour <b>indiquer l\'entame</b>.' },
+    { deal: { S: 'KQJ84.73.A52.964' }, up: 'S', pts: 'S', tally: { S: 10 }, auction: { d: 'E', b: ['1D'] }, hl: ['S13', 'S12', 'S11'], q: 'Est ouvre 1♦. Sud a 10 points et cinq beaux piques. Que dit-il ?', a: '<b>1♠</b> : 8 points et une belle couleur suffisent au palier 1.' },
+    { deal: { S: 'KJ4.AQ7.KJ52.Q73' }, up: 'S', pts: 'S', tally: { S: 16 }, auction: { d: 'E', b: ['1H'] }, hl: ['H14', 'H12'], q: 'Est ouvre 1♥. Sud a 16 points, régulier, A D à cœur.', a: '<b>1SA</b> : 16 à 18, avec un arrêt dans leur couleur.' },
+    { deal: { S: '98642.K73.Q52.J4' }, up: 'S', pts: 'S', tally: { S: 6 }, auction: { d: 'E', b: ['1C'] }, q: 'Est ouvre 1♣. Sud a cinq piques… sans honneur, et 6 points.', a: '<b>Passe</b> : cette couleur ne mérite pas d\'être entamée.' },
+    { hide: 1, big: `<div class="tsum"><h3>À retenir</h3>${TTAB(OVC_ROWS.slice(0, 3))}</div>`, say: 'Une intervention, c\'est aussi un conseil d\'entame : la couleur doit être belle.' },
+  ] },
+  c_cappel: { ic: '❓', t: 'Le contre d\'appel', steps: [
+    { big: TBIG('Le contre d\'appel', 'Niveau 2 · chapitre 6'), say: 'Contrer juste après leur ouverture, c\'est dire : « partenaire, <b>choisis</b> une couleur ».' },
+    { deal: { S: 'KJ74.AQ63.5.KJ84' }, up: 'S', pts: 'S', tally: { S: 14 }, auction: { d: 'E', b: ['1D'] }, hl: ['D5'], q: 'Est ouvre 1♦. Sud a 14 points, un singleton carreau, et les trois autres couleurs. Que dit-il ?', a: '<b>Contre</b> : court chez eux, prêt pour toutes les autres couleurs.' },
+    { deal: { S: 'KJ74.AQ63.5.KJ84', N: '9742.Q83.J65.874' }, up: 'NS', pts: 'N', tally: { N: 3 }, auction: { d: 'E', b: ['1D', 'X', 'P'] }, q: 'Nord a seulement 3 points. Peut-il passer ?', a: '<b>Non</b> : on répond toujours au contre d\'appel. Nord dit <b>1♠</b>, sa majeure.' },
+    { auction: { d: 'E', b: ['1D', 'X', 'P', '1S'] }, say: 'Le fit pique est trouvé, grâce à une question et une réponse obligatoire.' },
+    { hide: 1, big: `<div class="tsum"><h3>Répondre au contre d'appel</h3>${TTAB(RC_ROWS)}</div>`, say: 'Avec des points, on saute ; avec 12 et plus, on cue-bide.' },
+  ] },
+  c_purge: { ic: '🛠️', t: 'Purger, couper au mort', steps: [
+    { big: TBIG('Couper au mort', 'Niveau 2 · chapitre 8'), say: 'À la couleur, une coupe dans la <b>main courte en atout</b> rapporte un pli de plus.' },
+    { deal: { N: '742.5.KQ654.QJ54', E: '863.T9876.73.876', S: 'AKQJ5.432.A2.K32', O: 'T9.AKQJ.JT98.AT9' }, up: 'NS', dummy: 'N', contract: '4♠ par Sud', hl: ['H4', 'H3', 'H2', 'H5'], q: 'Sud a trois petits cœurs, le mort un seul. Comment ne pas perdre les trois ?', a: 'En <b>coupant</b> des cœurs au mort, qui n\'en aura bientôt plus.' },
+    { play: [['S', 'H2'], ['O', 'H14'], ['N', 'H5'], ['E', 'H6']], win: 'O', say: 'Premier tour : la défense prend. Le mort n\'a plus de cœur.' },
+    { play: [['S', 'H3'], ['O', 'H13'], ['N', 'S2'], ['E', 'H7']], win: 'N', say: 'Deuxième tour : le mort <b>coupe</b> avec le 2 d\'atout. Ce petit atout n\'aurait jamais fait de pli autrement.' },
+    { q: 'Et si Sud avait d\'abord joué trois tours d\'atout ?', a: 'Le mort n\'aurait plus eu d\'atout pour couper : <b>un pli de moins</b>. Quand on doit couper au mort, on ne purge pas tout de suite.' },
+    { hide: 1, big: `<div class="tsum"><h3>À retenir</h3><ol><li>Je compte les atouts adverses : 13 moins les miens.</li><li>Je coupe dans la main courte en atout.</li><li>Je garde des atouts au mort si j'en ai besoin.</li></ol></div>`, say: 'Les outils du déclarant.' },
+  ] },
+  c_def: { ic: '🛡️', t: 'La défense : quelle carte ?', steps: [
+    { big: TBIG('Qui joue en dernier ?', 'Niveau 2 · chapitre 9'), say: 'En défense, une seule question : <b>qui jouera la dernière carte</b> de ce pli ?' },
+    { deal: { N: '...AQ', E: '...J985', S: '...62', O: '...K74' }, up: 'NOS', dummy: 'N', contract: 'Défense', play: [['S', 'C2']], q: 'Ouest joue 2e. Son partenaire Est jouera en dernier. Que met Ouest ?', a: '<b>Petit</b>, le 4. Le Roi reste caché, et le déclarant doit deviner.' },
+    { play: [['O', 'C4'], ['N', 'C12'], ['E', 'C5']], win: 'N', say: 'Le déclarant a tenté la Dame. Il a deviné juste… mais s\'il avait mis l\'As, le Roi d\'Ouest aurait fait un pli.' },
+    { deal: { N: '732...', E: 'KJ5...', S: 'A6...', O: 'Q984...' }, up: 'NE', dummy: 'N', contract: 'Défense', play: [['O', 'S4'], ['N', 'S2']], q: 'Est joue 3e. Après lui, il n\'y a plus que le déclarant. Quelle carte ?', a: '<b>Forte</b>, mais la plus petite utile : le <b>Valet</b>.' },
+    { play: [['E', 'S11'], ['S', 'S14']], win: 'S', say: 'Le déclarant a dû sortir son As. Le Roi d\'Est est maintenant maître.' },
+    { deal: { N: '..QT2.', E: '..K63.', S: '..A54.', O: '..J987.' }, up: 'NE', dummy: 'N', contract: 'Défense', play: [['N', 'D12']], q: 'Le mort joue la Dame. Est a R 6 3. Que fait-il ?', a: '<b>Honneur sur honneur</b> : il couvre avec le Roi.' },
+    { play: [['E', 'D13'], ['S', 'D14'], ['O', 'D7']], win: 'S', say: 'Deux honneurs adverses pour un seul : au troisième tour, le Valet d\'Ouest sera maître.' },
+    { hide: 1, big: `<div class="tsum"><h3>À retenir</h3>${TTAB([['2e', 'petite carte'], ['3e', 'carte forte (la plus petite des cartes qui se suivent)'], ['un honneur juste avant moi', 'je couvre']])}</div>`, say: 'La défense, en un tableau.' },
+  ] },
+  c_sign: { ic: '📡', t: 'Les signaux', steps: [
+    { big: TBIG('Les signaux', 'Niveau 2 · chapitre 10'), say: 'Les défenseurs ne peuvent pas se parler. Leurs <b>petites cartes</b> parlent pour eux.' },
+    { deal: { N: '.J65..', E: '.K83..', S: '.T92..', O: '.A74..' }, up: 'NE', dummy: 'N', contract: '4♠ par Sud', play: [['O', 'H14'], ['N', 'H5']], q: 'Ouest entame l\'As de cœur. Est a R 8 3. Quelle carte joue-t-il ?', a: 'Le <b>8</b> : une grosse petite carte = « j\'aime, continue ».' },
+    { play: [['E', 'H8'], ['S', 'H2']], win: 'O', say: 'Ouest voit le 8 : il rejoue cœur, et le Roi d\'Est fera un pli.' },
+    { deal: { N: '.J65..', E: '.863..', S: '.KT2..', O: '.A74..' }, up: 'NE', dummy: 'N', contract: '4♠ par Sud', play: [['O', 'H14'], ['N', 'H5']], q: 'Même entame, mais Est a 8 6 3. Quelle carte ?', a: 'Le <b>3</b>, sa plus petite : « je n\'aime pas, change ».' },
+    { play: [['E', 'H3'], ['S', 'H2']], win: 'O', say: 'Ouest change de couleur : il évite de donner un pli au Roi de Sud.' },
+    { hide: 1, big: `<div class="tsum"><h3>À retenir</h3>${TTAB([['Sur l\'entame du partenaire', 'grosse = j\'aime · petite = change'], ['Le déclarant joue une couleur', 'pair : haut puis bas · impair : bas puis haut'], ['En défausse', 'grosse = j\'aime']])}</div>`, say: 'Trois messages.' },
+  ] },
+});
+[['d1', 'c_fortes'], ['d3', 'c_texmin'], ['d4', 'c_barr'], ['d5', 'c_interv'], ['d6', 'c_cappel'], ['d8', 'c_purge'], ['d9', 'c_def'], ['d10', 'c_sign']].forEach(([id, s]) => { const [, c] = cFind(id); if (c) c.slides = s; });
+
+// ---- les personnages prennent la parole (8-12 et 13-17 ans) ----
+const ENS_PROF = { enfant: ['🧙‍♂️', 'Professeur Dumblebridge'], ado: ['🧝', 'Ambroise Merlimpasse'] };
+function ensSeatName(t, s) {
+  if (s === 'S') { try { const h = HERO[t](); return ['🃏', h[0].split(' ')[0]]; } catch (e) { return ['🃏', 'Sud']; } }
+  const c = THEME_CAST[t] && THEME_CAST[t][s]; return c ? [c[1], c[0].split(' ')[0]] : ['', SEATN[s]];
+}
+{ const _r = tRender; tRender = function (a) { _r(a); try {
+  const t = tone(); if (!TCH || (t !== 'enfant' && t !== 'ado')) return;
+  document.querySelectorAll('.tseat').forEach(el => { const s = ['N', 'E', 'S', 'O'].find(k => el.classList.contains('t' + k)); if (!s || el.dataset.cast) return; const [ic, nm] = ensSeatName(t, s); el.dataset.cast = 1; el.innerHTML = `${ic} ${nm} <i>${SEATN[s]}</i>`; });
+  const nar = document.querySelector('.tnar'); if (!nar || nar.querySelector('.tspk')) return;
+  const st = TCH.L.steps[TCH.i] || {}; let who;
+  if (st.q && !TCH.rev) { const seats = ['N', 'E', 'O', 'S'], s = seats[TCH.i % 4], [ic, nm] = ensSeatName(t, s); who = [ic, nm + (t === 'enfant' ? ' demande' : ' demande')]; }
+  else who = ENS_PROF[t];
+  nar.insertAdjacentHTML('afterbegin', `<span class="tspk">${who[0]} <b>${who[1]}</b></span>`);
+} catch (e) { } }; }
+
+// ---- l'accueil de l'enseignant : 4 niveaux ----
+const ENS_BONUS = { 2: ['dimpasse', 'entames2'] };
+function ensSteps(c) { const L = COURS.find(x => x.ch.includes(c)); const b = C_SLIDES[c.slides] || TLESSONS.find(x => x.id === c.slides) || cAutoSlides(c, L.ch.indexOf(c) + 1); return b.steps.concat(cSlideEx(c)); }
+{ const _th = teachHome; teachHome = function () {
+  if (ST.prof === 'enseignant' && TCH && TCH.L && TCH.L.cours) { tClear(); TCH = null; document.body.classList.remove('teaching'); }
+  const r = _th.apply(this, arguments);
+  try { if (ST.prof !== 'enseignant') return r; const grp = app.querySelector('.teachh .grp'), tl = app.querySelector('.teachh .tles'); if (!grp || !tl) return r;
+    const lv = +(ST.opt.tlvl || 1); const L = COURS.find(x => x.n === lv);
+    grp.outerHTML = `<div class="tlvls">${COURS.map(x => `<button class="${x.n === lv ? 'on' : ''}" data-tlvl="${x.n}"><span>${x.ic}</span>${x.t}</button>`).join('')}</div><div class="grp">Niveau ${L.n} · ${L.t}</div><p class="tlvd">${L.d}</p>`;
+    const items = L.ch.map((c, k) => { const st = ensSteps(c); const hand = !!(C_SLIDES[c.slides] || TLESSONS.find(x => x.id === c.slides)); return `<button class="tl" data-tcl="${c.id}"><span class="tln">${k + 1}</span><span class="tli">${c.ic}</span><b>${c.t}</b><small>${c.d}</small><em>${st.length} scènes · ${st.filter(s => s.q).length} questions${hand ? ' · animé' : ''}</em></button>`; });
+    (ENS_BONUS[lv] || []).forEach(id => { const B = TLESSONS.find(x => x.id === id); if (B) items.push(`<button class="tl tlb" data-tles="${B.id}"><span class="tln">+</span><span class="tli">${B.ic}</span><b>${B.t}</b><small>${B.d}</small><em>${B.steps.length} scènes · leçon complémentaire</em></button>`); });
+    tl.innerHTML = items.join('');
+  } catch (e) { } return r; }; }
+app.addEventListener('click', e => { const t = e.target.closest('[data-tlvl],[data-tcl]'); if (!t) return; e.stopImmediatePropagation();
+  if (t.dataset.tlvl) { ST.opt.tlvl = +t.dataset.tlvl; save(); return teachHome(); }
+  if (t.dataset.tcl) { coursSlides(t.dataset.tcl); const b = document.querySelector('.teach [data-tgo="home"]'); if (b) b.textContent = '‹ Leçons'; }
+}, true);
 
 </script>
 <script>if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) { try { navigator.serviceWorker.register("sw.js"); } catch (e) {} }</script>
