@@ -1535,6 +1535,7 @@ body[data-th=adulte] .pcard .pcin,body:not([data-th]) .pcard .pcin{background:ra
 .tcard.dealing{transition-property:transform,opacity;transition-duration:.75s,.3s;transition-timing-function:cubic-bezier(.25,.75,.3,1)}
 .tcard.dealing .tin{box-shadow:0 6px 14px rgba(0,0,0,.28);border-radius:11px}
 .tin{transition:transform .7s cubic-bezier(.3,.7,.3,1)!important}
+svg.nilboat{height:1.45em;width:auto;vertical-align:-.3em;margin-right:.25em}
 </style>
 </head>
 <body>
@@ -6288,7 +6289,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v120';
+const APP_V = 'v121';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -12235,6 +12236,10 @@ Object.assign(GM_SCALE, { archbishop: 1.15, colonel: .97, duke: 1.1 });
   try { new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(n => { if (n.nodeType === 1) fixImgs(n.parentNode || n); }))).observe(document.body, { childList: true, subtree: true }); } catch (e) { }
   fixImgs(document);
 }
+// v121 — le vapeur du Nil des années 1920, en icône du journal de bord
+const NILBOAT = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 64" class="nilboat" aria-label="Vapeur du Nil"> <defs><linearGradient id="nbw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fb4c9"/><stop offset="1" stop-color="#3f7f9a"/></linearGradient> <linearGradient id="nbh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2c22"/><stop offset="1" stop-color="#1c1410"/></linearGradient></defs> <line x1="10" y1="10" x2="10" y2="30" stroke="#3a2c22" stroke-width="1.2"/><path d="M10 10 L19 12.5 L10 15Z" fill="#c3132f"/> <line x1="146" y1="8" x2="146" y2="30" stroke="#3a2c22" stroke-width="1.2"/><path d="M146 8 L155 10.5 L146 13Z" fill="#14533f"/> <path d="M28 15 H128 V18 H28Z" fill="#efe2c4" stroke="#8a6d3b" stroke-width=".6"/> <path d="M28 18 q2.5 3 5 0 q2.5 3 5 0 q2.5 3 5 0 q2.5 3 5 0 q2.5 3 5 0 q2.5 3 5 0 q2.5 3 5 0 q2.5 3 5 0 q2.5 3 5 0 q2.5 3 5 0 q2.5 3 5 0 q2.5 3 5 0 q2.5 3 5 0 q2.5 3 5 0 q2.5 3 5 0 q2.5 3 5 0 q2.5 3 5 0 q2.5 3 5 0 q2.5 3 5 0 q2.5 3 5 0" fill="#efe2c4" stroke="#8a6d3b" stroke-width=".5"/> <rect x="66" y="4" width="8" height="22" rx="1" fill="#1d1d1f"/><rect x="66" y="8" width="8" height="2.2" fill="#c9a34e"/> <path d="M70 4 q-3 -3 1 -4 q4 -1 2 -3" fill="none" stroke="#b9b3a8" stroke-width="1.6" stroke-linecap="round" opacity=".7"/><rect x="118" y="10" width="14" height="8" fill="#f7f1e3" stroke="#8a6d3b" stroke-width=".6"/><rect x="120" y="12" width="3" height="3" fill="#3b5a6b"/><rect x="125" y="12" width="3" height="3" fill="#3b5a6b"/> <rect x="18" y="21" width="120" height="9" fill="#f7f1e3" stroke="#8a6d3b" stroke-width=".6"/> <g stroke="#8a6d3b" stroke-width=".5"> <line x1="18" y1="24" x2="138" y2="24"/> <path d="M22 24V30M27 24V30M32 24V30M37 24V30M42 24V30M47 24V30M52 24V30M57 24V30M62 24V30M67 24V30M72 24V30M77 24V30M82 24V30M87 24V30M92 24V30M97 24V30M102 24V30M107 24V30M112 24V30M117 24V30M122 24V30M127 24V30M132 24V30"/></g> <rect x="12" y="30" width="134" height="9" fill="#fbf7ec" stroke="#8a6d3b" stroke-width=".6"/> <g fill="#3b5a6b"><rect x="17" y="32.5" width="3" height="3.5"/><rect x="23" y="32.5" width="3" height="3.5"/><rect x="29" y="32.5" width="3" height="3.5"/><rect x="35" y="32.5" width="3" height="3.5"/><rect x="41" y="32.5" width="3" height="3.5"/><rect x="47" y="32.5" width="3" height="3.5"/><rect x="92" y="32.5" width="3" height="3.5"/><rect x="98" y="32.5" width="3" height="3.5"/><rect x="104" y="32.5" width="3" height="3.5"/><rect x="110" y="32.5" width="3" height="3.5"/><rect x="116" y="32.5" width="3" height="3.5"/><rect x="122" y="32.5" width="3" height="3.5"/><rect x="128" y="32.5" width="3" height="3.5"/><rect x="134" y="32.5" width="3" height="3.5"/></g> <path d="M6 39 H150 Q155 39 153 43 L149 49 H12 Q8 49 6 44Z" fill="url(#nbh)"/> <line x1="10" y1="41.5" x2="150" y2="41.5" stroke="#c9a34e" stroke-width=".7"/> <path d="M58 44 A13 13 0 0 1 84 44Z" fill="#fbf7ec" stroke="#8a6d3b" stroke-width=".8"/> <g stroke="#8a6d3b" stroke-width=".6"><path d="M71 44 L59.5 38.5M71 44 L61.5 34.5M71 44 L65 32M71 44 L71 31M71 44 L77 32M71 44 L80.5 34.5M71 44 L82.5 38.5"/></g> <path d="M62 44 A9 9 0 0 1 80 44" fill="none" stroke="#c9a34e" stroke-width=".8"/> <path d="M0 50 Q10 48 20 50 T40 50 T60 50 T80 50 T100 50 T120 50 T140 50 T160 50 V64 H0Z" fill="url(#nbw)"/> <path d="M14 54 h18 M50 56 h24 M92 54 h20 M126 57 h18" stroke="#d8ecf3" stroke-width="1" stroke-linecap="round" opacity=".8"/> </svg>';
+{ const g = Object.getOwnPropertyDescriptor(C_STORY_HEAD, 'adulte'); if (g && g.get) Object.defineProperty(C_STORY_HEAD, 'adulte', { configurable: true, get() { const r = g.get(); r[0] = NILBOAT; return r; } }); else C_STORY_HEAD.adulte[0] = NILBOAT; }
+
 </script>
 <script>if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) { try { navigator.serviceWorker.register("sw.js"); } catch (e) {} }</script>
 </body>
