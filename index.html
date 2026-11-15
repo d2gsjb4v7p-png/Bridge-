@@ -1497,6 +1497,14 @@ body[data-th=adulte] .pcard .pcin,body:not([data-th]) .pcard .pcin{background:ra
 .rkbar.cgbar .rkmk.two{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
 .rkbar.cgbar .rkmk.two span{padding:4px 6px!important;white-space:nowrap;gap:6px}
 .rkbar.cgbar .rkme small{line-height:1.15}
+/* v113 la même échelle pour tous */
+.castline span.sc .cfimg{max-width:none!important;height:calc(150px * var(--s,1))!important;max-height:none!important;width:auto}
+.castline{gap:0}.castline span.sc{margin:0 -4px}
+.pcard.sc .pcin .cfimg{width:auto!important;max-width:calc(100% + 34px)!important;margin:0 -17px!important;height:calc(var(--s,1) * 100%)!important;max-height:none!important;object-fit:contain;object-position:50% 100%}
+.pcard.sc .pcin{overflow:visible}
+@media (max-width:400px){.castline span.sc .cfimg{height:calc(122px * var(--s,1))!important}}
+/* v114 les cœurs et les carreaux toujours en rouge sur les cartes */
+.cf.red,.cf.red .ci b,.cf.red .ci i,.cf.red em,.dc.red i,.dc.red em{color:#c3132f}
 </style>
 </head>
 <body>
@@ -6250,7 +6258,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v112';
+const APP_V = 'v114';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -12080,6 +12088,22 @@ const castCardIx = (i, k) => {
     fr.innerHTML = `<span class="pcix pctl">${ix}</span><span class="pcin">${fr.innerHTML}</span><span class="pcix pcbr">${ix}</span>`;
     const im = fr.querySelector('.cfimg'); if (im) { const f = () => { const q = im.naturalWidth / im.naturalHeight; if (jk) return; if (q > 0.6) fr.classList.add('pwide'); if (q > 0.8) fr.classList.add('pxwide'); }; if (im.complete) f(); else im.addEventListener('load', f); }
   });
+} catch (e) { } }; }
+
+// ====================================================================
+//  v113 — tous les personnages à la même échelle : les visages ont la même taille,
+//  les corps gardent leur stature (un nain reste plus petit qu'un elfe)
+// ====================================================================
+const GM_SCALE = { archiduc: 1, archiduchesse: 1.05, archbishop: 1.1, colonel: .9, chicane: .98, duke: 1,
+  barnabe: .94, eulalie: .97, nain: .54, lirelune: 1, flottin: .62, dumble: .97,
+  thalindor: 1.12, aelira: 1.1, vaelmor: 1.12, borbak: .7, orlavin: .84, chelemdor: .9 };
+{ const _ci13 = castIntro; castIntro = function (first) { _ci13(first); try {
+  const th = tone() === 'enfant' || tone() === 'ado' ? tone() : 'adulte', F = CAST_FULL[th]();
+  const fs = F.map(k => GM_SCALE[k] || 1), mx = Math.max(...fs);
+  app.querySelectorAll('.castline span').forEach((sp, i) => { if (F[i]) sp.style.setProperty('--s', (fs[i] / mx).toFixed(3)); sp.classList.add('sc'); });
+  app.querySelectorAll('.castgrid .pcard').forEach((c, i) => { if (!F[i] || !GM_FULL[F[i]]) return; c.style.setProperty('--s', Math.max(fs[i] / mx, 0.74).toFixed(3)); c.classList.add('sc'); c.classList.remove('pwide', 'pxwide'); });
+  // les classes « larges » ajoutées au chargement des images ne doivent plus s'appliquer
+  setTimeout(() => app.querySelectorAll('.castgrid .pcard.sc').forEach(c => c.classList.remove('pwide', 'pxwide')), 600);
 } catch (e) { } }; }
 
 </script>
