@@ -3890,7 +3890,7 @@ const THEORY = [
 <h3>La table</h3><p>Quatre joueurs, deux équipes : <b>Nord-Sud</b> contre <b>Est-Ouest</b>. Votre partenaire est assis en face. On joue dans le sens des aiguilles d'une montre. Chacun reçoit <b>13 cartes</b>.</p>
 <h3>Le pli</h3><p>Chacun joue une carte à son tour : c'est un <b>pli</b> (ou une <b>levée</b>). On doit <b>fournir</b> la couleur demandée. La plus forte carte de cette couleur gagne, sauf si quelqu'un qui n'en a plus <b>coupe</b> avec un atout.</p>
 <h3>La hiérarchie</h3>${TBL(['Les cartes', 'Les couleurs (pour les enchères)'], [['A, R, D, V, 10, 9… 2', '♣ < ♦ < ♥ < ♠ < SA']])}<p>♥ et ♠ sont les <b>majeures</b>, ♣ et ♦ les <b>mineures</b>.</p>
-<h3>Le contrat</h3><p>On annonce le nombre de plis <b>au-delà de 6</b> : <b>plis à faire = 6 + le palier</b>. 1♠ = 7 plis, 3SA = 9, 4♥ = 10, 6♣ = 12, 7SA = 13. Trois « passe » de suite terminent les enchères.</p>
+<h3>Le contrat</h3><p>On annonce le nombre de plis <b>au-delà de 6</b> : <b>plis à faire = 6 + le palier</b>. 1♠ = 7 plis, 3SA = 9, 4♥ = 10, 5♦ = 11, 6♣ = 12, 7SA = 13. Trois « passe » de suite terminent les enchères.</p><p>Après l'entame, le partenaire du déclarant s'étale : c'est le <b>mort</b>. Une colonne par couleur, l'<b>atout à sa droite</b> (à gauche du déclarant) ; à Sans-Atout, rouges et noires alternées.</p>
 <p>Le <b>déclarant</b> est le joueur du camp vainqueur qui a nommé la couleur du contrat le premier. Son partenaire étale son jeu : c'est le <b>mort</b>. L'adversaire assis à <b>gauche du déclarant</b> entame.</p>
 ${TBL(['Objectif', 'Contrats', 'Points à deux'], [['Partielle', 'sous la manche', 'moins de 25'], ['Manche', '3SA · 4♥ · 4♠ · 5♣ · 5♦', '25 (29 en mineure)'], ['Petit chelem', 'palier 6 : 12 plis', '33'], ['Grand chelem', 'palier 7 : 13 plis', '37']])}
 ${KEEP('Plis à faire = 6 + palier. Les seuils magiques : 25, 33, 37.')}` },
@@ -5244,7 +5244,7 @@ function fanHand(p, clickable) {
   return `${row}<div class="fan" style="height:${Math.round(H + maxY + 10)}px;width:${avail}px">${out.join('')}</div>${clickable ? `<div class="small lab tap">${!sel ? 'Touchez une couleur de votre main pour l\'étaler' : PG.pick ? 'Touchez à nouveau la carte levée pour la jouer' : 'Touchez la carte, puis touchez-la à nouveau'}</div>` : ''}`;
 }
 function dummyCols(p, clickable, small) {
-  const G = PG.G, legal = clickable ? gLegal(G, p).map(c => c[0] + c[1]) : [], ord = suitOrd(G.tr).slice().reverse();
+  const G = PG.G, legal = clickable ? gLegal(G, p).map(c => c[0] + c[1]) : [], ord = suitOrd(G.tr);
   const ls = [...new Set(legal.map(c => c[0]))];
   const sel = clickable ? (ls.length === 1 ? ls[0] : PG.dsel && ls.includes(PG.dsel) ? PG.dsel : null) : null;
   const cols = ord.map(s => { const rs = G.live[p][s]; return `<button class="dcol${sel === s ? ' on' : ''}" ${clickable && ls.includes(s) ? `data-dsuit="${s}"` : 'tabindex="-1"'}>${rs.length ? rs.map((r, k) => `<span class="dc${s === 'H' || s === 'D' ? ' red' : ''}" style="z-index:${k + 1}"><b>${rk(r)}</b><i>${SYM[s]}</i></span>`).join('') : `<span class="dvoid">${SYM[s]}<br>—</span>`}</button>`; }).join('');
@@ -6289,7 +6289,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v121';
+const APP_V = 'v123';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -7215,7 +7215,7 @@ const THEO_AGE = {
 <p>Tu n'as plus de cartes de la couleur demandée ? Alors tu peux jouer un <b>atout</b> : c'est la couleur magique, plus forte que toutes les autres. On dit que tu <b>coupes</b>.</p>
 <h3>👑 Qui est le plus fort ?</h3>${TBL(['Les cartes, de la plus forte à la plus faible'], [['As · Roi · Dame · Valet · 10 · 9 · 8 · 7 · 6 · 5 · 4 · 3 · 2']])}
 <h3>📜 Le contrat</h3><p>Avant de jouer, on fait les <b>enchères</b> : chacun dit combien de plis son équipe va gagner. Petit secret : on compte <b>à partir de 6</b>. Dire « 1 » veut dire « 7 plis », dire « 4 » veut dire « 10 plis ».</p>
-${TBL(['Tu dis…', 'Tu dois gagner…'], [['1', '7 plis'], ['2', '8 plis'], ['3', '9 plis'], ['4', '10 plis'], ['6', '12 plis : un chelem !']])}
+${TBL(['Tu dis…', 'Tu dois gagner…'], [['1', '7 plis'], ['2', '8 plis'], ['3', '9 plis'], ['4', '10 plis'], ['5', '11 plis'], ['6', '12 plis : un chelem !'], ['7', '13 plis : le grand chelem !']])}
 <p>Celui qui joue le contrat s'appelle le <b>déclarant</b>. Son partenaire pose toutes ses cartes sur la table : c'est le <b>mort</b>. Le déclarant joue les deux mains, comme un sorcier qui a quatre bras !</p>
 ${KEEP('Fournir la couleur demandée. L\'atout bat tout le monde. Plis à gagner = 6 + ce que tu as annoncé.')}` },
     points: { t: 'Compter ses points', d: 'Combien vaut ta main ?', h: () => `
@@ -7287,7 +7287,7 @@ ${KEEP('La manche rapporte beaucoup : avec 25 points à deux, on la joue.')}` },
 <h3>⚔️ La table</h3><p>Deux équipes de deux : <b>Nord-Sud</b> contre <b>Est-Ouest</b>. Ton partenaire est en face. On joue dans le sens des aiguilles d'une montre, avec <b>13 cartes</b> chacun.</p>
 <h3>🃏 Le pli</h3><p>Chacun pose une carte : c'est un <b>pli</b> (ou une <b>levée</b>). On doit <b>fournir</b> la couleur demandée. La plus forte carte gagne, sauf si quelqu'un qui n'a plus de cette couleur <b>coupe</b> avec un atout.</p>
 ${TBL(['Les cartes', 'Les couleurs (pour les enchères)'], [['A, R, D, V, 10… 2', '♣ < ♦ < ♥ < ♠ < Sans-Atout']])}<p>♥ et ♠ sont les <b>majeures</b>, ♣ et ♦ les <b>mineures</b>.</p>
-<h3>📜 Le contrat</h3><p>On annonce le nombre de plis <b>au-delà de 6</b> : plis à faire = <b>6 + le palier</b>. 1♠ = 7 plis, 3SA = 9, 4♥ = 10. Trois « passe » de suite terminent les enchères.</p>
+<h3>📜 Le contrat</h3><p>On annonce le nombre de plis <b>au-delà de 6</b> : plis à faire = <b>6 + le palier</b>. 1♠ = 7 plis, 3SA = 9, 4♥ = 10, 5♦ = 11. Trois « passe » de suite terminent les enchères.</p><p>Après l'entame, le partenaire du déclarant s'étale : c'est le <b>mort</b>. L'<b>atout se met à sa droite</b> ; à Sans-Atout, on alterne rouges et noires.</p>
 <p>Le <b>déclarant</b> joue ses cartes et celles de son partenaire, le <b>mort</b>, posées face visible. L'adversaire à <b>gauche du déclarant</b> entame.</p>
 ${TBL(['Objectif', 'Contrats', 'Points à deux'], [['Partielle', 'sous la manche', 'moins de 25'], ['Manche', '3SA · 4♥ · 4♠ · 5♣ · 5♦', '25'], ['Petit chelem', '12 plis', '33'], ['Grand chelem', '13 plis', '37']])}
 ${KEEP('Plis à faire = 6 + palier. Les seuils à retenir : 25, 33, 37.')}` },
@@ -10003,10 +10003,14 @@ const TCNT = {
 // ---------------- la scène ----------------
 const TW = 104, TH = 148, TSLOT = { N: [748, 268], S: [748, 500], O: [596, 384], E: [900, 384] }, TSLOTD = { N: [748, 330], S: [748, 540], O: [596, 436], E: [900, 436] };
 let TCH = null;
+// l'atout du contrat (« 4♥ par Sud », « Atout : ♠ ») ; 'NT' à Sans-Atout ou sans contrat
+function tTrumpOf(st) { const m = /([♠♥♦♣])/.exec(st.contract || ''); return m ? ({ '♠': 'S', '♥': 'H', '♦': 'D', '♣': 'C' })[m[1]] : 'NT'; }
+// le mort s'étale en colonnes : l'atout à SA droite (donc à gauche de l'écran pour Nord), puis les couleurs en alternant rouges et noires
+function tDummyOrd(tr) { return ({ S: ['S', 'H', 'C', 'D'], H: ['H', 'S', 'D', 'C'], D: ['D', 'S', 'H', 'C'], C: ['C', 'H', 'S', 'D'] })[tr] || ['S', 'H', 'C', 'D']; }
 function tHandPos(seat, cards, dummy) {
   const c = tSort(cards), out = [];
   if (dummy) {
-    const suits = ['S', 'H', 'C', 'D'].filter(s => c.some(x => x[0] === s)), cw = TW + 14, x0 = 800 - (suits.length * cw - 14) / 2;
+    const suits = tDummyOrd(dummy).filter(s => c.some(x => x[0] === s)), cw = TW + 14, x0 = 800 - (suits.length * cw - 14) / 2;
     suits.forEach((s, j) => c.filter(x => x[0] === s).forEach((x, k) => out.push([x, x0 + j * cw, 12 + k * 34, k])));
     return out;
   }
@@ -10026,7 +10030,7 @@ function tRender(anim) {
   const L = TCH.L, i = TCH.i, st = tState(L, i), p0 = L.steps[i], p = TCH.rev && p0.ra ? Object.assign({}, p0, p0.ra) : p0;
   const stage = document.querySelector('.tstage'); if (!stage) return; const cards = stage.querySelector('.tcards'), ov = stage.querySelector('.tov');
   const T = new Map(), hl = new Set(p.hl || []), hide = !!(p.hide || p.row);
-  if (!hide) Object.entries(st.hands).forEach(([seat, cs]) => tHandPos(seat, cs, st.dummy === seat).forEach(([id, x, y, k]) => T.set(id, { x, y, z: 10 + k, up: st.up.includes(seat), seat })));
+  if (!hide) Object.entries(st.hands).forEach(([seat, cs]) => tHandPos(seat, cs, st.dummy === seat && tTrumpOf(st)).forEach(([id, x, y, k]) => T.set(id, { x, y, z: 10 + k, up: st.up.includes(seat), seat })));
   const SL = st.dummy ? TSLOTD : TSLOT;
   if (!hide) st.trick.forEach(([seat, c], k) => T.set(c, { x: SL[seat][0], y: SL[seat][1], z: 60 + k, up: true, trick: k }));
   if (p.row) { const n = p.row.length, gap = Math.min(116, 1400 / n), x0 = 800 - ((n - 1) * gap + TW) / 2; p.row.forEach((c, k) => T.set('r' + c, { x: x0 + k * gap, y: 360, z: 10 + k, up: true, rowk: k })); }
@@ -10055,7 +10059,7 @@ function tRender(anim) {
     if (t.trick != null && t.trick >= firstPlay && anim) d = (t.trick - firstPlay) * 650;
     if (DEAL && dOrd.has(id)) { const k = dOrd.get(id); d = 500 + k * 95; e.style.transition = ''; TCH.tm.push(setTimeout(() => { e.style.zIndex = t.z; }, d + 300)); }
     e.style.transitionDelay = d + 'ms';
-    e.style.transform = `translate(${t.x}px,${t.y - (glow ? 22 : 0)}px)`; e.style.opacity = (p.dim && hl.size && !glow && t.trick == null) ? .3 : 1; e.style.zIndex = t.z;
+    e.style.transform = `translate(${t.x}px,${t.y - (glow && t.seat !== st.dummy ? 22 : 0)}px)`; e.style.opacity = (p.dim && hl.size && !glow && t.trick == null) ? .3 : 1; e.style.zIndex = t.z;
     if (DEAL && dOrd.has(id)) { e.classList.add('down'); e.classList.toggle('glow', glow); if (t.up) { const fl = 500 + dOrd.size * 95 + 700 + (t.z - 10) * 70; TCH.tm.push(setTimeout(() => { e.classList.remove('down', 'dealing'); }, fl)); } else TCH.tm.push(setTimeout(() => e.classList.remove('dealing'), 500 + dOrd.size * 95 + 700)); }
     else { e.classList.toggle('down', !t.up); e.classList.toggle('glow', glow); }
   });
@@ -10536,13 +10540,17 @@ const C_SLIDES = {
   ] },
   c_contrat: { ic: '📜', t: 'Le contrat et le mort', steps: [
     { big: TBIG('Le contrat', 'Chapitre 3'), say: 'Avant de jouer, les deux camps font des <b>enchères</b> : chacun promet un nombre de plis.' },
-    { hide: 1, big: `<div class="tsum"><h3>Plis à faire = 6 + le palier</h3>${TTAB([['1♠', '7 plis'], ['2♥', '8 plis'], ['3SA', '9 plis'], ['4♥', '10 plis'], ['6♣', '12 plis'], ['7SA', '13 plis']])}</div>`, say: 'Les 6 premiers plis sont « gratuits » : on annonce seulement ce qu\'on fera <b>en plus</b>.' },
+    { hide: 1, big: `<div class="tsum"><h3>Plis à faire = 6 + le palier</h3>${TTAB([['1♠', '7 plis'], ['2♥', '8 plis'], ['3SA', '9 plis'], ['4♥', '10 plis'], ['5♦', '11 plis'], ['6♣', '12 plis'], ['7SA', '13 plis']])}</div>`, say: 'Les 6 premiers plis sont « gratuits » : on annonce seulement ce qu\'on fera <b>en plus</b>.' },
     { deal: { N: 'Q72.K863.A54.J62', E: 'T643.52.9763.A54', S: 'K5.AQJ74.Q82.K93', O: 'AJ98.T9.KJT.QT87' }, up: 'S', auction: { d: 'S', b: ['1H', 'P', '2H', 'P', '4H', 'P', 'P', 'P'] }, say: 'Sud ouvre 1♥, Nord soutient à 2♥, Sud conclut à 4♥. Trois « passe » de suite : les enchères sont finies.' },
     { q: 'Quel est le contrat, et combien de plis faut-il ?', a: '<b>4♥</b> : 4 + 6 = <b>10 plis</b> pour Nord-Sud.' },
     { contract: '4♥ par Sud', q: 'Qui est le déclarant ?', a: '<b>Sud</b> : dans le camp gagnant, c\'est lui qui a dit cœur le premier.' },
     { auction: null, up: 'SO', play: [['O', 'S14']], say: 'Le joueur à <b>gauche</b> du déclarant entame : Ouest joue l\'As de pique, face cachée pour les autres jusque-là.' },
-    { dummy: 'N', up: 'NSO', say: 'Puis le partenaire du déclarant étale ses cartes sur la table : c\'est le <b>mort</b>. Le déclarant joue les deux mains.' },
-    { hide: 1, big: `<div class="tsum"><h3>À retenir</h3><ol><li>Plis à faire = 6 + palier.</li><li>Le déclarant : le premier de son camp à avoir nommé la couleur du contrat.</li><li>L'entame vient de sa gauche ; ensuite, le mort s'étale.</li></ol></div>`, say: 'Le contrat, en trois lignes.' },
+    { dummy: 'N', up: 'NSO', say: 'L\'entame est posée : le partenaire du déclarant étale alors ses cartes sur la table, en colonnes. C\'est le <b>mort</b>. Le déclarant joue les deux mains.' },
+    { hl: ['H13', 'H8', 'H6', 'H3'], say: 'Regardez la place des cœurs : l\'<b>atout se met à la droite du mort</b>, donc à la gauche du déclarant. Les autres couleurs suivent en alternant rouges et noires.' },
+    { q: 'Le mort étale ses cartes. De quel côté place-t-il l\'atout ?', a: 'À <b>sa droite</b>, donc à la <b>gauche du déclarant</b>. C\'est la seule place imposée.', ra: { hl: ['H13', 'H8', 'H6', 'H3'] } },
+    { deal: { N: 'Q72.K863.A54.J62', S: 'K5.AQJ7.Q82.K943' }, up: 'NS', dummy: 'N', contract: '3SA par Sud', say: 'À <b>Sans-Atout</b>, aucune couleur n\'a de place imposée : on <b>alterne rouges et noires</b> (♠ ♥ ♣ ♦), pour ne pas confondre deux couleurs voisines.' },
+    { hide: 1, big: `<div class="tsum"><h3>Le mort s'étale</h3><ol><li>Après l'entame, jamais avant.</li><li>Une colonne par couleur, de la plus forte à la plus petite.</li><li>L'atout à la <b>droite du mort</b> ; à Sans-Atout, rouges et noires alternées.</li><li>Ensuite, le mort se tait : il joue ce que le déclarant demande.</li></ol></div>`, say: 'Le mort, en quatre gestes.' },
+    { hide: 1, big: `<div class="tsum"><h3>À retenir</h3><ol><li>Plis à faire = 6 + palier.</li><li>Le déclarant : le premier de son camp à avoir nommé la couleur du contrat.</li><li>L'entame vient de sa gauche ; ensuite, le mort s'étale, l'atout à sa droite.</li></ol></div>`, say: 'Le contrat, en trois lignes.' },
   ] },
   c_redem: { ic: '🔁', t: 'La redemande de l\'ouvreur', steps: [
     { big: TBIG('La redemande', 'Chapitre 7'), say: 'L\'ouvreur a ouvert, le partenaire a répondu. Au deuxième tour, l\'ouvreur <b>précise</b> sa main.' },
@@ -10617,21 +10625,31 @@ ${KEEP('Je fournis d\'abord. Si je ne peux pas, je peux couper. Le plus gros ato
 <p>Avant de jouer, les deux camps font des <b>enchères</b>. Chaque enchère promet un nombre de plis, dans une couleur d'atout ou à Sans-Atout.</p>
 <h3>Plis à faire = 6 + le palier</h3>
 <p>Une enchère a un <b>palier</b>, de 1 à 7. On annonce seulement les plis <b>au-delà de 6</b>.</p>
-${TBL(['Enchère', 'Plis à faire'], [['1♠', '7'], ['2♥', '8'], ['3SA', '9'], ['4♥ ou 4♠', '10'], ['6 (petit chelem)', '12'], ['7 (grand chelem)', '13']])}
+${TBL(['Enchère', 'Plis à faire'], [['1♠', '7'], ['2♥', '8'], ['3SA', '9'], ['4♥ ou 4♠', '10'], ['5♣ ou 5♦', '11'], ['6 (petit chelem)', '12'], ['7 (grand chelem)', '13']])}
 <h3>Les enchères montent</h3>
 <p>Chaque enchère doit être plus haute que la précédente. À un même palier, l'ordre est : <b>♣ ♦ ♥ ♠ SA</b>. Ainsi, 1SA est plus haut que 1♠. Trois « passe » de suite terminent les enchères : la dernière enchère devient le <b>contrat</b>.</p>
 <h3>Qui joue ?</h3>
 <p><b>1. Le déclarant</b> : dans le camp qui a gagné les enchères, celui qui a nommé la couleur du contrat le premier.</p>
 <p><b>2. L'entame</b> : le joueur à <b>gauche</b> du déclarant joue la première carte.</p>
 <p><b>3. Le mort</b> : ensuite, le partenaire du déclarant étale ses cartes. Le déclarant joue les deux mains.</p>
+<h3>Comment le mort s'étale</h3>
+<p><b>1. Quand ?</b> Seulement après l'entame : le mort attend que la première carte soit posée, face visible.</p>
+<p><b>2. En colonnes</b> : une colonne par couleur, tournée vers le déclarant. Dans chaque colonne, les cartes se chevauchent de la plus forte (du côté du mort) à la plus petite (vers le centre de la table), assez décalées pour qu'on lise chaque carte.</p>
+<p><b>3. L'atout à droite</b> : la couleur d'atout se place à la <b>droite du mort</b>, donc à la gauche du déclarant. C'est la seule place imposée : d'un coup d'œil, les quatre joueurs savent quel est l'atout.</p>
+<p><b>4. À Sans-Atout</b> : pas de place imposée. L'usage est d'<b>alterner rouges et noires</b> (♠ ♥ ♣ ♦), pour ne pas confondre deux couleurs voisines.</p>
+<p><b>5. Ensuite, le mort se tait</b> : il joue les cartes que le déclarant nomme, sans conseil ni signe. Il peut seulement empêcher une irrégularité, par exemple une carte jouée de la mauvaise main.</p>
+<div class="ex">Contrat 4♥ par Sud. Nord, le mort, attend l'entame d'Ouest, puis étale ses quatre colonnes : les <b>cœurs à sa droite</b>, c'est-à-dire à la gauche de Sud, puis ♠, ♦ et ♣ en alternant les couleurs.</div>
 <div class="ex">Sud 1♥ – Nord 2♥ – Sud 4♥ – passe, passe, passe. Le contrat est <b>4♥</b> : 10 plis à faire. Sud a dit cœur le premier : il est <b>déclarant</b>. Ouest entame, Nord est le <b>mort</b>.</div>
 <h3>Les grands contrats</h3>
 ${TBL(['Objectif', 'Contrats'], [['La manche', '3SA · 4♥ · 4♠ · 5♣ · 5♦'], ['Le petit chelem', 'palier 6 : 12 plis'], ['Le grand chelem', 'palier 7 : 13 plis']])}
-${KEEP('Plis à faire = 6 + palier. Le déclarant a nommé la couleur le premier. Sa gauche entame, son partenaire est le mort.')}`,
+${KEEP('Plis à faire = 6 + palier. Le déclarant a nommé la couleur le premier. Sa gauche entame, puis son partenaire, le mort, s\'étale : l\'atout à sa droite ; à Sans-Atout, rouges et noires alternées.')}`,
     qs: [['Combien de plis faut-il pour réussir 2♠ ?', ['2', '6', '8', '9'], 2, '6 + 2 = 8.'],
       ['Quelle enchère est la plus haute ?', ['1SA', '1♠', '1♥'], 0, 'À un même palier : ♣ ♦ ♥ ♠ SA.'],
       ['Qui joue la première carte de la donne ?', ['Le joueur à gauche du déclarant', 'Le déclarant', 'Le mort'], 0, 'L\'entame vient de la gauche du déclarant.'],
       ['Que fait le mort ?', ['Il étale ses cartes ; le déclarant les joue', 'Il joue ses cartes lui-même', 'Il ne joue pas cette donne'], 0, 'Le déclarant joue ses deux mains.'],
+      ['Quand le mort étale-t-il ses cartes ?', ['Après l\'entame', 'Avant l\'entame', 'Dès la fin des enchères, avant tout'], 0, 'Il attend que l\'entame soit posée, face visible.'],
+      ['Où le mort place-t-il la couleur d\'atout ?', ['À sa droite (à gauche du déclarant)', 'À sa gauche', 'Au milieu', 'N\'importe où'], 0, 'L\'atout à la droite du mort : tout le monde le voit d\'un coup d\'œil.'],
+      ['À Sans-Atout, comment le mort range-t-il ses couleurs ?', ['En alternant rouges et noires', 'Les deux rouges ensemble', 'Dans n\'importe quel ordre, collées'], 0, 'Rouge, noire, rouge, noire : on ne confond pas deux couleurs voisines.'],
       ['Quelles sont les manches ?', ['3SA, 4♥, 4♠, 5♣, 5♦', '1SA, 2♥, 3♣', '4SA, 5♥, 6♣'], 0, 'Ce sont les contrats qui rapportent la prime de manche.']],
     ex: [['Sud 1♥ – Ouest passe – Nord 3♥ – Est passe – Sud 4♥ – tous passent. Le contrat, et les plis ?', null, ['4♥, 10 plis', '3♥, 9 plis', '4♥, 4 plis'], 0, 'La dernière enchère : 4♥. 6 + 4 = 10.'],
       ['Même donne. Qui est le déclarant ?', null, ['Nord', 'Est', 'Sud', 'Ouest'], 2, 'Sud a dit cœur le premier.'],
@@ -11435,6 +11453,8 @@ const C_HOME = {
   c3: [['Combien de plis faut-il pour réussir 5♦ ?', null, ['5', '10', '11', '12'], 2, '6 + 5 = 11.'],
     ['Est 1♠ – Sud 2♥ – Ouest 2♠ – Nord 4♥ – tous passent. Qui est le déclarant ?', null, SE4, 2, 'Sud a dit cœur le premier dans son camp.'],
     ['Même donne. Qui est le mort ?', null, SE4, 0, 'Le partenaire du déclarant : Nord.'],
+    ['Même donne : Nord s\'étale. Où met-il ses cœurs ?', null, ['À sa droite, à gauche de Sud', 'À sa gauche, à droite de Sud', 'Au milieu de ses colonnes'], 0, 'L\'atout se place à la droite du mort.'],
+    ['Le mort peut-il conseiller le déclarant pendant le jeu ?', null, ['Non, il joue seulement ce qu\'on lui demande', 'Oui, s\'il voit une erreur de jeu', 'Oui, à voix basse'], 0, 'Le mort se tait. Il peut seulement empêcher une irrégularité.'],
     ['Quelle enchère est la plus haute ?', null, ['2♠', '2♦', '2♣', '2♥'], 0, 'À un même palier : ♣ ♦ ♥ ♠ SA.']],
   c4: [['Combien de points d\'honneur ?', 'AJ5.Q862.KJ4.Q73', ['12', '13', '14'], 1, '4 + 1 + 2 + 3 + 1 + 2 = 13.'],
     ['Combien de points d\'honneur ?', 'T7.KQJ93.A852.64', ['9', '10', '11'], 1, '3 + 2 + 1 + 4 = 10.'],
