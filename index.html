@@ -1483,6 +1483,11 @@ body[data-th=ado] .pcard .pcin{background:radial-gradient(ellipse at 50% 30%,#fb
 body[data-th=adulte] .pcard .pcin,body:not([data-th]) .pcard .pcin{background:radial-gradient(ellipse at 50% 35%,#fffaf0 0%,#f3eadb 60%,#e2d5ee 100%);box-shadow:inset 0 0 0 1.5px #b08d3c,inset 0 0 0 4px #fffaf0,inset 0 0 0 5px rgba(176,141,60,.6)}
 @media (max-width:400px){html body .castf .castfr.pcard{width:142px;height:200px;margin-right:12px}.pcard .pcin{left:21px;right:21px}.pcard .pcrank{font-size:17px}.pcard .pcsuit{font-size:15px}}
 .castf .castb small{white-space:normal!important;letter-spacing:.04em!important;font-size:10.5px!important;display:inline-block;max-width:100%}
+/* v111 les personnages larges sortent du cadre doré pour garder une belle taille */
+.pcard.pwide .pcin{overflow:visible}
+.pcard.pwide .pcin .cfimg{max-width:none;width:calc(100% + 30px);margin:0 -15px;object-position:50% 100%}
+.pcard.pxwide .pcin .cfimg{width:calc(100% + 40px);margin:0 -20px}
+.pcard .pcix{text-shadow:0 0 3px #fffdf8,0 0 3px #fffdf8,0 0 2px #fffdf8}
 </style>
 </head>
 <body>
@@ -6236,7 +6241,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v110';
+const APP_V = 'v111';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -12064,6 +12069,7 @@ const castCardIx = (i, k) => {
     const ix = `<span class="pcrank">${jk ? 'J<br>O<br>K<br>E<br>R' : r}</span>${s ? `<span class="pcsuit">${s}</span>` : ''}`;
     fr.classList.remove('wide'); fr.classList.add('pcard'); if (red) fr.classList.add('red'); if (jk) fr.classList.add('joker');
     fr.innerHTML = `<span class="pcix pctl">${ix}</span><span class="pcin">${fr.innerHTML}</span><span class="pcix pcbr">${ix}</span>`;
+    const im = fr.querySelector('.cfimg'); if (im) { const f = () => { const q = im.naturalWidth / im.naturalHeight; if (jk) return; if (q > 0.6) fr.classList.add('pwide'); if (q > 0.8) fr.classList.add('pxwide'); }; if (im.complete) f(); else im.addEventListener('load', f); }
   });
 } catch (e) { } }; }
 
