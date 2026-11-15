@@ -1519,6 +1519,17 @@ body[data-th=adulte] .pcard .pcin,body:not([data-th]) .pcard .pcin{background:ra
 .tbig small{animation:tfade .6s ease-out .9s both}
 @keyframes trise{from{opacity:0;transform:translateY(30px) scale(.94);letter-spacing:.06em}to{opacity:1;transform:none;letter-spacing:0}}
 @media (prefers-reduced-motion:reduce){.tbig *, .tbigw{animation:none!important}}
+/* v116 histoires des cours : personnages en pied */
+.tsum.tstory .tsfig{display:flex;justify-content:center;align-items:flex-end;gap:6px;margin:0 0 14px;position:relative}
+.tsum.tstory .tsfig::after{content:"";position:absolute;left:12%;right:12%;bottom:-4px;height:16px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.2),transparent)}
+.tsum.tstory .tsfig img{position:relative;z-index:1;width:auto;filter:drop-shadow(0 4px 5px rgba(0,0,0,.25));animation:tsin .6s cubic-bezier(.2,1.2,.4,1) both}
+@keyframes tsin{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.tsum.tstory.tsolo{display:flex;align-items:center;gap:40px;max-width:1420px;text-align:left;padding:30px 50px 30px 30px}
+.tsum.tstory.tsolo .tsfig{flex:none;margin:0}
+.tsum.tstory.tsolo .tsfig img{max-width:520px;object-fit:contain;animation:tsin .8s cubic-bezier(.2,1.1,.4,1) both}
+.tsum.tstory.tsolo .tstx{flex:1;min-width:0}
+.tsum.tstory.tsolo h3{margin-bottom:6px}
+.tsum.tstory.tsolo p{font-size:46px;animation:tfade .6s ease-out .35s both}
 </style>
 </head>
 <body>
@@ -6272,7 +6283,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v115';
+const APP_V = 'v116';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -12120,6 +12131,39 @@ const GM_SCALE = { archiduc: 1, archiduchesse: 1.05, archbishop: 1.1, colonel: .
   // les classes « larges » ajoutées au chargement des images ne doivent plus s'appliquer
   setTimeout(() => app.querySelectorAll('.castgrid .pcard.sc').forEach(c => c.classList.remove('pwide', 'pxwide')), 600);
 } catch (e) { } }; }
+
+// ====================================================================
+//  v116 — les histoires des cours : les personnages en pied, à la même échelle ;
+//  quand un seul personnage est en scène, il est seul et en grand
+// ====================================================================
+const STORY_WHO = {
+  enfant: [['barnabe', /Barnabé/], ['eulalie', /Eulalie/], ['nain', /Grognon/], ['lirelune', /Lirelune/], ['flottin', /Flottin/], ['dumble', /Dumblebridge/]],
+  ado: [['thalindor', /Thalindor/], ['aelira', /A[ëe]lira/], ['vaelmor', /Vaelmor/], ['borbak', /Borbak/], ['orlavin', /Orlavin/], ['chelemdor', /Chelemdor/]],
+  adulte: [['archiduchesse', /archiduchesse/i], ['archiduc', /archiduc(?!hesse)/i], ['archbishop', /Archbishop|archevêque/i], ['colonel', /colonel|Surcontre/i], ['chicane', /Chicane/], ['duke', /Duke|Blackwood/]],
+};
+function storyWho(line) {
+  const th = tone() === 'enfant' || tone() === 'ado' ? tone() : 'adulte';
+  const txt = String(line).replace(/<[^>]+>/g, ' ');
+  const hit = STORY_WHO[th].map(([k, re]) => { const m = txt.match(re); return m ? [k, m.index] : null; }).filter(Boolean).sort((a, b) => a[1] - b[1]).map(x => x[0]);
+  return hit.length ? hit : CAST_FULL[th]();
+}
+function storyFigs(ks) {
+  ks = ks.filter(k => GM_FULL[k]);
+  if (ks.length === 1) { const k = ks[0], s = Math.max((GM_SCALE[k] || 1) / 1.12, .78); return `<div class="tsfig solo"><img alt="" src="${GM_FULL[k]}" style="height:${Math.round(700 * s)}px"></div>`; }
+  const mx = Math.max(...ks.map(k => GM_SCALE[k] || 1)), H = ks.length > 3 ? 250 : 300;
+  return `<div class="tsfig">${ks.map((k, i) => `<img alt="" src="${GM_FULL[k]}" style="height:${Math.round(H * (GM_SCALE[k] || 1) / mx)}px;animation-delay:${i * 110}ms">`).join('')}</div>`;
+}
+{ const _css = cStorySteps; cStorySteps = function (c) {
+  const r = _css(c); let L = null; try { L = cStoryLines(c); } catch (e) { }
+  if (!L) return r;
+  [0, 1].forEach(j => { const st = r[j] && r[j][0]; if (!st || !st.big) return;
+    const ks = storyWho(L[j]).filter(k => GM_FULL[k]); if (!ks.length) return;
+    const solo = ks.length === 1;
+    st.big = st.big.replace('class="tsum tstory"', `class="tsum tstory${solo ? ' tsolo' : ''}"`).replace(/<div class="tsc">[\s\S]*?<\/div>/, storyFigs(ks));
+    if (solo) st.big = st.big.replace(/(<div class="tsfig solo">[\s\S]*?<\/div>)([\s\S]*)<\/div>$/, '$1<div class="tstx">$2</div></div>');
+  });
+  return r;
+}; }
 
 </script>
 <script>if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) { try { navigator.serviceWorker.register("sw.js"); } catch (e) {} }</script>
