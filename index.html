@@ -1551,6 +1551,18 @@ svg.nilboat{height:1.45em;width:auto;vertical-align:-.3em;margin-right:.25em}
 .texc .txe{font:500 36px/1.35 var(--f-body);color:#14533f;margin:22px 0 0;animation:tfade .5s both}
 .texc .r{color:#c3132f}.texc .k{color:#14211b}
 .texc .txo i.txt{font-style:normal}
+/* v127 le fit et les couleurs courtes */
+.tsum.tfitd,.tsum.tcourt{text-align:center;max-width:1300px}
+.tfitd .tfr{display:flex;justify-content:center;gap:24px;margin:10px 0 18px}
+.tfitd .tfr span{font:700 54px var(--f-disp);color:#14533f;background:#e3f6ea;border:3px solid #1f9d55;border-radius:20px;padding:8px 30px}
+.tfitd p,.tcourt p{font-size:34px;margin:10px 0}.tfitd .nf,.tcourt .nf{color:#9b2c2c}
+.tcourt .tcc{display:flex;justify-content:center;gap:26px;margin:14px 0 16px}
+.tcourt .tcc>div{display:flex;flex-direction:column;align-items:center;gap:6px;background:#fff;border:3px solid #d9c391;border-radius:22px;padding:16px 30px;min-width:260px}
+.tcourt .tcc b{font:700 40px var(--f-disp);color:#14533f}
+.tcourt .tcc em{font:700 60px/1.1 var(--f-disp);font-style:normal;min-height:70px;display:flex;gap:12px;align-items:center}.tcourt .tcc em.z{color:#9a8f78}
+.tcourt .tcc em i{font-style:normal;background:#fffdf8;border:2px solid #cfc6b4;border-radius:10px;padding:2px 10px}
+.tcourt .tcc small{font-size:26px;line-height:1.2;color:#5a5446}
+.tcourt .tcc strong{font:700 56px var(--f-disp);color:#fff;background:#1f9d55;border-radius:50px;padding:2px 26px;margin-top:6px}
 </style>
 </head>
 <body>
@@ -6304,7 +6316,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v125';
+const APP_V = 'v127';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -9915,9 +9927,12 @@ const TLESSONS = [
     { hide: 1, big: TBIG('40', 'points dans le jeu'), q: 'Combien de points d\'honneur dans tout le jeu ?', a: '<b>40</b> : 4 couleurs × (4 + 3 + 2 + 1). Soit <b>10</b> en moyenne par joueur.' },
     { deal: { S: 'KQ9.A8.Q76.JT54' }, up: 'S', q: 'À vous : combien de points dans cette main ?', a: '<b>12</b> : Roi 3 + Dame 2 + As 4 + Dame 2 + Valet 1.', ra: { pts: 'S', tally: { S: 12 } } },
     { deal: { S: 'K954.Q873.6.A852' }, up: 'S', pts: 'S', tally: { S: 9 }, say: 'Une autre main : 9 points d\'honneur.' },
-    { hl: ['D6'], tally: { S: '9 + 2' }, say: 'Quand on a trouvé un <b>fit</b> avec son partenaire (8 cartes à deux), les couleurs courtes valent des points de <b>distribution</b> : chicane 3, singleton 2, doubleton 1.' },
+    { deal: { N: 'A7.KJ52.KJ93.Q74', S: 'K954.Q873.6.A852' }, up: 'NS', hl: ['H13', 'H11', 'H5', 'H2', 'H12', 'H8', 'H7', 'H3'], say: 'D\'abord, le <b>fit</b> : c\'est une couleur où les deux partenaires ont, <b>ensemble, au moins 8 cartes</b>. Ici, Nord a 4 cœurs et Sud 4 cœurs : 4 + 4 = <b>8 cœurs</b>. Nord-Sud ont un fit à cœur : cœur sera l\'atout.' },
+    { hide: 1, big: `<div class="tsum tfitd"><h3>Le fit : au moins 8 cartes à deux</h3><div class="tfr"><span>5 + 3</span><span>4 + 4</span><span>6 + 2</span></div><p>Avec 8 atouts sur 13, on en a plus que les adversaires : on contrôle la couleur.</p><p class="nf">7 cartes à deux (4 + 3, 5 + 2) : <b>pas de fit</b>.</p></div>`, say: 'Le fit se trouve pendant les enchères : chacun décrit ses couleurs longues, jusqu\'à ce qu\'on découvre <b>8 cartes à deux</b>.' },
+    { hide: 1, big: `<div class="tsum tcourt"><h3>Avec un fit, les couleurs courtes rapportent</h3><div class="tcc"><div><b>Chicane</b><em class="z">—</em><small>aucune carte<br>dans la couleur</small><strong>+3</strong></div><div><b>Singleton</b><em><i class="r">6♦</i></em><small>une seule carte<br>dans la couleur</small><strong>+2</strong></div><div><b>Doubleton</b><em><i class="r">8♦</i> <i class="r">3♦</i></em><small>deux cartes<br>dans la couleur</small><strong>+1</strong></div></div><p>Pourquoi ? Quand la couleur est jouée, on n\'en a plus : on <b>coupe avec un atout</b>, et chaque coupe est un pli de plus.</p><p class="nf">Sans fit, une couleur courte ne vaut <b>rien</b> : on n\'a pas assez d\'atouts pour couper.</p></div>`, say: 'Ce sont les <b>points de distribution</b>. Plus la couleur est courte, plus elle rapporte : chicane <b>3</b>, singleton <b>2</b>, doubleton <b>1</b>.' },
+    { hl: ['D6'], tally: { S: '9 + 2' }, say: 'Revenons à Sud. Il a un fit à cœur, et un <b>singleton</b> à carreau : le 6. Il ajoute <b>2 points</b> de distribution.' },
     { q: 'Le partenaire a ouvert 1♥ et Sud a 4 cœurs. Combien vaut sa main ?', a: '9 points d\'honneur + 2 pour le singleton = <b>11 points</b>.', ra: { tally: { S: 11 } } },
-    { hide: 1, big: `<div class="tsum"><h3>À retenir</h3><ol><li>As 4, Roi 3, Dame 2, Valet 1.</li><li>40 points dans le jeu.</li><li>Avec un fit : chicane 3, singleton 2, doubleton 1.</li></ol></div>`, say: 'Les points, en trois lignes.' },
+    { hide: 1, big: `<div class="tsum"><h3>À retenir</h3><ol><li>As 4, Roi 3, Dame 2, Valet 1.</li><li>40 points dans le jeu.</li><li>Le fit : au moins 8 cartes à deux dans une couleur.</li><li>Avec un fit seulement : chicane (0 carte) +3, singleton (1 carte) +2, doubleton (2 cartes) +1.</li></ol></div>`, say: 'Les points, en quatre lignes.' },
   ] },
   { id: 'ouvrir', ic: '📣', t: 'L\'ouverture', d: '12 points, la majeure 5e, 1SA, la meilleure mineure', steps: [
     { big: TBIG('L\'ouverture', 'Leçon 3'), say: 'Le premier joueur qui a une main forte <b>ouvre</b> les enchères.' },
@@ -10074,7 +10089,7 @@ function tRender(anim) {
     if (t.trick != null && t.trick >= firstPlay && anim) d = (t.trick - firstPlay) * 650;
     if (DEAL && dOrd.has(id)) { const k = dOrd.get(id); d = 500 + k * 95; e.style.transition = ''; TCH.tm.push(setTimeout(() => { e.style.zIndex = t.z; }, d + 300)); }
     e.style.transitionDelay = d + 'ms';
-    e.style.transform = `translate(${t.x}px,${t.y - (glow && t.seat !== st.dummy ? 22 : 0)}px)`; e.style.opacity = (p.dim && hl.size && !glow && t.trick == null) ? .3 : 1; e.style.zIndex = t.z;
+    e.style.transform = `translate(${t.x}px,${t.y - (glow && t.seat !== st.dummy ? (t.seat === 'N' ? -22 : 22) : 0)}px)`; e.style.opacity = (p.dim && hl.size && !glow && t.trick == null) ? .3 : 1; e.style.zIndex = t.z;
     if (DEAL && dOrd.has(id)) { e.classList.add('down'); e.classList.toggle('glow', glow); if (t.up) { const fl = 500 + dOrd.size * 95 + 700 + (t.z - 10) * 70; TCH.tm.push(setTimeout(() => { e.classList.remove('down', 'dealing'); }, fl)); } else TCH.tm.push(setTimeout(() => e.classList.remove('dealing'), 500 + dOrd.size * 95 + 700)); }
     else { e.classList.toggle('down', !t.up); e.classList.toggle('glow', glow); }
   });
@@ -10678,9 +10693,12 @@ ${TBL(['As', 'Roi', 'Dame', 'Valet'], [['4', '3', '2', '1']])}
 <p>Les autres cartes ne valent rien. Il y a <b>40 points</b> dans le jeu, donc <b>10</b> en moyenne par joueur.</p>
 <div class="ex">${cH('AK52.QJ3.K84.72', 'Votre main')}As 4 + Roi 3 + Dame 2 + Valet 1 + Roi 3 = <b>13 points d'honneur</b>.</div>
 <h3>2. La distribution, seulement avec un fit</h3>
-<p>Un <b>fit</b>, c'est au moins <b>8 cartes à deux</b> dans une couleur. Quand on l'a trouvé, les couleurs courtes valent des points, car on pourra y couper :</p>
-${TBL(['Chicane (0 carte)', 'Singleton (1)', 'Doubleton (2)'], [['+3', '+2', '+1']])}
-<p>Sans fit, une couleur courte ne vaut <b>rien</b>.</p>
+<p><b>Le fit</b> : c'est une couleur où les deux partenaires ont, <b>ensemble, au moins 8 cartes</b> (5 + 3, 4 + 4, 6 + 2…). Cette couleur deviendra l'atout. Avec 7 cartes à deux, il n'y a pas de fit. On découvre le fit pendant les enchères.</p>
+<div class="ex">${cH('A7.KJ52.KJ93.Q74', 'Nord')}${cH('K954.Q873.6.A852', 'Sud')}4 cœurs + 4 cœurs = <b>8 cœurs</b> : Nord-Sud ont un fit à cœur.</div>
+<p><b>Les couleurs courtes</b> : quand on a un fit, une couleur où l'on a peu de cartes rapporte des <b>points de distribution</b>. Quand l'adversaire la joue, on n'en a plus : on <b>coupe avec un atout</b>, et chaque coupe est un pli de plus.</p>
+${TBL(['Nom', 'Cartes dans la couleur', 'Points'], [['Chicane', 'aucune', '+3'], ['Singleton', 'une seule', '+2'], ['Doubleton', 'deux', '+1']])}
+<p>Sans fit, une couleur courte ne vaut <b>rien</b> : on n'a pas assez d'atouts pour couper.</p>
+<div class="ex">${cH('K954.Q873.6.A852', 'Sud, fit à cœur')}9 points d'honneur + 2 pour le <b>singleton</b> carreau = <b>11 points</b>.</div>
 <h3>3. Additionner avec le partenaire</h3>
 ${TBL(['À deux', 'On peut jouer'], [['moins de 25', 'une partielle'], ['25', 'la manche (3SA, 4♥, 4♠)'], ['33', 'le petit chelem'], ['37', 'le grand chelem']])}
 ${KEEP('As 4, Roi 3, Dame 2, Valet 1. 40 dans le jeu. Distribution seulement avec un fit. 25 à deux : la manche.')}`,
@@ -11921,7 +11939,10 @@ function cStorySteps(c) {
     [{ hide: 1, big: `<div class="tsum tstory"><div class="tsc">${cast}</div><h3>${ic} Le mot de la fin</h3><p>${L[1]}</p></div>`, say: 'Et maintenant, à vous de jouer !', story: 1 }]];
 }
 // on glisse l'histoire après le titre, et le mot de la fin avant les exercices
-function cWithStory(c, steps) { const [a, b] = cStorySteps(c); return [steps[0], ...a, ...steps.slice(1), ...b]; }
+// la page de garde porte le vrai numéro de la leçon dans son niveau
+function cRetitle(c, st) { try { const L = COURS.find(x => x.ch.includes(c)); if (!L || !st || !st.big || !/class="tbig"/.test(st.big)) return st; const k = L.ch.indexOf(c) + 1;
+  return Object.assign({}, st, { big: st.big.replace(/<small>[\s\S]*?<\/small>|(<\/b>)(?![\s\S]*<small>)(?=<\/div>$)/, (m, b) => (b || '') + `<small>${L.n === 1 ? 'Leçon ' + k : 'Niveau ' + L.n + ' · leçon ' + k}</small>`) }); } catch (e) { return st; } }
+function cWithStory(c, steps) { const [a, b] = cStorySteps(c); return [cRetitle(c, steps[0]), ...a, ...steps.slice(1), ...b]; }
 { const _cs = coursSlides; coursSlides = function (id) {
   const [, c] = cFind(id); if (!c) return _cs(id);
   // on construit le diaporama comme d'habitude, puis on insère l'histoire
