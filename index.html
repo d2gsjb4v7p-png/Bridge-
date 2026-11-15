@@ -1531,6 +1531,10 @@ body[data-th=adulte] .pcard .pcin,body:not([data-th]) .pcard .pcin{background:ra
 .tsum.tstory.tsolo h3{margin-bottom:6px}
 .tsum.tstory.tsolo p{font-size:46px;animation:tfade .6s ease-out .35s both}
 .tnar .r,.tq .r{color:#ff8f8f!important}.tnar .k,.tq .k{color:#f3ead2!important}
+/* v118 la donne, une carte après l'autre */
+.tcard.dealing{transition-property:transform,opacity;transition-duration:.75s,.3s;transition-timing-function:cubic-bezier(.25,.75,.3,1)}
+.tcard.dealing .tin{box-shadow:0 6px 14px rgba(0,0,0,.28);border-radius:11px}
+.tin{transition:transform .7s cubic-bezier(.3,.7,.3,1)!important}
 </style>
 </head>
 <body>
@@ -6284,7 +6288,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v117';
+const APP_V = 'v118';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -10035,15 +10039,24 @@ function tRender(anim) {
     if (!e) { e = tCardEl(id); e.style.transform = 'translate(748px,376px) scale(.4)'; e.style.opacity = 0; cards.appendChild(e); fresh.push(id); }
     t.el = e;
   });
+  // la donne : un paquet au centre, les cartes partent une à une, dans l'ordre N, E, S, O, faces cachées ; puis on retourne sa main
+  const dealIds = anim ? fresh.filter(id => { const t = T.get(id); return t.seat && t.trick == null && t.rowk == null; }) : [];
+  const DEAL = dealIds.length >= 8, dOrd = new Map();
+  if (DEAL) { const by = {}; dealIds.forEach(id => { const t = T.get(id); (by[t.seat] = by[t.seat] || []).push(id); });
+    const mx = Math.max(...Object.values(by).map(a => a.length)); let n = 0;
+    for (let r = 0; r < mx; r++) ['N', 'E', 'S', 'O'].forEach(sx => { const a = by[sx]; if (a && a[r] != null) dOrd.set(a[r], n++); });
+    dOrd.forEach((k, id) => { const e = T.get(id).el, o = Math.min(k, 51) * 0.35; e.classList.add('down', 'dealing'); e.style.transition = 'none'; e.style.transform = `translate(${748 - o}px,${376 - o}px) rotate(${(k % 5) - 2}deg)`; e.style.opacity = 1; e.style.zIndex = 200 - k; }); }
   void cards.offsetWidth;
   let fi = 0;
   T.forEach((t, id) => {
     const e = t.el, s = id.replace(/^r/, ''), glow = hl.has(s); let d = 0;
     if (fresh.includes(id)) d = (t.rowk != null ? t.rowk * 70 : fi++ * 22);
     if (t.trick != null && t.trick >= firstPlay && anim) d = (t.trick - firstPlay) * 650;
+    if (DEAL && dOrd.has(id)) { const k = dOrd.get(id); d = 500 + k * 95; e.style.transition = ''; TCH.tm.push(setTimeout(() => { e.style.zIndex = t.z; }, d + 300)); }
     e.style.transitionDelay = d + 'ms';
     e.style.transform = `translate(${t.x}px,${t.y - (glow ? 22 : 0)}px)`; e.style.opacity = (p.dim && hl.size && !glow && t.trick == null) ? .3 : 1; e.style.zIndex = t.z;
-    e.classList.toggle('down', !t.up); e.classList.toggle('glow', glow);
+    if (DEAL && dOrd.has(id)) { e.classList.add('down'); e.classList.toggle('glow', glow); if (t.up) { const fl = 500 + dOrd.size * 95 + 700 + (t.z - 10) * 70; TCH.tm.push(setTimeout(() => { e.classList.remove('down', 'dealing'); }, fl)); } else TCH.tm.push(setTimeout(() => e.classList.remove('dealing'), 500 + dOrd.size * 95 + 700)); }
+    else { e.classList.toggle('down', !t.up); e.classList.toggle('glow', glow); }
   });
   // le pli s'envole vers le gagnant
   if (p0.win && st.trick.length && !hide) {
