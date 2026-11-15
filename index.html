@@ -1530,6 +1530,7 @@ body[data-th=adulte] .pcard .pcin,body:not([data-th]) .pcard .pcin{background:ra
 .tsum.tstory.tsolo .tstx{flex:1;min-width:0}
 .tsum.tstory.tsolo h3{margin-bottom:6px}
 .tsum.tstory.tsolo p{font-size:46px;animation:tfade .6s ease-out .35s both}
+.tnar .r,.tq .r{color:#ff8f8f!important}.tnar .k,.tq .k{color:#f3ead2!important}
 </style>
 </head>
 <body>
@@ -6283,7 +6284,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v116';
+const APP_V = 'v117';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -12164,6 +12165,31 @@ function storyFigs(ks) {
   });
   return r;
 }; }
+
+// ====================================================================
+//  v117 — les exercices de pli posés à la classe : le pli est joué sur le tapis
+// ====================================================================
+const EXT_SEAT = { Nord: 'N', Est: 'E', Sud: 'S', Ouest: 'O' }, EXT_SU = { '♠': 'S', '♥': 'H', '♦': 'D', '♣': 'C' }, EXT_RK = { A: 14, R: 13, D: 12, V: 11 };
+function exTrick(q) {
+  const t = String(q).replace(/<[^>]+>/g, ' '), re = /(Nord|Est|Sud|Ouest)[^♠♥♦♣.?]{0,14}?([♠♥♦♣])\s?(10|[2-9ARDV])/g, out = []; let m;
+  while ((m = re.exec(t))) out.push([EXT_SEAT[m[1]], EXT_SU[m[2]] + (EXT_RK[m[3]] || +m[3])]);
+  if (out.length !== 4 || new Set(out.map(x => x[0])).size !== out.length) return null;
+  const tm = t.match(/[Aa]tout\s*:?\s*([♠♥♦♣])/), tr = tm ? EXT_SU[tm[1]] : null, lead = out[0][1][0];
+  const sc = c => (tr && c[0] === tr ? 100 : c[0] === lead ? 0 : -100) + +c.slice(1);
+  const win = out.length === 4 ? out.reduce((a, b) => (sc(b[1]) > sc(a[1]) ? b : a)) : null;
+  const deal = {}; ['N', 'E', 'S', 'O'].forEach(s => { const x = out.find(y => y[0] === s); const g = ['', '', '', '']; if (x) { const r = +x[1].slice(1); g['SHDC'.indexOf(x[1][0])] = ({ 14: 'A', 13: 'K', 12: 'Q', 11: 'J', 10: 'T' })[r] || String(r); } deal[s] = g.join('.'); });
+  return { deal, play: out, win, tr };
+}
+{ const _sx = cSlideEx; cSlideEx = function (c) {
+  return _sx(c).map(st => {
+    if (!st.q || !st.hide || !st.big) return st;
+    const T = exTrick(st.q); if (!T) return st;
+    const n = Object.assign({}, st); delete n.hide; delete n.big;
+    return Object.assign(n, { extrick: 1, deal: T.deal, up: 'NESO', auction: null, contract: T.tr ? 'Atout : ' + SYM[T.tr] : null, play: T.play, ra: T.win ? { hl: [T.win[1]] } : undefined });
+  });
+}; }
+// pas de compteur de plis pour un pli isolé posé à la classe
+{ const _tr17 = tRender; tRender = function (a) { _tr17(a); try { const st = TCH && TCH.L && TCH.L.steps[TCH.i]; if (st && st.extrick) document.querySelectorAll('.tov .tcnt').forEach(e => e.remove()); } catch (e) { } }; }
 
 </script>
 <script>if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) { try { navigator.serviceWorker.register("sw.js"); } catch (e) {} }</script>
