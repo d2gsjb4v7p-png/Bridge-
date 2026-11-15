@@ -1505,6 +1505,20 @@ body[data-th=adulte] .pcard .pcin,body:not([data-th]) .pcard .pcin{background:ra
 @media (max-width:400px){.castline span.sc .cfimg{height:calc(122px * var(--s,1))!important}}
 /* v114 les cœurs et les carreaux toujours en rouge sur les cartes */
 .cf.red,.cf.red .ci b,.cf.red .ci i,.cf.red em,.dc.red i,.dc.red em{color:#c3132f}
+/* v115 page de garde des leçons : les quatre couleurs dans l'ordre du bridge (♣ ♦ ♥ ♠), titre qui ne déborde plus */
+.tbigw{animation:tfade .5s ease-out both}
+@keyframes tfade{from{opacity:0}to{opacity:1}}
+.tbig{max-width:1240px;padding:0 40px}
+.tbig .tbs{display:flex!important;justify-content:center;gap:26px;margin:0 0 26px;letter-spacing:0!important}
+.tbig .tbs span{width:92px;height:92px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#fffaf0 55%,#efe4c8 100%);display:flex;align-items:center;justify-content:center;font:400 60px/1 Georgia,serif;box-shadow:0 8px 18px rgba(0,0,0,.35),inset 0 0 0 3px #c9a34e;animation:tpip .7s cubic-bezier(.2,1.5,.4,1) both}
+.tbig .tbs span.k,.tbig .tbs span.k *{color:#14211b!important}
+.tbig .tbs span.r,.tbig .tbs span.r *{color:#c3132f!important}
+.tbig .tbs span:nth-child(1){animation-delay:.25s}.tbig .tbs span:nth-child(2){animation-delay:.4s}.tbig .tbs span:nth-child(3){animation-delay:.55s}.tbig .tbs span:nth-child(4){animation-delay:.7s}
+@keyframes tpip{from{opacity:0;transform:translateY(-60px) rotate(-25deg) scale(.6)}to{opacity:1;transform:none}}
+.tbig b{font-size:100px!important;line-height:1.08!important;text-wrap:balance;animation:trise .8s cubic-bezier(.2,.9,.3,1) .05s both}
+.tbig small{animation:tfade .6s ease-out .9s both}
+@keyframes trise{from{opacity:0;transform:translateY(30px) scale(.94);letter-spacing:.06em}to{opacity:1;transform:none;letter-spacing:0}}
+@media (prefers-reduced-motion:reduce){.tbig *, .tbigw{animation:none!important}}
 </style>
 </head>
 <body>
@@ -6258,7 +6272,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v114';
+const APP_V = 'v115';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -9838,7 +9852,7 @@ const tR = c => +c.slice(1), tS = c => c[0], tRed = c => c[0] === 'H' || c[0] ==
 const tBid = b => b === 'P' ? 'Passe' : b === 'X' ? 'Contre' : b === 'XX' ? 'Surcontre' : `${b[0]}${b[1] === 'N' ? 'SA' : `<span class="${b[1] === 'H' || b[1] === 'D' ? 'tr' : ''}">${SYM[b[1]]}</span>`}`;
 const tCardTxt = c => `${rk(tR(c))}<span class="${tRed(c) ? 'tr' : ''}">${SYM[tS(c)]}</span>`;
 const SEATN = { N: 'Nord', E: 'Est', S: 'Sud', O: 'Ouest' };
-const TBIG = (t, s) => `<div class="tbig"><div class="tbs">♠ <i>♥</i> <i>♦</i> ♣</div><b>${t}</b>${s ? `<small>${s}</small>` : ''}</div>`;
+const TBIG = (t, s) => `<div class="tbig"><div class="tbs"><span class="k">♣</span><span class="r">♦</span><span class="r">♥</span><span class="k">♠</span></div><b>${t}</b>${s ? `<small>${s}</small>` : ''}</div>`;
 const TTAB = (rows) => `<table class="ttab">${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</table>`;
 
 // ---------------- les leçons ----------------
@@ -10028,7 +10042,8 @@ function tRender(anim) {
   }
   // superpositions : sièges, partenaires, points, total, contrat, enchères, grand titre, bulle
   let h = '';
-  if (!hide) ['N', 'E', 'S', 'O'].forEach(s => { const [x, y] = TSEATXY[s]; const has = st.hands[s] && st.hands[s].length; const yy = s === 'N' ? (has ? (st.dummy === 'N' ? 12 : 172) : 60) : s === 'S' ? (has ? 700 : 820) : (has ? 340 : 440); h += `<div class="tseat t${s}" style="left:${x}px;top:${yy}px">${SEATN[s]}</div>`; });
+  const titleOnly = p.big && /class="tbig"/.test(p.big) && !Object.values(st.hands || {}).some(x => x && x.length);
+  if (!hide && !titleOnly) ['N', 'E', 'S', 'O'].forEach(s => { const [x, y] = TSEATXY[s]; const has = st.hands[s] && st.hands[s].length; const yy = s === 'N' ? (has ? (st.dummy === 'N' ? 12 : 172) : 60) : s === 'S' ? (has ? 700 : 820) : (has ? 340 : 440); h += `<div class="tseat t${s}" style="left:${x}px;top:${yy}px">${SEATN[s]}</div>`; });
   if (p.pairs) h += `<svg class="tpairs" viewBox="0 0 1600 900"><line x1="800" y1="150" x2="800" y2="760"/><line class="eo" x1="340" y1="450" x2="1260" y2="450"/></svg><div class="tpl ns">Nord + Sud</div><div class="tpl eo">Est + Ouest</div>`;
   if (st.contract && !hide) h += `<div class="tcontract">${st.contract}</div>`;
   if (!hide && (st.trick.length || st.won.NS || st.won.EO || /par /.test(st.contract || ''))) h += TCNT.html(st);
