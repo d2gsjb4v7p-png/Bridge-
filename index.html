@@ -1488,6 +1488,15 @@ body[data-th=adulte] .pcard .pcin,body:not([data-th]) .pcard .pcin{background:ra
 .pcard.pwide .pcin .cfimg{max-width:none;width:calc(100% + 30px);margin:0 -15px;object-position:50% 100%}
 .pcard.pxwide .pcin .cfimg{width:calc(100% + 40px);margin:0 -20px}
 .pcard .pcix{text-shadow:0 0 3px #fffdf8,0 0 3px #fffdf8,0 0 2px #fffdf8}
+/* v112 Spades : le contrat de l'équipe a sa propre colonne, à droite des scores */
+.rkbar.cgbar{grid-template-columns:auto 1fr auto!important;column-gap:8px!important}
+.rkbar.cgbar .rkme{grid-row:1!important;grid-column:3!important;justify-self:end!important;align-self:center}
+.rkbar.cgbar .rkmk{min-width:0;flex-wrap:wrap}
+.rkbar.cgbar .cglast{grid-column:1/-1}
+@media (max-width:400px){.rkbar.cgbar .rkme{min-width:54px;padding:2px 5px}.rkbar.cgbar .rkme b{font-size:22px}.rkbar.cgbar .rkmk span{padding:4px 7px}}
+.rkbar.cgbar .rkmk.two{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+.rkbar.cgbar .rkmk.two span{padding:4px 6px!important;white-space:nowrap;gap:6px}
+.rkbar.cgbar .rkme small{line-height:1.15}
 </style>
 </head>
 <body>
@@ -6241,7 +6250,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v111';
+const APP_V = 'v112';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -9413,7 +9422,7 @@ function cgRender() {
     <div class="card"><h2>${CG.over ? 'Fin de la partie' : `Donne ${CG.round}/${CG.rounds} terminée`}</h2>${fin}${tab}<div class="escprof"><span class="av">${PROF_AV()}</span><div><b>${cap1(PROF_NAME())}</b>${lines.map(x => `<p>${x}</p>`).join('')}</div></div></div>`;
   }
   show(`${topBar(CG_T[CG.k], `Donne ${Math.min(CG.round + 1, CG.rounds)}/${CG.rounds}${CG.k === 'dame' ? '' : ' · atout ' + SYM[CG.trump]}`, 'menu')}<div class="wrap play rkw cgw">
-  <div class="rkbar cgbar">${trumpBox}${myBid}<div class="rkmk">${sc}</div>${CG.last ? `<div class="cglast"><small>Dernier pli</small><span>${CG.last.cards.map(x => `<i class="${x[0] === CG.last.win ? 'w' : ''}">${cgTxt(x[1])}</i>`).join(' ')}</span></div>` : ''}</div>
+  <div class="rkbar cgbar">${trumpBox}${myBid}<div class="rkmk${CG.k === 'dame' ? '' : ' two'}">${sc}</div>${CG.last ? `<div class="cglast"><small>Dernier pli</small><span>${CG.last.cards.map(x => `<i class="${x[0] === CG.last.win ? 'w' : ''}">${cgTxt(x[1])}</i>`).join(' ')}</span></div>` : ''}</div>
   <div class="card felt cgfelt">
    <div class="cgrow">${cgSeat('N')}</div>
    <div class="cgmid"><div>${cgSeat('O')}</div><div class="table4"><div></div><div>${cgSlot('N')}</div><div></div><div>${cgSlot('O')}</div><div class="tmid">${CG.phase === 'bid' ? 'Annonces' : `Pli ${Math.min(13, CG.tricks.length + (CG.cur.length ? 1 : 0) || 1)}`}</div><div>${cgSlot('E')}</div><div></div><div>${cgSlot('S')}</div><div></div></div><div>${cgSeat('E')}</div></div>
