@@ -1563,6 +1563,12 @@ svg.nilboat{height:1.45em;width:auto;vertical-align:-.3em;margin-right:.25em}
 .tcourt .tcc em i{font-style:normal;background:#fffdf8;border:2px solid #cfc6b4;border-radius:10px;padding:2px 10px}
 .tcourt .tcc small{font-size:26px;line-height:1.2;color:#5a5446}
 .tcourt .tcc strong{font:700 56px var(--f-disp);color:#fff;background:#1f9d55;border-radius:50px;padding:2px 26px;margin-top:6px}
+/* v128 la leçon d'ouverture, famille par famille */
+.tsum.tsec{position:relative;padding-top:34px;max-width:1300px}
+.tsec .tsn{position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:64px;height:64px;border-radius:50%;background:#14533f;color:#fff6d8;font:700 36px/64px var(--f-disp);text-align:center;box-shadow:0 0 0 4px #c9a34e,0 6px 14px rgba(0,0,0,.3)}
+.tsec ul{text-align:left;margin:8px auto 10px;max-width:1100px}.tsec li{margin:6px 0}
+.tplan{display:grid;grid-template-columns:1fr;gap:4px;text-align:left;max-width:900px;margin:10px auto 0}
+.tplan b{display:inline-block;min-width:330px;color:#14533f}
 </style>
 </head>
 <body>
@@ -6316,7 +6322,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v127';
+const APP_V = 'v128';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -9897,6 +9903,7 @@ const tBid = b => b === 'P' ? 'Passe' : b === 'X' ? 'Contre' : b === 'XX' ? 'Sur
 const tCardTxt = c => `${rk(tR(c))}<span class="${tRed(c) ? 'tr' : ''}">${SYM[tS(c)]}</span>`;
 const SEATN = { N: 'Nord', E: 'Est', S: 'Sud', O: 'Ouest' };
 const TBIG = (t, s) => `<div class="tbig"><div class="tbs"><span class="k">♣</span><span class="r">♦</span><span class="r">♥</span><span class="k">♠</span></div><b>${t}</b>${s ? `<small>${s}</small>` : ''}</div>`;
+const TSEC = (n, t, body) => `<div class="tsum tsec"><div class="tsn">${n}</div><h3>${t}</h3>${body}</div>`;
 const TTAB = (rows) => `<table class="ttab">${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</table>`;
 
 // ---------------- les leçons ----------------
@@ -9934,18 +9941,39 @@ const TLESSONS = [
     { q: 'Le partenaire a ouvert 1♥ et Sud a 4 cœurs. Combien vaut sa main ?', a: '9 points d\'honneur + 2 pour le singleton = <b>11 points</b>.', ra: { tally: { S: 11 } } },
     { hide: 1, big: `<div class="tsum"><h3>À retenir</h3><ol><li>As 4, Roi 3, Dame 2, Valet 1.</li><li>40 points dans le jeu.</li><li>Le fit : au moins 8 cartes à deux dans une couleur.</li><li>Avec un fit seulement : chicane (0 carte) +3, singleton (1 carte) +2, doubleton (2 cartes) +1.</li></ol></div>`, say: 'Les points, en quatre lignes.' },
   ] },
-  { id: 'ouvrir', ic: '📣', t: 'L\'ouverture', d: '12 points, la majeure 5e, 1SA, la meilleure mineure', steps: [
-    { big: TBIG('L\'ouverture', 'Leçon 3'), say: 'Le premier joueur qui a une main forte <b>ouvre</b> les enchères.' },
-    { hide: 1, big: TBIG('12', 'points d\'honneur pour ouvrir'), say: 'Avec <b>12 points d\'honneur</b> ou plus, on ouvre. Avec moins, on passe.' },
-    { deal: { S: 'AQ974.K3.A82.J54' }, up: 'S', pts: 'S', tally: { S: 14 }, say: '14 points, et cinq piques.' },
-    { hl: ['S14', 'S12', 'S9', 'S7', 'S4'], q: 'Que dit Sud ?', a: '<b>1♠</b> : avec 5 cartes dans une <b>majeure</b> (♥ ou ♠), on l\'annonce. C\'est la <b>majeure cinquième</b>.' },
+  { id: 'ouvrir', ic: '📣', t: 'L\'ouverture', d: '1♥/1♠, 1SA, 1♦, 1♣, les ouvertures fortes, les barrages', steps: [
+    { big: TBIG('L\'ouverture', 'Leçon 3'), say: 'Le premier joueur qui a une main assez forte <b>ouvre</b> les enchères. Aujourd\'hui, toutes les ouvertures, une par une.' },
+    { hide: 1, big: `<div class="tsum"><h3>Ouvrir, c'est décrire sa main</h3><p>L'ouverture est la <b>première enchère</b> de la donne. Elle dit au partenaire : « voici ma force, et voici ma couleur ».</p><ol class="tplan"><li><b>1♥ · 1♠</b> la majeure cinquième</li><li><b>1SA</b> la main régulière</li><li><b>1♦</b> la mineure</li><li><b>1♣</b> l'autre mineure</li><li><b>2♣ · 2♦ · 2SA</b> les mains très fortes</li><li><b>2♥ · 2♠ · 3 · 4</b> les barrages</li></ol></div>`, say: 'Six familles d\'ouvertures. On les découvre dans cet ordre, chacune avec sa règle, un exemple et un exercice.' },
+    { hide: 1, big: TBIG('12', 'points d\'honneur pour ouvrir au palier 1'), say: 'La règle de base : avec <b>12 points d\'honneur</b> ou plus, on ouvre. Avec moins, on <b>passe</b>.' },
+    { deal: { S: 'Q83.K962.J74.Q53' }, up: 'S', q: 'Exercice. Sud est le premier à parler. Ouvre-t-il ?', a: '<b>Non, il passe</b> : 8 points seulement, il en faut 12.', ra: { pts: 'S', tally: { S: 8 } } },
+    { hide: 1, auction: null, big: TSEC('1', '1♥ ou 1♠ : la majeure cinquième', `<ul><li><b>12 à 19</b> points d'honneur.</li><li>Au moins <b>5 cartes</b> à cœur ou à pique (les <b>majeures</b>).</li><li>Avec 5 cœurs <b>et</b> 5 piques : <b>1♠</b>.</li></ul><p>Pourquoi les majeures d'abord ? La manche y est à <b>4♥ ou 4♠</b> : 10 plis, plus facile que 5♣ ou 5♦.</p>`), say: 'Première ouverture : <b>un dans une majeure</b>. Elle promet <b>5 cartes</b> dans la couleur annoncée.' },
+    { deal: { S: 'AQ974.K3.A82.J54' }, up: 'S', pts: 'S', tally: { S: 14 }, say: 'Sud compte : <b>14 points</b>.' },
+    { hl: ['S14', 'S12', 'S9', 'S7', 'S4'], say: 'Et il a <b>cinq piques</b> : une majeure cinquième.' },
     { auction: { d: 'S', b: ['1S'] }, say: 'Sud ouvre <b>1♠</b>.' },
-    { deal: { S: 'KQ5.AJ4.QT73.K82' }, up: 'S', auction: null, pts: 'S', tally: { S: 15 }, say: '15 points, et aucune couleur de 5 cartes : la main est <b>régulière</b>.' },
-    { q: 'Que dit Sud ?', a: '<b>1SA</b> : 15 à 17 points, main régulière. Chez Nathalie, même avec une 5e majeure « moche ».' },
-    { auction: { d: 'S', b: ['1N'] }, say: 'Sud ouvre <b>1SA</b> (« un sans-atout »).' },
-    { deal: { S: 'A73.K842.AQ5.J96' }, up: 'S', auction: null, pts: 'S', tally: { S: 14 }, q: '14 points, pas de majeure cinquième, pas 15 points. Que dit Sud ?', a: '<b>1♣</b> : la meilleure mineure. Avec trois carreaux et trois trèfles, on ouvre 1♣.' },
-    { deal: { S: 'Q83.K962.J74.Q53' }, up: 'S', q: 'Et avec cette main ?', a: '<b>Passe</b> : 8 points seulement.', ra: { pts: 'S', tally: { S: 8 } } },
-    { hide: 1, big: `<div class="tsum"><h3>Ouvrir, dans l'ordre</h3>${TTAB([['15 à 17 points, régulier', '<b>1SA</b>'], ['5 cartes à ♥ ou ♠', '<b>1♥ ou 1♠</b>'], ['Sinon', '<b>1♣ ou 1♦</b>'], ['Moins de 12 points', '<b>Passe</b>']])}</div>`, say: 'Le chemin de l\'ouvreur.' },
+    { deal: { S: 'K3.AJ985.KQ4.762' }, up: 'S', auction: null, q: 'Exercice. Que dit Sud : 1♥, 1SA, 1♣ ou passe ?', a: '<b>1♥</b> : 13 points et cinq cœurs.', ra: { pts: 'S', tally: { S: 13 }, hl: ['H14', 'H11', 'H9', 'H8', 'H5'] } },
+    { hide: 1, auction: null, big: TSEC('2', '1SA : la main régulière de 15 à 17', `<ul><li><b>15 à 17</b> points d'honneur, ni plus ni moins.</li><li>Une main <b>régulière</b> : ni chicane, ni singleton, au plus un doubleton (4-3-3-3, 4-4-3-2, 5-3-3-2).</li><li>1SA <b>passe avant tout</b> : même avec une couleur de 5 cartes, si la main est 5-3-3-2.</li></ul>`), say: 'Deuxième ouverture : <b>un sans-atout</b>. C\'est la plus précise : le partenaire connaît votre force à 2 points près.' },
+    { deal: { S: 'KQ5.AJ4.QT73.K82' }, up: 'S', pts: 'S', tally: { S: 15 }, say: '<b>15 points</b>. Trois cartes partout, sauf quatre carreaux : 4-3-3-3, la main est régulière.' },
+    { auction: { d: 'S', b: ['1N'] }, say: 'Sud ouvre <b>1SA</b>.' },
+    { deal: { S: 'K7.AJ6.KQ853.A42' }, up: 'S', auction: null, q: 'Exercice. Que dit Sud : 1♦, 1SA ou 2♦ ?', a: '<b>1SA</b> : 17 points, et 5-3-3-2 est une main régulière. Les cinq carreaux ne changent rien.', ra: { pts: 'S', tally: { S: 17 } } },
+    { hide: 1, auction: null, big: TSEC('3', '1♦ : la mineure', `<p>Pas de majeure cinquième, pas de 1SA ? On ouvre dans une <b>mineure</b> (carreau ou trèfle) : <b>la plus longue</b>.</p><ul><li><b>1♦</b> : les carreaux sont plus longs que les trèfles.</li><li>Avec <b>4 carreaux et 4 trèfles</b> : <b>1♦</b>.</li><li>12 à 19 points, comme toutes les ouvertures au palier 1.</li></ul>`), say: 'Troisième ouverture : <b>un carreau</b>.' },
+    { deal: { S: 'A82.KJ4.AQ73.952' }, up: 'S', pts: 'S', tally: { S: 14 }, say: '<b>14 points</b> : pas assez pour 1SA. Pas de majeure cinquième.' },
+    { hl: ['D14', 'D12', 'D7', 'D3'], say: 'Quatre carreaux, trois trèfles : le carreau est la mineure la plus longue.' },
+    { auction: { d: 'S', b: ['1D'] }, say: 'Sud ouvre <b>1♦</b>.' },
+    { deal: { S: 'K5.Q72.AJ84.KJ63' }, up: 'S', auction: null, q: 'Exercice. Que dit Sud : 1♣, 1♦ ou 1SA ?', a: '<b>1♦</b> : 14 points (pas 1SA), quatre carreaux et quatre trèfles. À égalité 4-4 : <b>1♦</b>.', ra: { pts: 'S', tally: { S: 14 } } },
+    { hide: 1, auction: null, big: TSEC('4', '1♣ : l\'autre mineure', `<ul><li><b>1♣</b> : les trèfles sont plus longs que les carreaux.</li><li>Avec <b>3 carreaux et 3 trèfles</b> : <b>1♣</b>. L'ouverture de 1♣ peut donc n'avoir que <b>3 trèfles</b>.</li><li>12 à 19 points.</li></ul>`), say: 'Quatrième ouverture : <b>un trèfle</b>, la plus souple.' },
+    { deal: { S: 'A73.K842.AQ5.J96' }, up: 'S', pts: 'S', tally: { S: 14 }, say: '<b>14 points</b>, quatre cœurs seulement : pas de majeure cinquième.' },
+    { hl: ['D14', 'D12', 'D5', 'C11', 'C9', 'C6'], say: 'Trois carreaux, trois trèfles : à égalité 3-3, on ouvre <b>1♣</b>.' },
+    { auction: { d: 'S', b: ['1C'] }, say: 'Sud ouvre <b>1♣</b>.' },
+    { deal: { S: 'A4.K82.Q73.KJ954' }, up: 'S', auction: null, q: 'Exercice. Que dit Sud : 1♣, 1♦ ou passe ?', a: '<b>1♣</b> : 13 points et cinq trèfles, la mineure la plus longue.', ra: { pts: 'S', tally: { S: 13 } } },
+    { hide: 1, auction: null, big: TSEC('5', 'Les ouvertures fortes, au palier 2', `<p>Avec <b>20 points ou plus</b>, ouvrir au palier 1 est dangereux : le partenaire pourrait passer alors que la manche est sur table.</p>${TTAB([['20 à 21 H, régulière', '<b>2SA</b>'], ['22 à 23 H, ou une couleur très forte', '<b>2♣</b> (le partenaire répond 2♦)'], ['24 H et plus', '<b>2♦</b> (réponse 2♥, manche obligatoire)']])}`), say: 'Cinquième famille : les <b>mains très fortes</b>. On les verra en détail au niveau 2 ; aujourd\'hui, on apprend à les reconnaître.' },
+    { deal: { S: 'AQ5.KJ4.AQ63.KQ2' }, up: 'S', pts: 'S', tally: { S: 21 }, say: '<b>21 points</b>, main régulière (4-3-3-3).' },
+    { auction: { d: 'S', b: ['2N'] }, say: 'Trop fort pour 1SA : Sud ouvre <b>2SA</b>, 20 à 21 points.' },
+    { deal: { S: 'AK5.KQ4.AQJ6.AJ3' }, up: 'S', auction: null, q: 'Exercice. Que dit Sud : 2SA, 2♣ ou 2♦ ?', a: '<b>2♦</b> : 24 points. Le partenaire répondra 2♥, et la manche est obligatoire.', ra: { pts: 'S', tally: { S: 24 } } },
+    { hide: 1, auction: null, big: TSEC('6', 'Les barrages : faible, mais une longue couleur', `<p>Avec une main <b>faible</b> (6 à 10 H) et une <b>longue et belle couleur</b>, on ouvre haut pour <b>prendre de la place</b> aux adversaires.</p>${TTAB([['6 cartes à ♥ ou ♠', '<b>2♥ ou 2♠</b> (le « deux faible »)'], ['7 cartes', 'au <b>palier 3</b>'], ['8 cartes', 'au <b>palier 4</b>']])}`), say: 'Dernière famille : les <b>barrages</b>. La longueur de la couleur fixe le palier.' },
+    { deal: { S: '7.KQT864.J52.973' }, up: 'S', pts: 'S', tally: { S: 6 }, say: '<b>6 points</b> seulement, mais <b>six beaux cœurs</b>.' },
+    { auction: { d: 'S', b: ['2H'] }, say: 'Sud ouvre <b>2♥</b> : un deux faible. Les adversaires devront parler au palier 2 ou plus.' },
+    { deal: { S: 'QJ98753.4.K82.73' }, up: 'S', auction: null, q: 'Exercice. Que dit Sud : 2♠, 3♠ ou passe ?', a: '<b>3♠</b> : 6 points et <b>sept</b> piques, donc le palier 3.', ra: { pts: 'S', tally: { S: 6 } } },
+    { hide: 1, auction: null, big: `<div class="tsum"><h3>Ouvrir : le chemin, dans l'ordre</h3>${TTAB([['Moins de 12 H', '<b>Passe</b>, ou un barrage avec une longue couleur'], ['15 à 17 H, régulière', '<b>1SA</b>'], ['5 cartes à ♥ ou ♠', '<b>1♥ ou 1♠</b>'], ['Sinon, la mineure la plus longue', '<b>1♦</b> (4-4) ou <b>1♣</b> (3-3)'], ['20 H et plus', '<b>2SA</b>, <b>2♣</b> ou <b>2♦</b>']])}</div>`, say: 'Le chemin complet. Pour décider, on le suit toujours dans cet ordre.' },
   ] },
   { id: 'fit', ic: '🤝', t: 'Répondre : le fit', d: 'Soutenir la majeure du partenaire', steps: [
     { big: TBIG('Répondre avec le fit', 'Leçon 4'), say: 'Le partenaire a ouvert : comment lui répondre quand on a des cartes dans sa couleur ?' },
@@ -10711,20 +10739,29 @@ ${KEEP('As 4, Roi 3, Dame 2, Valet 1. 40 dans le jeu. Distribution seulement ave
       ['Combien de points d\'honneur ?', 'AQJ7.K42.A93.Q85', ['14', '15', '16', '17'], 2, 'As 4 + Dame 2 + Valet 1 + Roi 3 + As 4 + Dame 2 = 16.'],
       ['Combien de points d\'honneur ?', 'J8642.Q7.K953.83', ['5', '6', '7'], 1, 'Valet 1 + Dame 2 + Roi 3 = 6.'],
       ['Le partenaire a ouvert 1♠ ; vous avez 4 piques. Combien vaut votre main ?', 'Q852.7.KJ64.A953', ['10', '11', '12'], 2, '10 points d\'honneur, et le singleton cœur vaut 2 avec le fit : 12.']] },
-  { id: 'c5', ic: '📣', t: 'Ouvrir', d: '12 points, 1SA, la majeure 5e, la meilleure mineure', slides: 'ouvrir', mini: 'ouvrir', th: `
-<p>Le premier joueur qui a une main assez forte <b>ouvre</b> les enchères. Pour choisir, on suit toujours le même chemin.</p>
-<h3>Étape 1 · Ai-je 12 points d'honneur ?</h3>
-<p>Non : je <b>passe</b>. Oui : étape 2.</p>
-<h3>Étape 2 · Ma main est-elle régulière, avec 15 à 17 points ?</h3>
-<p>Une main <b>régulière</b> n'a ni chicane, ni singleton, et au plus un doubleton (4-3-3-3, 4-4-3-2, 5-3-3-2). Avec 15 à 17 points : <b>1SA</b>.</p>
-<h3>Étape 3 · Ai-je 5 cartes à ♥ ou à ♠ ?</h3>
-<p>Cœur et pique sont les <b>majeures</b>. Avec 5 cartes ou plus : <b>1♥</b> ou <b>1♠</b>. On l'appelle la <b>majeure cinquième</b>.</p>
-<h3>Étape 4 · Sinon, la meilleure mineure</h3>
-<p>Trèfle et carreau sont les <b>mineures</b>. On ouvre dans la plus longue ; à égalité 3-3, <b>1♣</b> ; à égalité 4-4, <b>1♦</b>.</p>
-${TBL(['Ma main', 'J\'ouvre'], [['moins de 12 H', 'Passe'], ['15 à 17 H, régulière', '1SA'], ['5 cartes à ♥ ou ♠', '1♥ ou 1♠'], ['sinon', '1♣ ou 1♦']])}
-<div class="ex">${cH('AQ974.K3.A82.J54', 'Votre main')}14 points (pas assez pour 1SA) et cinq piques : <b>1♠</b>.</div>
-<p class="small">Avec 20 points ou plus, on ouvre plus haut : ce sera pour le niveau 2.</p>
-${KEEP('12 H pour ouvrir. 15-17 régulier : 1SA. Majeure 5e : 1♥/1♠. Sinon la meilleure mineure.')}`,
+  { id: 'c5', ic: '📣', t: 'Ouvrir', d: '1♥/1♠, 1SA, 1♦, 1♣, les ouvertures fortes, les barrages', slides: 'ouvrir', mini: 'ouvrir', th: `
+<p>L'<b>ouverture</b> est la première enchère de la donne : elle dit au partenaire « voici ma force, et voici ma couleur ». Avec <b>12 points d'honneur</b> ou plus, on ouvre ; avec moins, on <b>passe</b>. Il y a six familles d'ouvertures : on les voit dans l'ordre.</p>
+<h3>1. 1♥ ou 1♠ : la majeure cinquième</h3>
+<p><b>12 à 19</b> points d'honneur et au moins <b>5 cartes</b> à cœur ou à pique (les <b>majeures</b>). Avec 5 cœurs et 5 piques : <b>1♠</b>. On privilégie les majeures, car la manche y est à 4♥ ou 4♠ : 10 plis, plus facile que 5♣ ou 5♦.</p>
+<div class="ex">${cH('AQ974.K3.A82.J54', 'Votre main')}14 points et cinq piques : <b>1♠</b>.</div>
+<h3>2. 1SA : la main régulière de 15 à 17</h3>
+<p><b>15 à 17</b> points et une main <b>régulière</b> : ni chicane, ni singleton, au plus un doubleton (4-3-3-3, 4-4-3-2, 5-3-3-2). 1SA passe <b>avant tout</b>, même avec une couleur de 5 cartes dans une main 5-3-3-2.</p>
+<div class="ex">${cH('KQ5.AJ4.QT73.K82', 'Votre main')}15 points, 4-3-3-3 : <b>1SA</b>.</div>
+<h3>3. 1♦ : la mineure</h3>
+<p>Pas de majeure cinquième, pas de 1SA : on ouvre dans la <b>mineure la plus longue</b>. <b>1♦</b> quand les carreaux sont plus longs, et avec <b>4 carreaux et 4 trèfles</b>. 12 à 19 points.</p>
+<div class="ex">${cH('A82.KJ4.AQ73.952', 'Votre main')}14 points, quatre carreaux et trois trèfles : <b>1♦</b>.</div>
+<h3>4. 1♣ : l'autre mineure</h3>
+<p><b>1♣</b> quand les trèfles sont plus longs, et avec <b>3 carreaux et 3 trèfles</b> : l'ouverture de 1♣ peut n'avoir que 3 trèfles. 12 à 19 points.</p>
+<div class="ex">${cH('A73.K842.AQ5.J96', 'Votre main')}14 points, quatre cœurs seulement, 3-3 en mineures : <b>1♣</b>.</div>
+<h3>5. Les ouvertures fortes, au palier 2</h3>
+<p>Avec <b>20 points ou plus</b>, on n'ouvre pas au palier 1 : le partenaire pourrait passer alors que la manche est sur table. Elles sont détaillées au niveau 2.</p>
+${TBL(['Ma main', 'J\'ouvre'], [['20 à 21 H, régulière', '2SA'], ['22 à 23 H, ou une couleur très forte', '2♣ (le partenaire répond 2♦)'], ['24 H et plus', '2♦ (réponse 2♥, manche obligatoire)']])}
+<h3>6. Les barrages</h3>
+<p>Avec une main <b>faible</b> (6 à 10 H) et une <b>longue et belle couleur</b>, on ouvre haut pour prendre de la place aux adversaires. Détaillés au niveau 2.</p>
+${TBL(['Ma couleur', 'J\'ouvre'], [['6 cartes à ♥ ou ♠', '2♥ ou 2♠ (deux faible)'], ['7 cartes', 'au palier 3'], ['8 cartes', 'au palier 4']])}
+<h3>7. Le chemin, dans l'ordre</h3>
+${TBL(['Ma main', 'J\'ouvre'], [['moins de 12 H', 'Passe (ou un barrage)'], ['15 à 17 H, régulière', '1SA'], ['5 cartes à ♥ ou ♠', '1♥ ou 1♠'], ['sinon, la mineure la plus longue', '1♦ (4-4) ou 1♣ (3-3)'], ['20 H et plus', '2SA, 2♣ ou 2♦']])}
+${KEEP('12 H pour ouvrir. Majeure 5e : 1♥/1♠. 15-17 régulier : 1SA. Sinon la mineure la plus longue : 1♦ (4-4), 1♣ (3-3). 20 H et plus : palier 2. Faible avec une longue couleur : barrage.')}`,
     qs: [['Combien de points d\'honneur faut-il pour ouvrir ?', ['10', '12', '15'], 1, '12 points d\'honneur.'],
       ['Que promet l\'ouverture de 1♥ ?', ['Au moins 5 cœurs et 12 points', '4 cœurs', 'Une main faible'], 0, 'La majeure cinquième.'],
       ['Que promet l\'ouverture de 1SA ?', ['15 à 17 points, main régulière', '12 à 14 points', 'N\'importe quelle main'], 0, '1SA : 15-17 régulier.'],
@@ -11596,7 +11633,7 @@ const C_HINT = {
   c2: 'Un atout a-t-il été joué ? Si oui, seul le plus gros atout compte. Sinon, regardez la couleur demandée.',
   c3: 'Plis à faire = 6 + le palier. Pour le déclarant, cherchez qui a nommé la couleur le premier dans le camp gagnant.',
   c4: 'Comptez couleur par couleur : As 4, Roi 3, Dame 2, Valet 1. Les courtes ne comptent qu\'avec un fit.',
-  c5: 'Suivez les étapes dans l\'ordre : 12 points ? Régulière à 15-17 ? Cinq cartes en majeure ? Sinon, la mineure.',
+  c5: 'Suivez le chemin dans l\'ordre : 12 points ? Régulière à 15-17 ? Cinq cartes en majeure ? Sinon, la mineure la plus longue.',
   c6: 'Moins de 6 points : passe. Puis dans l\'ordre : un fit ? une majeure de 4 cartes ? sinon, mes points en Sans-Atout.',
   c7: 'Trois questions : fit avec le répondant ? quelle forme ? quelle zone (12-14, 15-17, 18 et plus) ?',
   c8: 'Mineure 20, majeure 30, SA 40 puis 30. Si le total atteint 100 : manche. Sinon : partielle.',
