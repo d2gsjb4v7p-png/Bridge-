@@ -1652,6 +1652,8 @@ body[data-th="enfant"] .tov .egdeco{color:#ffe1a1;opacity:.3}body[data-th="enfan
  .sysw{padding:0!important;max-width:none!important}
 }
 @media print{.memoa .mbox p{font-size:10.5pt!important;line-height:1.25!important}.memoa .mbox b{font-size:11pt!important}.memoa .mbox{padding:2mm 3mm!important}.memoa .mgrid{gap:2.5mm!important}}
+.sysf .o{display:inline-flex;align-items:center;justify-content:center;min-width:17px;height:17px;border-radius:50%;background:var(--green);color:#fff;font:700 10.5px/1 system-ui;margin-right:6px;vertical-align:1px}.sysf .sub2{padding-left:23px;color:var(--muted);font-style:italic}@media print{.sysf .o{min-width:12px;height:12px;font-size:7pt;margin-right:3px}.sysf .sub2{padding-left:15px}}
+@media print{.encf{font-size:10pt!important;line-height:1.32!important}.encf table{font-size:9.4pt!important}.encf td{padding:2.2px 4px!important}.encf th{font-size:7.2pt!important}.encf .note,.encf .lead{font-size:9.2pt!important}.encf h2{font-size:13.5pt!important}.encf section{margin-bottom:3.4mm!important;padding:5px 8px!important}.encf .o{min-width:14px!important;height:14px!important;font-size:8pt!important}}
 </style>
 </head>
 <body>
@@ -3701,7 +3703,7 @@ function uncontested(seat, A, c) {
     if (r[0] === '1' && y !== x && o2[1] === y && (o2[0] === '2' || o2[0] === '3')) { const st = decide('capitaine', h, { kind: o2[0] === '2' ? 'b' : 'c', x, y }, 0); if (st) return fromStep(st, 'capitaine', st.accept[0][0] === '3' ? MM(11, 12, {}, { inv: 1 }) : null); }
     if (r[0] === '1' && y !== x && o2 === '1N') { const st = decide('capitaine', h, { kind: 'd', x, y }, 0); if (st) return fromStep(st, 'capitaine', st.accept[0] === '2N' ? MM(11, 12, {}, { inv: 1 }) : null); }
     if ((ob === '2C' || ob === '2D') && (r === '2D' || r === '2H')) { const olo = ob === '2C' ? (o2[1] === 'N' ? 22 : 19) : 24, ohi = ob === '2C' ? 23 : 27, s0 = o2[1]; const fitS = s0 !== 'N' && n(h, s0) >= 3 ? s0 : null; const my = fitS ? dist(h, fitS, null).p : v; if (my + olo >= 33) { if (fitS && can('4N')) return D('4N', `Fit et ${my} + ${olo} à ${ohi} : 33 atteint → Blackwood.`, 'chelem'); const b = my + olo >= 37 ? '7N' : '6N'; if (can(b)) return D(b, `${my} + ${olo} à ${ohi} : ${b === '7N' ? '37' : '33'} atteint → ${B(b)}.`, 'chelem'); } if (!fitS && my + ohi >= 33 && can('4N')) return D('4N', `${my} + ${olo} à ${ohi} : 33 possible → 4SA quantitatif.`, 'chelem'); }
-    if (ob === '2C' && r === '2D' && o2 !== '2N' && o2 !== 'P') { const s = o2[1], fit = n(h, s) >= 3; if (isMaj(s)) { if (fit && v >= 3) return D(can('4' + s) ? '4' + s : 'P', `Il a un unicolore ou une belle majeure (8 levées) et j'ai le fit avec ${v} H : la manche → 4${SYM[s]}.`, 'fortes'); if (v >= 6) return D(can('3N') ? '3N' : 'P', `${v} H sans fit : 3SA.`, 'fortes'); return D('P', `${v} H sans fit : le 2♣ n'était forcing qu'un tour → passe.`, 'fortes'); } if (v >= 4) return D(can('3N') ? '3N' : 'P', `Sa mineure de 9 levées et mes ${v} H : 3SA.`, 'fortes'); return D('P', `${v} H : je passe sur sa mineure.`, 'fortes'); }
+    if (ob === '2C' && r === '2D' && o2 !== '2N' && o2 !== 'P') { const s = o2[1], fit = n(h, s) >= 3; if (isMaj(s)) { if (v >= 8) return D('3' + s, `Il a un unicolore ou une belle majeure (8 levées) ; j'ai ${v} H : je suis fort → 3${SYM[s]}, on peut tenter le chelem.`, 'fortes', { al: 'Fort : chelem possible' }); return D(can('4' + s) ? '4' + s : 'P', `Il a un unicolore ou une belle majeure (8 levées) ; avec ${v} H seulement → 4${SYM[s]} : l'arrêt, la manche sans chelem.`, 'fortes', { al: 'Arrêt : la manche, pas de chelem' }); } if (v >= 4) return D(can('3N') ? '3N' : 'P', `Sa mineure de 9 levées et mes ${v} H : 3SA.`, 'fortes'); return D('P', `${v} H : je passe sur sa mineure.`, 'fortes'); }
     if (ob === '2C' && r === '2D') { if (v <= 2) return D('P', `${v} H face à 22-23 : pas de manche → passe.`, 'fortes'); const s = o2[1]; if (s !== 'N' && n(h, s) >= 3) { const g = isMaj(s) ? '4' + s : '3N'; return D(can(g) ? g : 'P', `Fit et ${v} H : la manche.`, 'fortes'); } return D(can('3N') ? '3N' : 'P', `${v} H face à 22-23 : 3SA.`, 'fortes'); }
     if (ob === '2D' && r === '2H') { const s = o2[1]; if (s !== 'N' && n(h, s) >= 3) { const g = isMaj(s) ? '4' + s : '5' + s; return D(can(g) ? g : '3N', 'Manche obligatoire : fit → la manche.', 'fortes'); } return D(can('3N') ? '3N' : 'P', 'Manche obligatoire : 3SA.', 'fortes'); }
     if (o2 === 'P') return null;
@@ -3710,6 +3712,7 @@ function uncontested(seat, A, c) {
   if (iAmOpener && k === 4) {
     const r = ours[1].b, o2 = ours[2].b, r2 = ours[3].b;
     if (ob === '1N' && (r === '2D' || r === '2H') && ['2N', '3N', '3H', '3S'].includes(r2)) { const M = r === '2D' ? 'H' : 'S'; const kind = r2 === '2N' ? 'g' : r2 === '3N' ? 'h' : 'i'; const st = decide('capitaine', h, { kind, M }, 0); if (st) return fromStep(st, 'capitaine', null); }
+    if (ob === '2C' && r === '2D' && /^2[HS]$/.test(o2)) { const M = o2[1]; if (r2 === '3' + M) return D(can('4N') ? '4N' : '4' + M, `Il est fort (3${SYM[M]}) : on cherche le chelem → Blackwood 4SA.`, 'chelem'); if (r2 === '4' + M) return D('P', `4${SYM[M]} : l'arrêt, la manche sans chelem → passe.`, 'fortes'); }
     if (ob === '1N' && r === '2C') {
       if (r2 === '2N') return D(v >= 16 ? '3N' : 'P', `Proposition 8-9 H : ${v >= 16 ? 'maximum → 3SA' : 'minimum → passe'}.`, 'capitaine');
       if (o2 === '2D' && /^2[HS]$/.test(r2)) { const M = r2[1], f = n(h, M) >= 3; const b = f ? (v >= 16 ? '4' + M : 'P') : (v >= 16 ? '2N' : 'P'); return D(b, `Après 2♦, il montre 5 ${NOMS[M]} et 8-9 H : ${f ? (v >= 16 ? 'fit et maximum → 4' + SYM[M] : 'fit mais minimum → passe') : (v >= 16 ? 'pas de fit, maximum → 2SA' : 'pas de fit, minimum → passe')}.`, 'stayman'); }
@@ -6411,7 +6414,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v156';
+const APP_V = 'v160';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -10661,6 +10664,16 @@ wideLayout();
 //  Le texte est écrit au « vous » ; tuTree() le passe au « tu » pour les 8-17 ans.
 // ====================================================================
 // ---- la méthode pour compter les levées sûres (cours, école de la carte, cahier) ----
+const PERD_CDI = `<p>À la couleur, le principe de base est l'inverse de Sans-Atout : on <b>compte les perdantes</b>, les levées qu'on risque de <b>perdre</b>.</p>
+<h3>1 · Compter les perdantes</h3>
+<p>On compte depuis la <b>main longue en atout</b> (en général celle du déclarant), <b>couleur par couleur</b>, en ne regardant que ses <b>3 premières cartes</b> :</p>
+${TBL(['Dans la couleur, j\'ai', 'Perdantes'], [['Une chicane (0 carte)', '<b>0</b>'], ['Un singleton', '<b>1</b>, sauf si c\'est l\'As'], ['Un doubleton', '<b>2</b> au plus : 0 avec A R, 1 avec A x ou R x'], ['3 cartes ou plus', 'une perdante pour chaque <b>As, Roi, Dame</b> qui manque parmi les 3 premières']])}
+<p>Les <b>honneurs du mort</b> comptent aussi : avec ♥ 7 5 3 face à ♥ A R 4 au mort, il ne manque que la Dame : <b>1</b> perdante.</p>
+<p>On compare ensuite avec les <b>perdantes permises</b> : 13 − les plis du contrat. À 4♠ (10 plis), on a droit à <b>3</b> perdantes.</p>
+<div class="ex">Contrat 4♠. Sud : ♠ A R D V 5 · ♥ 8 6 4 · ♦ A R · ♣ 7 3 2. Nord : ♠ 7 4 3 · ♥ 9 · ♦ 8 6 5 4 · ♣ A R 8 5 4.<br>Atouts : 0 perdante. Cœurs : 3 (rien en haut). Carreaux : 0. Trèfles : 1 (la Dame manque, et le 3e tour). Total : <b>4 perdantes</b> pour 3 permises : il faut en supprimer une.</div>
+<h3>2 · Il y en a trop ? L'ordre CDI</h3>
+${TBL(['Dans l\'ordre', 'Comment'], [['<b>C</b> · La Coupe de la main courte', 'couper ses perdantes avec les atouts de la main <b>courte</b> en atout (le mort, en général). Une coupe dans la main longue ne rapporte rien.'], ['<b>D</b> · La Défausse', 'défausser une perdante sur une levée maîtresse en trop de l\'autre main, <b>avant de rendre la main</b>, sinon les adversaires l\'encaissent.'], ['<b>I</b> · L\'Impasse', 'le pari, en dernier : elle ne réussit qu\'une fois sur deux.']])}
+<p>Dans l'exemple : le mort n'a qu'un cœur. <b>C</b> : on coupe deux cœurs au mort, et il ne reste que 2 perdantes. Ne purgez pas tous les atouts avant : gardez-en au mort pour couper.</p>`;
 const COUNT_SURE = `<div class="cnt3"><div class="cnt3h">🧮 Compter ses levées sûres : la méthode en 3 gestes</div>
 <p>Une <b>levée sûre</b> est un pli <b>gagné tout de suite</b>, sans jamais rendre la main. On les compte <b>couleur par couleur</b> :</p>
 <ol><li><b>Regroupez</b> : prenez ensemble vos cartes et celles du mort dans la couleur.</li>
@@ -10934,26 +10947,31 @@ ${KEEP('Mineure 20, majeure 30, SA 40 puis 30. 100 et plus : manche. Chute : 50 
       ['Vulnérable : 4♥ juste fait.', null, ['620', '420', '650'], 0, '120 + 500.'],
       ['Non vulnérable : 2♠ avec une levée de mieux.', null, ['140', '110', '90'], 0, '90 + 50.'],
       ['Non vulnérable : 4♥ chute d\'une levée.', null, ['Les adversaires marquent 50', 'Les adversaires marquent 100', 'On marque 50'], 0, '50 par levée de chute.']] },
-  { id: 'c9', ic: '🧮', t: 'Le déclarant : compter, débloquer, affranchir', d: 'Le plan avant la première carte', slides: 'levees', mini: 'longueur', th: `
-<p>Quand le mort s'étale, on ne joue pas tout de suite. On fait d'abord un <b>plan</b>, en trois questions.</p>
+  { id: 'c9', ic: '🧮', t: 'Le plan à Sans-Atout : compter les gagnantes, puis ALC', d: 'Le plan avant la première carte', slides: 'levees', mini: 'longueur', th: `
+<p>Quand le mort s'étale, on ne joue pas tout de suite. On fait d'abord un <b>plan</b>. À Sans-Atout, le principe de base est de <b>compter les gagnantes</b> : les levées qu'on peut encaisser tout de suite. Trois questions.</p>
 <h3>1 · Combien de plis me faut-il ?</h3>
 <p>6 + le palier. À 3SA : 9 plis.</p>
-<h3>2 · Combien de levées sûres ?</h3>
+<h3>2 · Combien de gagnantes (levées sûres) ?</h3>
 <p>Une <b>levée sûre</b> se gagne tout de suite, sans rendre la main : un As, un As-Roi…</p>
 ${DIA('♠ A R 3', '♠ 7 4 2')}
 <p>Ici, <b>2 levées sûres</b> à pique : l'As et le Roi.</p>
 ${COUNT_SURE}
-<h3>3 · Où trouver les plis qui manquent ?</h3>
-<p><b>Affranchir</b> : jouer une couleur pour chasser la carte maîtresse adverse. Vos cartes suivantes deviennent maîtresses.</p>
+<h3>3 · Il en manque ? L'ordre ALC</h3>
+<p>Pour fabriquer les levées qui manquent, trois lettres, dans cet ordre : <b>A</b>ffranchir, <b>L</b>ongueur, <b>C</b>ommunications.</p>
+<h3>A · Affranchir</h3>
+<p>Jouer une couleur pour <b>chasser la carte maîtresse adverse</b>. Vos cartes suivantes deviennent maîtresses.</p>
 ${DIA('♥ R D V 10', '♥ 5 3 2')}
-<p>L'As adverse prend le premier tour ; le Roi, la Dame et le Valet font ensuite <b>3 plis</b>.</p>
-<p><b>La longueur</b> : quand les adversaires n'ont plus de cartes dans une couleur, vos petites cartes deviennent maîtresses.</p>
-<h3>Débloquer : commencer par la main courte</h3>
-<p>La <b>main courte</b> est celle des deux qui a le moins de cartes dans la couleur. On joue d'abord ses honneurs, pour finir dans la main longue.</p>
+<p>L'As adverse prend le premier tour ; le Roi, la Dame et le Valet font ensuite <b>3 plis</b>. On affranchit <b>tôt</b>, tant qu'on a encore des arrêts dans les autres couleurs.</p>
+<h3>L · La longueur</h3>
+<p>Avec une couleur longue (8 cartes à deux, ou 5 cartes d'un côté), on la joue jusqu'à ce que les adversaires n'en aient plus : vos <b>petites cartes</b> deviennent maîtresses. Avec 8 cartes, les adversaires en ont 5, le plus souvent partagées 3-2 : après trois tours, il ne leur en reste plus.</p>
+<h3>C · Les communications</h3>
+<p>Une levée affranchie ne vaut rien si l'on ne peut pas <b>aller la chercher</b>. Avant de jouer, on vérifie les <b>entrées</b> (les reprises) dans chaque main, et l'on <b>débloque</b> : on joue d'abord les honneurs de la <b>main courte</b>, pour finir dans la main longue.</p>
 ${DIA('♦ A R 2', '♦ D V 10 9 8')}
 <p>Nord est la main courte (3 cartes) : As, Roi, puis le 2 vers la Dame. <b>Cinq plis.</b> Commencer par la Dame bloquerait la couleur.</p>
-${KEEP('Avant de jouer : combien de plis faut-il, combien en ai-je, où trouver les autres ? Puis : main courte d\'abord.')}`,
+${KEEP('À Sans-Atout, je compte mes gagnantes. Il en manque ? A-L-C : Affranchir, la Longueur, et les Communications (main courte d\'abord, garder une reprise).')}`,
     qs: [['Que faire en premier quand le mort s\'étale ?', ['Faire mon plan : compter mes plis', 'Jouer tout de suite mes As', 'Couper'], 0, 'Le plan d\'abord.'],
+      ['À Sans-Atout, le principe de base est de compter :', ['Les gagnantes', 'Les perdantes', 'Les atouts'], 0, 'Les levées que l\'on peut encaisser tout de suite.'],
+      ['Que veut dire ALC ?', ['Affranchir, Longueur, Communications', 'Atout, Levée, Coupe', 'As, Longue, Contre'], 0, 'L\'ordre du plan à Sans-Atout.'],
       ['Une levée sûre, c\'est :', ['Un pli gagné tout de suite, sans rendre la main', 'Un pli espéré', 'Un atout'], 0, 'As, As-Roi…'],
       ['Affranchir une couleur, c\'est :', ['Chasser la carte maîtresse adverse pour rendre les miennes maîtresses', 'Jouer l\'atout', 'Défausser'], 0, 'On perd la main une fois pour gagner les suivantes.'],
       ['Dans une couleur partagée, on joue d\'abord les honneurs de :', ['La main courte', 'La main longue', 'N\'importe laquelle'], 0, 'Pour ne pas bloquer la couleur.']],
@@ -10970,6 +10988,7 @@ ${TBL(['Contre Sans-Atout', 'Contre un contrat à la couleur'], [['1. La couleur
 <p>• Une <b>séquence</b> d'honneurs (R D V) : la plus haute, le <b>Roi</b>.</p>
 <p>• Contre SA, une longue sans séquence : la <b>4e meilleure</b> (la 4e carte en partant du haut).</p>
 <p>• Contre une <b>couleur</b>, sans séquence, et toujours dans la couleur du partenaire : la <b>parité</b>. Nombre pair de cartes, l'avant-dernière ; impair, la plus petite.</p>
+<p>• En dernier recours, quand aucune autre entame n'a d'intérêt : le <b>top of nothing</b>, la plus grosse carte d'une couleur sans honneur.</p>
 <h3>La parité, en détail</h3>
 <p>Contre un contrat à la <b>couleur</b>, et dans la couleur de votre partenaire, la carte d'entame lui dit <b>combien de cartes</b> vous avez dans la couleur. Deux cas, à retenir par cœur :</p>
 ${TBL(['Vous avez', 'Vous entamez', 'Exemple'], [['un nombre <b>pair</b> de cartes (2 ou 4)', 'l\'<b>avant-dernière</b>', '<b>8</b> 3 → le <b>8</b> · 8 6 <b>4</b> 2 → le <b>4</b>'], ['un nombre <b>impair</b> de cartes (3 ou 5)', 'la <b>plus petite</b>', 'D 8 <b>2</b> → le <b>2</b> · 9 7 5 4 <b>2</b> → le <b>2</b>']])}
@@ -10981,6 +11000,9 @@ ${TBL(['Vous avez', 'Vous entamez', 'Exemple'], [['un nombre <b>pair</b> de cart
 <h3>Contre Sans-Atout : le Roi de R D V, et le déblocage</h3>
 <p>À Sans-Atout, on n'entame un honneur qu'avec <b>3 cartes qui se suivent</b> en tête (R D V, D V 10). Le partenaire le sait : votre Roi lui promet la <b>Dame et le Valet</b>.</p>
 <div class="ex">Vous avez ♠ R D V 4, votre partenaire ♠ A 8. Vous entamez le <b>Roi</b>. Votre partenaire <b>prend avec l'As</b> (il débloque : sinon son As bloquerait la couleur) et <b>renvoie le 8</b>. Votre Dame et votre Valet font les plis suivants : <b>deux plis de plus</b> pour la défense.</div>
+<div class="ex">Vous avez ♠ R D 8 5 2, votre partenaire ♠ A 10 3. Vous entamez le <b>5</b> (4e meilleure). Votre partenaire prend de l'<b>As</b>, puis rejoue le <b>10</b>, et non le 3 : <b>avec deux cartes restantes, on rejoue la plus grosse</b>. C'est le déblocage : ainsi, la couleur ne reste pas bloquée chez lui, et vos cartes font les plis suivants.</div>
+<h3>En dernier recours : le « top of nothing »</h3>
+<p>Quand <b>toutes les autres entames</b> ont été examinées et paraissent inutiles ou dangereuses, on entame dans une couleur sans honneur la <b>plus grosse carte</b> : avec ♦ 8 6 3, le <b>8</b>. Message au partenaire : « je n'ai rien dans cette couleur, ne la rejoue pas pour moi ». C'est une entame de dernier recours, jamais un premier choix.</p>
 <h3>Une main, deux contrats</h3>
 <p>La même main ne s'entame pas pareil. Contre <b>Sans-Atout</b>, on développe sa longue. Contre une <b>couleur</b>, on cherche un pli rapide ou une coupe : singleton, séquence de 2 honneurs ; et quand on a des honneurs partout, <b>l'atout</b>.</p>
 <div class="ex">${cH('J9.QJ8.KJ72.Q653', 'Votre main')}Contre 3SA : le <b>2♦</b> (la longue la plus riche, 4e meilleure). Contre 4♠ : la <b>Dame de cœur</b> (tête de séquence D V).</div>
@@ -11218,6 +11240,13 @@ const C2 = [
 <p>Avec 20 points ou plus, une ouverture au palier 1 risque d'être passée par le partenaire, alors que la manche est sur table. On ouvre donc <b>au palier 2</b>.</p>
 <h3>L'échelle des ouvertures fortes</h3>
 ${TBL(['Ma main', 'J\'ouvre', 'Le partenaire'], [['20 à 21 H, régulière', '2SA', 'passe avec 0 à 4 H, sinon comme sur 1SA'], ['22 à 23 H, régulière, ou unicolore très fort', '2♣', '2♦ : le relais, obligatoire'], ['24 H et plus', '2♦', '2♥ : le relais, la manche est obligatoire']])}
+<h3>Le 2♣ fort indéterminé : quatre mains possibles</h3>
+${TBL(['Cas', 'La main', 'Après le relais 2♦'], [['1', '22 à 23 H, régulière', '2SA'], ['2', 'Irrégulière, unicolore fort en majeure : <b>8 levées de jeu</b>', '2♥ ou 2♠'], ['3', 'Irrégulière, unicolore fort en mineure : <b>9 levées de jeu</b>', '3♣ ou 3♦'], ['4', 'Irrégulière, 20 à 23 H et une très belle majeure : 5 cartes A R D x x, ou 6 cartes', '2♥ ou 2♠']])}
+<p>Pour les cas 2 et 3, ce sont les <b>levées</b> qui comptent, pas les points : on ouvre 2♣ dès 17 H.</p>
+<div class="ex">${cH('KQJ986.AT.964.AK', 'Votre main')}♠ R D V 9 8 6 : 5 levées · ♥ A 10 : 1 · ♦ 9 6 4 : 0 · ♣ A R : 2. <b>17 H et 8 levées en majeure : 2♣</b>, puis 2♠.</div>
+<div class="ex">${cH('A5.A4.J8.AKQT965', 'Votre main')}♠ A 5 : 1 levée · ♥ A 4 : 1 · ♦ V 8 : 0 · ♣ A R D 10 9 6 5 : 7. <b>17 H et 9 levées en mineure : 2♣</b>, puis 3♣.</div>
+<h3>Après 2♣ – 2♦ – 2♥ ou 2♠</h3>
+${TBL(['Le partenaire dit', 'Ça veut dire'], [['3 de la majeure (3♥ ou 3♠)', 'je suis fort : on peut tenter le chelem'], ['4 de la majeure (4♥ ou 4♠)', 'l\'arrêt : on joue la manche, pas de chelem, je n\'ai pas assez de points']])}
 <h3>Le relais ne dit rien</h3>
 <p>Sur 2♣, le partenaire dit <b>2♦</b> quelle que soit sa main, même avec 0 point. Sur 2♦, il dit <b>2♥</b>. C'est une simple question : « décris-moi ta main ».</p>
 <h3>Ensuite, l'ouvreur décrit</h3>
@@ -11225,15 +11254,19 @@ ${TBL(['Ma main', 'J\'ouvre', 'Le partenaire'], [['20 à 21 H, régulière', '2S
 <div class="ex">${cH('AK5.KQ4.AQJ6.AJ3', 'Votre main')}24 points : <b>2♦</b>. Le partenaire dit 2♥ (relais). Vous dites 2SA : régulier. La manche est garantie.</div>
 <h3>Répondre à 2SA</h3>
 <p>Les mêmes outils que sur 1SA, <b>un palier plus haut</b> : Texas 3♦ (cœurs) et 3♥ (piques) <b>dès 0 point</b>, comme sur 1SA : avec 0 à 4 H, on passe après la complétion, et c'est l'ouvreur qui joue. Stayman 3♣ dès 5 H ; l'ouvreur répond 3♦ (aucune majeure 4e), 3♥, 3♠, ou <b>3SA avec les deux majeures</b>. Avec 5 cœurs et 5 piques, <b>pas de 4♦</b> sur 2SA : Texas dans la plus solide. Sinon : passe avec 0 à 4 H, 3SA avec 5 à 10 H.</p>
-${KEEP('20-21 régulier : 2SA. 22-23 : 2♣, relais 2♦. 24 et plus : 2♦, relais 2♥, manche obligatoire.')}`,
+${KEEP('20-21 régulier : 2SA. 2♣ : 22-23 régulier, 8 levées en majeure, 9 en mineure, ou 20-23 avec une très belle majeure ; relais 2♦. 24 et plus : 2♦, relais 2♥, manche obligatoire.')}`,
     qs: [['Que montre l\'ouverture de 2SA ?', ['20 à 21 H, main régulière', '15 à 17 H', 'Une main faible avec deux couleurs'], 0, '2SA : 20-21 régulier.'],
       ['Votre partenaire ouvre 2♣. Vous avez 2 points. Que dites-vous ?', ['2♦', 'Passe', '2SA'], 0, 'Le relais est obligatoire, même avec 0 point.'],
       ['Après 2♦ (24 H et plus), la manche est-elle obligatoire ?', ['Oui', 'Non'], 0, 'On ne s\'arrête pas avant la manche.'],
+      ['17 H et 8 levées de jeu en majeure : vous ouvrez…', ['2♣', '1 de la majeure', '2♦'], 0, 'Le cas 2 du 2♣ fort indéterminé : ce sont les levées qui comptent.'],
+      ['2♣ – 2♦ – 2♠ – 4♠ : que dit 4♠ ?', ['L\'arrêt : la manche, sans chelem', 'Je suis fort, chelem possible', 'J\'ai 4 piques'], 0, '3♠ serait fort ; 4♠ est l\'arrêt.'],
       ['Sur 2SA, avec 6 H et 4 piques, vous dites :', ['3♣ (Stayman)', '3SA', 'Passe'], 0, 'Stayman un palier plus haut, dès 5 H.'],
       ['Sur 2SA, avec 2 H et cinq cœurs, vous dites :', ['3♦ (Texas)', 'Passe', '3♥'], 0, 'Le Texas se fait dès 0 point : l\'ouvreur dit 3♥, vous passez. 3♥ joué par la main forte vaut mieux que 2SA.']],
     ex: [['Que dites-vous en ouverture ?', 'AQ5.KJ4.AQ63.KQ2', ['2SA', '1SA', '2♣', '1♦'], 0, '21 points, régulière : 2SA.'],
       ['Que dites-vous en ouverture ?', 'AK5.KQ4.AQJ6.AJ3', ['2♦', '2♣', '2SA', '1♦'], 0, '24 points : 2♦.'],
       ['Que dites-vous en ouverture ?', 'AK4.AQ5.KQJ7.QJ2', ['2♣', '2♦', '2SA', '1SA'], 0, '22 points, régulière : 2♣, puis 2SA après le relais.'],
+      ['Que dites-vous en ouverture ?', 'KQJ986.AT.964.AK', ['2♣', '1♠', '2♠', '2♦'], 0, '17 H et 8 levées en majeure : 2♣, puis 2♠ après le relais.'],
+      ['Que dites-vous en ouverture ?', 'A5.A4.J8.AKQT965', ['2♣', '1♣', '3♣', '2SA'], 0, '17 H et 9 levées en mineure : 2♣, puis 3♣.'],
       ['Votre partenaire ouvre 2SA. Que répondez-vous ?', '9742.Q83.J65.874', ['Passe', '3SA', '3♣'], 0, '3 points : moins de 5, passe.'],
       ['Votre partenaire ouvre 2SA. Que répondez-vous ?', 'Q74.K83.J652.874', ['3SA', 'Passe', '3♣'], 0, '6 points, pas de majeure 4e : 3SA.']] },
   { id: 'd2', ic: '🎯', t: 'Répondre à 1SA : Stayman et Texas', d: 'Quatre questions, dans l\'ordre', slides: 'sa', th: `
@@ -11246,6 +11279,7 @@ ${TBL(['Après le Texas, avec', '5 cartes', '6 cartes'], TEXAS_ROWS)}
 <h3>3 · Ai-je 4 cartes en majeure et 8 points ? → le Stayman 2♣</h3>
 <p>2♣ demande : « as-tu 4 cartes en majeure ? » L'ouvreur répond :</p>
 ${TBL(['Réponse', 'Signification'], [['2♦', 'aucune majeure de 4 cartes'], ['2♥', '4 cœurs (pas 4 piques)'], ['2♠', '4 piques (pas 4 cœurs)'], ['2SA', 'les deux majeures']])}
+<p><b>La suite</b> : sur <b>2♦</b>, l'ouvreur a probablement une majeure par 3 : avec 10 H et plus, nommez votre meilleure majeure <b>au palier 3</b> ; l'ouvreur dit 4 avec 3 cartes, sinon 3SA. Sans majeure à nommer : 2SA (8-9) ou 3SA. Sur <b>2SA</b> (4 cœurs et 4 piques), le fit est trouvé : comptez vos points et finissez <b>la manche au palier 4</b> dans votre meilleure majeure (avec 8-9 H, proposez au palier 3).</p>
 <p><b>Avec 5 cartes dans une majeure et 4 dans l'autre</b> : de 0 à 7 H, le Texas ; dès 8 H, <b>d'abord le Stayman</b>. Si l'ouvreur répond 2♦ (pas de majeure 4e), vous nommez votre majeure 5e : <b>au palier 2 avec 8-9 H</b> (proposition), <b>au palier 3 avec 10 H et plus</b> (manche).</p>
 <h3>4 · Sinon, je compte mes points</h3>
 ${TBL(['Mes points', 'Je dis'], [['0 à 7', 'passe'], ['8 à 9', '2SA (proposition)'], ['10 à 15', '3SA']])}
@@ -11331,7 +11365,9 @@ ${KEEP('Contre d\'appel : 12 H et les majeures (3 + 4 sur une mineure, l\'autre 
       ['1♦ – contre – passe – ? Que dites-vous ?', '9742.Q83.J65.874', ['1♠', 'Passe', '1SA'], 0, 'On répond toujours : 1♠, la majeure.'],
       ['1♣ – contre – passe – ? Que dites-vous ?', 'KQ74.K83.J65.874', ['2♠', '1♠', 'Passe'], 0, '9 H : un saut, 2♠.'],
       ['Ils ouvrent 1♥. Que dites-vous ?', 'K74.KQJ63.A5.984', ['Passe', 'Contre', '1SA'], 0, 'Long dans leur couleur : ni contre ni intervention, passe.']] },
-  { id: 'd7', ic: '🪤', t: 'L\'impasse et la double impasse', d: 'Capturer un honneur bien placé', slides: 'impasse', th: `
+  { id: 'd7', ic: '🪤', t: 'Le plan à la couleur : compter les perdantes, puis CDI', d: 'Coupe, Défausse, Impasse', slides: 'impasse', th: `
+${PERD_CDI}
+<h3>I · L'impasse, en détail</h3>
 <p>Une <b>impasse</b>, c'est jouer <b>vers</b> une fourchette d'honneurs (A D, R V…) en espérant que l'honneur manquant est placé <b>avant</b> elle.</p>
 <h3>Le principe : jouer vers l'honneur</h3>
 ${DIA('♠ A D', '♠ 5 3')}
@@ -11352,6 +11388,7 @@ ${KEEP('Je joue vers la fourchette, de la main faible vers la main forte. Double
       ['Nord : ♦ A D 10 — Sud : ♦ 5 4 3. Premier tour, Ouest met petit. Vous passez :', null, ['Le 10', 'La Dame', 'L\'As'], 0, 'Double impasse : d\'abord le 10.'],
       ['Nord : ♣ A D — Sud : ♣ 7 4. Est a le Roi. Combien de plis ?', null, ['1', '2', '0'], 0, 'L\'impasse échoue : seulement l\'As.']] },
   { id: 'd8', ic: '🛠️', t: 'Purger, couper au mort, la longueur', d: 'Les trois outils du déclarant à la couleur', slides: null, th: `
+<div class="ex"><b>Rappel du plan à la couleur</b> : je compte mes <b>perdantes</b> depuis la main longue en atout ; il y en a trop ? <b>C</b>oupe dans la main courte, <b>D</b>éfausse avant de rendre la main, <b>I</b>mpasse en dernier.</div>
 <p>À la couleur, le déclarant a trois outils pour gagner des plis en plus.</p>
 <h3>1 · Purger les atouts</h3>
 <p>Jouer atout jusqu'à ce que les adversaires n'en aient plus. Ainsi, ils ne couperont pas vos gros honneurs. <b>Comptez</b> : vous avez 8 atouts, ils en ont 5. Souvent deux ou trois tours suffisent.</p>
@@ -13253,13 +13290,14 @@ c9: `
 <p>Pour les compter, couleur par couleur : regarde <b>tes cartes et celles du mort ensemble</b>. Pars de l'As et descends : As, Roi, Dame, Valet… Compte les cartes qui se suivent. <b>Au premier trou, tu t'arrêtes.</b> Pas d'As ? Zéro !</p>
 <table class="mini"><tr><th>Toi</th><th>Le mort</th><th>Plis sûrs</th></tr><tr><td>A R 3</td><td>7 4 2</td><td><b>2</b> (As, Roi… la Dame manque)</td></tr><tr><td>A R D</td><td>5 4</td><td><b>3</b></td></tr><tr><td>R D V</td><td>5 4 3</td><td><b>0</b> (pas d'As !)</td></tr></table>
 <p>Puis tu additionnes les quatre couleurs. Il t'en manque ? Question 3 !</p>
-<h3>3 · Où trouver les plis qui manquent ?</h3>
-<p><b>Chasser l'As</b> : avec R D V, tu n'as pas de pli sûr… mais si tu joues le Roi, l'adversaire prend avec son As. Ensuite, ta Dame et ton Valet sont les plus forts : <b>2 plis</b> ! Au bridge, rendre une famille gagnante comme ça s'appelle <b>affranchir</b> (comme libérer un prisonnier).</p>
-<p><b>La famille longue</b> (celle où tu as beaucoup de cartes) : quand les adversaires n'en ont plus, même tes petites cartes gagnent des plis.</p>
-<h3>L'astuce du capitaine : la main courte d'abord</h3>
-<p>Quand tu joues une couleur, commence par les gros honneurs du côté où il y a <b>le moins de cartes</b>. Sinon, tu restes coincé !</p>
+<h3>3 · Il en manque ? Le mot magique : A-L-C</h3>
+<p>Le Professeur Dumblebridge l'écrit au tableau en lettres d'or : <b>A</b> comme Affranchir, <b>L</b> comme Longueur, <b>C</b> comme Communications. Dans cet ordre !</p>
+<p><b>A · Affranchir, chasser l'As</b> : avec R D V, tu n'as pas de pli sûr… mais si tu joues le Roi, l'adversaire prend avec son As. Ensuite, ta Dame et ton Valet sont les plus forts : <b>2 plis</b> ! Au bridge, rendre une famille gagnante comme ça s'appelle <b>affranchir</b> (comme libérer un prisonnier).</p>
+<p><b>L · La Longueur, la famille longue</b> (celle où tu as beaucoup de cartes) : quand les adversaires n'en ont plus, même tes petites cartes gagnent des plis.</p>
+<h3>C · Les Communications : pouvoir passer d'une main à l'autre</h3>
+<p>Un pli gagnant ne sert à rien si tu ne peux pas aller le chercher ! C'est comme un pont entre ta main et celle du mort. Le secret : commence par les gros honneurs du côté où il y a <b>le moins de cartes</b>, la main courte. Sinon, tu restes coincé !</p>
 <div class="ex">Le mort a ♦ A R 2, toi ♦ D V 10 9 8. Le mort est la main courte : tu joues l'As, puis le Roi, puis le 2 vers ta main… et tes carreaux font <b>5 plis</b>. Si tu commences par la Dame, tu bloques la couleur. Grognon l'a fait : il est encore coincé.</div>
-${KMOTS([['Plan', 'réfléchir avant de jouer'], ['Levée sûre', 'un pli que l\'on gagne à coup sûr, tout de suite'], ['Affranchir', 'chasser les grosses cartes adverses pour que les tiennes gagnent'], ['Main courte', 'le côté (toi ou le mort) qui a le moins de cartes dans la famille']])}${KEEP('Avant de jouer : combien de plis me faut-il ? Combien en ai-je ? Où trouver les autres ? Et la main courte d\'abord !')}`,
+${KMOTS([['Plan', 'réfléchir avant de jouer'], ['Levée sûre', 'un pli que l\'on gagne à coup sûr, tout de suite'], ['Affranchir', 'chasser les grosses cartes adverses pour que les tiennes gagnent'], ['ALC', 'le plan à Sans-Atout : Affranchir, Longueur, Communications'], ['Main courte', 'le côté (toi ou le mort) qui a le moins de cartes dans la famille']])}${KEEP('À Sans-Atout, je compte mes plis gagnants. Il en manque ? A-L-C : Affranchir, la Longueur, les Communications (la main courte d\'abord) !')}`,
 c10: `
 <p>L'<b>entame</b>, c'est la toute première carte de la donne. Elle est jouée par le joueur à <b>gauche du déclarant</b>, avant que le mort étale ses cartes. Il faut donc la choisir sans voir le mort : c'est un petit mystère à résoudre, comme un détective !</p>
 <h3>Contre Sans-Atout : ta couleur la plus longue</h3>
@@ -13381,22 +13419,25 @@ d9: `
 ${KMOTS([['Défenseurs', 'les deux joueurs qui jouent contre le contrat'], ['En 2e, en 3e', 'ta place dans le pli : 2e, juste après le premier ; 3e, juste après le deuxième'], ['Cartes qui se suivent', 'comme le Roi et la Dame, ou la Dame et le Valet'], ['Rejouer', 'jouer à nouveau la même couleur']])}
 ${KEEP('Qui joue en dernier ? Mon partenaire : je joue petit. Le déclarant : je joue fort. Et je rejoue la couleur de mon partenaire.')}`,
 d8: `
-<p>Quand ton équipe joue un contrat à l'atout, le déclarant a trois outils dans sa boîte. Le Professeur Dumblebridge les appelle « les trois baguettes ».</p>
-<h3>1 · Faire tomber les atouts des adversaires</h3>
-<p>Les adversaires ont des atouts, eux aussi : avec, ils peuvent couper tes As ! Alors, d'abord, <b>joue atout</b> plusieurs fois, jusqu'à ce qu'ils n'en aient plus. Au bridge, on dit <b>purger</b> les atouts, comme on vide un seau.</p>
-<p>Pour savoir quand t'arrêter, <b>compte</b> : il y a 13 atouts en tout. Si ton équipe en a 8, les adversaires en ont 5.</p>
-<h3>2 · Couper chez le mort</h3>
-<p>Si le mort n'a plus de cartes dans une couleur, il peut <b>couper</b> avec un petit atout. Chaque coupe chez le mort, c'est <b>un pli en plus</b> ! Mais il faut garder des atouts au mort pour couper. Alors, dans ce cas, on coupe d'abord, et on fait tomber les atouts ensuite.</p>
-<h3>3 · La couleur longue</h3>
-<p>Quand ton équipe a beaucoup de cartes dans une couleur, ses petites cartes deviennent les plus fortes dès que les adversaires n'en ont plus. Tu te souviens ? C'est <b>affranchir</b> : libérer les prisonniers.</p>
-<div class="ex">L'atout est pique. Ton équipe a 8 piques, les adversaires 5. Tu joues trois fois atout : ils ont fourni 2 et 2, puis le dernier tombe. Plus d'atouts chez eux : tes As sont en sécurité.</div>
-${KMOTS([['Purger', 'jouer atout jusqu\'à ce que les adversaires n\'en aient plus'], ['Couper', 'jouer un atout quand on n\'a plus la couleur demandée'], ['Le mort', 'ton partenaire, qui étale ses cartes sur la table'], ['Affranchir', 'rendre ses petites cartes gagnantes']])}
-${KEEP('Je compte les atouts et je fais tomber ceux des adversaires. Mais si je veux couper chez le mort, je coupe d\'abord !')}`,
+<p>Quand ton équipe joue un contrat à l'atout, le capitaine ne compte pas ses plis gagnants comme à Sans-Atout : il compte ses <b>perdantes</b>, les plis qu'il risque de perdre !</p>
+<h3>1 · Compter les perdantes</h3>
+<p>Regarde ta main, couleur par couleur, mais seulement tes <b>3 premières cartes</b>. Chaque <b>As</b>, <b>Roi</b> ou <b>Dame</b> qui manque, c'est une perdante. Une couleur vide : 0 perdante. Une seule carte : 1 perdante (sauf l'As).</p>
+${TBL(['Ta couleur', 'Perdantes'], [['A R D 5', '0'], ['A R 7 4', '1 (la Dame manque)'], ['A 8 6', '2 (le Roi et la Dame manquent)'], ['9 7 4 3', '3'], ['un seul 6', '1'], ['aucune carte', '0']])}
+<p>À 4♠, il faut 10 plis : tu as droit à <b>3 perdantes</b>. Tu en as plus ? Le Professeur Dumblebridge sort ses trois baguettes, dans l'ordre : <b>C - D - I</b>.</p>
+<h3>C · La Coupe chez le mort</h3>
+<p>Si le mort n'a plus de cartes dans une couleur, il peut <b>couper</b> tes perdantes avec ses petits atouts. Chaque coupe chez le mort, c'est une perdante en moins ! Mais garde des atouts au mort : coupe d'abord, et fais tomber les atouts des adversaires ensuite.</p>
+<h3>D · La Défausse</h3>
+<p>Le mort a un gros honneur en trop dans une couleur que tu n'as pas ? Joue-le, et <b>jette une perdante</b> de ta main dessus. Fais-le vite, avant que les adversaires reprennent la main !</p>
+<h3>I · L'Impasse</h3>
+<p>Le piège à Roi, en dernier, parce qu'il ne marche qu'une fois sur deux.</p>
+<div class="ex">Contrat 4♠. Tes cœurs : 8 6 4 (3 perdantes). Le mort n'a qu'un cœur. Tu perds un cœur, puis le mort <b>coupe</b> les deux autres : il ne te reste qu'une perdante à cœur !</div>
+${KMOTS([['Perdante', 'un pli que tu risques de perdre'], ['CDI', 'le plan à l\'atout : Coupe, Défausse, Impasse'], ['Couper', 'jouer un atout quand on n\'a plus la couleur demandée'], ['Défausser', 'jeter une carte d\'une autre couleur']])}
+${KEEP('À l\'atout, je compte mes perdantes. Trop de perdantes ? C-D-I : la Coupe chez le mort, la Défausse, puis l\'Impasse.')}`,
 };
 const K_QS2 = {
   d7: [['Une impasse, c\'est :', ['Un piège pour attraper un Roi caché', 'Couper avec un atout', 'Jeter une carte'], 0, 'On espère que le Roi est du bon côté.'], ['Le mort a ♠ A D, toi ♠ 5 3. Tu commences par :', ['Le 3 de ta main, vers A D', 'La Dame du mort', 'L\'As, puis la Dame'], 0, 'De la main aux petites cartes vers la fourchette.'], ['Le piège marche :', ['Une fois sur deux', 'Toujours', 'Jamais'], 0, 'Le Roi est d\'un côté ou de l\'autre.'], ['Ouest met petit. Tu poses :', ['La Dame', 'L\'As', 'Le 5'], 0, 'Si le Roi est chez Ouest, la Dame gagne.'], ['Le Roi était chez Est et ta Dame a perdu :', ['Ce n\'est pas une faute, c\'était un pari', 'J\'ai triché', 'J\'aurais dû jouer la Dame d\'abord'], 0, 'Une impasse réussit une fois sur deux.']],
   d9: [['Tu joues en 2e. Qui joue en dernier ?', ['Mon partenaire', 'Le déclarant', 'Moi'], 0, 'Il joue 4e : il veille.'], ['En 2e, tu joues :', ['Une petite carte', 'Ta plus grosse carte', 'N\'importe quoi'], 0, 'Ton partenaire jouera après toi.'], ['En 3e, tu joues :', ['Une carte forte', 'Une petite carte'], 0, 'Après toi, il ne reste que le déclarant.'], ['En 3e avec ♥ R D 5, tu mets :', ['La Dame', 'Le Roi', 'Le 5'], 0, 'La plus petite des cartes qui se suivent.'], ['Tu reprends la main. Tu joues :', ['La couleur de mon partenaire', 'Ma couleur préférée', 'Un atout, toujours'], 0, 'Son entame montre sa couleur longue.']],
-  d8: [['Ton équipe a 8 atouts. Combien les adversaires en ont-ils ?', ['5', '8', '13'], 0, '13 − 8 = 5.'], ['Purger les atouts, c\'est :', ['Jouer atout jusqu\'à ce que les adversaires n\'en aient plus', 'Jeter ses atouts', 'Couper chez le mort'], 0, 'Comme on vide un seau.'], ['Une coupe chez le mort rapporte :', ['Un pli en plus', 'Rien', 'Un point'], 0, 'Le petit atout du mort gagne un pli.'], ['Tu veux couper chez le mort. Tu fais tomber les atouts :', ['Après avoir coupé', 'Tout de suite, tous', 'Jamais'], 0, 'Sinon, le mort n\'a plus d\'atouts pour couper.']],
+  d8: [['À l\'atout, le capitaine compte :', ['Ses perdantes', 'Ses gagnantes', 'Ses atouts seulement'], 0, 'Les plis qu\'il risque de perdre.'], ['Tu as ♥ A 8 6. Combien de perdantes ?', ['2', '1', '3'], 0, 'Le Roi et la Dame manquent.'], ['À 4♠, combien de perdantes as-tu le droit d\'avoir ?', ['3', '4', '10'], 0, '13 − 10 = 3.'], ['CDI, dans l\'ordre :', ['Coupe, Défausse, Impasse', 'Impasse, Défausse, Coupe', 'Contre, Défense, Impasse'], 0, 'L\'impasse en dernier : c\'est un pari.'], ['Tu veux couper chez le mort. Tu fais tomber les atouts :', ['Après avoir coupé', 'Tout de suite, tous', 'Jamais'], 0, 'Sinon, le mort n\'a plus d\'atouts pour couper.']],
 };
 const K_EX2 = {
   d7: [['Le mort : ♥ A D. Toi : ♥ 7 4. Par quelle carte commences-tu ?', null, ['Le 4, de ta main', 'L\'As du mort', 'La Dame du mort'], 0, 'On joue vers la fourchette.'], ['Tu joues le 4 vers ♥ A D. Ouest met le 2. Tu mets :', null, ['La Dame', 'L\'As'], 0, 'La Dame : si le Roi est chez Ouest, elle gagne.'], ['Tu joues vers ♥ A D. Ouest met le Roi. Tu mets :', null, ['L\'As', 'La Dame'], 0, 'L\'As prend le Roi, et la Dame devient la plus forte.'], ['Le Roi était chez Est. Ta Dame a perdu. As-tu fait une faute ?', null, ['Non, c\'était un pari', 'Oui, une grosse faute'], 0, 'Une impasse réussit une fois sur deux.']],
@@ -13406,7 +13447,7 @@ const K_EX2 = {
   Object.keys(K_TH2).forEach(id => { const c = all[id]; if (!c) return; const th = c.th, qs = c.qs, ex = c.ex;
     Object.defineProperty(c, 'th', { configurable: true, get() { return tone() === 'enfant' ? K_TH2[id] : th; }, set(v) { } });
     if (K_QS2[id]) Object.defineProperty(c, 'qs', { configurable: true, get() { return tone() === 'enfant' ? K_QS2[id] : qs; }, set(v) { } });
-    const KT2 = { d7: 'L\'impasse : le piège à Roi', d8: 'Les trois outils du déclarant', d9: 'La défense : petite ou forte ?' }; if (KT2[id]) { const t0 = c.t; Object.defineProperty(c, 't', { configurable: true, get() { return tone() === 'enfant' ? KT2[id] : t0; }, set(v) { } }); }
+    const KT2 = { d7: 'L\'impasse : le piège à Roi', d8: 'Le plan à l\'atout : C-D-I', d9: 'La défense : petite ou forte ?' }; if (KT2[id]) { const t0 = c.t; Object.defineProperty(c, 't', { configurable: true, get() { return tone() === 'enfant' ? KT2[id] : t0; }, set(v) { } }); }
     if (K_EX2[id]) Object.defineProperty(c, 'ex', { configurable: true, get() { return tone() === 'enfant' ? K_EX2[id] : ex; }, set(v) { } }); }); }
 
 // ---------- les enfants : années, trimestres, et deux groupes d'âge ----------
@@ -13701,7 +13742,7 @@ function memoPage(n) {
   ${mots.length ? `<div class="mlex"><h3>📖 ${kid ? 'Mon petit dictionnaire' : 'Le lexique'}</h3><div class="mlexg">${mots.map(([a, b]) => `<p><b>${a}</b> : ${b}.</p>`).join('')}</div></div>` : ''}
   <p class="mfoot">Cours de bridge · ${kid ? 'à garder sur la table pendant le jeu' : 'à garder sur la table pendant le jeu'}</p></div></div>`);
 }
-const CAN = { c1: 'Je sais ce qu\'est un pli, et je joue chacun mon tour.', c2: 'Je sais ce qu\'est l\'atout, et quand je peux couper.', c3: 'Je sais ce qu\'est un contrat, et qui est le mort.', d9: 'En défense, je joue petit en 2e et fort en 3e.', c4: 'Je sais compter mes points.', c9: 'Je sais faire un plan, comme un capitaine.', d7: 'Je sais tendre le piège de l\'impasse.', c10: 'Je sais choisir mon entame.', d8: 'Je sais faire tomber les atouts et couper chez le mort.', c5: 'Je sais quand et comment ouvrir.', c6: 'Je sais répondre à mon partenaire et trouver le fit.', c7: 'Je sais faire ma redemande.', c8: 'Je sais compter les points du score.', d2: 'Je connais le Texas et le Stayman.', d5: 'Je sais intervenir quand l\'adversaire a ouvert.', d1: 'Je connais les ouvertures fortes.', d4: 'Je sais faire un barrage.', d6: 'Je sais faire un contre d\'appel, et y répondre.', d10: 'Je parle le langage des cartes avec mon partenaire.', e3: 'Je sais demander les clés pour le chelem.' };
+const CAN = { c1: 'Je sais ce qu\'est un pli, et je joue chacun mon tour.', c2: 'Je sais ce qu\'est l\'atout, et quand je peux couper.', c3: 'Je sais ce qu\'est un contrat, et qui est le mort.', d9: 'En défense, je joue petit en 2e et fort en 3e.', c4: 'Je sais compter mes points.', c9: 'Je sais compter mes plis gagnants et suivre A-L-C à Sans-Atout.', d7: 'Je sais tendre le piège de l\'impasse.', c10: 'Je sais choisir mon entame.', d8: 'Je sais compter mes perdantes et suivre C-D-I à l\'atout.', c5: 'Je sais quand et comment ouvrir.', c6: 'Je sais répondre à mon partenaire et trouver le fit.', c7: 'Je sais faire ma redemande.', c8: 'Je sais compter les points du score.', d2: 'Je connais le Texas et le Stayman.', d5: 'Je sais intervenir quand l\'adversaire a ouvert.', d1: 'Je connais les ouvertures fortes.', d4: 'Je sais faire un barrage.', d6: 'Je sais faire un contre d\'appel, et y répondre.', d10: 'Je parle le langage des cartes avec mon partenaire.', e3: 'Je sais demander les clés pour le chelem.' };
 const masteredAny = id => cMastered(id) || cMastered(id + 'b') || cMastered(id + 'r');
 function carnetPage() {
   syncCours(); const kid = tone() === 'enfant', nm = (ST.opt && ST.opt.kname) || '';
@@ -13719,36 +13760,54 @@ function carnetPage() {
   </div></div>`);
 }
 document.addEventListener('input', e => { if (e.target.classList && e.target.classList.contains('kname')) { ST.opt.kname = e.target.value.trim().slice(0, 30); save(); const h = document.querySelector('.kcarnet .mhead h2'); if (h) h.textContent = 'Le carnet de progrès' + (ST.opt.kname ? ' de ' + ST.opt.kname : ''); } });
-document.addEventListener('click', e => { const t = e.target.closest('[data-memo],[data-kcarnet],[data-sysf]'); if (!t) return; e.stopPropagation(); const d = t.dataset; if (d.memo) return memoPage(+d.memo); if (d.kcarnet) return carnetPage(); if (d.sysf) return sysPage(); }, true);
+document.addEventListener('click', e => { const t = e.target.closest('[data-memo],[data-kcarnet],[data-sysf],[data-cartf]'); if (!t) return; e.stopPropagation(); const d = t.dataset; if (d.cartf) return cartePage(); if (d.memo) return memoPage(+d.memo); if (d.kcarnet) return carnetPage(); if (d.sysf) return sysPage(); }, true);
 // les boutons : la fiche mémo à côté du cahier, le carnet sous les badges, la fiche du système pour les grands
 { const _h = coursHome; coursHome = function () { const r = _h.apply(this, arguments); try {
   document.querySelectorAll('[data-ccahier]').forEach(b => { if (!b.parentNode.querySelector('[data-memo]')) b.insertAdjacentHTML('afterend', `<button class="btn sec" data-memo="${b.dataset.ccahier}">📝 La fiche mémo</button>`); });
   const bd = document.querySelector('[data-badges]'); if (bd && !document.querySelector('[data-kcarnet]')) bd.insertAdjacentHTML('afterend', `<button class="card courslink" data-kcarnet="1"><span>📒</span><b>Le carnet de progrès</b><small>${tone() === 'enfant' ? 'Ce que je sais faire, à imprimer pour les parents ›' : 'Les leçons acquises, à imprimer ›'}</small></button>`);
-  if (tone() !== 'enfant') { const h = document.querySelector('.chero'); if (h && !document.querySelector('[data-sysf]')) h.insertAdjacentHTML('afterend', `<button class="card courslink" data-sysf="1"><span>📄</span><b>La fiche du système</b><small>Toutes les conventions, recto verso sur une feuille A4 ›</small></button>`); }
+  if (tone() !== 'enfant') { const h = document.querySelector('.chero'); if (h && !document.querySelector('[data-sysf]')) h.insertAdjacentHTML('afterend', `<button class="card courslink" data-sysf="1"><span>📄</span><b>La fiche des enchères</b><small>Tout le système, recto verso sur une feuille A4 ›</small></button><button class="card courslink" data-cartf="1"><span>🃏</span><b>La fiche du jeu de la carte</b><small>Le plan, l'entame, la défense, sur une feuille A4 ›</small></button>`); }
 } catch (e) { } return r; }; }
 { const _b = badgesPage; badgesPage = function () { const r = _b.apply(this, arguments); const w = document.querySelector('.wrap.cours .card'); if (w && !document.querySelector('[data-kcarnet]')) w.insertAdjacentHTML('beforeend', `<div class="acts"><button class="btn" data-kcarnet="1">📒 Le carnet de progrès, pour les parents</button></div>`); return r; }; }
-{ const _t = teachHome; teachHome = function () { const r = _t.apply(this, arguments); const cl = document.querySelector('.courslink'); if (cl && !document.querySelector('[data-sysf]')) cl.insertAdjacentHTML('afterend', `<button class="card courslink" data-sysf="1"><span>📄</span><b>La fiche du système</b><small>Toutes les conventions, recto verso sur une feuille A4 ›</small></button>`); return r; }; }
+{ const _t = teachHome; teachHome = function () { const r = _t.apply(this, arguments); const cl = document.querySelector('.courslink'); if (cl && !document.querySelector('[data-sysf]')) cl.insertAdjacentHTML('afterend', `<button class="card courslink" data-sysf="1"><span>📄</span><b>La fiche des enchères</b><small>Tout le système, recto verso sur une feuille A4 ›</small></button><button class="card courslink" data-cartf="1"><span>🃏</span><b>La fiche du jeu de la carte</b><small>Le plan, l'entame, la défense, sur une feuille A4 ›</small></button>`); return r; }; }
 
 // ---------- la fiche du système, recto verso ----------
 function sysPage() {
   const T = (h, rows) => `<table><tr>${h.map(x => `<th>${x}</th>`).join('')}</tr>${rows.map(r => `<tr>${r.map(x => `<td>${x}</td>`).join('')}</tr>`).join('')}</table>`;
+  const O = k => `<b class="o">${k}</b>`;
   const S = (n, t, body, w) => `<section${w ? ' class="wide"' : ''}><h2><span class="n">${n}</span>${t}</h2>${body}</section>`;
   const d = new Date().toLocaleDateString('fr-BE', { day: 'numeric', month: 'long', year: 'numeric' });
-  show(`${topBar('📄 La fiche du système', 'Recto verso sur une feuille A4', 'cours')}<div class="wrap sysw"><div class="acts noprint"><button class="btn" data-print="1">🖨 Imprimer ou enregistrer en PDF (recto verso)</button></div>
-<div class="sysf"><header><div class="suits">♣ ♦ ♥ ♠</div><h1>Cours de bridge, initiation</h1><p class="sub">Le système enseigné : toutes les conventions d'enchères, d'entame et de défense, en une feuille.</p><div class="meta"><span>Majeure cinquième</span><span>·</span><span>1SA 15-17</span><span>·</span><span>Blackwood 5 clés</span></div></header>
+  show(`${topBar('📄 La fiche des enchères', 'Recto verso sur une feuille A4', 'cours')}<div class="wrap sysw"><div class="acts noprint"><button class="btn" data-print="1">🖨 Imprimer ou enregistrer en PDF (recto verso)</button></div>
+<div class="sysf encf"><header><div class="suits">♣ ♦ ♥ ♠</div><h1>Cours de bridge, initiation</h1><p class="sub">Les enchères : tout le système enseigné, en une feuille recto verso.</p><div class="meta"><span>Majeure cinquième</span><span>·</span><span>1SA 15-17</span><span>·</span><span>Blackwood 5 clés</span></div></header>
 <div class="grid">
-${S(1, 'Les ouvertures', `<p class="lead">12 points d'honneur (H) pour ouvrir. On suit le chemin dans cet ordre.</p>${T(['Ma main', 'J\'ouvre'], [['Moins de 12 H', 'Passe (ou un barrage, section 6)'], ['12 à 19 H, 5 cartes ou plus à ♥ ou ♠', '1♥ ou 1♠ (1♠ avec 5-5)'], ['15 à 17 H régulier, majeure de 5 cartes avec un honneur', '1♥ ou 1♠ : la majeure passe avant 1SA'], ['15 à 17 H régulier, majeure de 5 cartes sans honneur', '1SA'], ['15 à 17 H régulier : 4-3-3-3, 4-4-3-2, 5-3-3-2 (5 cartes en mineure)', '1SA'], ['Sinon, 12 à 19 H, 4 carreaux ou plus (pas plus de trèfles)', '1♦ : toujours 4 carreaux'], ['Sinon, 12 à 19 H : tout le reste', '1♣ : vrai trèfle (4+) ou faux trèfle'], ['20 à 21 H, régulier', '2SA'], ['22 à 23 H, ou unicolore très fort', '2♣'], ['24 H et plus', '2♦']])}`, 1)}
-${S(2, 'Répondre à 1 à la couleur', `<p class="lead">0 à 5 H : passe, sauf une majeure de 4 cartes au palier 1 (dès 5 H). Dès 6 H : fit d'abord, majeure ensuite, points enfin.</p>${T(['Ma main', 'Je dis'], [['Fit majeur (3 cartes), 6 à 10', '2 de sa majeure'], ['Fit majeur, 11 à 12', '3 de sa majeure'], ['Fit majeur, 13 à 15', '4 de sa majeure'], ['Fit majeur, 16 et plus', '2♣ ou 2♦, fit ensuite'], ['Sur 1♣/1♦ : majeure de 4 cartes, dès 5 H', '1♥ ou 1♠ (4-4 : 1♥)'], ['Sans fit, sur 1♥ : 4 piques, dès 5 H', '1♠'], ['Sans fit, sur 1♠ : 5 cœurs, dès 11 H', '2♥'], ['Sans fit, mineure de 6 cartes, dès 11 H', '2♣ ou 2♦'], ['Sans fit, 6 à 10', '1SA'], ['Régulier sans fit, 11 à 12 · 13 et plus', '2SA · 3SA'], ['Sur une mineure : régulier, 13 à 18 · 19-20 · 21+', '3SA · 4SA · 5SA'], ['Sur une mineure : 9 atouts, irrégulier', '2m (6-10), 3m (11-12)']])}<p class="note">Une nouvelle couleur du répondant est <b>forcing</b>. Avec un fit : chicane 3, singleton 2, doubleton 1, et +1 par atout au-delà du 3e.</p>`)}
-${S(3, 'La redemande de l\'ouvreur', `<p class="lead">Fit avec le répondant, forme, puis zone.</p>${T(['Forme', 'Je dis'], [['4 cartes dans sa majeure', 'je le soutiens'], ['Main régulière', 'Sans-Atout'], ['Couleur de 6 cartes', 'je la répète'], ['Deuxième couleur de 4 cartes', 'je l\'annonce']])}${T(['Zone', 'Je fais'], [['Minimum, 12 à 14', 'au plus bas'], ['Moyenne, 15 à 17', 'je saute d\'un palier'], ['Forte, 18 et plus', 'la manche (2SA avec 18-19 régulier)']])}<p class="note">Le répondant devient <b>capitaine</b> : 25 points à deux, la manche.</p>`)}
-${S(4, 'Sur 1SA (et 2SA)', `<p class="lead">Le répondant se pose quatre questions, dans l'ordre.</p>${T(['Ma main', 'Je dis'], [['5 cartes en majeure, dès 0 H', 'Texas : 2♦ = cœurs, 2♥ = piques'], ['5 cœurs et 5 piques', '0-9 H : Texas dans la plus solide · 10 H et plus : 4♦'], ['6 cartes en mineure, 0 à 9 H', 'Texas mineur : 2♠ = trèfles, 3♣ = carreaux'], ['4 cartes en majeure et 8 H', 'Stayman 2♣'], ['5 cartes dans une majeure + 4 dans l\'autre', '0-7 : Texas · 8-9 : Stayman puis la 5e au palier 2 · 10+ : Stayman puis la 5e au palier 3'], ['Sinon : 0-7 · 8-9 · 10-15', 'passe · 2SA · 3SA'], ['16-17 · 18-19 · 20 et plus', '4SA (proposition) · 6SA · 5SA']])}<p class="note"><b>Stayman</b> : 2♦ pas de majeure 4e · 2♥ · 2♠ · 2SA les deux. <b>Après le Texas</b> : 0-7 passe ; 8-9 : 2SA (5 cartes) ou 3M (6 cartes) ; 10-15 : 3SA (5 cartes) ou 4M (6 cartes). <b>Sur 2SA</b> : un palier plus haut : Texas 3♦/3♥ dès 0 H, Stayman 3♣ dès 5 H (3SA = les deux majeures), pas de 4♦ ; sinon passe (0-4) ou 3SA (5-10).</p>`, 1)}
-${S(5, 'Les ouvertures fortes', `${T(['Ouverture', 'Main', 'Le partenaire'], [['<b>2SA</b>', '20-21, régulier', 'passe avec 0-4 H, sinon comme sur 1SA'], ['<b>2♣</b>', '22-23 régulier, ou unicolore très fort', '2♦ : relais, quelle que soit la main'], ['<b>2♦</b>', '24 et plus', '2♥ : relais, manche forcée']])}<p class="note">Après le relais, l'ouvreur décrit : Sans-Atout s'il est régulier, sinon sa couleur longue.</p>`)}
+${S(1, 'Les ouvertures', `<p class="lead">On suit le chemin dans l'ordre et on s'arrête à la première réponse « oui ».</p>${T(['Ma main', 'J\'ouvre'], [[`${O(1)}Mes points : moins de 12 H`, 'Passe (ou un barrage, section 6)'], [`${O(1)}Mes points : 20 H et plus`, '2SA, 2♣ ou 2♦ (section 5)'], [`${O(2)}12 à 19 H, 5 cartes ou plus à ♥ ou ♠`, '1♥ ou 1♠ (1♠ avec 5-5)'], ['<span class="sub2">… sauf 15 à 17 H régulier avec une majeure 5e sans honneur</span>', '1SA'], [`${O(3)}15 à 17 H régulier : 4-3-3-3, 4-4-3-2, 5-3-3-2 (5 cartes en mineure)`, '1SA'], [`${O(4)}4 carreaux ou plus (pas plus de trèfles)`, '1♦ : toujours 4 carreaux'], [`${O(5)}Tout le reste`, '1♣ : vrai trèfle (4+) ou faux trèfle']])}`, 1)}
+${S(2, 'Répondre à 1 à la couleur', `<p class="lead">Dans l'ordre : les points, le fit, une majeure, puis les points à Sans-Atout.</p>${T(['Ma main', 'Je dis'], [[`${O(1)}0 à 5 H`, 'passe (sauf une majeure 4e au palier 1 : dès 5 H)'], [`${O(2)}Fit majeur (3 cartes), 6 à 10`, '2 de sa majeure'], [`${O(2)}Fit majeur, 11 à 12`, '3 de sa majeure'], [`${O(2)}Fit majeur, 13 à 15`, '4 de sa majeure'], [`${O(2)}Fit majeur, 16 et plus`, '2♣ ou 2♦, fit ensuite'], [`${O(3)}Sur 1♣/1♦ : majeure de 4 cartes, dès 5 H`, '1♥ ou 1♠ (4-4 : 1♥)'], [`${O(3)}Sur 1♥ : 4 piques, dès 5 H`, '1♠'], [`${O(3)}Sur 1♠ : 5 cœurs, dès 11 H`, '2♥'], [`${O(4)}Mineure de 6 cartes, dès 11 H`, '2♣ ou 2♦'], [`${O(5)}Sinon : 6-10 · 11-12 · 13 et plus`, '1SA · 2SA · 3SA'], ['Sur une mineure : régulier, 13 à 18 · 19-20 · 21+', '3SA · 4SA · 5SA'], ['Sur une mineure : 9 atouts, irrégulier', '2m (6-10), 3m (11-12)']])}<p class="note">Une nouvelle couleur du répondant est <b>forcing</b>. Avec un fit : chicane 3, singleton 2, doubleton 1, et +1 par atout au-delà du 3e.</p>`)}
+${S(3, 'La redemande de l\'ouvreur', `<p class="lead">Dans l'ordre : le fit, la forme, puis la zone.</p>${T(['Ma main', 'Je dis'], [[`${O(1)}4 cartes dans sa majeure`, 'je le soutiens'], [`${O(2)}Main régulière`, 'Sans-Atout'], [`${O(2)}Couleur de 6 cartes`, 'je la répète'], [`${O(2)}Deuxième couleur de 4 cartes`, 'je l\'annonce']])}${T(['Zone', 'Je fais'], [[`${O(3)}Minimum, 12 à 14`, 'au plus bas'], [`${O(3)}Moyenne, 15 à 17`, 'je saute d\'un palier'], [`${O(3)}Forte, 18 et plus`, 'la manche (2SA avec 18-19 régulier)']])}<p class="note">Le répondant devient <b>capitaine</b> : 25 points à deux, la manche.</p>`)}
+${S(4, 'Sur 1SA (et 2SA)', `<p class="lead">Le répondant se pose quatre questions, dans l'ordre.</p>${T(['Ma main', 'Je dis'], [[`${O(1)}5 cartes en majeure, dès 0 H`, 'Texas : 2♦ = cœurs, 2♥ = piques'], ['<span class="sub2">… 5 dans une majeure + 4 dans l\'autre</span>', '0-7 : Texas · 8-9 : Stayman puis la 5e au palier 2 · 10+ : Stayman puis la 5e au palier 3'], ['<span class="sub2">… 5 cœurs et 5 piques</span>', '0-9 H : Texas dans la plus solide · 10 H et plus : 4♦'], [`${O(2)}6 cartes en mineure, 0 à 9 H`, 'Texas mineur : 2♠ = trèfles, 3♣ = carreaux'], [`${O(3)}4 cartes en majeure et 8 H`, 'Stayman 2♣'], [`${O(4)}Sinon : 0-7 · 8-9 · 10-15`, 'passe · 2SA · 3SA'], [`${O(4)}16-17 · 18-19 · 20 et plus`, '4SA (proposition) · 6SA · 5SA']])}<p class="note"><b>Stayman</b> : 2♦ pas de majeure 4e · 2♥ · 2♠ · 2SA les deux. <b>Sur 2♦</b> (souvent une majeure par 3) : avec 10 H et plus, ma meilleure majeure au palier 3, sinon 3SA. <b>Sur 2SA</b> : je compte mes points, la manche au palier 4 dans ma meilleure majeure. <b>Après le Texas</b> : 0-7 passe ; 8-9 : 2SA (5 cartes) ou 3M (6 cartes) ; 10-15 : 3SA (5 cartes) ou 4M (6 cartes). <b>Sur 2SA</b> : un palier plus haut : Texas 3♦/3♥ dès 0 H, Stayman 3♣ dès 5 H (3SA = les deux majeures), pas de 4♦ ; sinon passe (0-4) ou 3SA (5-10).</p>`, 1)}
+${S(5, 'Les ouvertures fortes', `${T(['Ouverture', 'Main', 'Le partenaire'], [['<b>2SA</b>', '20-21, régulier', 'passe avec 0-4 H, sinon comme sur 1SA'], ['<b>2♣</b>', 'fort indéterminé : 4 mains (ci-dessous)', '2♦ : relais, quelle que soit la main'], ['<b>2♦</b>', '24 et plus', '2♥ : relais, manche forcée']])}${T(['Le 2♣ montre', 'Après le relais 2♦'], [[`${O(1)}22-23 H régulier`, '2SA'], [`${O(2)}Irrégulier, unicolore fort : 8 levées en majeure (dès 17 H)`, '2♥ ou 2♠'], [`${O(3)}Irrégulier, unicolore fort : 9 levées en mineure (dès 17 H)`, '3♣ ou 3♦'], [`${O(4)}Irrégulier, 20-23 H, majeure A R D x x ou 6 cartes`, '2♥ ou 2♠']])}<p class="note">Après 2♣ – 2♦ – 2♥/2♠ : <b>3 de la majeure</b> = je suis fort, chelem possible · <b>4 de la majeure</b> = l'arrêt, la manche sans chelem.</p>`)}
 ${S(6, 'Deux faibles et barrages', `<p class="lead">6 à 10 H, une longue et belle couleur (deux des cinq gros honneurs), et pas de majeure 4e à côté (en majeure : pas 4 cartes dans l'autre majeure).</p>${T(['Longueur', 'J\'ouvre'], [['6 cartes à ♥ ou ♠', '2♥ ou 2♠'], ['7 cartes', 'au palier 3'], ['8 cartes', 'au palier 4']])}${T(['Sur le barrage du partenaire', 'Je dis'], [['3 atouts, moins de 14 H', '3 de sa couleur'], ['4 atouts ou plus, moins de 14 H', '4 de sa couleur'], ['Fit et 15 H et plus', '2SA'], ['Sans fit, 15 H et plus, 6 cartes', '3♣ ou 3♦']])}`)}
 ${S(7, 'Intervenir et contrer', `${T(['Ils ont ouvert, je dis', 'Il me faut'], [['Une couleur au palier 1', '8 H et 5 belles cartes'], ['Une couleur au palier 2', '11 H et 6 cartes, ou 13 H et 5 solides'], ['1SA', '16-18, régulier, un arrêt chez eux'], ['Contre d\'appel sur une mineure', '12 H et 7 cartes en majeures (3 + 4)'], ['Contre d\'appel sur une majeure', '12 H et l\'autre majeure par 4'], ['Contre d\'appel, toute ouverture', '18 H et plus']])}${T(['Sur le contre d\'appel du partenaire', 'Je dis'], [['0 à 8 H', 'ma meilleure couleur au plus bas, majeure d\'abord'], ['9 à 11 H', 'un saut'], ['12 H et plus', 'la manche, ou le cue-bid']])}<p class="note"><b>Appel ou punitif ?</b> Partenaire muet et palier bas : appel. Partenaire qui a parlé, contre de 1SA, d'une manche ou d'un chelem : punitif.</p>`)}
-${S(8, 'Le chelem', `${T(['À deux', 'Contrat'], [['33 points (HL sans fit, HLD avec fit)', 'petit chelem'], ['37 points', 'grand chelem']])}<p class="note"><b>Blackwood 5 clés</b> (4SA), quand l'atout est fixé : les 4 As et le Roi d'atout. 5♣ 0 ou 3 · 5♦ 1 ou 4 · 5♥ 2 sans la Dame d'atout · 5♠ 2 avec la Dame. Il manque 2 clés : on s'arrête. Après une enchère à SA, 4SA est quantitatif.</p>`)}
-${S(9, 'Entames', `${T(['Entame', 'Règle'], [['Contre Sans-Atout', 'la couleur du partenaire s\'il en a nommé une, sinon ma plus longue ; tête de séquence de 3, sinon 4e meilleure'], ['Sur l\'entame du Roi à SA (R D V)', 'avec A x, le partenaire prend de l\'As et renvoie la couleur'], ['Contre une couleur, dans l\'ordre', 'singleton, séquence de 2 honneurs, partenaire, atout ; jamais sous un As, si possible pas sous un Roi'], ['La parité (à la couleur, et dans la couleur du partenaire)', 'pair : l\'avant-dernière · impair : la plus petite'], ['A x x, couleur non annoncée, contre une couleur', 'ni l\'As ni une petite : une autre couleur']])}`)}
-${S(10, 'Défense et signaux', `${T(['Situation', 'Règle'], [['En 2e position', 'petite carte (sauf honneur sur honneur)'], ['En 3e position', 'carte forte, la plus petite de celles qui se suivent'], ['Quand on prend la main', 'on rejoue la couleur du partenaire'], ['Sur l\'entame du partenaire', 'grosse = j\'aime · petite = je n\'aime pas'], ['Quand le déclarant joue une couleur', 'haut-bas = pair · bas-haut = impair'], ['En défausse (1re), débutants', 'grosse = j\'aime · petite = je n\'en veux pas'], ['En défausse (1re), confirmés : l\'italienne', 'impaire = j\'aime · paire = je n\'aime pas ; petite paire → la moins chère des 2 autres couleurs, grosse paire → la plus chère']])}`)}
-${S(11, 'La marque', `${T(['Chaque levée au-delà de 6', 'Vaut'], [['♣ ou ♦', '20'], ['♥ ou ♠', '30'], ['Sans-Atout', '40 la première, puis 30']])}<p class="note">100 et plus : <b>manche</b>, +300 (vulnérable +500). Sinon partielle, +50. Chute : 50 par levée (vulnérable 100). Petit chelem +500 (750), grand chelem +1000 (1500).</p>`)}
-${S(12, 'Pas encore vu au cours', `<p class="lead">Présentes dans l'application, désactivées par défaut.</p><div class="chips"><span>Multi 2♦</span><span>2SA Jacoby</span><span>Splinters</span><span>Quatrième couleur forcing</span><span>Roudi</span><span>Lebensohl</span></div>`)}
+${S(8, 'Le chelem', `<p class="lead">Dans l'ordre : les points, les clés, puis la décision.</p>${T(['Étape', 'Règle'], [[`${O(1)}Les points à deux`, '33 (HL sans fit, HLD avec fit) : petit chelem · 37 : grand chelem'], [`${O(2)}Les clés : 4SA, Blackwood 5 clés`, '5♣ 0 ou 3 · 5♦ 1 ou 4 · 5♥ 2 sans la Dame d\'atout · 5♠ 2 avec la Dame'], [`${O(3)}On décide`, 'il manque 2 clés : stop au palier 5 · il en manque 1 : petit chelem · aucune : grand chelem possible']])}<p class="note">Les 5 clés : les 4 As et le Roi d'atout. Le Blackwood se fait quand l'atout est fixé ; après une enchère à SA, 4SA est quantitatif.</p>`)}
+${S(9, 'La marque', `${T(['Chaque levée au-delà de 6', 'Vaut'], [['♣ ou ♦', '20'], ['♥ ou ♠', '30'], ['Sans-Atout', '40 la première, puis 30']])}<p class="note">100 et plus : <b>manche</b>, +300 (vulnérable +500). Sinon partielle, +50. Chute : 50 par levée (vulnérable 100). Petit chelem +500 (750), grand chelem +1000 (1500).</p>`)}
+</div><footer>${d} · Rédigé par Arnaud de Beukelaer</footer></div></div>`);
+}
+
+
+// ---------- la fiche du jeu de la carte ----------
+function cartePage() {
+  const T = (h, rows) => `<table><tr>${h.map(x => `<th>${x}</th>`).join('')}</tr>${rows.map(r => `<tr>${r.map(x => `<td>${x}</td>`).join('')}</tr>`).join('')}</table>`;
+  const O = k => `<b class="o">${k}</b>`;
+  const S = (n, t, body) => `<section><h2><span class="n">${n}</span>${t}</h2>${body}</section>`;
+  const d = new Date().toLocaleDateString('fr-BE', { day: 'numeric', month: 'long', year: 'numeric' });
+  show(`${topBar('🃏 La fiche du jeu de la carte', 'Une feuille A4', 'cours')}<div class="wrap sysw"><div class="acts noprint"><button class="btn" data-print="1">🖨 Imprimer ou enregistrer en PDF</button></div>
+<div class="sysf cartef"><header><div class="suits">♠ ♥ ♦ ♣</div><h1>Le jeu de la carte</h1><p class="sub">Cours de bridge, initiation · le déclarant, l'entame, la défense.</p></header>
+<div class="grid">
+${S(1, 'Le plan à Sans-Atout', `<p class="lead">Le principe : je compte mes <b>gagnantes</b>. Couleur par couleur, les honneurs maîtres qui se suivent depuis l'As, dans les deux mains, jamais plus que la longueur de la main la plus longue. Il en manque ? <b>ALC</b>, dans l'ordre :</p>${T(['Étape', 'Comment'], [[`${O(1)}<b>A</b>ffranchir`, 'chasser les honneurs adverses : R D V 10 → 3 levées après l\'As'], [`${O(2)}<b>L</b>ongueur`, 'jouer la couleur longue jusqu\'à épuiser les adversaires'], [`${O(3)}<b>C</b>ommunications`, 'garder une reprise ; débloquer : honneurs de la main courte d\'abord']])}`)}
+${S(2, 'Le plan à la couleur', `<p class="lead">Le principe : je compte mes <b>perdantes</b>, depuis la main longue en atout, en regardant les 3 premières cartes de chaque couleur.</p>${T(['J\'ai', 'Perdantes'], [['chicane', '0'], ['singleton', '1 (0 avec l\'As)'], ['doubleton', '0 avec A R · 1 avec A x ou R x · 2 sinon'], ['3 cartes et plus', '1 par As, Roi, Dame qui manque']])}<p class="lead">Permises : 13 − les plis du contrat. Trop de perdantes ? <b>CDI</b>, dans l'ordre :</p>${T(['Étape', 'Comment'], [[`${O(1)}<b>C</b>oupe`, 'de la main courte en atout (le mort) ; couper avant de purger'], [`${O(2)}<b>D</b>éfausse`, 'd\'une perdante sur une levée du mort, avant de rendre la main'], [`${O(3)}<b>I</b>mpasse`, 'le pari, en dernier']])}`)}
+${S(3, 'L\'impasse', `${T(['Situation', 'Règle'], [['La règle d\'or', 'jouer <b>de la main faible vers la main forte</b> ; jamais la Dame vers l\'As'], ['A D face à x x', 'petite vers A D : la Dame si le Roi est avant la fourchette (1 fois sur 2)'], ['A D 10 face à x x x (double impasse)', 'd\'abord vers le 10, puis, revenu dans l\'autre main, vers la Dame ; il faut 2 entrées']])}`)}
+${S(4, 'Les entames', `${T(['Contre Sans-Atout', 'Contre une couleur'], [[`${O(1)}la couleur du partenaire`, `${O(1)}un singleton`], [`${O(2)}ma couleur la plus longue`, `${O(2)}une séquence de 2 honneurs`], ['', `${O(3)}la couleur du partenaire`], ['', `${O(4)}atout`]])}${T(['La carte', 'Règle'], [['Séquence', 'à SA : tête de 3 honneurs qui se suivent (R D V) ; à la couleur : tête de 2 (R D)'], ['Longue sans séquence, à SA', 'la 4e meilleure'], ['Couleur du partenaire, à la couleur', 'la parité : pair → l\'avant-dernière · impair → la plus petite'], ['Dernier recours', 'le <b>top of nothing</b> : la plus grosse d\'une couleur sans honneur'], ['Interdits', 'jamais sous un As à la couleur ; si possible pas sous un Roi']])}`)}
+${S(5, 'Déblocage et retours', `${T(['Exemple', 'Le partenaire'], [['R D V 4 face à A 8 : j\'entame le Roi (à SA, il promet D V)', 'prend de l\'As et renvoie le 8'], ['R D 8 5 2 face à A 10 3 : j\'entame le 5 (4e meilleure)', 'prend de l\'As et rejoue le 10 : avec deux cartes, la plus grosse']])}<p class="note">Débloquer : la main courte se débarrasse de ses grosses cartes d'abord, pour que la couleur longue puisse courir.</p>`)}
+${S(6, 'La défense', `${T(['Situation', 'Règle'], [['En 2e position', 'petite carte (honneur sur honneur si l\'on joue un honneur)'], ['En 3e position', 'carte forte, la plus petite de celles qui se suivent'], ['Quand on prend la main', 'on rejoue la couleur du partenaire']])}`)}
+${S(7, 'Les signaux', `${T(['Situation', 'Signal'], [['Sur l\'entame du partenaire', 'grosse = j\'aime · petite = je n\'aime pas'], ['Quand le déclarant joue une couleur', 'haut-bas = pair · bas-haut = impair'], ['1re défausse, débutants', 'grosse = j\'aime · petite = je n\'en veux pas'], ['1re défausse, confirmés : l\'italienne', 'impaire = j\'aime · paire = je n\'aime pas ; petite paire → la moins chère des 2 autres couleurs, grosse paire → la plus chère']])}`)}
 </div><footer>${d} · Rédigé par Arnaud de Beukelaer</footer></div></div>`);
 }
 
@@ -13766,6 +13825,131 @@ const MIXTE = `<h3>👨‍👧 Les tables mixtes : un enfant, un adulte</h3>
 const TUTO = s => typeof s !== 'string' ? s : s.replace(/Que dites-vous \?/g, 'Que dis-tu ?').replace(/Que répondez-vous \?/g, 'Que réponds-tu ?').replace(/Que jouez-vous \?/g, 'Que joues-tu ?').replace(/Vous jouez/g, 'Tu joues').replace(/vous jouez/g, 'tu joues').replace(/Vous avez/g, 'Tu as').replace(/vous avez/g, 'tu as').replace(/Vous êtes/g, 'Tu es').replace(/vous êtes/g, 'tu es').replace(/Votre partenaire/g, 'Ton partenaire').replace(/votre partenaire/g, 'ton partenaire').replace(/Votre/g, 'Ta').replace(/votre/g, 'ta').replace(/Vos /g, 'Tes ').replace(/vos /g, 'tes ').replace(/Vous /g, 'Tu ').replace(/ vous /g, ' tu ').replace(/(\d+) H\b/g, '$1 points').replace(/\bH\b(?= et| :|,)/g, 'points').replace(/Partenaire /g, 'Ton partenaire ');
 { const AC = ADULT_COURS || COURS; AC.forEach(L => L.ch.forEach(c => { const d0 = Object.getOwnPropertyDescriptor(c, 'hw'); if (!d0) return; const g = d0.get ? d0.get : () => d0.value;
   Object.defineProperty(c, 'hw', { configurable: true, get() { const h = g.call(c) || []; return tone() === 'enfant' ? h.map(x => x.map((y, i) => i === 1 ? y : Array.isArray(y) ? y.map(TUTO) : TUTO(y))) : h; }, set(v) { } }); })); }
+
+// ====================================================================
+//  v159 — LES DONNES EN CASCADE
+//  On joue une donne entière : les enchères (vous êtes Sud), puis la carte, en attaque ou en défense.
+//  À la fin, le professeur commente : enchères, entame, chaque carte coûteuse.
+//  Une erreur ? Même situation, nouvelle donne. Compris ? Situation suivante.
+// ====================================================================
+const CAS_T = [
+  { id: 'ouv', ic: '🗣️', t: 'Ouvrir, puis jouer', d: 'Vous ouvrez ; votre camp cherche le bon contrat.', dealer: 'S', pre: H => hcp(H.S) >= 12 && hcp(H.S) <= 19, ok: (A, c) => fb1(A, 'S', /^1[CDHSN]$/) && c && pairOf(c.decl) === 'NS' },
+  { id: 'entsa', ic: '🗡️', t: 'L\'entame contre Sans-Atout', d: 'Les adversaires jouent à Sans-Atout : à vous d\'entamer, puis de défendre.', dealer: 'E', ok: (A, c) => c && c.decl === 'E' && c.st === 'N' && c.level >= 2 },
+  { id: 'rep', ic: '🤝', t: 'Répondre au partenaire', d: 'Nord ouvre : vous répondez, et l\'on joue.', dealer: 'N', pre: H => hcp(H.N) >= 12 && hcp(H.S) >= 5, ok: (A, c) => fb1(A, 'N', /^1[CDHS]$/) && c && pairOf(c.decl) === 'NS' },
+  { id: 'def3', ic: '🛡️', t: 'La défense en 3e position', d: 'Votre partenaire entame : en 3e, carte forte, puis rejouez sa couleur.', dealer: 'O', ok: (A, c) => c && c.decl === 'O' && c.level >= 2 },
+  { id: 'stay', ic: '🔍', t: 'Le Stayman', d: 'Nord ouvre 1SA ; vous avez une majeure de 4 cartes.', dealer: 'N', pre: H => hcp(H.N) >= 15 && hcp(H.N) <= 17 && hcp(H.S) >= 8 && (H.S.H.length === 4 || H.S.S.length === 4), ok: A => bidBy(A, 'N', '1N') && bidBy(A, 'S', '2C') },
+  { id: 'entc', ic: '🎯', t: 'L\'entame contre une couleur', d: 'Les adversaires jouent à l\'atout : votre entame, puis la défense.', dealer: 'E', ok: (A, c) => c && c.decl === 'E' && c.st !== 'N' && c.level >= 2 },
+  { id: 'texas', ic: '🤠', t: 'Le Texas', d: 'Nord ouvre 1SA ; vous avez une majeure de 5 cartes.', dealer: 'N', pre: H => hcp(H.N) >= 15 && hcp(H.N) <= 17 && (H.S.H.length >= 5 || H.S.S.length >= 5), ok: A => bidBy(A, 'N', '1N') && (bidBy(A, 'S', '2D') || bidBy(A, 'S', '2H')) },
+  { id: 'xapp', ic: '📣', t: 'Le contre d\'appel', d: 'L\'adversaire ouvre ; vous avez de quoi contrer.', dealer: 'E', pre: H => hcp(H.S) >= 12, ok: A => { const i = A.ev.findIndex(e => e.b !== 'P'); return i >= 0 && A.ev[i].s === 'E' && /^1[CDHS]$/.test(A.ev[i].b) && A.ev[i + 1] && A.ev[i + 1].b === 'X'; } },
+  { id: 'saplan', ic: '🧮', t: 'Le plan à Sans-Atout : ALC', d: 'Votre camp joue 3SA : comptez vos gagnantes, puis ALC.', dealer: 'S', pre: H => hcp(H.S) + hcp(H.N) >= 24, ok: (A, c) => c && pairOf(c.decl) === 'NS' && c.st === 'N' && c.level === 3 },
+  { id: 'barr', ic: '🦫', t: 'Le barrage', d: 'Une petite main et une longue couleur.', dealer: 'S', pre: H => hcp(H.S) <= 10 && SU.some(s => H.S[s].length >= 6), ok: A => fb1(A, 'S', /^(2[HS]|3[CDHS]|4[HS])$/) },
+  { id: 'coulplan', ic: '✂️', t: 'Le plan à la couleur : CDI', d: 'Votre camp joue une manche en majeure : comptez vos perdantes, puis CDI.', dealer: 'S', pre: H => hcp(H.S) + hcp(H.N) >= 23, ok: (A, c) => c && pairOf(c.decl) === 'NS' && (c.st === 'H' || c.st === 'S') && c.level === 4 },
+  { id: 'bw', ic: '🔑', t: 'Le chelem : Blackwood 5 clés', d: 'Le fit est trouvé, les points sont là : comptez les clés avec 4SA, puis décidez.', dealer: 'S', pre: H => hcp(H.S) + hcp(H.N) >= 30 && hcp(H.S) >= 15, ok: (A, c) => { const i = A.ev.findIndex(e => e.s === 'S' && e.b === '4N'); return i >= 0 && A.ev.slice(0, i).some(e => e.s === 'N' && e.b !== 'P') && c && pairOf(c.decl) === 'NS' && c.st !== 'N'; } },
+  { id: 'fort', ic: '💪', t: 'Le 2♣ fort indéterminé', d: 'Une très grosse main : 2♣, et la suite.', dealer: 'S', pre: H => { const o = openingOf(H.S); return o && o.bid === '2C'; }, ok: A => fb1(A, 'S', /^2C$/) },
+];
+const fb1 = (A, seat, re) => { const e = A.ev.find(x => x.b !== 'P'); return !!e && e.s === seat && re.test(e.b); };
+const bidBy = (A, seat, b) => A.ev.some(e => e.s === seat && e.b === b);
+let CAS = null;
+function casSt() { ST.cas = ST.cas || { i: 0, ok: {}, n: 0, streak: 0 }; return ST.cas; }
+function casTheme() { const s = casSt(); return CAS_T[s.i % CAS_T.length]; }
+function casDeal(th) {
+  for (let t = 0; t < 6000; t++) {
+    const H = dealAll({}); if (th.pre && !th.pre(H)) continue;
+    const A0 = { dealer: th.dealer, ev: [], hands: H, noise: { N: 0, E: 0, S: 0, O: 0 }, rng: mulberry(t * 13 + 7) }; runAuction(A0);
+    const c = contractOf(A0.ev); if (!c && th.id !== 'barr') continue;
+    if (th.ok(A0, c)) return H;
+  }
+  return null;
+}
+function casStart(id) {
+  const s = casSt(); if (id) { const k = CAS_T.findIndex(x => x.id === id); if (k >= 0) s.i = k; }
+  const th = casTheme(), H = casDeal(th) || casDeal(th) || casDeal(th); if (!H) { s.i++; save(); return casStart(); }
+  const n = 1 + Math.floor(Math.random() * 16);
+  CAS = { th, H, n, A: { dealer: th.dealer, ev: [], hands: H, noise: { N: 0, S: 0, E: 0.04, O: 0.04 }, rng: mulberry(Date.now() % 100000) }, dec: [] };
+  runAuction(CAS.A, 'S'); if (auctionOver(CAS.A.ev)) return casToPlay(); casRender();
+}
+function casHead() { const s = casSt(), th = CAS.th; return `<div class="card cashead"><div class="label">🔁 ${T3('Situation', 'Situation', 'Situation')} ${(s.i % CAS_T.length) + 1} / ${CAS_T.length}${s.streak ? ` · essai n° ${s.streak + 1}` : ''}</div><h2>${th.ic} ${th.t}</h2><p class="small">${th.d}</p></div>`; }
+function casRender() {
+  const A = CAS.A, vul = VULN[CAS.n];
+  const notes = A.ev.filter(e => e.b !== 'P' && !e.user).map(e => `<li><b>${SEATNAME[e.s]}, ${BC(e.b)}</b>${alertTxt(e) ? ' : ' + alertTxt(e) : ''}</li>`).join('');
+  show(`${topBar('🔁 Les donnes en cascade', CAS.th.t, 'cours')}<div class="wrap">${casHead()}
+  <div class="card"><div class="sit">Vous êtes <b>Sud</b> · Donneur : ${SEATNAME[A.dealer]} · Vulnérable : <b>${vulTxt(vul)}</b></div><div class="label">Votre main</div>${handBlock(CAS.H.S)}</div>
+  <div class="card"><div class="label">Les enchères</div>${aucSimple(A.dealer, A.ev.map(e => e.b), 'S', true)}${notes ? `<ul class="notes">${notes}</ul>` : ''}</div>
+  <div class="card"><div class="q">${T3('Ton enchère ?', 'Ton enchère ?', 'Votre enchère ?')}</div>${bidGrid(legalCalls(A.ev, 'S'), 'data-casb')}</div></div>`);
+}
+function casBid(call) {
+  const A = CAS.A; if (!legalCalls(A.ev, 'S').includes(call)) return;
+  const um = userMean(A, 'S', call); CAS.dec.push({ user: call, sys: { bid: um.sys.bid, accept: um.sys.accept || [um.sys.bid], why: um.sys.why }, ctx: aucSimple(A.dealer, A.ev.map(e => e.b), 'S', false) });
+  A.ev.push({ s: 'S', b: call, mean: um.mean, user: true }); runAuction(A, 'S');
+  if (auctionOver(A.ev)) return casToPlay(); casRender();
+}
+function casToPlay() {
+  const c = contractOf(CAS.A.ev); CAS.c = c;
+  if (!c) return casEnd(null, null);
+  const ns = pairOf(c.decl) === 'NS', mode = ns ? 'decl' : 'def', tr = c.st === 'N' ? null : c.st;
+  show(`${topBar('🔁 Les donnes en cascade', CAS.th.t, 'cours')}<div class="wrap">${casHead()}<div class="card"><p>Contrat final : <b>${cS(c)}</b>. ${ns ? T3('C\'est ton équipe qui joue !', 'Ton camp joue le contrat.', 'Votre camp joue le contrat : à vous de jouer la carte.') : T3('Tu défends !', 'Tu défends.', 'Vous défendez.')}</p><p class="small">Le professeur prépare la donne…</p></div></div>`);
+  ddsReady().then(() => {
+    const Hp = mode === 'decl' && c.decl === 'N' ? rot180(CAS.H) : CAS.H, declP = mode === 'decl' ? 'S' : c.decl;
+    const sol = ddsSolve(gNew(Hp, tr, declP)); const dd = sol ? 13 - sol.best : null; CAS.dd = dd;
+    playStart({ H: CAS.H, tr, level: c.level, decl: c.decl, dd, mode, teach: false, back: 'cours', title: `🔁 ${CAS.th.t} · ${cS(c)}`, note: `Les enchères : ${CAS.A.ev.map(e => BC(e.b)).join(' – ')}`, onEnd: (v, pg) => casEnd(v, pg) });
+  }).catch(() => casEnd(null, null));
+}
+function casLeadCheck(pg) {
+  // l'entame de l'élève, s'il était l'entameur
+  const G = pg.G, t0 = G.tricks[0]; if (!t0 || t0.cards[0][0] !== 'S' || pg.mode !== 'def') return null;
+  const h = pg.G.H.S, st = pg.tr || 'N', first = t0.cards[0][1];
+  const pEv = CAS.A.ev.find(e => e.s === 'N' && /^[1-3][CDHS]$/.test(e.b) && !e.cue); const p = pEv ? pEv.b[1] : null;
+  let x = null; try { x = st === 'N' ? C_ENTSA.solve(h, { A: { p, calls: [], notes: [] } }) : C_ENTC.solve(h, { A: { T: st, p, calls: [], notes: [] } }); } catch (e) { x = null; }
+  if (!x) return null; const s0 = x.steps[0], card = s0.card || (s0.accept && s0.accept[0]); if (!card) return null;
+  const ok = card === first[0] + first[1] || (s0.accept && s0.accept.includes(first[0] + first[1]));
+  return { ok, mine: cardTxt(first[0], first[1]), sys: cardTxt(card[0], +card.slice(1)), why: s0.why || '' };
+}
+function casEnd(v, pg) {
+  const s = casSt(), c = CAS.c, bad = CAS.dec.filter(d => !d.sys.accept.includes(d.user));
+  const lead = pg ? casLeadCheck(pg) : null;
+  const need = c ? c.level + 6 : 0, mode = pg ? pg.mode : null;
+  let made = null, line = 'Tout le monde a passé : pas de jeu de la carte.';
+  if (pg) { made = v >= need; const diff = v - need; line = mode === 'decl' ? (diff >= 0 ? `Contrat réussi${diff ? `, +${diff}` : ''} : ${v} levées.` : `Chute de ${-diff} : ${v} levées pour ${need}.`) : (diff >= 0 ? `Le déclarant a réussi son contrat (${v} levées).` : `Contrat chuté de ${-diff} : bravo à la défense !`); }
+  const play = pg ? { rot: false, mode, tricks: realTricks(pg.G).map(x => x.cards.map(([q, cc]) => q + cc[0] + cc[1]).join(' ') + '>' + x.win) } : null;
+  CAS.res = { bad: bad.length, lead: lead && !lead.ok ? 1 : 0, play: null };
+  show(`${topBar('🔁 Les donnes en cascade', 'Le bilan', 'cours')}<div class="wrap">${casHead()}
+  <div class="card ${pg && ((mode === 'decl') === made) ? 'win' : ''}"><div class="label">${c ? cS(c) + ' par ' + SEATNAME[c.decl] : 'Passe général'}</div><div class="big2">${line}</div>${pg && CAS.dd != null ? `<p class="small">Avec un jeu parfait des deux côtés, le déclarant fait <b>${CAS.dd}</b> levées.</p>` : ''}</div>
+  <div class="card"><h2>🗣️ Les enchères ${bad.length ? `: ${bad.length} hors système` : ': toutes dans le système ✅'}</h2><p class="small">${CAS.A.ev.map(e => `${SEATNAME[e.s][0]} ${BC(e.b)}`).join(' · ')}</p>${CAS.dec.map(d => { const ok = d.sys.accept.includes(d.user); return `<div class="rev ${ok ? 'ok' : 'bad'}"><b>${ok ? '✓' : '✗'} Vous : ${BC(d.user)}</b>${ok ? '' : ` · le système : <b>${BC(d.sys.accept[0])}</b>`}<div class="small">${d.sys.why || ''}</div></div>`; }).join('') || '<p class="small">Vous n\'avez pas eu à parler.</p>'}</div>
+  ${lead ? `<div class="card"><h2>🗡️ L'entame ${lead.ok ? ': bonne ✅' : ': à revoir'}</h2><p>Vous avez entamé <b>${lead.mine}</b>.${lead.ok ? '' : ` Le cours conseillait <b>${lead.sys}</b>.`}</p><p class="small">${lead.why}</p></div>` : ''}
+  ${pg ? `<div class="card bil40"><h2>🎓 Le jeu de la carte</h2><div id="casbil"><p class="small">Le professeur analyse chaque carte…</p></div></div>` : ''}
+  <div class="card" id="casnext"><p class="small">Le professeur termine son analyse…</p></div></div>`);
+  const fin = lost => {
+    CAS.res.play = lost; const errs = CAS.res.bad + CAS.res.lead + (lost ? 1 : 0), th = CAS.th;
+    if (!errs) { s.ok[th.id] = (s.ok[th.id] || 0) + 1; s.streak = 0; s.i++; } else s.streak = (s.streak || 0) + 1;
+    s.n = (s.n || 0) + 1; save();
+    const box = document.getElementById('casnext'); if (!box) return;
+    const nx = CAS_T[s.i % CAS_T.length];
+    box.innerHTML = errs ? `<h2>🔁 On recommence : même situation, nouvelle donne</h2><p>${[CAS.res.bad ? `${CAS.res.bad} enchère${CAS.res.bad > 1 ? 's' : ''} hors système` : '', CAS.res.lead ? 'l\'entame' : '', lost ? `${lost} levée${lost > 1 ? 's' : ''} perdue${lost > 1 ? 's' : ''} au jeu de la carte` : ''].filter(Boolean).join(', ')}. Relisez les commentaires, puis rejouez une donne du même type.</p><div class="acts"><button class="btn" data-cas="again">🔁 Même situation, nouvelle donne</button><button class="btn sec" data-cas="skip">Passer à la situation suivante ›</button></div>`
+      : `<h2>✅ Compris !</h2><p>Situation suivante : <b>${nx.ic} ${nx.t}</b>.</p><div class="acts"><button class="btn" data-cas="next">Donne suivante ›</button><button class="btn sec" data-cas="list">Choisir une situation</button></div>`;
+  };
+  if (!pg) return fin(0);
+  const Hp = pg.G.H, c2 = { st: c.st, decl: pg.decl, level: c.level };
+  ddsReady().then(() => profAnalyse(play, Hp, c2, out => {
+    const ctrl = mode === 'decl' ? ['N', 'S'] : ['S']; if (out) out.forEach(x => { x.mine = ctrl.includes(x.p); });
+    const lost = out ? out.filter(x => x.note && x.mine).reduce((a, x) => a + x.note.lost, 0) : 0;
+    const el = document.getElementById('casbil'); const declT = v, userT = mode === 'decl' ? v : 13 - v;
+    if (el) { el.innerHTML = colorize(bilanHtml(out, { tr: c.st === 'N' ? null : c.st, mode, made: mode === 'decl' ? made : !made, ns: userT, need: mode === 'decl' ? need : 14 - need, dd: CAS.dd == null ? null : mode === 'decl' ? CAS.dd : 13 - CAS.dd, counted: true })); if (typeof tuTree === 'function') tuTree(el); }
+    fin(lost);
+  })).catch(() => fin(0));
+}
+function casList() {
+  const s = casSt();
+  show(`${topBar('🔁 Les donnes en cascade', 'Les situations', 'cours')}<div class="wrap"><div class="card"><p>Vous jouez chaque donne <b>jusqu'au bout</b> : les enchères, puis la carte, en attaque ou en défense. Le professeur commente ensuite. Une erreur ? <b>Même situation, nouvelle donne</b>. Compris ? On passe à la suivante.</p><div class="acts"><button class="btn" data-cas="next">▶ Continuer : ${casTheme().ic} ${casTheme().t}</button></div></div>
+  <div class="card"><h2>Les ${CAS_T.length} situations</h2>${CAS_T.map((t, k) => `<button class="cstep" data-cas="go:${t.id}"><span>${t.ic}</span><b>${k + 1}. ${t.t}</b><small>${s.ok[t.id] ? `✅ réussie ${s.ok[t.id]} fois` : t.d}</small></button>`).join('')}</div></div>`);
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-casb],[data-cas]'); if (!t || t.disabled) return; e.stopPropagation(); const d = t.dataset;
+  if (d.casb) return casBid(d.casb);
+  const v = d.cas; if (v === 'list') return casList(); if (v === 'again' || v === 'next') return casStart();
+  if (v === 'skip') { casSt().i++; casSt().streak = 0; save(); return casStart(); }
+  if (v.startsWith('go:')) { casSt().streak = 0; return casStart(v.slice(3)); }
+}, true);
+{ const _h = coursHome; coursHome = function () { const r = _h.apply(this, arguments); try { const h = document.querySelector('.chero'); if (h && !document.querySelector('[data-cas]')) h.insertAdjacentHTML('afterend', `<button class="card courslink" data-cas="list"><span>🔁</span><b>Les donnes en cascade</b><small>Enchères et carte, jusqu'au bout ; le professeur commente, et l'on recommence tant que ce n'est pas compris ›</small></button>`); } catch (e) { } return r; }; }
 
 </script>
 <script>if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) { try { navigator.serviceWorker.register("sw.js"); } catch (e) {} }</script>
