@@ -1680,6 +1680,7 @@ body[data-th="enfant"] .tov .egdeco{color:#ffe1a1;opacity:.3}body[data-th="enfan
  .fp{font-size:10.1pt!important;line-height:1.32!important}.fpt{font-size:19pt;margin:3mm 0 1.5mm}.fsec h3{font-size:12.5pt;margin:3.2mm 0 1.3mm}.ft{font-size:9.7pt;margin:1mm 0}.ft td{padding:1.05mm 1.8mm}.ft th{font-size:7.4pt;padding:0.8mm 1.8mm}.fd,.fs{font-size:9.5pt;margin:1mm 0}.fbox{font-size:9.7pt;padding:1.8mm 3mm;margin:2mm 0}.fbt{font-size:11pt}.fa{font-size:9.3pt;padding:2px 9px}.fq{font-size:10.1pt}.fstep{padding:1.05mm 0}.fn{width:6mm;height:6mm;font-size:9pt}.fscale b{font-size:17pt}.fscale div{padding:1.5mm 1mm}.fpf{margin-top:3mm}
  .fpf{position:static;margin-top:4mm;font-size:8pt}
 }
+.m2dots{display:flex;gap:6px;margin-top:6px}.m2dots span{flex:1;height:10px;border-radius:6px;background:rgba(127,127,127,.25)}.m2dots span.on{background:#2e9d5b}.card.lose{border:2px solid #d9534f}
 </style>
 </head>
 <body>
@@ -6441,7 +6442,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v163';
+const APP_V = 'v164';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -13977,6 +13978,120 @@ document.addEventListener('click', e => {
   if (v.startsWith('go:')) { casSt().streak = 0; return casStart(v.slice(3)); }
 }, true);
 { const _h = coursHome; coursHome = function () { const r = _h.apply(this, arguments); try { const h = document.querySelector('.chero'); if (h && !document.querySelector('[data-cas]')) h.insertAdjacentHTML('afterend', `<button class="card courslink" data-cas="list"><span>🔁</span><b>Les donnes en cascade</b><small>Enchères et carte, jusqu'au bout ; le professeur commente, et l'on recommence tant que ce n'est pas compris ›</small></button>`); } catch (e) { } return r; }; }
+
+// ====================================================================
+//  v164 — MÉMORISER LES ENCHÈRES
+//  Des batteries d'exercices, niveau par niveau. Une batterie est acquise après 10 bonnes réponses
+//  d'affilée ; quand tout le niveau est acquis, le niveau suivant s'ouvre.
+//  Bonne réponse : on rappelle pourquoi. Mauvaise : on explique ce que veut dire l'enchère choisie,
+//  puis la bonne réponse et sa raison.
+// ====================================================================
+const M2_GOAL = 10;
+const SN_ = { C: '♣', D: '♦', H: '♥', S: '♠', N: 'SA' };
+const nm_ = s => ({ C: 'trèfles', D: 'carreaux', H: 'cœurs', S: 'piques' })[s];
+// ---------- l'ouvreur après 1SA : le générateur ----------
+function m2SA3() {
+  const kind = pick(['st', 'st', 'st', 'tx', 'tx', 'tm', 'inv']);
+  const spec = { reg: true, hcp: [15, 17] }; if (kind === 'st') spec.shape = pick([{ H: [4, 4] }, { S: [4, 4] }, { H: [4, 4], S: [4, 4] }, { H: [2, 3], S: [2, 3] }]);
+  const h = genHand(spec); if (!h || n(h, 'H') >= 5 || n(h, 'S') >= 5) return null; const v = hcp(h), H = n(h, 'H'), S = n(h, 'S');
+  let calls, bid, why, acc;
+  if (kind === 'st') { calls = ['1N', 'P', '2C', 'P']; bid = H >= 4 && S >= 4 ? '2N' : H >= 4 ? '2H' : S >= 4 ? '2S' : '2D'; why = `Le partenaire fait le Stayman : « as-tu 4 cartes en majeure ? ». ${bid === '2N' ? 'J\'ai 4 cœurs et 4 piques : <b>2SA</b>, les deux.' : bid === '2D' ? 'Je n\'ai ni 4 cœurs ni 4 piques : <b>2♦</b>.' : `J'ai 4 ${nm_(bid[1])} : <b>${BC(bid)}</b>.`} Mes points ne comptent pas ici : je réponds à la question.`; }
+  else if (kind === 'tx') { const t = pick(['2D', '2H']); calls = ['1N', 'P', t, 'P']; bid = t === '2D' ? '2H' : '2S'; why = `${BC(t)} est un Texas : le partenaire a 5 ${nm_(bid[1])}. Je <b>complète</b> en disant ${BC(bid)}, quelle que soit ma main : c'est moi, la main forte, qui jouerai le contrat.`; }
+  else if (kind === 'tm') { const t = pick(['2S', '3C']); calls = ['1N', 'P', t, 'P']; bid = t === '2S' ? '3C' : '3D'; why = `${BC(t)} est un Texas mineur : le partenaire a 6 ${nm_(bid[1])}. Je <b>complète</b> : ${BC(bid)}.`; }
+  else { calls = ['1N', 'P', '2N', 'P']; bid = v === 15 ? 'P' : '3N'; acc = v === 16 ? ['P', '3N'] : [bid]; why = `2SA est une proposition de manche (8-9 H). J'ai ${v} H : ${v === 15 ? 'minimum, je <b>passe</b>' : v === 17 ? 'maximum, <b>3SA</b>' : 'dans le milieu : je peux passer ou dire 3SA, selon la qualité de ma main'}.`; }
+  return { calls, dealer: 'N', hand: h, hcp: v, steps: [{ bid, accept: acc || [bid], why }], ctx: { kind } };
+}
+// ---------- ce que veut dire une enchère, selon le moment ----------
+function m2Mean(calls, b) {
+  const st = b === 'P' ? null : b[1], lv = b === 'P' ? 0 : +b[0];
+  const OPEN = { P: 'Passe : moins de 12 H, et pas de barrage', '1C': '1♣ : 12 à 19 H, sans majeure 5e, pas 4 carreaux (vrai ou faux trèfle)', '1D': '1♦ : 12 à 19 H, 4 carreaux ou plus, sans majeure 5e', '1H': '1♥ : 12 à 19 H et 5 cœurs ou plus', '1S': '1♠ : 12 à 19 H et 5 piques ou plus', '1N': '1SA : 15 à 17 H, main régulière', '2C': '2♣ : le fort indéterminé (22-23 régulier, ou unicolore très fort)', '2D': '2♦ : 24 H et plus, manche forcée', '2H': '2♥ : un deux faible, 6 cœurs et 6 à 10 H', '2S': '2♠ : un deux faible, 6 piques et 6 à 10 H', '2N': '2SA : 20 à 21 H, main régulière' };
+  const c0 = calls.filter(x => x !== 'P'), seq = calls.join(' ');
+  if (!c0.length) { if (OPEN[b]) return OPEN[b]; if (lv === 3) return `${BC(b)} : un barrage, 7 cartes et 6 à 10 H`; if (lv === 4 && st !== 'N') return `${BC(b)} : un barrage, 8 cartes et 6 à 10 H`; return `${BC(b)} : cette ouverture n'existe pas dans notre système`; }
+  const o = c0[0];
+  if (c0.length === 1 && /^1[HS]$/.test(o)) { const M = o[1]; // réponses à 1 en majeure
+    if (b === 'P') return 'Passe : moins de 6 H'; if (b === '1S') return '1♠ : 4 piques ou plus, dès 5 H, pas de fit cœur'; if (b === '1N') return '1SA : 6 à 10 H, sans fit, rien d\'autre à dire';
+    if (b === '2' + M) return `${BC(b)} : le fit (3 cartes) et 6 à 10 points`; if (b === '3' + M) return `${BC(b)} : le fit et 11-12 points, une proposition de manche`; if (b === '4' + M) return `${BC(b)} : le fit et 13 à 15 points, la manche`;
+    if (b === '2H' && M === 'S') return '2♥ : 5 cœurs et 11 H ou plus, sans fit pique'; if (b === '2C' || b === '2D') return `${BC(b)} : 6 cartes et 11 H (ou le fit et 16 points, pour soutenir ensuite)`;
+    if (b === '2N') return '2SA : 11-12 H, régulier, sans fit : une proposition'; if (b === '3N') return '3SA : 13 H et plus, régulier, sans fit';
+    return `${BC(b)} : cette réponse n'existe pas dans notre système sur ${BC(o)}`; }
+  if (c0.length === 1 && /^1[CD]$/.test(o)) { const m = o[1];
+    if (b === 'P') return 'Passe : moins de 6 H (moins de 5 sans majeure 4e)'; if (b === '1H') return '1♥ : 4 cœurs ou plus, dès 5 H'; if (b === '1S') return '1♠ : 4 piques ou plus, dès 5 H (et pas 4 cœurs)'; if (b === '1D') return '1♦ : n\'est pas une réponse de notre système sur 1♣ : on cherche d\'abord une majeure, sinon les Sans-Atout';
+    const SA = { '1N': '6 à 10 H', '2N': '11 à 12 H', '3N': '13 à 18 H', '4N': '19 à 20 H (proposition de chelem)', '5N': '21 H et plus' }; if (SA[b]) return `${BC(b)} : main régulière, sans majeure 4e, ${SA[b]}`;
+    if (b === '2' + m) return `${BC(b)} : 9 atouts avec lui (5 cartes), main irrégulière, 6 à 10 H`; if (b === '3' + m) return `${BC(b)} : 9 atouts, main irrégulière, 11 à 12 H`;
+    return `${BC(b)} : cette réponse n'existe pas dans notre système sur ${BC(o)}`; }
+  if (c0.length === 1 && o === '1N') {
+    const R = { P: 'Passe : 0 à 7 H, sans majeure 5e ni mineure 6e', '2C': '2♣ : le Stayman, « as-tu 4 cartes en majeure ? » (4 cartes en majeure et 8 H)', '2D': '2♦ : le Texas cœur, 5 cœurs (dès 0 H)', '2H': '2♥ : le Texas pique, 5 piques (dès 0 H)', '2S': '2♠ : le Texas mineur, 6 trèfles', '3C': '3♣ : le Texas mineur, 6 carreaux', '2N': '2SA : 8-9 H, une proposition', '3N': '3SA : 10 à 15 H, sans majeure', '4D': '4♦ : 5 cœurs et 5 piques, 10 H et plus', '4N': '4SA : 16-17 H, une proposition de chelem', '5N': '5SA : 20 H et plus, une proposition de grand chelem', '6N': '6SA : 18-19 H, le petit chelem' };
+    return R[b] || `${BC(b)} : cette réponse n'existe pas sur 1SA dans notre système`; }
+  if (c0.length === 2 && o === '1N') { const r = c0[1];
+    if (r === '2C') { const R = { '2D': '2♦ : je n\'ai ni 4 cœurs ni 4 piques', '2H': '2♥ : j\'ai 4 cœurs', '2S': '2♠ : j\'ai 4 piques (et pas 4 cœurs)', '2N': '2SA : j\'ai 4 cœurs et 4 piques', P: 'Passe : interdit, le Stayman est une question, il faut répondre' }; return R[b] || `${BC(b)} : ce n'est pas une réponse au Stayman`; }
+    if (/^(2D|2H|2S|3C)$/.test(r)) { const want = { '2D': '2H', '2H': '2S', '2S': '3C', '3C': '3D' }[r]; if (b === want) return `${BC(b)} : je complète le Texas`; if (b === 'P') return 'Passe : interdit, le Texas oblige l\'ouvreur à compléter'; return `${BC(b)} : sur un Texas, on ne raconte pas sa main, on complète (${BC(want)})`; }
+    if (r === '2N') { if (b === 'P') return 'Passe : je suis minimum (15 H)'; if (b === '3N') return '3SA : je suis maximum (17 H, ou un bon 16)'; return `${BC(b)} : sur la proposition 2SA, on passe ou on dit 3SA`; } }
+  // la redemande de l'ouvreur
+  const r = c0[1], x = o[1];
+  if (c0.length === 2 && r === '2' + x && /^[HS]$/.test(x)) { if (b === 'P') return 'Passe : minimum, 12 à 14 points recomptés'; if (b === '3' + x) return `${BC(b)} : 15 à 17 points recomptés, une proposition de manche`; if (b === '4' + x) return `${BC(b)} : 18 points et plus recomptés, la manche`; return `${BC(b)} : après le soutien simple, on passe, on propose (3) ou l'on conclut (4)`; }
+  if (c0.length === 2 && /^1[CDHS]$/.test(o) && /^1[HS]$/.test(r)) { const y = r[1];
+    if (b === '2' + y) return `${BC(b)} : 4 cartes dans sa majeure (le fit), 12 à 14 points`; if (b === '3' + y) return `${BC(b)} : le fit, 15 à 17 points`; if (b === '4' + y) return `${BC(b)} : le fit, 18 points et plus, la manche`;
+    if (b === '1N') return '1SA : main régulière, 12 à 14 H, sans le fit'; if (b === '2N') return '2SA : main régulière, 18 à 19 H, sans le fit'; if (b === '3N') return '3SA : une main régulière très forte, sans fit';
+    if (b === '2' + x) return `${BC(b)} : je répète ma couleur (6 cartes), 12 à 14 H`; if (b === '3' + x) return `${BC(b)} : 6 cartes dans ma couleur, 15 à 17 H`;
+    if (b === '1S') return '1♠ : 4 piques, une deuxième couleur, 12 à 17 H'; if (/^2[CDH]$/.test(b)) return `${BC(b)} : une deuxième couleur de 4 cartes`;
+    if (b === 'P') return 'Passe : interdit, une couleur nouvelle du répondant est forcing'; }
+  return `${BC(b)} : ce n'est pas l'enchère du système dans cette séquence`;
+}
+// ---------- les batteries ----------
+const M2_LV = [
+  { n: 1, t: 'Niveau 1 · La première enchère', d: 'Ouvrir, puis répondre à l\'ouverture.', bats: [
+    { id: 'ouv', ic: '🗣️', t: 'Les ouvertures', d: 'Vous êtes le donneur : que dites-vous ?', mk: () => makeExercise(C_OUVRIR) },
+    { id: 'repM', ic: '♥', t: 'Les réponses à 1♥ et 1♠', d: 'Votre partenaire ouvre d\'une majeure.', mk: () => makeExercise(Math.random() < .5 ? C_SOUTIEN : C_SANSFIT) },
+    { id: 'repm', ic: '♣', t: 'Les réponses à 1♣ et 1♦', d: 'Votre partenaire ouvre d\'une mineure.', mk: () => makeExercise(C_MINEURE) },
+    { id: 'repSA', ic: '🎯', t: 'Les réponses à 1SA', d: 'Votre partenaire ouvre 1SA (15-17).', mk: () => makeExercise(C_SA1) }] },
+  { n: 2, t: 'Niveau 2 · La redemande de l\'ouvreur', d: 'La 3e enchère de la séquence : vous avez ouvert, le partenaire a répondu.', bats: [
+    { id: 'redM', ic: '♠', t: 'Après une ouverture en majeure', d: '1♥ ou 1♠, le partenaire répond : à vous.', mk: () => m2Gen(() => makeExercise(C_TROIS), e => /^1[HS]$/.test(e.calls[0])) },
+    { id: 'redm', ic: '♦', t: 'Après une ouverture en mineure', d: '1♣ ou 1♦, le partenaire répond : à vous.', mk: () => m2Gen(() => makeExercise(C_TROIS), e => /^1[CD]$/.test(e.calls[0])) },
+    { id: 'redSA', ic: '🎯', t: 'Après une ouverture de 1SA', d: 'Le partenaire fait un Stayman, un Texas, ou propose la manche.', mk: () => m2Gen(m2SA3) }] },
+];
+function m2Gen(f, ok) { for (let k = 0; k < 60; k++) { const e = f(); if (e && (!ok || ok(e))) return e; } return null; }
+function m2St() { ST.m2 = ST.m2 || { s: {}, ok: {} }; return ST.m2; }
+const m2Bat = id => { for (const L of M2_LV) { const b = L.bats.find(x => x.id === id); if (b) return [L, b]; } return [null, null]; };
+const m2LvOpen = L => L.n === 1 || M2_LV[L.n - 2].bats.every(b => m2St().ok[b.id]);
+let M2 = null;
+function m2Home() {
+  const s = m2St();
+  show(`${topBar('🧠 Mémoriser les enchères', 'Batterie par batterie, niveau par niveau', 'cours')}<div class="wrap">
+  <div class="card"><p>Chaque batterie est <b>acquise après ${M2_GOAL} bonnes réponses d'affilée</b>. Une erreur remet le compteur à zéro. Quand toutes les batteries d'un niveau sont acquises, le niveau suivant s'ouvre.</p><p class="small">À chaque réponse, le professeur explique : pourquoi c'est juste, ou ce que votre enchère voulait dire et ce qu'il fallait dire.</p></div>
+  ${M2_LV.map(L => { const op = m2LvOpen(L); return `<div class="card"><h2>${op ? '' : '🔒 '}${L.t}</h2><p class="small">${L.d}</p>${L.bats.map(b => { const ok = s.ok[b.id], k = s.s[b.id] || 0; return `<button class="cstep" ${op ? `data-m2="${b.id}"` : 'disabled'}><span>${ok ? '✅' : b.ic}</span><b>${b.t}</b><small>${ok ? 'Acquise' : op ? `${b.d} · série : ${k} / ${M2_GOAL}` : 'S\'ouvre quand le niveau précédent est acquis'}</small></button>`; }).join('')}</div>`; }).join('')}</div>`);
+}
+function m2Next(id) {
+  const [L, b] = m2Bat(id); if (!b) return m2Home(); const e = b.mk(); if (!e) return m2Next(id);
+  M2 = { id, e, done: false }; m2Render();
+}
+function m2Dots(k) { return `<div class="m2dots">${Array.from({ length: M2_GOAL }, (_, i) => `<span class="${i < k ? 'on' : ''}"></span>`).join('')}</div>`; }
+function m2Render(fb) {
+  const { e, id } = M2, [L, b] = m2Bat(id), s = m2St(), k = s.s[id] || 0;
+  const SEAT = ['N', 'E', 'S', 'O'], d0 = SEAT.indexOf(e.dealer || 'S'), ev = e.calls.map((x, i) => ({ s: SEAT[(d0 + i) % 4], b: x }));
+  const legal = legalCalls(ev, 'S').filter(c => c !== 'XX');
+  show(`${topBar('🧠 ' + b.t, L.t, 'cours')}<div class="wrap m2">
+  <div class="card"><div class="label">Série : ${k} / ${M2_GOAL}${s.ok[id] ? ' · ✅ acquise' : ''}</div>${m2Dots(k)}</div>
+  <div class="card"><div class="label">Votre main · Sud</div>${handBlock(e.hand)}${e.calls.length ? `<div class="label" style="margin-top:10px">Les enchères</div>${aucSimple(e.dealer, e.calls, 'S', !fb)}` : `<p class="small">Vous êtes le donneur : vous parlez le premier.</p>`}</div>
+  ${fb || `<div class="card"><div class="q">Votre enchère ?</div>${bidGrid(legal, 'data-m2b')}</div>`}</div>`);
+}
+function m2Answer(b) {
+  if (!M2 || M2.done) return; M2.done = true;
+  const { e, id } = M2, s = m2St(), st = e.steps[0], ok = (st.accept || [st.bid]).includes(b);
+  const [L] = m2Bat(id); const before = s.ok[id];
+  s.s[id] = ok ? (s.s[id] || 0) + 1 : 0; if (s.s[id] >= M2_GOAL) s.ok[id] = true; save();
+  const lvDone = !before && s.ok[id] && L.bats.every(x => s.ok[x.id]);
+  const nextL = lvDone ? M2_LV.find(x => x.n === L.n + 1) : null;
+  const fb = ok ? `<div class="card win"><h2>✅ Juste : ${BC(b)}</h2><p><b>Pourquoi :</b> ${st.why}</p></div>`
+    : `<div class="card lose"><h2>❌ Vous avez dit ${BC(b)}</h2><p><b>Ce que veut dire votre enchère :</b> ${m2Mean(e.calls, b)}.</p><p><b>Il fallait dire ${BC(st.bid)}</b>${(st.accept || []).length > 1 ? ` (ou ${st.accept.filter(x => x !== st.bid).map(BC).join(', ')})` : ''}.</p><p><b>Pourquoi :</b> ${st.why}</p><p class="small"><b>Votre main :</b> ${e.hcp} H, ${SU.map(x => e.hand[x].length).join('-')} (♠-♥-♦-♣).</p></div>`;
+  const tail = s.ok[id] && !before ? `<div class="card"><h2>🏅 Batterie acquise : ${M2_GOAL} bonnes réponses d'affilée !</h2>${lvDone ? (nextL ? `<p>Tout le ${L.t.split(' · ')[0].toLowerCase()} est acquis : <b>${nextL.t}</b> est ouvert.</p>` : '<p>Tous les niveaux sont acquis. Bravo !</p>') : ''}<div class="acts"><button class="btn" data-m2home="1">Choisir la batterie suivante</button><button class="btn sec" data-m2n="1">Continuer celle-ci</button></div></div>`
+    : `<div class="acts"><button class="btn" data-m2n="1">Donne suivante ›</button><button class="btn sec" data-m2home="1">Les batteries</button></div>`;
+  m2Render(colorize(fb) + tail);
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-m2],[data-m2b],[data-m2n],[data-m2home]'); if (!t || t.disabled) return; e.stopPropagation(); const d = t.dataset;
+  if (d.m2) return m2Next(d.m2); if (d.m2b) return m2Answer(d.m2b); if (d.m2n) return m2Next(M2.id); if (d.m2home) return m2Home();
+}, true);
+{ const _h = coursHome; coursHome = function () { const r = _h.apply(this, arguments); try { const h = document.querySelector('.chero'); if (h && !document.querySelector('[data-m2home]')) h.insertAdjacentHTML('afterend', `<button class="card courslink" data-m2home="1"><span>🧠</span><b>Mémoriser les enchères</b><small>Ouvertures, réponses, redemandes : 10 bonnes réponses d'affilée par batterie ›</small></button>`); } catch (e) { } return r; }; }
 
 // ====================================================================
 //  v162 — LES DEUX FICHES, REFAITES POUR ÊTRE LUES
