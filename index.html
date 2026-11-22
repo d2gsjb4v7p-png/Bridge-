@@ -1776,6 +1776,49 @@ body.fmeasure .fp{width:718px!important;max-width:718px!important;margin:0 auto!
 .dipsig{display:flex;justify-content:space-around;margin-top:34px}.dipsig div{display:flex;flex-direction:column;align-items:center;gap:4px}.dipsig i{display:block;width:170px;border-bottom:1px solid #2a2418}.dipsig span{font-style:italic}.dipd{margin-top:20px;font-size:13px;opacity:.75}
 .dip-ado .dipin{border-color:#3d6b35}.dip-ado h1,.dip-ado .dipn{color:#2f5a28}.dip-ado .dipic{color:#3d6b35}.dip-enfant .dipin{border-color:#7a5ad6}.dip-enfant h1,.dip-enfant .dipn{color:#5a3fa0}.dip-enfant .dipic{color:#e2b53a}
 @media print{.sdip{box-shadow:none;margin:0;max-width:none}.noprint,.top,.tvbtn{display:none!important}}
+.pbtop{display:flex;align-items:center;gap:12px;width:100%;text-align:left;cursor:pointer;border:2px solid #2e8b57;background:linear-gradient(160deg,rgba(46,139,87,.08),rgba(46,139,87,.02));font:inherit;color:inherit}.pbtop b{display:block;font-size:16.5px}.pbtop small{display:block;opacity:.85;line-height:1.35;margin-top:2px}.pbic{font-size:30px}.pbtop .chev{margin-left:auto;font-size:22px;opacity:.6}
+/* v175 cascade */
+.casc{--cacc:#0f6b4a;--cacc2:#e2b53a;--cbg:rgba(15,107,74,.06)}
+.ctabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 12px}
+.ctab{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 8px;border-radius:16px;border:2px solid rgba(128,128,128,.25);background:var(--card,#fff);color:inherit;font:inherit;cursor:pointer}
+.ctab span{font-size:26px}.ctab b{font-size:15.5px}.ctab small{opacity:.7;font-size:12px}
+.ctab.on{border-color:var(--cacc);background:linear-gradient(160deg,rgba(15,107,74,.12),rgba(15,107,74,.03));box-shadow:0 3px 12px rgba(15,107,74,.18)}
+.chero{border-top:5px solid var(--cacc)}.chero-t{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}.chero-t b{font-size:18px}.chero-t span{font-weight:700;color:var(--cacc)}
+.cbar{height:10px;border-radius:99px;background:rgba(128,128,128,.18);overflow:hidden;margin:10px 0 8px}.cbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--cacc),#3fb27f)}
+.cpal{margin:16px 0 4px}.cpal-h{display:flex;align-items:center;gap:8px;margin:0 4px 8px}.cpal-h b{font-size:16px;letter-spacing:.01em}.cpal-h small{margin-left:auto;opacity:.65;font-weight:700}.cpal-ic{font-size:20px}
+.cpal-l{position:relative;padding-left:4px}
+.cpal-l::before{content:"";position:absolute;left:23px;top:22px;bottom:22px;width:3px;border-radius:3px;background:repeating-linear-gradient(to bottom,rgba(128,128,128,.35) 0 6px,transparent 6px 10px)}
+.cnode{position:relative;margin:0 0 8px}
+.cn-h{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:10px 12px 10px 4px;border:0;background:none;color:inherit;font:inherit;cursor:pointer;border-radius:14px}
+.cn-dot{position:relative;z-index:1;flex:0 0 40px;width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;background:var(--card,#fff);border:2.5px solid rgba(128,128,128,.4);color:rgba(0,0,0,.55)}
+.cn-ic{font-size:22px;flex:0 0 26px;text-align:center}.cn-t{flex:1;display:flex;flex-direction:column;min-width:0}.cn-t b{font-size:15.5px;line-height:1.25}.cn-t small{opacity:.72;line-height:1.3;margin-top:1px}
+.cn-s{font-size:12px;font-weight:700;white-space:nowrap;opacity:.8}
+.cnode.ok .cn-dot{background:radial-gradient(circle at 35% 30%,#fff3b8,#e2b53a 55%,#a77a12);border-color:#a77a12;color:#4d3300}.cnode.ok .cn-s{color:#8a6a1e}
+.cnode.here .cn-dot{background:var(--cacc);border-color:var(--cacc);color:#fff;box-shadow:0 0 0 0 rgba(15,107,74,.45);animation:cpulse 2s infinite}.cnode.here .cn-s{color:var(--cacc)}
+@keyframes cpulse{0%{box-shadow:0 0 0 0 rgba(15,107,74,.45)}70%{box-shadow:0 0 0 12px rgba(15,107,74,0)}100%{box-shadow:0 0 0 0 rgba(15,107,74,0)}}
+@media (prefers-reduced-motion:reduce){.cnode.here .cn-dot{animation:none}}
+.cnode.lock .cn-h{opacity:.55}.cnode.lock .cn-dot{font-size:14px}
+.cnode.open .cn-h{background:var(--cbg)}
+.cn-b{margin:6px 0 6px 50px;padding:12px 14px;border-radius:14px;background:var(--card,#fff);border:1.5px solid rgba(15,107,74,.25);box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.cn-rule{border-left:4px solid var(--cacc2);background:rgba(226,181,58,.09);padding:8px 12px;border-radius:0 10px 10px 0}.cn-rl{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#8a6a1e}.cn-rule p{margin:4px 0 0;line-height:1.5}
+.cn-how{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0 4px}.cn-how span{font-size:12.5px;padding:6px 8px;border-radius:8px;background:rgba(128,128,128,.08);line-height:1.3}
+.cn-lk{margin:6px 0 0;opacity:.75}
+.ccta{border:2px solid #0f6b4a;background:linear-gradient(160deg,rgba(15,107,74,.10),rgba(226,181,58,.07));padding:14px}
+.ccta-h{display:flex;gap:12px;align-items:flex-start}.ccta-ic{font-size:34px;line-height:1}.ccta-h b{display:block;font-size:18px}.ccta-h small{display:block;opacity:.85;line-height:1.35;margin-top:2px}
+.ccta-b{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.ccta-b button{display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:12px;border:1.5px solid rgba(15,107,74,.35);background:var(--card,#fff);color:inherit;font:inherit;text-align:left;cursor:pointer}
+.ccta-b span{font-weight:700;font-size:15px}.ccta-b i{display:block;height:7px;border-radius:99px;background:rgba(128,128,128,.2);overflow:hidden}.ccta-b em{display:block;height:100%;background:linear-gradient(90deg,#0f6b4a,#3fb27f)}.ccta-b small{opacity:.7}
+.cbadge{display:inline-block;margin-top:6px;padding:3px 10px;border-radius:99px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);font-size:12px;font-weight:700}
+@media (max-width:520px){.cn-how{grid-template-columns:1fr}.cn-b{margin-left:12px}.ccta-b{grid-template-columns:1fr}}
+@media (min-width:1100px){.wrap.casc{max-width:880px}}
+/* v176 */
+.cfb h3{margin-bottom:8px}.cfb-r{margin:8px 0;padding:8px 12px;border-radius:10px;background:rgba(192,57,43,.06);border-left:4px solid #c0392b}.cfb-r p{margin:4px 0 0}.cfb-r.cfb-ok{background:rgba(46,139,87,.08);border-left-color:#2e8b57}
+.cfb-l{display:block;font-size:12.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;opacity:.85}
+.cfb-m{margin:10px 0 2px;padding:8px 12px;border-radius:10px;background:rgba(226,181,58,.12);border-left:4px solid #e2b53a}.cfb-m p{margin:4px 0 0}.cfb-m.solo{margin:0 0 12px}
+.crevc{border:2px dashed rgba(15,107,74,.35)}.crevc.on{border:2px solid #e2b53a;background:rgba(226,181,58,.08)}.crev-h{display:flex;gap:10px;align-items:flex-start}.crev-h>span{font-size:26px}.crev-h > div > b{display:block}.crev-h small{display:block;opacity:.85;line-height:1.35}
+.chow{margin-top:8px}.chow summary{cursor:pointer;font-weight:700;color:var(--cacc,#0f6b4a)}.chow ul{margin:8px 0 0 18px;padding:0}.chow li{margin:5px 0;line-height:1.4}
+.abc{border:2px solid #2f6fb5}.abc-h{display:flex;gap:8px;align-items:center}.abc-h span{font-size:18px}.abc-h b{font-size:16px}.abc-o{flex-direction:row!important;flex-wrap:wrap}.abc-o .btn{min-width:64px;text-align:center!important}
+.abc .btn.good{background:#2e8b57;color:#fff;border-color:#2e8b57}.abc .btn.badb{background:#c0392b;color:#fff;border-color:#c0392b}
 </style>
 </head>
 <body>
@@ -6537,7 +6580,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v173';
+const APP_V = 'v176';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -9405,7 +9448,7 @@ function kidDefausse(v) {
 }
 function defausseText(root) {
   const t = themeOf(); if (!root) return; let first = t !== 'enfant';
-  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => (n.parentElement && n.parentElement.closest('script,style,input,textarea,.felt,.defx,.top,.tbar,h1,h2,h3,.ltit') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) });
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => (n.parentElement && n.parentElement.closest('script,style,input,textarea,.felt,.defx,.top,.tbar,h1,h2,h3,.ltit,.cn-t,.ctab,.ccta,.cpal-h') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) });
   const L = []; while (w.nextNode()) L.push(w.currentNode);
   L.forEach(n => {
     const v = n.nodeValue; if (!/[Dd]éfauss/.test(v)) return;
@@ -15022,6 +15065,342 @@ function ficheSplit() {
   const all = [...app.querySelectorAll('.fp')]; all.forEach((pg, i) => { const n = pg.querySelector('.fpn'); if (n) n.textContent = `${i + 1} / ${all.length}`; });
 }
 function ficheDraw() { try { app.querySelectorAll('.fp').forEach(drawHoldings); ficheSplit(); } catch (e) { console.log('fiche', e); } }
+
+// ====================================================================
+//  v174 — LES BATTERIES DE JEU DE LA CARTE
+//  Un thème, une donne : vous jouez (déclarant ou défenseur), le professeur évalue chaque carte.
+//  Pas bien ? On explique pourquoi, et l'on recommence avec une autre donne du même genre.
+//  Acquis après deux donnes réussies d'affilée.
+// ====================================================================
+const PB_T = [
+  { id: 'sa', ic: '🧮', t: 'Le plan à Sans-Atout : ALC', d: 'Vous jouez 3SA. Il vous manque des levées : comptez vos gagnantes, puis Affranchir, Longueur, Communications.', mode: 'decl', st: 'N', level: 3, hint: 'Avant la première carte : comptez vos <b>gagnantes</b> couleur par couleur. Il en manque ? Choisissez la couleur à <b>affranchir</b> (la plus longue), gardez des <b>communications</b>.', les: 'c9',
+    pre: H => { const ns = hcp(H.S) + hcp(H.N); if (ns < 24 || ns > 28) return false; if (SU.some(s => H.S[s].length < 2 || H.N[s].length < 2)) return false; if (['H', 'S'].some(s => H.S[s].length + H.N[s].length >= 8)) return false; const g = SU.reduce((a, s) => a + sureTricks(H.S[s], H.N[s]), 0); return g >= 6 && g <= 8; }, ddMin: 9 },
+  { id: 'coul', ic: '✂️', t: 'Le plan à la couleur : CDI', d: 'Vous jouez 4 dans une majeure. Trop de perdantes : Coupe, Défausse, Impasse, dans cet ordre.', mode: 'decl', level: 4, hint: 'Avant la première carte : comptez vos <b>perdantes</b> depuis la main longue en atout. Plus de 3 ? <b>C</b>oupe dans la main courte, <b>D</b>éfausse sur une couleur maîtresse, <b>I</b>mpasse en dernier.', les: 'd7',
+    pre: H => { const ns = hcp(H.S) + hcp(H.N); if (ns < 22 || ns > 27) return false; const T = ['S', 'H'].find(s => H.S[s].length >= 5 && H.N[s].length >= 3); if (!T) return false; H._T = T; const l = SU.reduce((a, s) => a + losersIn(H.S[s], H.N[s]), 0); return l === 4; }, ddMin: 10 },
+  { id: 'coupe', ic: '🔪', t: 'Couper au mort', d: 'Le mort est court dans une couleur : vos perdantes s\'y coupent, avant de purger.', mode: 'decl', level: 4, hint: 'Le mort a une courte : <b>coupez-y vos perdantes</b>. Attention : si vous purgez d\'abord, le mort n\'aura plus d\'atouts pour couper.', les: 'd8',
+    pre: H => { const ns = hcp(H.S) + hcp(H.N); if (ns < 21 || ns > 27) return false; const T = ['S', 'H'].find(s => H.S[s].length >= 5 && H.N[s].length >= 3 && H.N[s].length <= 4); if (!T) return false; const sh = SU.find(s => s !== T && H.N[s].length <= 1 && H.S[s].length >= 3); if (!sh) return false; H._T = T; return SU.reduce((a, s) => a + losersIn(H.S[s], H.N[s]), 0) >= 4; }, ddMin: 10 },
+  { id: 'entsa', ic: '🗡️', t: 'Défendre contre 3SA (vous entamez)', d: 'Est joue 3SA : votre entame, puis toute la défense.', mode: 'def', decl: 'E', st: 'N', level: 3, hint: 'Contre Sans-Atout : entamez votre <b>couleur longue</b> (ou celle du partenaire), la 4e meilleure sans séquence. Gardez vos <b>reprises</b>.', les: 'c10',
+    pre: H => { const eo = hcp(H.E) + hcp(H.O); if (eo < 25 || eo > 29) return false; if (SU.some(s => H.E[s].length < 2 || H.O[s].length < 2)) return false; return SU.some(s => H.S[s].length >= 5); } },
+  { id: 'entc', ic: '🎯', t: 'Défendre contre 4 en majeure (vous entamez)', d: 'Est joue 4♠ ou 4♥ : votre entame, puis la défense.', mode: 'def', decl: 'E', level: 4, hint: 'Contre une couleur : singleton, <b>séquence</b>, couleur du partenaire, et jamais sous un As. Puis comptez les levées de la défense.', les: 'c10',
+    pre: H => { const eo = hcp(H.E) + hcp(H.O); if (eo < 23 || eo > 28) return false; const T = ['S', 'H'].find(s => H.E[s].length >= 5 && H.O[s].length >= 3); if (!T) return false; H._T = T; return true; } },
+  { id: 'def3', ic: '🛡️', t: 'La défense en 3e position', d: 'Votre partenaire entame contre 3SA : carte forte en 3e, puis la bonne relance.', mode: 'def', decl: 'O', st: 'N', level: 3, hint: 'En 3e : <b>carte forte</b>, la plus petite de celles qui se suivent. Puis <b>rejouez la couleur du partenaire</b> (de deux cartes restantes, la plus grosse).', les: 'd9',
+    pre: H => { const eo = hcp(H.E) + hcp(H.O); if (eo < 25 || eo > 29) return false; if (SU.some(s => H.E[s].length < 2 || H.O[s].length < 2)) return false; return SU.some(s => H.N[s].length >= 5) && hcp(H.S) >= 6; } },
+  { id: 'cash', ic: '💰', t: 'Compter et encaisser', d: 'Vous jouez 3SA avec assez de gagnantes : il suffit de les encaisser dans le bon ordre.', mode: 'decl', st: 'N', level: 3, hint: 'Comptez vos <b>gagnantes</b> : il y en a 9 ? Alors on ne prend <b>aucun risque</b> : on les encaisse, en commençant par les honneurs de la <b>main la plus courte</b> pour ne pas bloquer une couleur.', les: 'c9',
+    pre: H => { const ns = hcp(H.S) + hcp(H.N); if (ns < 26 || ns > 30) return false; if (SU.some(s => H.S[s].length < 2 || H.N[s].length < 2)) return false; if (['H', 'S'].some(s => H.S[s].length + H.N[s].length >= 8)) return false; const g = SU.reduce((a, s) => a + sureTricks(H.S[s], H.N[s]), 0); return g >= 9 && g <= 10; } },
+  { id: 'blanc', ic: '🤚', t: 'Le coup à blanc', d: 'Un seul arrêt dans la couleur d\'entame : on laisse passer, pour couper les communications des adversaires.', mode: 'decl', st: 'N', level: 3, hint: 'Un seul arrêt (l\'As) dans la couleur d\'entame ? <b>Laissez passer</b> : règle de 7 (7 moins le nombre de cartes de la couleur à deux = le nombre de tours à laisser passer). Puis développez votre couleur.', les: 'c9',
+    pre: H => { const ns = hcp(H.S) + hcp(H.N); if (ns < 24 || ns > 28) return false; if (['H', 'S'].some(s => H.S[s].length + H.N[s].length >= 8)) return false; const X = SU.find(s => { const a = H.S[s].concat(H.N[s]); return a.includes(14) && !a.includes(13) && !a.includes(12) && a.length >= 5 && a.length <= 6 && H.O[s].length >= 5; }); if (!X) return false; const g = SU.reduce((a, s) => a + sureTricks(H.S[s], H.N[s]), 0); return g >= 6 && g <= 8; } },
+  { id: 'purge', ic: '🧹', t: 'Purger les atouts', d: 'Vous jouez 4 dans une majeure avec 3 perdantes : on fait tomber les atouts adverses, puis on encaisse.', mode: 'decl', level: 4, hint: 'Comptez vos <b>perdantes</b> : 3 ou moins ? Rien à supprimer : <b>purgez</b> d\'abord les atouts (en comptant ceux qui tombent), puis encaissez vos levées.', les: 'd8',
+    pre: H => { const ns = hcp(H.S) + hcp(H.N); if (ns < 23 || ns > 28) return false; const T = ['S', 'H'].find(s => H.S[s].length >= 5 && H.N[s].length >= 3); if (!T) return false; H._T = T; return SU.reduce((a, s) => a + losersIn(H.S[s], H.N[s]), 0) === 3; } },
+  { id: 'defa', ic: '🗑️', t: 'Défausser sur une couleur maîtresse', d: 'Le mort a une couleur avec plus de levées que vous n\'avez de cartes : vos perdantes s\'y défaussent.', mode: 'decl', level: 4, hint: 'D de CDI : le mort a des <b>levées en trop</b> dans une couleur ? Encaissez-les <b>avant de rendre la main</b>, en défaussant vos perdantes d\'une autre couleur.', les: 'd8',
+    pre: H => { const ns = hcp(H.S) + hcp(H.N); if (ns < 22 || ns > 28) return false; const T = ['S', 'H'].find(s => H.S[s].length >= 5 && H.N[s].length >= 3); if (!T) return false; const D = SU.find(s => s !== T && H.N[s].length > H.S[s].length && sureTricks(H.S[s], H.N[s]) > H.S[s].length); if (!D) return false; H._T = T; return SU.reduce((a, s) => a + losersIn(H.S[s], H.N[s]), 0) === 4; } },
+];
+let PB = null;
+function pbSt() { ST.pb = ST.pb || {}; return ST.pb; }
+function pbRec(id) { const s = pbSt(); s[id] = s[id] || { n: 0, streak: 0, ok: 0, acq: false }; return s[id]; }
+function pbDeal(th) {
+  for (let t = 0; t < 4000; t++) { const H = dealAll({}); if (th.pre(H)) { const st = th.st || H._T; delete H._T; return { H, st }; } }
+  return null;
+}
+let PB_CASC = false;
+function pbHome() {
+  PB_CASC = false; const S = pbSt();
+  show(`${topBar('🃏 Les batteries de jeu de la carte', 'Jouer, être évalué, recommencer jusqu\'à ce que ce soit acquis', 'menu')}<div class="wrap">
+  <div class="card"><p>Un thème, une donne : <b>vous jouez toutes les cartes</b>, en déclarant ou en défense. À la fin, le professeur <b>évalue chaque carte</b> : ce qui était bien, ce qui a coûté une levée, pourquoi, et ce qu'il fallait jouer.</p><p>Pas encore ça ? <b>Une autre donne du même genre</b>. Le thème est <b>acquis</b> après deux donnes réussies d'affilée (contrat rempli et aucune carte coûteuse).</p></div>
+  <div class="menu">${PB_T.map((t, i) => { const r = S[t.id]; return `<button class="tile" data-pb="${t.id}"><span class="tn s${i % 4}">${t.ic}</span><span class="tt"><b>${t.t}${r && r.acq ? ' ✅' : ''}</b><span class="small">${r ? (r.acq ? `Acquis · ${r.n} donne${r.n > 1 ? 's' : ''} jouée${r.n > 1 ? 's' : ''}` : `${r.n} donne${r.n > 1 ? 's' : ''} jouée${r.n > 1 ? 's' : ''} · série en cours : ${r.streak} / 2`) : t.d}</span></span><span class="chev">›</span></button>`; }).join('')}</div></div>`);
+}
+function pbStart(id) {
+  const th = PB_T.find(x => x.id === id); if (!th) return pbHome();
+  show(`${topBar(`${th.ic} ${th.t}`, 'On distribue…', 'pb')}<div class="wrap"><div class="card"><p class="small">Le professeur cherche une donne du bon genre…</p></div></div>`);
+  setTimeout(() => ddsReady().then(() => {
+    let H = null, dd = null;
+    let ST0 = null; for (let k = 0; k < 12; k++) { const g = pbDeal(th); if (!g) break; const h = g.H, st = g.st, tr = st === 'N' ? null : st;
+      const declP = th.mode === 'decl' ? 'S' : th.decl; let sol = null; try { sol = ddsSolve(gNew(h, tr, declP)); } catch (e) { }
+      const d = sol ? 13 - sol.best : null; const need = th.level + 6;
+      if (th.mode === 'decl' ? (d != null && d >= need && d <= need + 1) : (d != null && d >= need - 1 && d <= need)) { H = h; dd = d; ST0 = st; break; }
+      if (!H && k === 11) { H = h; dd = d; ST0 = st; } }
+    if (!H) return pbHome();
+    PB = { th, H, dd, st: ST0 }; pbIntro();
+  }).catch(() => pbHome()), 30);
+}
+function pbIntro() {
+  const { th, H } = PB, c = { level: th.level, st: PB.st, decl: th.mode === 'decl' ? 'S' : th.decl }, r = pbRec(th.id);
+  show(`${topBar(`${th.ic} ${th.t}`, `Donne n° ${r.n + 1}${r.streak ? ` · série : ${r.streak} / 2` : ''}`, 'pb')}<div class="wrap">
+  <div class="card"><div class="label">Le contrat</div><div class="big2">${cS(c)}</div><p class="small">${th.mode === 'decl' ? `Vous êtes <b>Sud</b>, le déclarant ; Nord est le mort. Ouest entame.` : `Vous êtes <b>Sud</b>, en défense. ${th.decl === 'E' ? 'C\'est vous qui entamez.' : 'Votre partenaire (Nord) entame.'}`}</p></div>
+  <div class="card"><div class="label">Le conseil du professeur</div><p>${th.hint}</p></div>
+  <div class="card"><div class="label">Votre main</div>${drawHand(H.S)}${th.mode === 'decl' ? `<div class="label" style="margin-top:8px">Le mort (Nord)</div>${drawHand(H.N)}` : ''}</div>
+  <div class="acts"><button class="btn" data-pbgo="1">▶ Jouer la donne</button><button class="btn sec" data-cch="${th.les}">📖 Relire la leçon</button></div></div>`);
+}
+function pbPlay() {
+  const { th, H } = PB, tr = PB.st === 'N' ? null : PB.st;
+  playStart({ H, tr, level: th.level, decl: th.mode === 'decl' ? 'S' : th.decl, dd: PB.dd, mode: th.mode, teach: false, back: 'pb', title: `${th.ic} ${th.t}`, note: th.hint.replace(/<[^>]+>/g, ''), onEnd: (v, pg) => pbEnd(v, pg) });
+}
+function pbEnd(v, pg) {
+  const { th } = PB, r = pbRec(th.id), need = th.level + 6, mode = th.mode, made = v >= need, c = { level: th.level, st: PB.st, decl: th.mode === 'decl' ? 'S' : th.decl };
+  r.n++; save();
+  const line = mode === 'decl' ? (made ? `Contrat réussi${v > need ? `, +${v - need}` : ''} : ${v} levées.` : `Chute de ${need - v} : ${v} levées pour ${need}.`) : (made ? `Le déclarant a réussi son contrat (${v} levées).` : `Chute de ${need - v} : bravo, la défense a gagné !`);
+  show(`${topBar(`${th.ic} ${th.t}`, 'L\'évaluation du professeur', 'pb')}<div class="wrap">
+  <div class="card"><div class="label">${cS(c)}</div><div class="big2">${line}</div>${PB.dd != null ? `<p class="small">Avec le meilleur jeu des deux côtés : ${PB.dd} levées pour le déclarant.</p>` : ''}</div>
+  <div class="card bil40"><h2>🎓 Carte par carte</h2><div id="pbbil"><p class="small">Le professeur analyse chaque carte…</p></div></div>
+  <div class="card" id="pbnext"><p class="small">…</p></div></div>`);
+  const play = { rot: false, mode, tricks: realTricks(pg.G).map(x => x.cards.map(([q, cc]) => q + cc[0] + cc[1]).join(' ') + '>' + x.win) };
+  const fin = lost => {
+    const okDeal = (mode === 'decl' ? made : true) && !lost;
+    if (okDeal) { r.streak++; if (r.streak >= 2) r.acq = true; } else r.streak = 0; save();
+    const box = document.getElementById('pbnext'); if (!box) return;
+    const nx = PB_CASC && typeof cascNextPlay === 'function' ? cascNextPlay(th.id) : PB_T[(PB_T.indexOf(th) + 1) % PB_T.length];
+    box.innerHTML = !okDeal ? `<h2>🔁 Pas encore : on recommence</h2><p>${mode === 'decl' && !made ? 'Le contrat a chuté. ' : ''}${lost ? `${lost} levée${lost > 1 ? 's' : ''} perdue${lost > 1 ? 's' : ''} par des cartes coûteuses (expliquées ci-dessus). ` : ''}Relisez l'explication, puis <b>une autre donne du même genre</b>.</p><div class="acts"><button class="btn" data-pb="${th.id}">🔁 Une autre donne du même genre</button><button class="btn sec" data-cch="${th.les}">📖 Relire la leçon</button><button class="btn sec" data-pbh="1">${PB_CASC ? 'La cascade' : 'Les thèmes'}</button></div>`
+      : r.acq ? `<h2>✅ Acquis !</h2><p>Deux donnes réussies d'affilée : ce ${PB_CASC ? 'niveau' : 'thème'} est maîtrisé.</p><div class="acts">${PB_CASC ? `<button class="btn" data-casc="carte">🪜 Le niveau suivant de la cascade ›</button>` : nx ? `<button class="btn" data-pb="${nx.id}">Thème suivant : ${nx.ic} ${nx.t}</button>` : ''}<button class="btn sec" data-pb="${th.id}">Encore une pour le plaisir</button><button class="btn sec" data-pbh="1">${PB_CASC ? 'La cascade' : 'Les thèmes'}</button></div>`
+      : `<h2>👍 Réussi : encore une pour confirmer</h2><p>Une deuxième donne réussie d'affilée, et le thème est acquis.</p><div class="acts"><button class="btn" data-pb="${th.id}">Donne suivante ›</button><button class="btn sec" data-pbh="1">${PB_CASC ? 'La cascade' : 'Les thèmes'}</button></div>`;
+    try { if (!okDeal) errAddPb(th.id); else errPbOk(th.id); } catch (e) { }
+    if (typeof tuTree === 'function') tuTree(box);
+  };
+  const Hp = pg.G.H, c2 = { st: PB.st, decl: pg.decl, level: th.level };
+  ddsReady().then(() => profAnalyse(play, Hp, c2, out => {
+    const ctrl = mode === 'decl' ? ['N', 'S'] : ['S']; if (out) out.forEach(x => { x.mine = ctrl.includes(x.p); });
+    const lost = out ? out.filter(x => x.note && x.mine).reduce((a, x) => a + x.note.lost, 0) : 0;
+    const el = document.getElementById('pbbil'); const userT = mode === 'decl' ? v : 13 - v;
+    if (el) { el.innerHTML = colorize(bilanHtml(out, { tr: PB.st === 'N' ? null : PB.st, mode, made: mode === 'decl' ? made : !made, ns: userT, need: mode === 'decl' ? need : 14 - need, dd: PB.dd == null ? null : mode === 'decl' ? PB.dd : 13 - PB.dd, counted: true })); if (typeof tuTree === 'function') tuTree(el); }
+    fin(lost);
+  })).catch(() => fin(0));
+}
+// le carnet
+function errAddPb(id) { const L = errList(), ex = L.find(e => e.k === 'pb' && e.id === id); if (ex) { ex.n++; ex.ok = 0; } else L.push({ k: 'pb', id, n: 1, ok: 0 }); save(); }
+function errPbOk(id) { const L = errList(), i = L.findIndex(e => e.k === 'pb' && e.id === id); if (i < 0) return; if (++L[i].ok >= 2) L.splice(i, 1); save(); }
+{ const _ec = t2ErrCard; t2ErrCard = function () { const h = _ec.apply(this, arguments); const C = errList().filter(e => e.k === 'pb'); if (!C.length) return h;
+  const add = `<span class="small">Les batteries de jeu de la carte à reprendre :</span><div class="t2bs">${C.map(e => { const t = PB_T.find(x => x.id === e.id); return t ? `<button class="btn sec t2b" data-pb="${e.id}">🃏 ${t.t} <small>×${e.n}</small></button>` : ''; }).join('')}</div>`;
+  if (/class="t2err on"/.test(h)) return h.replace(/<\/div>\s*$/, add + '</div>'); return `<div class="t2err on"><b>📒 Mes erreurs à revoir</b>${add}</div>`; }; }
+document.addEventListener('click', e => { const t = e.target.closest('[data-pb],[data-pbgo],[data-pbh],[data-nav="pb"]'); if (!t || t.disabled) return; e.stopPropagation(); e.preventDefault(); const d = t.dataset;
+  if (d.pbgo) return pbPlay(); if (d.pbh || d.nav === 'pb') return PB_CASC && typeof cascPage === 'function' ? cascPage('carte') : pbHome(); if (d.pb) return pbStart(d.pb); }, true);
+// ---------- dans « S'entraîner » : en tête, et dans les étapes du parcours ----------
+{ const st = n => T2_PATH.find(s => n.test(s.t));
+  const pl = st(/plan du déclarant/); if (pl) pl.it.splice(2, 0, ['pb', 'sa'], ['pb', 'coul'], ['pb', 'coupe']);
+  const en = st(/entame/i); if (en) en.it.splice(1, 0, ['pb', 'entsa'], ['pb', 'entc']);
+  const df = st(/défense/i); if (df) df.it.splice(1, 0, ['pb', 'def3']);
+  LES_T2.c9 = (LES_T2.c9 || []).concat([['pb', 'sa']]); LES_T2.d7 = (LES_T2.d7 || []).concat([['pb', 'coul']]); LES_T2.d8 = (LES_T2.d8 || []).concat([['pb', 'coupe']]); LES_T2.c10 = (LES_T2.c10 || []).concat([['pb', 'entsa'], ['pb', 'entc']]); LES_T2.d9 = (LES_T2.d9 || []).concat([['pb', 'def3']]); }
+{ const _it = t2PathItem; t2PathItem = function (x) { if (x[0] === 'pb') { const t = PB_T.find(y => y.id === x[1]); if (!t) return ''; const ok = itemOk(x); return `<button class="btn sec t2b${ok ? ' t2ok' : ''}" data-pb="${t.id}">🃏 ${t.t}${ok ? ' ✓' : ''}</button>`; } return _it.apply(this, arguments); }; }
+{ const _io = itemOk; itemOk = function (x) { if (x[0] === 'pb') { const r = (ST.pb || {})[x[1]]; return !!(r && r.acq); } return _io.apply(this, arguments); }; }
+{ const _ic = itemCount; itemCount = function (x) { return x[0] === 'pb' || _ic.apply(this, arguments); }; }
+{ const _hb = hubBuild; hubBuild = function () { const r = _hb.apply(this, arguments); try { if (tone() === 'enfant' && kAge() === 'petit') return r; const p3 = app.querySelector('.hubp[data-p="3"]'); if (p3 && !p3.querySelector('.pbtop')) { const h = p3.querySelector('.hubph'); const n = PB_T.filter(t => ((ST.pb || {})[t.id] || {}).acq).length; h.insertAdjacentHTML('afterend', `<button class="card pbtop" data-pbh="1"><span class="pbic">🃏</span><span><b>Les batteries de jeu de la carte</b><small>Vous jouez une donne entière, le professeur évalue chaque carte et explique ; on recommence avec une donne du même genre jusqu'à ce que ce soit acquis. ${n} / ${PB_T.length} thèmes acquis.</small></span><span class="chev">›</span></button><button class="card pbtop" data-dqh="1"><span class="pbic">🕵️</span><span><b>Les donnes-enquêtes</b><small>Douze donnes jouées carte par carte, avec des questions aux moments-clés.</small></span><span class="chev">›</span></button>`); } } catch (e) { console.log('pb', e); } return r; }; }
+
+// ====================================================================
+//  v175 — LE CHAPITRE EN CASCADE
+//  Deux escaliers, du plus simple au plus complexe : les enchères, puis le jeu de la carte.
+//  À chaque marche : la règle, une donne, l'explication ; faux → une autre donne du même genre ;
+//  la marche est acquise après deux réussites d'affilée, et la suivante s'ouvre.
+// ====================================================================
+const CASC_BID = [
+  { p: 'Les bases', ic: '🌱', L: [
+    { id: 'compter', ic: '🔢', t: 'Compter ses points', learn: 'Les points d\'honneur et la distribution.', rule: 'As 4, Roi 3, Dame 2, Valet 1 : ce sont les <b>points H</b>. Il y en a 40 dans le jeu, 10 en moyenne par main. On y ajoute la <b>distribution</b> quand on a une couleur longue.', les: 'c4' },
+    { id: 'ouvrir', ic: '📣', t: 'Ouvrir les enchères', learn: 'Quand ouvrir, et de quoi.', rule: 'On ouvre à partir de <b>12 H</b>. Une majeure de <b>5 cartes</b> : 1♥ ou 1♠. Une main <b>régulière de 15 à 17</b> : 1SA. Sinon, la meilleure mineure.', les: 'c5' } ] },
+  { p: 'Répondre à l\'ouverture', ic: '🤝', L: [
+    { id: 'soutien', ic: '💞', t: 'Soutenir la majeure', learn: 'Dire le fit tout de suite, selon sa force.', rule: 'Avec <b>3 cartes</b> dans la majeure du partenaire, on a le <b>fit</b> (8 cartes). On le dit tout de suite : le palier dépend de vos points.', les: 'c6' },
+    { id: 'sansfit', ic: '🧭', t: 'Répondre sans fit', learn: 'Une couleur au palier 1, ou 1SA.', rule: 'Sans fit : une <b>couleur de 4 cartes au palier 1</b> (forcing), sinon <b>1SA</b> avec une main faible. Une nouvelle couleur oblige l\'ouvreur à reparler.', les: 'c6' },
+    { id: 'mineure', ic: '♣', t: 'Répondre à 1♣ ou 1♦', learn: 'Chercher d\'abord une majeure.', rule: 'Sur une mineure, on cherche d\'abord le <b>fit en majeure</b> : une majeure de 4 cartes se nomme au palier 1, avant de soutenir la mineure.', les: 'c6' } ] },
+  { p: 'La redemande', ic: '🔁', L: [
+    { id: 'troisieme', ic: '🗣️', t: 'L\'ouvreur au 3e tour', learn: 'Décrire sa force et sa forme.', rule: 'L\'ouvreur précise sa <b>force</b> (minimum, moyen, fort) et sa <b>forme</b> : main régulière, 2e couleur, ou couleur de 6 cartes.', les: 'c7' },
+    { id: 'capitaine', ic: '⚓', t: 'Le capitaine', learn: 'Additionner et décider.', rule: 'Celui qui connaît le mieux la main du partenaire est le <b>capitaine</b> : il additionne et décide. <b>25</b> points à deux, la manche ; <b>33</b>, le petit chelem.', les: 'c7' } ] },
+  { p: 'Le Sans-Atout', ic: '🎯', L: [
+    { id: 'sa1', ic: '❓', t: 'Répondre à 1SA', learn: 'Les 4 questions du répondant.', rule: 'Sur 1SA (15-17), le répondant <b>additionne</b> : il sait tout de suite s\'il faut passer, proposer la manche ou la demander. Avec une majeure, il cherche le fit.', les: 'd2' },
+    { id: 'stayman', ic: '🔍', t: 'Le Stayman', learn: 'Trouver un fit 4-4 en majeure.', rule: '<b>2♣</b> demande une majeure de 4 cartes. Réponses : <b>2♦</b> aucune, <b>2♥</b>, <b>2♠</b>, <b>2SA</b> les deux.', les: 'd2' },
+    { id: 'texas', ic: '🔀', t: 'Le Texas', learn: 'Montrer 5 cartes en majeure.', rule: 'Avec 5 cartes en majeure : <b>2♦</b> pour les cœurs, <b>2♥</b> pour les piques. L\'ouvreur dit la couleur <b>juste au-dessus</b> : c\'est lui qui jouera.', les: 'd3' } ] },
+  { p: 'Les mains extrêmes', ic: '⚡', L: [
+    { id: 'fortes', ic: '💪', t: 'Répondre à 2SA, 2♣ et 2♦', learn: 'Les ouvertures fortes.', rule: 'Sur le <b>2♣ fort</b>, on ne passe jamais : 2♦ d\'attente, même avec 0 point. Sur 2SA, on additionne pour la manche.', les: 'd1' },
+    { id: 'deuxt', ic: '🧩', t: 'L\'ouverture de 2♣ : les 4 cas', learn: 'Ce que l\'ouvreur montre au 2e tour.', rule: 'Le 2♣ fort cache <b>4 types de mains</b> : c\'est la redemande de l\'ouvreur qui dit laquelle. Le répondant écoute, puis décide.', les: 'd1' },
+    { id: 'barrage', ic: '🚧', t: 'Le barrage du partenaire', learn: 'Que faire face à 7 cartes et peu de points ?', rule: 'Le barrage promet <b>7 cartes</b> et une main faible. On ne va à la manche qu\'avec des <b>levées rapides</b> (As, Rois) et du fit.', les: 'd4' } ] },
+  { p: 'La compétition', ic: '⚔️', L: [
+    { id: 'intervenir', ic: '🙋', t: 'Intervenir', learn: 'Parler quand ils ont ouvert.', rule: 'Au palier 1 : <b>8 H et 5 belles cartes</b>. Au palier 2 : <b>11 H et 6 cartes</b>. 1SA d\'intervention : 16 à 18 H, régulier, avec un arrêt.', les: 'd5' },
+    { id: 'contre', ic: '✋', t: 'Le contre d\'appel', learn: 'Demander au partenaire de choisir.', rule: 'Le <b>contre d\'appel</b> : 12 H au moins, <b>court</b> dans leur couleur, du <b>soutien</b> dans les autres.', les: 'd6' },
+    { id: 'repcontre', ic: '↪️', t: 'Répondre au contre d\'appel', learn: 'Nommer sa meilleure couleur.', rule: 'On nomme sa <b>meilleure couleur</b>, de préférence une majeure, <b>même avec 0 point</b> : passer laisserait jouer les adversaires contrés… avec leurs atouts.', les: 'd6' },
+    { id: 'cuebid', ic: '🎌', t: 'Le cue-bid', learn: 'Montrer le fit et la force.', rule: 'Après une intervention, nommer <b>leur couleur</b> montre le <b>fit</b> dans la couleur du partenaire et <b>au moins 11 points</b>.', les: 'e1' } ] },
+  { p: 'Le chelem', ic: '👑', L: [
+    { id: 'hld', ic: '📏', t: 'Compter en HL et HLD', learn: 'Évaluer la main une fois le fit trouvé.', rule: 'Fit trouvé : on compte <b>H + L + D</b> (honneurs, longueur, distribution). Les courtes valent des points quand on a de l\'atout.', les: 'e3' },
+    { id: 'potentiel', ic: '🔭', t: 'Manche ou chelem ?', learn: 'Additionner pour viser haut.', rule: '<b>25</b> points à deux : la manche. <b>33</b> : le petit chelem. <b>37</b> : le grand chelem.', les: 'e3' },
+    { id: 'quanti', ic: '🎚️', t: 'Le chelem à Sans-Atout', learn: 'Le 4SA quantitatif.', rule: 'Sans fit en couleur, <b>4SA</b> ne demande pas les clés : il <b>propose 6SA</b>. Le partenaire passe avec le minimum, conclut avec le maximum.', les: 'e3' },
+    { id: 'qouv', ic: '🎛️', t: 'Répondre au quantitatif', learn: 'Accepter ou refuser.', rule: 'Face au 4SA quantitatif : <b>minimum → passe</b>, <b>maximum → 6SA</b>. Entre les deux, une couleur 4e peut aider à trouver le fit.', les: 'e3' },
+    { id: 'bw', ic: '🔑', t: 'Répondre au Blackwood 5 clés', learn: 'Compter ses clés.', rule: 'Les 5 clés : les 4 As et le Roi d\'atout. <b>5♣</b> 0 ou 3, <b>5♦</b> 1 ou 4, <b>5♥</b> 2 sans la Dame d\'atout, <b>5♠</b> 2 avec.', les: 'e3' },
+    { id: 'bwcap', ic: '🧮', t: 'Décider après le Blackwood', learn: 'Le capitaine conclut.', rule: 'Il manque <b>2 clés</b> : on s\'arrête au palier 5. <b>1 clé</b> : le petit chelem. <b>Aucune</b> : le grand chelem est possible.', les: 'e3' },
+    { id: 'dame', ic: '👸', t: 'La Dame d\'atout et les Rois', learn: 'Aller chercher le grand chelem.', rule: 'Après le Blackwood, on peut encore demander la <b>Dame d\'atout</b>, puis les <b>Rois</b> : pour le grand chelem, il ne doit rien manquer.', les: 'e3' },
+    { id: 'grand', ic: '🏔️', t: 'Petit ou grand chelem ?', learn: 'Compter 13 levées.', rule: 'Le grand chelem demande <b>toutes les clés, la Dame d\'atout</b> et <b>13 levées comptées</b>. Dans le doute, le petit chelem.', les: 'e3' } ] },
+];
+const CASC_PLAY = [
+  { p: 'Le déclarant à Sans-Atout', ic: '🧮', L: [
+    { id: 'cash', learn: 'Compter ses gagnantes, puis les encaisser sans bloquer.', les: 'c9' },
+    { id: 'sa', learn: 'Affranchir une couleur : A-L-C.', les: 'c9' },
+    { id: 'blanc', learn: 'Laisser passer pour couper la route aux adversaires.', les: 'c9' } ] },
+  { p: 'Le déclarant à l\'atout', ic: '♠', L: [
+    { id: 'purge', learn: 'Faire tomber les atouts adverses, en les comptant.', les: 'd8' },
+    { id: 'coupe', learn: 'Couper ses perdantes dans la main courte.', les: 'd8' },
+    { id: 'defa', learn: 'Défausser ses perdantes sur une couleur maîtresse du mort.', les: 'd8' },
+    { id: 'coul', learn: 'Le plan complet : C-D-I, dans l\'ordre.', les: 'd7' } ] },
+  { p: 'La défense', ic: '🛡️', L: [
+    { id: 'entsa', learn: 'L\'entame et la défense contre Sans-Atout.', les: 'c10' },
+    { id: 'entc', learn: 'L\'entame et la défense contre une couleur.', les: 'c10' },
+    { id: 'def3', learn: 'La 3e main et la relance.', les: 'd9' } ] },
+];
+let CASC_TAB = 'bid';
+const cascBidList = () => CASC_BID.flatMap(P => P.L).filter(l => CASES.find(c => c.id === l.id));
+const cascPlayList = () => CASC_PLAY.flatMap(P => P.L).filter(l => PB_T.find(t => t.id === l.id));
+function cascOk(tab, id) { return tab === 'bid' ? !!(ST.cases[id] && ST.cases[id].acq) : !!(((ST.pb || {})[id] || {}).acq); }
+function cascCur(tab) { const L = tab === 'bid' ? cascBidList() : cascPlayList(); const i = L.findIndex(l => !cascOk(tab, l.id)); return i < 0 ? L.length : i; }
+function cascNextPlay(id) { const L = cascPlayList(), i = L.findIndex(l => l.id === id), n = L[i + 1]; return n ? PB_T.find(t => t.id === n.id) : null; }
+function cascStreak(tab, id) { return tab === 'bid' ? ((ST.cases[id] || {}).streak || 0) : (((ST.pb || {})[id] || {}).streak || 0); }
+function cascPage(tab, openId) {
+  CASC_TAB = tab === 'carte' || tab === 'play' ? 'play' : tab === 'bid' ? 'bid' : CASC_TAB; X = null; PB_CASC = false;
+  const T = CASC_TAB, P = T === 'bid' ? CASC_BID : CASC_PLAY, L = T === 'bid' ? cascBidList() : cascPlayList(), cur = cascCur(T), nOk = L.filter(l => cascOk(T, l.id)).length;
+  const other = T === 'bid' ? 'play' : 'bid', oL = other === 'bid' ? cascBidList() : cascPlayList(), oOk = oL.filter(l => cascOk(other, l.id)).length;
+  const open = openId || (L[cur] && L[cur].id);
+  let idx = 0;
+  const node = l => { const i = idx++, ok = cascOk(T, l.id), here = i === cur, lock = i > cur, isOpen = l.id === open;
+    const th = T === 'play' ? PB_T.find(t => t.id === l.id) : null, c = T === 'bid' ? CASES.find(x => x.id === l.id) : null;
+    const ic = T === 'bid' ? l.ic : th.ic, title = T === 'bid' ? l.t : th.t, rule = T === 'bid' ? l.rule : th.hint, sub = l.learn, st = cascStreak(T, l.id);
+    return `<div class="cnode${ok ? ' ok' : ''}${here ? ' here' : ''}${lock ? ' lock' : ''}${isOpen ? ' open' : ''}" data-cnode="${l.id}">
+      <button class="cn-h" data-copen="${l.id}"><span class="cn-dot">${ok ? '✓' : lock ? '🔒' : i + 1}</span><span class="cn-ic">${ic}</span><span class="cn-t"><b>${title}</b><small>${sub}</small></span><span class="cn-s">${ok ? 'Acquis' : here ? (st ? `${st} / 2` : 'À vous') : lock ? '' : ''}</span></button>
+      ${isOpen ? `<div class="cn-b"><div class="cn-rule"><span class="cn-rl">📜 La règle</span><p>${rule}</p></div>
+        <div class="cn-how"><span>① ${T === 'bid' ? 'Une main, une enchère' : 'Une donne entière, jouée par vous'}</span><span>② ${T === 'bid' ? 'Juste : on dit pourquoi' : 'Chaque carte évaluée'}</span><span>③ Faux : pourquoi, et une autre ${T === 'bid' ? 'main' : 'donne'} du même genre</span><span>④ Acquis après 2 réussites d'affilée</span></div>
+        <div class="acts">${lock ? `<button class="btn sec" data-cgo="${l.id}">Essayer quand même</button>` : `<button class="btn" data-cgo="${l.id}">${ok ? '🔁 Revoir ce niveau' : st ? '▶ Continuer' : '▶ Commencer'}</button>`}${l.les ? `<button class="btn sec" data-cch="${l.les}">📖 La leçon</button>` : ''}</div>${lock ? '<p class="small cn-lk">Conseil : réussissez d\'abord le niveau précédent, chaque marche prépare la suivante.</p>' : ''}</div>` : ''}</div>`; };
+  const pct = Math.round(100 * nOk / Math.max(1, L.length));
+  show(`${topBar('🪜 Le chapitre en cascade', T === 'bid' ? 'Les enchères, du plus simple au plus complexe' : 'Le jeu de la carte, du plus simple au plus complexe', 'menu')}<div class="wrap casc">
+  <div class="ctabs"><button class="ctab${T === 'bid' ? ' on' : ''}" data-casc="bid"><span>🗣️</span><b>Les enchères</b><small>${T === 'bid' ? nOk : oOk} / ${(T === 'bid' ? L : oL).length} niveaux</small></button><button class="ctab${T === 'play' ? ' on' : ''}" data-casc="carte"><span>🃏</span><b>Le jeu de la carte</b><small>${T === 'play' ? nOk : oOk} / ${(T === 'play' ? L : oL).length} niveaux</small></button></div>
+  <div class="card chero"><div class="chero-t"><b>${T === 'bid' ? 'Les enchères en cascade' : 'Le jeu de la carte en cascade'}</b><span>${nOk === L.length ? '🏆 Tout est acquis !' : `Niveau ${cur + 1} sur ${L.length}`}</span></div>
+    <div class="cbar"><i style="width:${pct}%"></i></div>
+    <p class="small">${T === 'bid' ? 'Chaque marche, une seule notion : la règle, puis une main à enchérir. Juste, on vous dit pourquoi ; faux, on vous dit pourquoi ce n\'est pas bon, ce qu\'il fallait dire, et l\'on recommence avec une autre main du même genre.' : 'Chaque marche, une seule technique : la règle, puis une donne entière que vous jouez. À la fin, chaque carte est évaluée et expliquée ; tant que ce n\'est pas acquis, on rejoue une autre donne du même genre.'}</p></div>
+  ${P.map(G => { const items = G.L.filter(l => T === 'bid' ? CASES.find(c => c.id === l.id) : PB_T.find(t => t.id === l.id)); if (!items.length) return ''; const done = items.filter(l => cascOk(T, l.id)).length; return `<div class="cpal"><div class="cpal-h"><span class="cpal-ic">${G.ic}</span><b>${G.p}</b><small>${done} / ${items.length}</small></div><div class="cpal-l">${items.map(node).join('')}</div></div>`; }).join('')}
+  </div>`);
+  const el = app.querySelector('.cnode.open'); if (el && openId) el.scrollIntoView({ block: 'center' });
+}
+function cascGo(id) {
+  if (CASC_TAB === 'bid') { const c = CASES.find(x => x.id === id); if (!c) return; startCase(c, 'casc'); }
+  else { pbStart(id); PB_CASC = true; }
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-casc],[data-copen],[data-cgo]'); if (!t) return; e.stopPropagation(); e.preventDefault(); const d = t.dataset;
+  if (d.casc) return cascPage(d.casc === 'carte' ? 'play' : d.casc);
+  if (d.copen) { const n = t.closest('.cnode'); const was = n.classList.contains('open'); return cascPage(CASC_TAB, was ? '__none__' : d.copen); }
+  if (d.cgo) return cascGo(d.cgo);
+}, true);
+// les exercices d'enchères en mode cascade : « une autre main », « niveau suivant », retour à la cascade
+document.addEventListener('click', e => {
+  if (!X || X.mode !== 'casc') return; const t = e.target.closest('[data-act="next"],[data-act="home"],.top [data-nav],[data-cnext]'); if (!t) return;
+  e.stopPropagation(); e.preventDefault(); const c = X.c;
+  if (t.dataset.act === 'next') return startCase(c, 'casc');
+  if (t.dataset.cnext) { const L = cascBidList(), i = L.findIndex(l => l.id === c.id), n = L[i + 1]; return cascPage('bid', n ? n.id : undefined); }
+  return cascPage('bid', c.id);
+}, true);
+{ const _r = render; render = function () { const r = _r.apply(this, arguments); try { if (X && X.mode === 'casc' && X.phase === 'done') { const a = [...app.querySelectorAll('.acts')].find(x => x.querySelector('[data-act="next"]')); if (a) { const acq = cs(X.c.id).acq; a.innerHTML = acq ? `<button class="btn" data-cnext="1">🪜 Niveau acquis : la marche suivante ›</button><button class="btn sec" data-act="next">Encore une main</button>` : `<button class="btn" data-act="next">🔁 Une autre main du même genre</button><button class="btn sec" data-act="home">🪜 La cascade</button>`; } }
+  if (X && X.mode === 'casc') { const h = app.querySelector('.top'); if (h && !h.querySelector('.cbadge')) { const L = cascBidList(), i = L.findIndex(l => l.id === X.c.id); h.insertAdjacentHTML('beforeend', `<span class="cbadge">🪜 Cascade · niveau ${i + 1} / ${L.length} · ${cs(X.c.id).streak || 0} / 2</span>`); } } } catch (e) { } return r; }; }
+// ---------- l'entrée : en tête de « S'entraîner » et dans « Apprendre » ----------
+{ const _hb = hubBuild; hubBuild = function () { const r = _hb.apply(this, arguments); try { PB_CASC = false; if (tone() === 'enfant' && kAge() === 'petit') return r;
+  const nb = cascBidList(), np = cascPlayList(), ob = nb.filter(l => cascOk('bid', l.id)).length, op = np.filter(l => cascOk('play', l.id)).length;
+  const card = `<div class="card ccta"><div class="ccta-h"><span class="ccta-ic">🪜</span><div><b>Le chapitre en cascade</b><small>Du plus simple au plus complexe, une marche à la fois : la règle, une donne, l'explication ; on recommence jusqu'à ce que ce soit acquis.</small></div></div>
+    <div class="ccta-b"><button data-casc="bid"><span>🗣️ Les enchères</span><i><em style="width:${Math.round(100 * ob / nb.length)}%"></em></i><small>${ob} / ${nb.length} niveaux</small></button><button data-casc="carte"><span>🃏 Le jeu de la carte</span><i><em style="width:${Math.round(100 * op / np.length)}%"></em></i><small>${op} / ${np.length} niveaux</small></button></div></div>`;
+  [3, 2].forEach(k => { const p = app.querySelector(`.hubp[data-p="${k}"]`); if (p && !p.querySelector('.ccta')) { const h = p.querySelector('.hubph'); h.insertAdjacentHTML('afterend', card); } });
+} catch (e) { console.log('casc', e); } return r; }; }
+
+// ====================================================================
+//  v176 — APPRENDRE POUR RETENIR
+//  1. Faux dans la cascade : votre enchère, ce qu'elle veut dire, pourquoi elle ne va pas, la bonne, pourquoi.
+//  2. « À retenir » : la règle de la marche, à chaque fin d'exercice.
+//  3. Les révisions espacées : chaque marche acquise revient après 1, 3, 7, 21 puis 60 jours, mélangée aux autres.
+//  4. Le plan A-B-C avant de jouer (Audrey Grant) : Analyser (compter), Balayer les techniques, Combiner l'ordre.
+// ====================================================================
+const CDAY = () => Math.floor(Date.now() / 864e5), CREV_GAP = [1, 3, 7, 21, 60];
+function cascRule(id) { const l = CASC_BID.flatMap(P => P.L).find(x => x.id === id); return l ? l.rule : null; }
+function genMean(b, calls) {
+  try { if (typeof m2Mean === 'function') { const m = m2Mean(calls || [], b); if (m && !/ce n'est pas l'enchère du système dans cette séquence/.test(m)) return m; } } catch (e) { }
+  if (b === 'P') return 'Passe : vous n\'avez rien à ajouter, ou pas assez de points pour parler. C\'est souvent laisser le partenaire dans un contrat qui n\'est pas le meilleur';
+  if (b === 'X') return 'Contre : selon la séquence, d\'appel (demander au partenaire de choisir une couleur) ou punitif (« ils vont chuter »)';
+  if (b === 'XX') return 'Surcontre : une main forte, qui pense gagner le contrat contré';
+  const lv = +b[0], s = b[1];
+  if (s === 'N') return lv === 1 ? '1SA : une main régulière d\'une force précise' : lv === 3 ? '3SA : la manche à Sans-Atout, un contrat de conclusion' : lv >= 6 ? `${lv}SA : un chelem à Sans-Atout` : lv === 4 ? '4SA : selon le contexte, le Blackwood (avec un fit) ou une proposition de chelem (sans fit)' : `${lv}SA : une description à Sans-Atout`;
+  const maj = s === 'H' || s === 'S';
+  if (lv >= 6) return `${BC(b)} : un chelem, qui demande environ 33 points et pas deux clés qui manquent`;
+  if ((maj && lv === 4) || (!maj && lv === 5)) return `${BC(b)} : la manche, une conclusion (le partenaire passe)`;
+  return `${BC(b)} : ${lv === 1 ? 'une couleur de 4 ou 5 cartes au palier le plus bas' : 'une couleur, à un palier qui annonce plus de force ou plus de longueur'}`;
+}
+// ---------- 1 · la correction en 4 temps (mode cascade et révision) ----------
+{ const _ob = onBid; onBid = function (b) {
+  const casc = X && (X.mode === 'casc' || X.mode === 'cascrev') && X.phase === 'bid'; const st = casc ? X.ex.steps[X.si] : null; const wrong = casc && !st.accept.includes(b); const n0 = casc ? X.fbs.length : 0; const calls = casc ? (X.calls || []).slice() : null;
+  const r = _ob.apply(this, arguments);
+  try { if (wrong) {
+    const k = X.fbs.findIndex((f, i) => i >= n0 && /class="fb bad"/.test(f)); if (k < 0) return r;
+    let hint = st.diag ? st.diag(b) : null, mean = null, why = null;
+    if (hint) { const m = hint.match(/<b>Ce que veut dire votre enchère :<\/b>\s*([\s\S]*?)\.\s*C'est pour cela qu'elle ne convient pas à cette main\./); if (m) { mean = m[1]; hint = hint.replace(m[0], '').replace(/^(<br>)+|(<br>)+$/g, '').trim(); } why = hint || null; }
+    if (!mean) mean = genMean(b, calls);
+    if (!why) { const h = X.ex.hand, pts = X.ex.hcp != null ? X.ex.hcp : (h ? hcp(h) : null), shape = h ? SU.map(x => h[x].length) : null, lg = h ? SU.reduce((a, x) => h[x].length > h[a].length ? x : a, 'S') : null;
+      why = `${pts != null ? `Votre main a <b>${pts} H</b>${shape ? `, avec ${SU.map((x, i) => `${shape[i]} ${SYM[x]}`).join(' · ')}${h[lg].length >= 5 ? ` (une couleur longue à ${SYM[lg]})` : ''}` : ''} : ce n'est pas ce que décrit ${BC(b)}. ` : ''}Votre partenaire croirait que vous avez la main ci-dessus (« ce qu'elle veut dire ») et prendrait ses décisions sur une fausse image : c'est ainsi qu'on rate une manche, ou qu'on joue un contrat trop haut.`; }
+    const rest = X.ex.steps.slice(X.si + 1), rule = cascRule(X.c.id);
+    X.fbs[k] = `<div class="fb bad cfb"><h3>✗ Votre enchère : ${BC(b)}</h3>
+      <div class="cfb-r"><span class="cfb-l">🔎 Ce qu'elle veut dire</span><p>${mean}.</p></div>
+      <div class="cfb-r"><span class="cfb-l">⚠️ Pourquoi ce n'est pas la bonne ici</span><p>${why}</p></div>
+      <div class="cfb-r cfb-ok"><span class="cfb-l">✅ La bonne enchère : ${st.accept.map(BC).join(' ou ')}</span>${fullWhy(st)}</div>
+      ${rest.length ? `<p><b>La suite attendue :</b> ${rest.map(x => BC(x.bid)).join(', puis ')}.</p>${rest.map((x, j) => qHtml(X.si + 1 + j, 'Puis, après la réponse de Nord : les questions suivantes')).join('')}` : ''}
+      ${rule ? `<div class="cfb-m"><span class="cfb-l">🧠 À retenir</span><p>${rule}</p></div>` : ''}</div>`;
+    render(); } } catch (e) { console.log('cfb', e); }
+  return r; }; }
+// ---------- 2 · « À retenir » aussi quand c'est juste ; 3 · les révisions ----------
+function crev() { ST.crev = ST.crev || {}; return ST.crev; }
+function crevDue() { const d = CDAY(), R = crev(); return cascBidList().filter(l => cascOk('bid', l.id) && R[l.id] && R[l.id].due <= d); }
+function crevSeed() { const R = crev(); cascBidList().forEach(l => { if (cascOk('bid', l.id) && !R[l.id]) R[l.id] = { lv: 0, due: CDAY() + 1 }; }); }
+let CREVQ = null;
+function crevStart() { const due = shuffle(crevDue()); if (!due.length) return cascPage('bid'); CREVQ = { q: due.map(l => l.id), i: 0, ok: 0 }; crevNext(); }
+function crevNext() { if (!CREVQ || CREVQ.i >= CREVQ.q.length) return crevEnd(); const c = CASES.find(x => x.id === CREVQ.q[CREVQ.i]); startCase(c, 'cascrev'); }
+function crevEnd() { const n = CREVQ ? CREVQ.q.length : 0, ok = CREVQ ? CREVQ.ok : 0; CREVQ = null; X = null;
+  show(`${topBar('🔁 Les révisions du jour', 'Le résultat', 'menu')}<div class="wrap casc"><div class="card chero"><div class="chero-t"><b>${ok} / ${n} réussies</b><span>${ok === n ? '🎉' : '💪'}</span></div><p>${ok === n ? 'Tout est encore bien en mémoire : ces marches reviendront plus tard, de plus en plus espacées.' : 'Les marches ratées reviennent demain : c\'est en se trompant, puis en recommençant, qu\'on retient le mieux.'}</p><div class="acts"><button class="btn" data-casc="bid">🪜 La cascade</button></div></div></div>`); }
+{ const _r = render; render = function () { const r = _r.apply(this, arguments); try {
+  if (X && (X.mode === 'casc' || X.mode === 'cascrev') && X.phase === 'done' && !X._post) { X._post = 1;
+    const ok = !X.results.includes('fail'), rule = cascRule(X.c.id), R = crev();
+    if (X.mode === 'cascrev') { const e = R[X.c.id] || (R[X.c.id] = { lv: 0, due: 0 }); if (ok) { e.lv = Math.min(e.lv + 1, CREV_GAP.length - 1); e.due = CDAY() + CREV_GAP[e.lv]; CREVQ && CREVQ.ok++; } else { e.lv = 0; e.due = CDAY() + 1; } save(); }
+    else if (cs(X.c.id).acq && !R[X.c.id]) { R[X.c.id] = { lv: 0, due: CDAY() + 1 }; save(); }
+    if (ok && rule) X.fbs.push(`<div class="cfb-m solo"><span class="cfb-l">🧠 À retenir</span><p>${rule}</p></div>`);
+    if (X.mode === 'cascrev') X.fbs.push(`<p class="small" style="margin:2px 4px 10px"><b>${ok ? `Révision réussie : cette marche reviendra dans ${CREV_GAP[(R[X.c.id] || {}).lv || 0]} jour${CREV_GAP[(R[X.c.id] || {}).lv || 0] > 1 ? 's' : ''}.` : 'À revoir : cette marche revient demain.'}</b></p>`);
+    _r.apply(this, arguments); }
+  if (X && X.mode === 'cascrev' && X.phase !== 'done') { const t = app.querySelector('.top'); if (t && !t.querySelector('.cbadge')) t.insertAdjacentHTML('beforeend', `<span class="cbadge">🔁 Révision ${CREVQ ? CREVQ.i + 1 : 1} / ${CREVQ ? CREVQ.q.length : 1}</span>`); }
+  if (X && X.mode === 'cascrev' && X.phase === 'done') { const a = [...app.querySelectorAll('.acts')].find(x => x.querySelector('[data-act="next"],[data-cnext]')); if (a) a.innerHTML = `<button class="btn" data-crevn="1">${CREVQ && CREVQ.i + 1 < CREVQ.q.length ? `Révision suivante (${CREVQ.i + 2} / ${CREVQ.q.length}) ›` : 'Fin des révisions ›'}</button>`; const h = app.querySelector('.top .cbadge'); if (h) h.textContent = `🔁 Révision ${CREVQ ? CREVQ.i + 1 : 1} / ${CREVQ ? CREVQ.q.length : 1}`; else { const t = app.querySelector('.top'); if (t) t.insertAdjacentHTML('beforeend', `<span class="cbadge">🔁 Révision ${CREVQ ? CREVQ.i + 1 : 1} / ${CREVQ ? CREVQ.q.length : 1}</span>`); } }
+} catch (e) { console.log('crev', e); } return r; }; }
+document.addEventListener('click', e => { const t = e.target.closest('[data-crev],[data-crevn]'); if (!t) return; e.stopPropagation(); e.preventDefault(); if (t.dataset.crev) return crevStart(); if (CREVQ) { CREVQ.i++; crevNext(); } else cascPage('bid'); }, true);
+document.addEventListener('click', e => { if (!X || X.mode !== 'cascrev') return; const t = e.target.closest('.top [data-nav],[data-act="home"]'); if (!t) return; e.stopPropagation(); e.preventDefault(); CREVQ = null; cascPage('bid'); }, true);
+// la page de la cascade : la carte des révisions et l'encart « Comment on apprend ici »
+{ const _cp = cascPage; cascPage = function (tab, openId) { crevSeed(); const r = _cp.apply(this, arguments); try {
+  const T = CASC_TAB, w = app.querySelector('.wrap.casc'), hero = w && w.querySelector('.chero'); if (!hero) return r;
+  if (T === 'bid') { const due = crevDue().length, all = Object.keys(crev()).length;
+    hero.insertAdjacentHTML('afterend', `<div class="card crevc${due ? ' on' : ''}"><div class="crev-h"><span>🔁</span><div><b>Les révisions espacées</b><small>${due ? `<b>${due}</b> marche${due > 1 ? 's' : ''} à revoir aujourd'hui, mélangée${due > 1 ? 's' : ''} : une main chacune.` : all ? `Rien aujourd'hui. Vos ${all} marche${all > 1 ? 's' : ''} acquise${all > 1 ? 's' : ''} reviendront après 1, 3, 7, 21 puis 60 jours.` : 'Chaque marche acquise reviendra après 1, 3, 7, 21 puis 60 jours : c\'est ce qui fait passer une règle dans la mémoire à long terme.'}</small></div></div>${due ? '<div class="acts"><button class="btn" data-crev="1">▶ Mes révisions du jour</button></div>' : ''}</div>`); }
+  hero.insertAdjacentHTML('beforeend', `<details class="chow"><summary>🎓 Comment on apprend ici, et pourquoi ça marche</summary><ul>
+    <li><b>Une seule notion par marche</b>, de la plus simple à la plus complexe : chaque marche prépare la suivante.</li>
+    <li><b>On cherche d'abord, on lit ensuite</b> : répondre avant de voir la solution grave la règle bien mieux que la relire (l'« effet de test »).</li>
+    <li><b>L'erreur est expliquée en 4 temps</b> : ce que veut dire votre réponse, pourquoi elle ne va pas, la bonne, et pourquoi.</li>
+    <li><b>On recommence avec une autre donne</b> du même genre : on apprend la règle, pas la donne.</li>
+    <li><b>Les révisions espacées et mélangées</b> : revoir juste avant d'oublier, en alternant les sujets, comme à la table.</li>
+    ${T === 'play' ? '<li><b>Compter avant de jouer</b> : le plan A-B-C d\'Audrey Grant, qui rejoint nos A-L-C et C-D-I. On joue d\'abord, et l\'on comprend ensuite les enchères qui mènent au contrat.</li>' : '<li><b>La règle en une phrase</b> (« À retenir ») revient à chaque exercice : courte, toujours la même, elle devient un réflexe.</li>'}
+  </ul></details>`);
+} catch (e) { console.log('casc2', e); } return r; }; }
+// ---------- 4 · le plan A-B-C avant de jouer ----------
+{ const _pi = pbIntro; pbIntro = function () { const r = _pi.apply(this, arguments); try {
+  const { th, H } = PB; if (th.mode !== 'decl') return r;
+  const sa = PB.st === 'N', per = SU.map(s => sa ? sureTricks(H.S[s], H.N[s]) : losersIn(H.S[s], H.N[s])), tot = per.reduce((a, b) => a + b, 0);
+  const opts = shuffle([...new Set([tot, tot - 1, tot + 1, tot + 2].filter(v => v >= 0))]).slice(0, 4); if (!opts.includes(tot)) opts[0] = tot;
+  PB.abc = { tot, per, sa, done: false };
+  const tip = [...app.querySelectorAll('.wrap .card')].find(c => /Le conseil du/i.test(c.textContent)); if (tip) tip.style.display = 'none';
+  const go = app.querySelector('[data-pbgo]'); if (go) { go.disabled = true; go.title = 'Répondez d\'abord à la question A'; }
+  const anchor = app.querySelector('.wrap .acts');
+  anchor.insertAdjacentHTML('beforebegin', `<div class="card abc"><div class="abc-h"><span>🅰️🅱️©️</span><b>Le plan A-B-C, avant la première carte</b></div>
+    <p class="small"><b>A</b>nalyser : compter. <b>B</b>alayer les techniques (affranchir, longueur, impasse, coupe, défausse). <b>C</b>ombiner : dans quel ordre.</p>
+    <p class="q"><b>A · ${sa ? 'Combien de gagnantes (levées sûres) avez-vous ?' : 'Combien de perdantes, depuis votre main (la main longue en atout) ?'}</b></p>
+    <div class="t2o abc-o">${opts.sort((a, b) => a - b).map(v => `<button class="btn sec" data-abc="${v}">${v}</button>`).join('')}</div><div id="abcfb"></div></div>`);
+} catch (e) { console.log('abc', e); } return r; }; }
+document.addEventListener('click', e => { const t = e.target.closest('[data-abc]'); if (!t || !PB || !PB.abc || PB.abc.done) return; e.stopPropagation();
+  const A = PB.abc, v = +t.dataset.abc, H = PB.H, ok = v === A.tot; A.done = true;
+  app.querySelectorAll('[data-abc]').forEach(b => { b.disabled = true; if (+b.dataset.abc === A.tot) b.classList.add('good'); else if (b === t) b.classList.add('badb'); });
+  const det = SU.map((s, i) => `${SYM[s]} ${hold_(H.S[s])} / ${hold_(H.N[s])} : <b>${A.per[i]}</b>`).join(' · ');
+  const need = PB.th.level + 6, gap = A.sa ? need - A.tot : A.tot - (13 - need);
+  const box = document.getElementById('abcfb');
+  box.innerHTML = colorize(`<div class="cfb ${ok ? 'fb ok' : 'fb bad'}"><h3>${ok ? '✓ Bien compté' : `✗ Vous avez dit ${v} : il y en a ${A.tot}`}</h3>
+    ${ok ? '' : `<div class="cfb-r"><span class="cfb-l">⚠️ Pourquoi</span><p>${A.sa ? (v > A.tot ? 'Vous avez sans doute compté une carte qui n\'est pas maîtresse (après un trou), ou plus de levées que la main la plus longue n\'a de cartes.' : 'Vous avez sans doute oublié une levée maîtresse.') : (v > A.tot ? 'Vous avez sans doute compté une perdante couverte par un honneur du mort.' : 'Vous avez sans doute oublié une perdante : on regarde les 3 premières cartes de chaque couleur.')}</p></div>`}
+    <div class="cfb-r cfb-ok"><span class="cfb-l">✅ Le compte, couleur par couleur</span><p>${det}. Total : <b>${A.tot}</b>.</p></div>
+    <div class="cfb-m"><span class="cfb-l">🧭 B et C : le plan</span><p>${A.sa ? (gap > 0 ? `Il manque <b>${gap}</b> levée${gap > 1 ? 's' : ''} pour ${need} : il faut en <b>développer</b>. ` : 'Vous avez votre compte : <b>encaissez</b>, sans prendre de risque. ') : (gap > 0 ? `<b>${gap}</b> perdante${gap > 1 ? 's' : ''} de trop : il faut en <b>supprimer</b>. ` : 'Pas de perdante en trop : <b>purgez</b>, puis encaissez. ')}${PB.th.hint}</p></div></div>`);
+  if (typeof tuTree === 'function') tuTree(box);
+  const go = app.querySelector('[data-pbgo]'); if (go) { go.disabled = false; go.title = ''; }
+  const tip = [...app.querySelectorAll('.wrap .card')].find(c => /Le conseil du/i.test(c.textContent)); if (tip) tip.style.display = '';
+}, true);
 
 // ====================================================================
 //  v162 — LES DEUX FICHES, REFAITES POUR ÊTRE LUES
