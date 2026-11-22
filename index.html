@@ -2388,8 +2388,8 @@ const C_TROIS = {
     let bid, key, why, traps, row;
     if (n(h, y) >= 4) {
       const d = dist(h, y, null); key = 'Bfit'; bid = (d.p <= 14 ? '2' : d.p <= 17 ? '3' : '4') + y; row = d.p <= 14 ? 0 : d.p <= 17 ? 1 : 2;
-      why = `Nord promet 4 ${NOMS[y]}, j'en ai ${n(h, y)} : fit. Je recompte : ${d.txt}. Zone ${zoneOf(d.p)} → ${B(bid)}. Je renseigne, Nord décidera.`;
-      traps = ['3 cartes suffisent pour soutenir le répondant.', 'Je calcule le total : Nord peut avoir 5 points.', bid[0] === '2' ? 'Je compte seulement mes H.' : 'Je saute pour obliger Nord à reparler.'];
+      why = `Nord promet 4 ${NOMS[y]}, j'en ai ${n(h, y)} : fit. Je recompte : ${d.txt}. Zone ${zoneOf(d.p)} → ${B(bid)}.` + (bid[0] === '4' ? ` Je suis <b>trop fort pour ${B('3' + y)}</b> (15 à 17 seulement)${regular(h) ? ', et le fit passe avant le Sans-Atout' : ` et ma main <b>n'est pas régulière</b> : 2SA (18-19 régulier) est exclu`}. ${B(bid)} dit : <b>plus de 17 points et le fit</b>. Avec les 6 points minimum de Nord, la manche est jouable : je la dis tout de suite.` : bid[0] === '3' ? ` Je saute d'un palier : 15 à 17 points et le fit. Nord dira la manche s'il n'est pas minimum.` : ' Je renseigne au plus bas, Nord décidera.');
+      traps = bid[0] === '4' ? [`${B('3' + y)} : je saute pour montrer ma force.`, '2SA : 18-19 H, je suis fort.', `${B('2' + y)} : Nord décidera.`] : ['3 cartes suffisent pour soutenir le répondant.', 'Je calcule le total : Nord peut avoir 5 points.', bid[0] === '2' ? 'Je compte seulement mes H.' : 'Je saute pour obliger Nord à reparler.'];
     } else if (n(h, x) >= 6) {
       if (v >= 18 && !isMaj(x)) return null;
       key = 'Brep'; bid = (v <= 14 ? '2' : v <= 17 ? '3' : '4') + x; row = v <= 14 ? 0 : v <= 17 ? 1 : 2;
@@ -2958,7 +2958,7 @@ const QUESTIONS = {
       a(`Combien de ${NOMS[M]} ai-je ?`, `${n(h, M)} → ${n(h, M) >= 3 || K === 'i' ? 'fit' : 'pas de fit'}.`);
       a('Donc ?', `→ ${BC(b)}.`, true); return a.list;
     }
-    const R = { a: () => [dist(h, c.M, 3), 15, 17], b: () => [dist(h, c.y, null), 12, 14], c: () => [dist(h, c.y, null), 15, 17], d: () => [{ p: v, txt: `${v} H` }, 12, 14], e: () => [{ p: v, txt: `${v} H` }, 8, 9], f: () => [dist(h, c.M, null), 11, 12] }[K]();
+        const R = { a: () => [dist(h, c.M, 3), 15, 17], b: () => [dist(h, c.y, null), 12, 14], c: () => [dist(h, c.y, null), 15, 17], d: () => [{ p: v, txt: `${v} H` }, 12, 14], e: () => [{ p: v, txt: `${v} H` }, 8, 9], f: () => [dist(h, c.M, null), 11, 12] }[K]();
     a('Mes points ?', R[0].txt + '.');
     a('Total, avec son minimum ET son maximum : quel feu ?', `${feu(R[0].p, R[1], R[2]).txt} → ${BC(b)}.`, true); return a.list;
   },
@@ -6643,7 +6643,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v180';
+const APP_V = 'v181';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -10956,6 +10956,8 @@ const C_SLIDES = {
     { deal: { S: 'K4.AQJ974.K82.93' }, up: 'S', auction: { d: 'S', b: ['1H', 'P', '1S', 'P'] }, pts: 'S', tally: { S: 13 }, say: 'Autre main : Sud ouvre 1♥, Nord dit 1♠. Pas de fit pique, mais <b>six cœurs</b>.' },
     { q: 'Que dit Sud, avec 13 points ?', a: '<b>2♥</b> : je répète ma couleur 6e, au plus bas.' },
     { deal: { S: 'K82.Q4.AJ5.KJ863' }, up: 'S', auction: { d: 'S', b: ['1C', 'P', '1H', 'P'] }, pts: 'S', tally: { S: 14 }, q: '1♣ – 1♥. Main régulière, 14 points, pas 4 cœurs. Que dit Sud ?', a: '<b>1SA</b> : régulier, minimum.' },
+    { deal: { S: 'AKQT.7.KQJ8.QJ96' }, up: 'S', auction: { d: 'S', b: ['1D', 'P', '1S', 'P'] }, pts: 'S', tally: { S: 18 }, say: '1♦ – 1♠. Sud a 18 points, 4 piques et un singleton cœur.' },
+    { q: 'Fit pique. Sud dit-il 3♠, 2SA ou 4♠ ?', a: '<b>4♠</b> : 3♠ ne montrerait que 15 à 17, et 2SA demande une main <b>régulière</b>. 4♠ dit : plus de 17 points et le fit.' },
     { hide: 1, big: `<div class="tsum"><h3>La zone décide de la hauteur</h3>${TTAB([['12 à 14', 'au plus bas'], ['15 à 17', 'je saute d\'un palier'], ['18 et plus', 'la manche (ou 2SA régulier)']])}</div>`, say: 'Minimum : au plus bas. Plus fort : on saute.' },
   ] },
   c_marque: { ic: '🧾', t: 'La manche et la marque', steps: [
@@ -11146,6 +11148,7 @@ ${KEEP('Moins de 6 : passe, sauf une majeure 4e au palier de 1 (dès 5). Fit d\'
 ${TBL(['Zone', 'Je fais'], ZONE_ROWS)}
 <div class="ex">${cH('KJ73.A5.AQ842.94', 'Votre main')}1♦ – 1♠ – ? Fit pique (4 cartes), 14 points, zone minimum : <b>2♠</b>. Avec 17 points : <b>3♠</b>.</div>
 <div class="ex">${cH('K82.Q4.AJ5.KJ863', 'Votre main')}1♣ – 1♥ – ? Pas 4 cœurs, main régulière, 14 points : <b>1SA</b>.</div>
+<div class="ex">${cH('AKQT.7.KQJ8.QJ96', 'Votre main')}1♦ – 1♠ – ? Fit pique, 18 H + singleton = 20 points. Trop fort pour 3♠ (15-17), main pas régulière pour 2SA : <b>4♠</b>. Cette enchère dit : plus de 17 points et le fit.</div>
 <h3>Ensuite, le capitaine décide</h3>
 <p>Le répondant connaît maintenant la zone de l'ouvreur. Il additionne et décide : passer, proposer, ou conclure la manche.</p>
 ${KEEP('Fit d\'abord, forme ensuite, zone enfin. Minimum : au plus bas. 15-17 : je saute. 18 et plus : la manche.')}`,
@@ -11936,7 +11939,8 @@ const C_HOME = {
     ['Nord ouvre 1♥. Que répondez-vous ?', 'K94.82.Q752.J964', ['1SA', '2♥', 'Passe'], 0, 'Pas de fit (2 cœurs), 6 points : 1SA.']],
   c7: [['1♣ – 1♠ – ? Que dites-vous ?', 'KQ74.A5.84.AJ962', ['2♠', '3♠', '1SA', '2♣'], 0, 'Fit (4 piques) et 14 points : 2♠.'],
     ['1♥ – 1♠ – ? Que dites-vous ?', 'A5.AKJ974.K82.93', ['2♥', '3♥', '1SA'], 1, 'Six cœurs et 15 points : je saute à 3♥.'],
-    ['1♦ – 1♥ – ? Que dites-vous ?', 'K82.Q4.AJ853.K63', ['1SA', '2♦', '2♥', '2SA'], 0, 'Régulière, 13 points, 2 cœurs : 1SA.', 2]],
+    ['1♦ – 1♥ – ? Que dites-vous ?', 'K82.Q4.AJ853.K63', ['1SA', '2♦', '2♥', '2SA'], 0, 'Régulière, 13 points, 2 cœurs : 1SA.', 2],
+    ['1♦ – 1♠ – ? Que dites-vous ?', 'AKQT.7.KQJ8.QJ96', ['3♠', '2SA', '4♠', '2♠'], 2, 'Fit pique, 18 H + singleton : trop fort pour 3♠ (15-17), main pas régulière pour 2SA : 4♠, plus de 17 points et le fit.', 2]],
   c8: [['Non vulnérable : 3SA avec une levée de mieux.', null, ['430', '400', '460'], 0, '40 + 30 + 30 + 30 = 130, + 300.'],
     ['Non vulnérable : 2♦ juste fait.', null, ['90', '40', '140'], 0, '2 × 20 = 40, + 50 de partielle.'],
     ['Vulnérable : 3SA chute de 2 levées.', null, ['Les adversaires marquent 200', 'Les adversaires marquent 100', 'On marque 200'], 0, '2 × 100.'],
@@ -13812,6 +13816,7 @@ c7: `
 <h3>Question 3 · Ma main est-elle petite, moyenne ou grande ?</h3>
 ${KTB(['Mes points', 'Ma main est…', 'Je dis'], [['12 à 14', 'petite', 'le plus bas possible'], ['15 à 17', 'moyenne', 'je saute un palier'], ['18 et plus', 'grande', 'la manche !']])}
 <div class="ex">${cH('KJ73.A5.AQ842.94', 'Ta main')}Tu as ouvert 1♦, ton partenaire dit 1♠. Tu as 4 piques : le fit ! 14 points, petite main : <b>2♠</b>. Avec 17 points, tu sauterais : 3♠.</div>
+<div class="ex">${cH('AKQT.7.KQJ8.QJ96', 'Ta main')}Même enchères, mais tu as 18 points et un seul cœur : c'est une grande main ! Trop forte pour 3♠, pas assez ronde pour 2SA : tu dis directement <b>4♠</b>, la manche.</div>
 <h3>Le capitaine décide</h3>
 <p>Le répondant connaît maintenant la main de l'ouvreur. Il devient le <b>capitaine</b> : il additionne les points de l'équipe. Avec <b>25 points à deux</b>, on joue la manche !</p>
 ${KMOTS([['Redemande', 'la deuxième enchère de l\'ouvreur'], ['Sauter', 'dire une enchère un palier plus haut que nécessaire, pour montrer de la force'], ['Capitaine', 'celui qui décide du contrat final, en additionnant les points'], ['25 points', 'ce qu\'il faut à deux pour la manche']])}
@@ -15361,6 +15366,28 @@ document.addEventListener('click', e => {
 } catch (e) { console.log('casc', e); } return r; }; }
 
 // ====================================================================
+//  v181 — L'OUVREUR A LE FIT : 2, 3 OU 4 (1♦ – 1♠ – 4♠ avec 18 et plus)
+//  Une marche dédiée dans la cascade et dans S'entraîner.
+// ====================================================================
+const C_FITOUV = {
+  id: 'fitouv', track: 'bid', title: 'L\'ouvreur a le fit : 2, 3 ou 4 ?', short: 'Le fit de l\'ouvreur',
+  memo: `<p>J'ai ouvert, mon partenaire répond une majeure (4 cartes) et j'en ai 4 aussi : le <b>fit</b>. Je recompte avec mes couleurs courtes, puis je dose :</p>${memoTable(['Mes points', 'Je dis'], [['12 à 14', '2 de sa majeure'], ['15 à 17', '3 de sa majeure (je saute)'], ['18 et plus', '4 de sa majeure : la manche']])}<p>Exemple : 1♦ – 1♠ – ? avec ♠ A R D 10 · ♥ 7 · ♦ R D V 8 · ♣ D V 9 6 (18 H). Trop fort pour 3♠, main pas régulière pour 2SA : <b>4♠</b> — plus de 17 points et le fit.</p>`,
+  scen: [
+    { key: 'Bfit', w: 1, ctx: () => { const x = pick(['C', 'D', 'H']); return { kind: 'B', x, y: x === 'H' ? 'S' : pick(['H', 'S']) }; }, hand: c => ({ shape: { [c.y]: [4, 4], [c.x]: c.x === 'H' ? [5, 5] : [4, 5] }, hcp: [11, 14] }) },
+    { key: 'Bfit', w: 1, ctx: () => { const x = pick(['C', 'D', 'H']); return { kind: 'B', x, y: x === 'H' ? 'S' : pick(['H', 'S']) }; }, hand: c => ({ shape: { [c.y]: [4, 4], [c.x]: c.x === 'H' ? [5, 5] : [4, 5] }, hcp: [14, 17] }) },
+    { key: 'Bfit', w: 1.4, ctx: () => { const x = pick(['C', 'D']), y = pick(['H', 'S']), z = pick(['C', 'D', 'H', 'S'].filter(s => s !== x && s !== y)); return { kind: 'B', x, y, z }; }, hand: c => ({ shape: { [c.y]: [4, 4], [c.x]: [4, 5], [c.z]: [0, 1] }, hcp: [16, 20] }) },
+  ],
+  solve(h, c) { const r = C_TROIS.solve.call(C_TROIS, h, c); return r && r.key === 'Bfit' ? r : null; },
+};
+SHORTS.fitouv = SHORTS.troisieme; QUESTIONS.fitouv = QUESTIONS.troisieme; COUNTS.fitouv = COUNTS.troisieme;
+{ const i = CASES.findIndex(c => c.id === 'troisieme'); CASES.splice(i + 1, 0, C_FITOUV); C_FITOUV.num = C_TROIS.num + 'b'; }
+// la marche de la cascade, juste après « L'ouvreur au 3e tour »
+{ const G = CASC_BID.find(P => P.L.some(l => l.id === 'troisieme')); const i = G.L.findIndex(l => l.id === 'troisieme');
+  G.L.splice(i + 1, 0, { id: 'fitouv', ic: '💪', t: 'L\'ouvreur a le fit : 2, 3 ou 4', learn: 'Doser son soutien selon sa force.', rule: 'Le répondant a dit une majeure et j\'en ai <b>4</b> : fit. Je recompte (couleurs courtes), puis : 12-14 → <b>2</b>, 15-17 → <b>3</b>, <b>18 et plus → 4</b>. Exemple : 1♦ – 1♠ – <b>4♠</b> avec 18 H et un singleton : trop fort pour 3♠, pas régulier pour 2SA.', les: 'c7' }); }
+// la batterie de mémorisation
+{ const L = M2_LV.find(l => l.n === 2); if (L && !L.bats.some(b => b.id === 'fitouv')) L.bats.splice(2, 0, { id: 'fitouv', ic: '💪', t: 'J\'ai le fit : 2, 3 ou 4 ?', d: 'Le partenaire a répondu une majeure, vous en avez 4 : dosez.', mk: () => makeExercise(C_FITOUV) }); }
+
+// ====================================================================
 //  v176 — APPRENDRE POUR RETENIR
 //  1. Faux dans la cascade : votre enchère, ce qu'elle veut dire, pourquoi elle ne va pas, la bonne, pourquoi.
 //  2. « À retenir » : la règle de la marche, à chaque fin d'exercice.
@@ -15723,7 +15750,7 @@ ${sec('Répondre à 1♣ ou 1♦', path([
     ['Main régulière ?', 'Sans-Atout', '6-10 → 1SA · 11-12 → 2SA · 13-18 → 3SA · 19-20 → 4SA · 21+ → 5SA.'],
     ['9 atouts dans sa mineure, main irrégulière ?', 'Je soutiens', '6-10 → 2 de sa mineure · 11-12 → 3.']]))}
 ${sec('La redemande de l\'ouvreur', path([
-    ['4 cartes dans la majeure du répondant ?', 'Je soutiens', ''],
+    ['4 cartes dans la majeure du répondant ?', 'Je soutiens', 'Je recompte (couleurs courtes) : 12-14 → <b>2</b> · 15-17 → <b>3</b> · <b>18 et plus → 4</b>. Ex. : ♠ A R D 10 · ♥ 7 · ♦ R D V 8 · ♣ D V 9 6, 1♦ – 1♠ – ? Trop fort pour 3♠, pas régulier pour 2SA → <b>4♠</b> : plus de 17 points et le fit.'],
     ['Quelle forme ?', 'Je décris', 'Régulière → Sans-Atout · 6 cartes → je les répète · une 2e couleur de 4 → je l\'annonce.'],
     ['Quelle zone ?', 'Je dose', '12-14 : au plus bas · 15-17 : je saute un palier · 18 et plus : la manche (2SA avec 18-19 régulier).']]))}
 ${box('Le capitaine', '<p>Après la redemande, le <b>répondant</b> connaît la main de l\'ouvreur : il additionne. 25 points à deux : la manche. Une couleur nouvelle du répondant est <b>forcing</b> : l\'ouvreur doit reparler.</p>', 'gold')}`);
