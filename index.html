@@ -1883,6 +1883,19 @@ body[data-th=ado] .card.th .lkick{color:#5e4526}
 table{color:inherit}
 .clvl .btn.sec{background:color-mix(in srgb,var(--cbg) 82%,#fff)!important;color:var(--cink)!important;border:1px solid var(--cgold)}
 body[data-th] .card.felt .pw .small,body[data-th] .card.felt .tmid,body[data-th] .card.felt .lab{color:#f6e7bb!important}
+
+/* v182 : page des points de distribution */
+.dx{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.55);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:max(16px,env(safe-area-inset-top)) 12px 24px}
+.dx-in{position:relative;max-width:680px;margin:0 auto;background:var(--paper);color:var(--ink);border-radius:18px;padding:20px 18px 18px;box-shadow:0 10px 40px rgba(0,0,0,.35);line-height:1.5}
+.dx-in h2{margin:0 34px 6px 0;font-size:21px;color:var(--feltx)}.dx-in h3{margin:16px 0 4px;font-size:16px;color:var(--feltx)}
+.dx-lead{background:var(--soft);border-radius:10px;padding:8px 10px}
+.dx-in ul,.dx-in ol{padding-left:20px;margin:6px 0}.dx-in li{margin:3px 0}
+.dx-ex{border-left:4px solid var(--gold);background:color-mix(in srgb,var(--gold) 10%,transparent);border-radius:8px;padding:8px 10px;margin:14px 0}
+.dx-x{position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--soft);color:var(--ink);font-size:16px;cursor:pointer}
+.distlink{margin-top:8px}
+.card.distcard{display:flex;gap:12px;align-items:center;width:100%;text-align:left;cursor:pointer;font:inherit;color:var(--ink)}
+.distcard .dci{font-size:28px}.distcard small{display:block;color:var(--muted);margin-top:2px}
+body.tv .dx-in{max-width:980px;font-size:1.25em}
 </style>
 </head>
 <body>
@@ -6643,7 +6656,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v181';
+const APP_V = 'v182';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -15388,6 +15401,55 @@ SHORTS.fitouv = SHORTS.troisieme; QUESTIONS.fitouv = QUESTIONS.troisieme; COUNTS
 { const L = M2_LV.find(l => l.n === 2); if (L && !L.bats.some(b => b.id === 'fitouv')) L.bats.splice(2, 0, { id: 'fitouv', ic: '💪', t: 'J\'ai le fit : 2, 3 ou 4 ?', d: 'Le partenaire a répondu une majeure, vous en avez 4 : dosez.', mk: () => makeExercise(C_FITOUV) }); }
 
 // ====================================================================
+//  v182 — LES POINTS DE DISTRIBUTION : QUAND, COMMENT, POURQUOI
+//  Une page qui explique la logique, des questions plus claires dans « Compter ses points »,
+//  et un lien « Pourquoi ce compte ? » partout où une explication parle de distribution.
+// ====================================================================
+QUESTIONS.compter = ex => {
+  const st = ex.steps[0], h = ex.hand, K = ex.key, a = QL(), M = st.trump || (ex.ctx && ex.ctx.M);
+  const shorts = st.trump ? SU.filter(s => s !== st.trump && n(h, s) <= 2).map(s => `${['chicane', 'singleton', 'doubleton'][n(h, s)]} ${SYM[s]} +${3 - n(h, s)}`) : [];
+  a('Y a-t-il un fit (8 cartes à deux dans la même couleur) ?', st.trump ? `Oui, à ${NOMS[st.trump]}.` : `Non → je ne compte que mes points d'honneur. Sans atouts pour couper, une couleur courte est un trou par où l'adversaire fera ses levées, pas une force.`);
+  if (st.trump) {
+    a('Mes couleurs courtes, en dehors de l\'atout ?', shorts.length ? `${shorts.join(', ')} : chacune promet des coupes, donc des levées en plus.` : 'Aucune : pas de points de couleurs courtes.');
+    const T = n(h, st.trump);
+    a('Ai-je des atouts en surplus (+1 par atout au-delà du 3e) ?',
+      K === 'rep' ? (T > 3 ? `Oui : je soutiens ses 5 cartes. 3 atouts suffisaient pour le fit ; j'en ai ${T}, soit ${T - 3} de plus que nécessaire → +${T - 3}.` : 'Non : j\'en ai 3, juste ce qu\'il faut pour le fit → rien à ajouter.')
+      : K === 'tx6' ? `Non : c'est moi qui ai la couleur longue (mon Texas). Mes ${T} atouts ne sont pas un renfort apporté au partenaire, ils SONT la couleur → je ne les compte pas une deuxième fois.`
+      : K === 'ouv' ? 'Non : c\'est ma propre couleur d\'ouverture, la base du fit, pas un renfort → pas de bonus.'
+      : 'Non : fit 4-4, chacun a exactement sa moitié → pas d\'atout en surplus.');
+  }
+  a('Le compte ?', `${st.short} points. <button class="btn sec small distlink" data-distx>📐 Pourquoi on compte ainsi ?</button>`, true);
+  return a.list;
+};
+const DISTX = () => `<div class="dx-in"><button class="dx-x" data-distclose aria-label="Fermer">✕</button>
+<h2>📐 Les points de distribution</h2><p class="dx-lead">Quand les compter, comment, et pourquoi. <b>Un point compté doit correspondre à une levée en plus.</b> Sinon, c'est un point imaginaire qui vous fera monter trop haut.</p>
+<h3>1. Les couleurs courtes : seulement avec un fit</h3>
+<p>Chicane <b>+3</b> · singleton <b>+2</b> · doubleton <b>+1</b>, en dehors de l'atout.</p>
+<p><b>Pourquoi ?</b> Une couleur courte rapporte des levées <b>en coupant</b>. Exemple : vous avez un singleton ♣, le partenaire a ♣ 8 6 3 ; dès le 2e tour de trèfle, vous coupez au lieu de perdre. Mais pour couper, il faut des atouts : sans fit (8 cartes à deux), le même singleton est un <b>trou</b> par où l'adversaire encaisse sa couleur.</p>
+<h3>2. Les atouts en surplus : seulement pour le soutien d'une majeure 5e</h3>
+<p>Le répondant qui soutient la majeure 5e de l'ouvreur ajoute <b>+1 par atout au-delà du 3e</b>.</p>
+<p><b>Pourquoi ?</b> Avec ses 5 cartes, l'ouvreur n'a besoin que de 3 atouts chez vous pour le fit. Le 4e (et le 5e) sont un <b>renfort</b> : un atout de plus que nécessaire, c'est une coupe de plus, et 9 atouts à deux ne laissent que 4 cartes aux adversaires.</p>
+<p><b>Et pourquoi pas les autres ?</b> Quand la couleur longue est <b>la vôtre</b> (Texas avec 6 cartes, ouvreur soutenu dans sa couleur), vos atouts ne sont pas un renfort apporté au partenaire : ils sont la couleur elle-même. Les compter une seconde fois serait compter deux fois les mêmes levées. Et dans un fit 4-4 (Stayman), chacun a exactement sa moitié : rien en surplus.</p>
+<h3>3. Quand surtout ne pas compter</h3>
+<ul><li><b>Pas de fit</b> : seulement les points d'honneur, même avec une chicane.</li>
+<li><b>Pour jouer à Sans-Atout</b> (ouvrir 1SA, répondre 2SA ou 3SA) : on ne coupe pas à Sans-Atout, donc les H seuls.</li>
+<li><b>Pour ouvrir</b> : on ouvre sur les points d'honneur (12 H). La distribution vient après, quand le fit est trouvé.</li>
+<li><b>Avant d'être sûr du fit</b> : un fit « probable » n'est pas un fit.</li>
+<li><b>Deux fois la même couleur</b> : un singleton vaut 2, pas « doubleton + singleton ».</li></ul>
+<h3>4. Les trois questions, dans l'ordre</h3>
+<ol><li>Y a-t-il un fit ? Non → les H seuls.</li><li>Mes couleurs courtes hors atout ? → chicane 3, singleton 2, doubleton 1.</li><li>Ai-je des atouts en surplus ? Oui seulement si je soutiens la majeure 5e du partenaire avec 4 atouts ou plus → +1 par atout au-delà du 3e.</li></ol>
+<div class="dx-ex"><b>Exemple</b> : 1SA – 2♦ (Texas) – 2♥ – ? Vous avez ♠ 7 · ♥ A D 10 8 6 4 · ♦ R 9 5 3 2 · ♣ D (11 H). Fit cœur : oui. Couleurs courtes : singleton ♠ +2, singleton ♣ +2. Atouts en surplus : non, c'est votre propre couleur. Total <b>15 points</b>, pas 17.</div>
+<button class="btn" data-distclose>J'ai compris</button></div>`;
+function distOpen() { let o = document.getElementById('distx'); if (o) o.remove(); o = document.createElement('div'); o.id = 'distx'; o.className = 'dx'; o.innerHTML = colorize(DISTX()); document.body.appendChild(o); if (typeof tuTree === 'function') tuTree(o); o.scrollTop = 0; }
+document.addEventListener('click', e => { if (e.target.closest('[data-distx]')) { e.preventDefault(); e.stopPropagation(); distOpen(); } else if (e.target.closest('[data-distclose]') || e.target.id === 'distx') { const o = document.getElementById('distx'); o && o.remove(); } }, true);
+// le lien « Pourquoi ce compte ? » dans le rappel de la règle et sous toute explication qui parle de distribution
+C_COMPTE.memo += `<p><button class="btn sec small distlink" data-distx>📐 Quand, comment et pourquoi compter la distribution</button></p>`;
+new MutationObserver(() => {
+  app.querySelectorAll('.fb:not([data-dxd])').forEach(f => { f.dataset.dxd = 1; if (!f.querySelector('[data-distx]') && /singleton|doubleton|chicane|au-delà du 3e/.test(f.textContent)) { const b = document.createElement('button'); b.className = 'btn sec small distlink'; b.dataset.distx = ''; b.textContent = '📐 Pourquoi ce compte ?'; f.appendChild(b); } });
+  const c = app.querySelector('.ccta'); if (c && !app.querySelector('.distcard')) { const d = document.createElement('button'); d.className = 'card distcard'; d.dataset.distx = ''; d.innerHTML = '<span class="dci">📐</span><span><b>Les points de distribution</b><small>Quand les compter, comment, et surtout pourquoi.</small></span>'; c.insertAdjacentElement('afterend', d); }
+}).observe(app, { childList: true, subtree: true });
+
+// ====================================================================
 //  v176 — APPRENDRE POUR RETENIR
 //  1. Faux dans la cascade : votre enchère, ce qu'elle veut dire, pourquoi elle ne va pas, la bonne, pourquoi.
 //  2. « À retenir » : la règle de la marche, à chaque fin d'exercice.
@@ -15727,7 +15789,7 @@ const SU_ = s => `<span class="${s === '♥' || s === '♦' ? 'r' : ''}">${s}</s
 sysPage = function () {
   const { T, path, box, sec, page } = FX, K = 'Les enchères';
   const p1 = page(1, 4, K, 'Compter sa main, puis ouvrir', `
-${sec('Compter ses points', `<div class="fcols"><div>${T(['Carte', 'Points'], [['As', '4'], ['Roi', '3'], ['Dame', '2'], ['Valet', '1']])}<p class="fs">Ce sont les points d'honneur (<b>H</b>). Il y en a 40 dans le jeu, 10 par joueur en moyenne.</p></div><div>${box('Les points de distribution', '<p>Seulement <b>quand on a trouvé un fit</b> (8 atouts à deux) :</p><p>chicane <b>+3</b> · singleton <b>+2</b> · doubleton <b>+1</b> · et le répondant ajoute <b>+1</b> par atout au-delà du 3e.</p>', 'blue')}</div></div>`)}
+${sec('Compter ses points', `<div class="fcols"><div>${T(['Carte', 'Points'], [['As', '4'], ['Roi', '3'], ['Dame', '2'], ['Valet', '1']])}<p class="fs">Ce sont les points d'honneur (<b>H</b>). Il y en a 40 dans le jeu, 10 par joueur en moyenne.</p></div><div>${box('Les points de distribution', '<p>Seulement <b>quand on a trouvé un fit</b> (8 atouts à deux) :</p><p>chicane <b>+3</b> · singleton <b>+2</b> · doubleton <b>+1</b> · et le répondant qui soutient une majeure 5e ajoute <b>+1</b> par atout au-delà du 3e.</p><p class="fs">Pourquoi ? Une couleur courte rapporte des levées en coupant : sans fit, c\'est un trou.</p>', 'blue')}</div></div>`)}
 ${sec('Les repères, à deux', `<div class="fscale"><div><b>25</b><span>la manche</span><small>3SA · 4♥ · 4♠</small></div><div><b>28-29</b><span>la manche en mineure</span><small>5♣ · 5♦</small></div><div><b>33</b><span>le petit chelem</span><small>12 levées</small></div><div><b>37</b><span>le grand chelem</span><small>13 levées</small></div></div><p class="fs">Le chiffre de l'enchère + 6 = les levées promises : 1♥ = 7 levées, 4♠ = 10 levées.</p>`)}
 ${sec('Ouvrir : le chemin, dans l\'ordre', `<p class="fs">On pose les questions de haut en bas, et l'on s'arrête au premier « oui ».</p>${path([
     ['Moins de 12 H ?', 'Passe', 'Sauf avec une longue couleur et 6 à 10 H : le barrage (page 4).'],
