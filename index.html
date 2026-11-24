@@ -1896,6 +1896,12 @@ body[data-th] .card.felt .pw .small,body[data-th] .card.felt .tmid,body[data-th]
 .card.distcard{display:flex;gap:12px;align-items:center;width:100%;text-align:left;cursor:pointer;font:inherit;color:var(--ink)}
 .distcard .dci{font-size:28px}.distcard small{display:block;color:var(--muted);margin-top:2px}
 body.tv .dx-in{max-width:980px;font-size:1.25em}
+
+/* v184 : réponses des batteries lisibles après correction (jour et nuit) */
+.t2o .btn:disabled{opacity:1}
+.t2o .btn.sec:disabled{opacity:.6}
+.t2o .btn.good:disabled{background:#2e8b57!important;color:#fff!important;border-color:#2e8b57!important}
+.t2o .btn.badb:disabled{background:#c0394b!important;color:#fff!important;border-color:#c0394b!important}
 </style>
 </head>
 <body>
@@ -6656,7 +6662,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v182';
+const APP_V = 'v184';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -11218,7 +11224,11 @@ ${DIA('♥ R D V 10', '♥ 5 3 2')}
 <p>Une levée affranchie ne vaut rien si l'on ne peut pas <b>aller la chercher</b>. Avant de jouer, on vérifie les <b>entrées</b> (les reprises) dans chaque main, et l'on <b>débloque</b> : on joue d'abord les honneurs de la <b>main courte</b>, pour finir dans la main longue.</p>
 ${DIA('♦ A R 2', '♦ D V 10 9 8')}
 <p>Nord est la main courte (3 cartes) : As, Roi, puis le 2 vers la Dame. <b>Cinq plis.</b> Commencer par la Dame bloquerait la couleur.</p>
-${KEEP('À Sans-Atout, je compte mes gagnantes. Il en manque ? A-L-C : Affranchir, la Longueur, et les Communications (main courte d\'abord, garder une reprise).')}`,
+<h3>4 · Qui est l'adversaire dangereux ?</h3>
+<p>Avant de rendre la main, demandez-vous qui peut vous faire chuter s'il la prend. Trois questions : <b>qui a la longue</b> (l'entame et les enchères le disent) ? <b>a-t-il une reprise</b> (des points annoncés) ? <b>qui prendra la main</b> dans mon plan ?</p>
+<p>Ensuite : laissez passer pour vider l'autre adversaire (le coup à blanc), et faites vos impasses <b>dans le bon sens</b> : si elles échouent, c'est l'adversaire inoffensif qui prend.</p>
+<div class="ex">Ouest entame le 5 de pique, ses piques seront vite affranchis. Il vous manque le Roi de carreau : ♦ 3 2 en main, ♦ A D V 10 9 au mort. L'impasse (petit vers la Dame) ne peut perdre que vers <b>Est</b> : elle est sans danger.</div>
+${KEEP('À Sans-Atout, je compte mes gagnantes. Il en manque ? A-L-C : Affranchir, la Longueur, et les Communications (main courte d\'abord, garder une reprise). Et avant de rendre la main : qui est l\'adversaire dangereux ?')}`,
     qs: [['Que faire en premier quand le mort s\'étale ?', ['Faire mon plan : compter mes plis', 'Jouer tout de suite mes As', 'Couper'], 0, 'Le plan d\'abord.'],
       ['À Sans-Atout, le principe de base est de compter :', ['Les gagnantes', 'Les perdantes', 'Les atouts'], 0, 'Les levées que l\'on peut encaisser tout de suite.'],
       ['Que veut dire ALC ?', ['Affranchir, Longueur, Communications', 'Atout, Levée, Coupe', 'As, Longue, Contre'], 0, 'L\'ordre du plan à Sans-Atout.'],
@@ -11670,6 +11680,12 @@ ${TBL(['Vous jouez…', 'Qui joue en dernier ?', 'Donc'], [['2e', 'votre partena
 <h3>Quand vous prenez la main</h3>
 <p>Rejouez la <b>couleur de votre partenaire</b>. Et avant chaque carte, <b>comptez</b> : combien de levées faut-il pour faire chuter ?</p>
 <div class="ex">Le mort joue la Dame de carreau. Vous avez ♦ R 6 3 : <b>couvrez</b> avec le Roi. Le déclarant doit mettre l'As : votre partenaire a peut-être le Valet ou le 10.</div>
+<h3>La parité du résidu : quelle carte rejouer ?</h3>
+<p>Vous avez pris la main et vous rejouez la couleur de votre partenaire. Regardez les cartes qui vous <b>restent</b> dans cette couleur (le « résidu ») et comptez-les :</p>
+<ul><li>il vous en reste <b>2</b> (nombre pair) → rejouez la <b>plus grosse</b> ;</li><li>il vous en reste <b>3</b> (nombre impair) → rejouez la <b>plus petite</b>.</li></ul>
+<p><b>Pourquoi ?</b> Votre partenaire voit votre carte et compte : il sait combien il vous en reste, donc combien en a le déclarant. Il sait alors si sa couleur est affranchie et s'il doit garder ses cartes maîtresses. Et la plus grosse de deux cartes <b>débloque</b> en même temps : elle ne restera pas seule en travers de sa couleur.</p>
+<div class="ex">Votre partenaire entame le 5 de pique. Vous avez ♠ A 10 3 : vous prenez de l'As, il vous reste 10 3 (deux cartes) → rejouez le <b>10</b>. Avec ♠ A 9 6 3, il vous reste 9 6 3 (trois cartes) → rejouez le <b>3</b>.</div>
+<p><b>Et dans l'autre sens</b> : quand c'est votre partenaire qui relance, lisez sa carte. Une grosse carte, puis une plus petite au tour suivant : il lui en restait 2. Une petite, puis une plus grosse : il lui en restait 3.</p>
 ${KEEP('Qui joue en dernier ? Mon partenaire : je joue petit. Le déclarant : je joue fort. Sauf honneur sur honneur, et sauf si le pli est déjà à nous.')}`,
     qs: [['Vous jouez 2e. Qui joue en dernier ?', ['Mon partenaire', 'Le déclarant', 'Moi'], 0, 'Il jouera 4e.'],
       ['En 3e position, on joue en général :', ['Fort', 'Petit', 'N\'importe quoi'], 0, 'Le déclarant joue après vous.'],
@@ -11819,7 +11835,10 @@ ${KEEP('13 cartes par main, 40 points dans le jeu. Je compte les points montrés
 <h3>Combien de fois laisser passer ?</h3>
 <p>La <b>règle de 7</b> : 7 moins le nombre de cartes que vous avez à deux dans la couleur = nombre de fois que vous laissez passer.</p>
 <div class="ex">3SA. Ouest entame le Roi de pique. Vous avez ♠ A 4 2 face à ♠ 7 3 : 5 cartes. 7 − 5 = <b>2</b> : laissez passer deux fois, prenez au troisième tour.</div>
-${KEEP('À SA, avec un seul arrêt : je laisse passer. Règle de 7 : 7 − mes cartes = nombre de coups à blanc.')}`,
+<h3>Quand ne PAS laisser passer</h3>
+<p>Laisser passer, c'est <b>donner la main</b> aux adversaires. On ne le fait que si l'on doit rendre la main plus tard. Donc on prend tout de suite quand on a <b>9 levées sans rendre la main</b>, quand une <b>autre couleur</b> est plus dangereuse (ils en profiteraient pour changer), avec <b>deux arrêts</b>, ou quand c'est l'adversaire dangereux lui-même qui prendra la main.</p>
+<div class="ex">♠ D 5 au mort, ♠ A 7 3 en main. Ouest entame, Est met le <b>Roi</b>. Vous devez chasser deux As : laissez passer ! Vous gardez l'As <b>et</b> la Dame, et Est se vide de ses piques.</div>
+${KEEP('À SA, avec un seul arrêt : je compte d\'abord. Si je dois rendre la main, je laisse passer (règle de 7 : 7 − mes cartes). Si j\'ai 9 levées ou qu\'une autre couleur est plus dangereuse, je prends.')}`,
     qs: [['Le coup à blanc, c\'est :', ['Ne pas prendre tout de suite', 'Couper', 'Purger'], 0, 'On laisse passer un ou deux tours.'],
       ['Le but est de :', ['Couper les communications entre les défenseurs', 'Gagner du temps', 'Montrer ses points'], 0, 'Le défenseur sans carte ne peut plus rejouer la couleur.'],
       ['Règle de 7 : avec 6 cartes à deux, je laisse passer :', ['1 fois', '2 fois', '0 fois'], 0, '7 − 6 = 1.'],
@@ -14455,7 +14474,7 @@ const SQ_LIRE = [
 ];
 const SQ_RELANCE = [
   { p: 'Contre 3SA, votre partenaire entame le <b>Roi de pique</b> (il promet R D V). Vous avez ♠ A 8. Que faites-vous ?', o: [['Je prends de l\'As et je rejoue le 8', 1, 'Le déblocage : si vous gardez l\'As, la couleur se bloque. En prenant de l\'As et en rejouant le 8, ses Dame et Valet font les levées suivantes.'], ['Je laisse passer et je garde mon As', 0, 'Au tour suivant, votre As tombera sur ses honneurs, ou vous devrez prendre et vous n\'aurez plus de pique à rejouer : la couleur est bloquée. On débloque tout de suite.'], ['Je prends de l\'As et je joue une autre couleur', 0, 'Vous abandonnez la couleur longue de votre partenaire, celle qui doit faire chuter le contrat. On la rejoue.']] },
-  { p: 'Contre 3SA, votre partenaire entame le <b>5 de pique</b> (4e meilleure, de R D 8 5 2). Vous avez ♠ A 10 3. Vous prenez de l\'As. Que rejouez-vous ?', o: [['Le 10', 1, 'Avec deux cartes restantes, on rejoue la <b>plus grosse</b> : le 10 débloque, et la couleur de votre partenaire peut courir.'], ['Le 3', 0, 'Votre 10 resterait seul et bloquerait la couleur au 3e tour : votre partenaire ne pourrait plus encaisser ses piques. Avec deux cartes, la plus grosse d\'abord.'], ['Une autre couleur', 0, 'La couleur longue de votre partenaire est la meilleure chance de chute : on la rejoue, en débloquant.']] },
+  { p: 'Contre 3SA, votre partenaire entame le <b>5 de pique</b> (4e meilleure, de R D 8 5 2). Vous avez ♠ A 10 3. Vous prenez de l\'As. Que rejouez-vous ?', o: [['Le 10', 1, 'Avec deux cartes restantes (un nombre pair), on rejoue la <b>plus grosse</b> : c\'est la <b>parité du résidu</b>. Le 10 débloque, et la couleur de votre partenaire peut courir.'], ['Le 3', 0, 'Votre 10 resterait seul et bloquerait la couleur au 3e tour : votre partenaire ne pourrait plus encaisser ses piques. Avec deux cartes, la plus grosse d\'abord.'], ['Une autre couleur', 0, 'La couleur longue de votre partenaire est la meilleure chance de chute : on la rejoue, en débloquant.']] },
   { p: 'Vous défendez contre 4♠. Votre partenaire a entamé ♥ (sa couleur longue). Vous prenez la main. Le mort a ♣ A R D V 10. Que jouez-vous ?', o: [['Je rejoue cœur, la couleur de mon partenaire', 1, 'C\'est là que sont les levées de la défense. Le mort est solide à trèfle : jouer trèfle aiderait le déclarant.'], ['Trèfle', 0, 'Le mort a A R D V 10 : vous jouez dans sa force et lui offrez ses levées. On rejoue la couleur du partenaire.'], ['Atout', 0, 'Rien ne presse à l\'atout ici : la défense doit encaisser ses cœurs avant que le déclarant défausse ses perdantes.']] },
   { p: 'Contre 4♥, votre partenaire entame le <b>2 de trèfle</b> (probablement un singleton). Vous prenez de l\'As de trèfle. Que rejouez-vous ?', o: [['Trèfle, pour qu\'il coupe', 1, 'Son entame d\'un singleton cherche la coupe : vous rejouez trèfle, il coupe, et la défense gagne une levée de plus.'], ['Une autre couleur', 0, 'Votre partenaire a entamé son singleton pour couper : si vous changez de couleur, la coupe est perdue.'], ['Atout', 0, 'Jouer atout supprime les atouts de votre partenaire, ceux qui devaient couper vos trèfles.']] },
   { p: 'Vous êtes 3e. Votre partenaire entame le 4 de cœur, le mort met le 2. Vous avez ♥ R D 7. Que mettez-vous ?', o: [['La Dame', 1, 'En 3e, carte forte, mais la plus petite de celles qui se suivent : la Dame fait le même travail que le Roi, et votre partenaire saura que vous avez le Roi si elle fait la levée.'], ['Le Roi', 0, 'Le Roi fait le même travail, mais ment à votre partenaire : il croira que le déclarant a la Dame. Avec R D, la Dame.'], ['Le 7', 0, 'En 3e, après vous il n\'y a plus que le déclarant : une petite carte lui offre la levée à bon compte. Carte forte.']] },
@@ -15447,6 +15466,155 @@ C_COMPTE.memo += `<p><button class="btn sec small distlink" data-distx>📐 Quan
 new MutationObserver(() => {
   app.querySelectorAll('.fb:not([data-dxd])').forEach(f => { f.dataset.dxd = 1; if (!f.querySelector('[data-distx]') && /singleton|doubleton|chicane|au-delà du 3e/.test(f.textContent)) { const b = document.createElement('button'); b.className = 'btn sec small distlink'; b.dataset.distx = ''; b.textContent = '📐 Pourquoi ce compte ?'; f.appendChild(b); } });
   const c = app.querySelector('.ccta'); if (c && !app.querySelector('.distcard')) { const d = document.createElement('button'); d.className = 'card distcard'; d.dataset.distx = ''; d.innerHTML = '<span class="dci">📐</span><span><b>Les points de distribution</b><small>Quand les compter, comment, et surtout pourquoi.</small></span>'; c.insertAdjacentElement('afterend', d); }
+}).observe(app, { childList: true, subtree: true });
+
+// ====================================================================
+//  v183 — LE COUP À BLANC : QUAND OUI, QUAND NON (et l'adversaire dangereux)
+//  4 donnes-enquêtes vérifiées au solveur, une page « quand oui / quand non »,
+//  des liens depuis la cascade, les batteries et le cours.
+// ====================================================================
+const DQ_BLANC = [
+  { id: 'blanc1', th: 'blanc', ic: '🤚', t: 'Le Roi d\'Est : laisser passer', contract: '3SA par Sud', tr: 'N', decl: 'S', dealer: 'S', calls: ['1N', 'P', '3N', 'P', 'P', 'P'], view: ['N', 'S'], you: 'S',
+    hands: { S: 'A73.AQ5.KQ4.8652', N: 'Q5.K84.JT93.KQJ9', W: 'JT962.J93.872.T4', E: 'K84.T762.A65.A73' },
+    steps: [
+      { tr: ['S6'], s: 'Ouest entame le <b>6 de pique</b>. Au mort : ♠ D 5. En main : ♠ A 7 3.', p: 'Qui est l\'adversaire dangereux ?', o: [['Ouest', 1, 'C\'est lui qui a la <b>longueur</b> à pique : une petite carte d\'entame promet 4 ou 5 cartes. S\'il reprend la main une fois ses piques affranchis, il les encaisse.'], ['Est', 0, 'Est n\'a que quelques piques. Il ne devient dangereux que s\'il peut encore en rejouer vers Ouest : c\'est justement ce qu\'on va empêcher.'], ['Aucun', 0, 'Avec 5 piques à deux seulement, vous êtes court : la couleur d\'Ouest est une vraie menace.']] },
+      { tr: ['+S5 SK'], s: 'Le mort fournit le 5, Est met le <b>Roi</b>.', p: 'Prenez-vous de l\'As ?', o: [['Non, je laisse passer', 1, 'Il vous faut chasser <b>deux As</b> (carreau et trèfle) : vous rendrez la main deux fois. En laissant passer, vous gardez <b>l\'As et la Dame</b> comme arrêts et vous videz Est de ses piques.'], ['Oui, je prends de l\'As', 0, 'Il ne vous resterait qu\'un arrêt, la Dame. Est prend son premier As et rejoue pique : la Dame part. À son second As, il rejoue encore pique et Ouest encaisse ses piques : <b>une de chute</b>.'], ['Je prends de l\'As et j\'attaque les trèfles tout de suite', 0, 'Le problème n\'est pas l\'ordre des couleurs : après l\'As, il ne vous reste qu\'un arrêt pour deux prises de main adverses. Est vous chasse la Dame, puis sert Ouest : <b>une de chute</b>. (Une autre bonne option existait au 1er pli : mettre la Dame du mort, qui gagne si Ouest a le Roi.)']] },
+      { tr: ['+S3', 'S8 S7 S2 SQ'], s: 'Est rejoue le 8 de pique, la Dame du mort fait la levée. Il vous reste l\'As de pique.', p: 'Vous devez encore chasser l\'As de carreau et l\'As de trèfle. Pourquoi êtes-vous tranquille s\'ils sont chez Est ?', o: [['À son 1er As il rejoue son dernier pique, à son 2e il n\'en a plus', 1, 'Est avait 3 piques. Après le Roi et le 8, il lui en reste un : l\'As le prend. Au second As, Est n\'a <b>plus de pique</b> : la route vers Ouest est coupée.'], ['Parce que la Dame a fait la levée', 0, 'La Dame n\'était qu\'un des deux arrêts. Ce qui vous sauve, c\'est qu\'Est sera vide de pique quand il prendra la main la seconde fois.'], ['Je ne le suis pas : j\'encaisse mes levées', 0, 'Vous n\'avez que 5 levées sûres (2 piques, 3 cœurs) : il faut affranchir carreaux et trèfles, donc rendre la main.']] },
+    ], end: ['CK CA C2 C4', 'S4 SA S9 H4', 'DK D2 D3 DA'], fin: 'Dix levées. Si vous aviez pris le Roi de l\'As, Est aurait eu assez de piques pour servir Ouest à chaque prise de main : <b>une de chute</b>. <b>La leçon</b> : avec D x face à A x x, quand Est met le Roi, laissez passer : vous gardez deux arrêts et vous videz le partenaire de l\'entameur.' },
+  { id: 'blanc2', th: 'blanc', ic: '7️⃣', t: 'La règle de 7', contract: '3SA par Sud', tr: 'N', decl: 'S', dealer: 'S', calls: ['1N', 'P', '3N', 'P', 'P', 'P'], view: ['N', 'S'], you: 'S',
+    hands: { S: 'A73.KQ5.AQ4.Q852', N: '84.A84.J63.KJT93', W: 'KJ962.J932.875.6', E: 'QT5.T76.KT92.A74' },
+    steps: [
+      { tr: ['S6 S4 SQ'], s: 'Ouest entame le 6 de pique, le mort met le 4, Est la Dame. Vous : ♠ A 7 3, le mort : ♠ 8 4.', p: 'Combien de fois laissez-vous passer ?', o: [['Deux fois', 1, 'Règle de 7 : 7 − 5 cartes à deux = <b>2</b>. Vous prendrez au 3e tour : Est, qui a au plus 3 piques, n\'en aura plus.'], ['Une fois', 0, 'Est garderait un pique à rejouer quand il prendra la main avec l\'As de trèfle.'], ['Aucune : je prends', 0, 'Il faut chasser l\'As de trèfle. Est le prendrait et rejouerait pique : Ouest encaisserait ses piques affranchis. <b>Une de chute.</b>']] },
+      { tr: ['+S3', 'ST S7 S2 S8', 'S5 SA S9 D3'], s: 'Vous laissez passer deux fois et prenez au 3e tour. Est n\'a plus de pique.', p: 'Vous chassez maintenant l\'As de trèfle. Que craignez-vous encore ?', o: [['Plus rien si Est a l\'As de trèfle', 1, 'Le coup à blanc a <b>coupé la route</b>. Et si c\'est Ouest qui avait l\'As de trèfle, aucun plan ne marchait : vous avez joué la meilleure chance.'], ['Qu\'Est rejoue pique', 0, 'Il n\'en a plus : ses 3 piques sont partis.'], ['L\'impasse à carreau', 0, 'Inutile : 1 pique, 3 cœurs, l\'As de carreau et 4 trèfles font 9 levées sans risque.']] },
+    ], end: ['C2 C6 CK CA'], fin: 'Neuf levées, et même dix. <b>La leçon</b> : 7 moins le nombre de cartes à deux = le nombre de tours à laisser passer. On prend quand le partenaire de l\'entameur est vide.' },
+  { id: 'blanc3', th: 'blanc', ic: '🚫', t: 'Ne pas laisser passer', contract: '3SA par Sud', tr: 'N', decl: 'S', dealer: 'S', calls: ['1N', 'P', '3N', 'P', 'P', 'P'], view: ['N', 'S'], you: 'S',
+    hands: { S: 'A64.865.AKQ2.QJ4', N: '732.J42.J53.AK72', W: 'KJ985.T3.T98.985', E: 'QT.AKQ97.764.T63' },
+    steps: [
+      { tr: ['S8 S2 SQ'], s: 'Ouest entame le 8 de pique, le mort met le 2, Est la Dame. Vous : ♠ A 6 4. Regardez aussi vos cœurs : ♥ 8 6 5 face à ♥ V 4 2.', p: 'La règle de 7 dirait « une fois ». Que faites-vous ?', o: [['Je prends de l\'As et je compte', 1, 'Comptez d\'abord : As de pique, 4 carreaux, 4 trèfles = <b>9 levées sans rendre la main</b>. Le coup à blanc protège un arrêt pour plus tard ; ici, vous ne rendez jamais la main.'], ['Je laisse passer une fois', 0, 'Est fait la levée et <b>change de couleur</b> : cœur, où vous n\'avez aucun arrêt. ♥ A R D… : <b>deux de chute</b>.'], ['Je laisse passer deux fois', 0, 'Encore pire : vous offrez du temps aux adversaires pour trouver les cœurs.']] },
+      { tr: ['+SA', 'DA D8 D3 D4'], s: 'Vous prenez de l\'As et encaissez vos carreaux, puis vos trèfles.', p: 'Quand ne faut-il PAS faire le coup à blanc ?', o: [['Quand on a ses levées sans rendre la main, ou qu\'une autre couleur est plus dangereuse', 1, 'Laisser passer donne la main aux adversaires : à eux de jouer, ils peuvent <b>changer de couleur</b>. On ne le fait que si l\'on doit rendre la main plus tard et que la couleur d\'entame est la vraie menace.'], ['Jamais : la règle de 7 s\'applique toujours', 0, 'La règle de 7 dit <b>combien</b> de fois laisser passer, pas <b>s\'il faut</b> le faire. On compte d\'abord ses levées.'], ['Seulement quand l\'entame est un honneur', 0, 'L\'honneur entamé ne change rien : ce qui compte, c\'est vos levées et vos autres faiblesses.']] },
+    ], end: ['DK D9 D5 D6', 'DQ DT DJ D7'], fin: 'Neuf levées sans jamais rendre la main. Laisser passer, c\'était donner la main à Est pour qu\'il trouve les cœurs. <b>La leçon</b> : on compte d\'abord ses levées ; le coup à blanc ne sert que si l\'on doit rendre la main.' },
+  { id: 'blanc4', th: 'blanc', ic: '🧭', t: 'L\'impasse dans le bon sens', contract: '3SA par Sud', tr: 'N', decl: 'S', dealer: 'S', calls: ['1N', 'P', '3N', 'P', 'P', 'P'], view: ['N', 'S'], you: 'S',
+    hands: { S: 'A74.AQ3.J65.AJ95', N: '83.K54.AK72.KT42', W: 'KQT95.762.43.Q87', E: 'J62.JT98.QT98.63' },
+    steps: [
+      { tr: ['SK S3 S2'], s: 'Ouest entame le <b>Roi de pique</b> (séquence). Vous : ♠ A 7 4, le mort : ♠ 8 3.', p: 'Que faites-vous ?', o: [['Je laisse passer', 1, 'Règle de 7 : 7 − 5 = 2 tours. Ouest a la longueur : c\'est l\'adversaire dangereux.'], ['Je prends de l\'As', 0, 'Vous n\'auriez plus d\'arrêt et vous devez encore trouver la Dame de trèfle.']] },
+      { tr: ['+S4', 'SQ S8 S6 S7', 'ST H4 SJ SA'], s: 'Ouest continue la Dame (vous laissez passer), puis le 10 : vous prenez de l\'As. Est n\'a plus de pique ; Ouest en a encore trois, affranchis.', p: 'Il vous faut 4 trèfles (♣ A V 9 5 face à R 10 4 2), il manque la Dame. Dans quel sens faites-vous l\'impasse ?', o: [['As, puis petit vers Roi-10 : si elle échoue, c\'est Est qui prend', 1, 'L\'impasse se fait <b>vers l\'adversaire inoffensif</b>. Si Ouest a la Dame, elle est prise ; si c\'est Est, il prend mais n\'a plus de pique : le contrat est sûr.'], ['Roi, puis le 10 vers As-Valet : si elle échoue, c\'est Ouest qui prend', 0, 'Si Ouest a la Dame (c\'est le cas), il prend et encaisse ses trois piques : <b>une de chute</b>.'], ['As et Roi en tête, pour la faire tomber', 0, 'Avec 5 trèfles dehors, la Dame tombe rarement en deux tours. Et si elle ne tombe pas, qui la prend ? Peut-être Ouest.']] },
+    ], end: ['CA C7 C2 C3', 'C5 C8 CT C6', 'CK H8 C9 CQ'], fin: 'Dix levées. La Dame était chez Ouest : l\'impasse dans l\'autre sens chutait. <b>La leçon</b> : repérez l\'adversaire dangereux, puis faites vos impasses de façon que, si elles échouent, ce soit l\'autre qui prenne la main.' },
+];
+DQ_BLANC.forEach(d => { DQ2.push(d); DQ.push(d); });
+DQ_TH.blanc = '🤚 Le coup à blanc : quand oui, quand non';
+const BLANCX = () => `<div class="dx-in"><button class="dx-x" data-distclose aria-label="Fermer">✕</button>
+<h2>🤚 Le coup à blanc : quand oui, quand non</h2><p class="dx-lead">À Sans-Atout, la défense entame sa longue couleur pour l'affranchir. Le coup à blanc (« laisser passer ») consiste à ne pas prendre tout de suite, pour <b>vider le partenaire de l'entameur</b> : quand il prendra la main, il ne pourra plus rejouer la couleur.</p>
+<h3>1. D'abord : qui est l'adversaire dangereux ?</h3>
+<p>Celui qui a la <b>couleur longue</b> (souvent l'entameur : une petite carte promet 4 ou 5 cartes ; les enchères aident aussi). S'il reprend la main quand sa couleur est affranchie, il l'encaisse. L'autre est <b>inoffensif</b> dès qu'il n'a plus de cartes de la couleur.</p>
+<h3>2. Le coup à blanc : OUI, quand…</h3>
+<ul><li>vous n'avez <b>qu'un arrêt</b> (ou un arrêt et demi : D x face à A x x) dans la couleur d'entame ;</li>
+<li>et vous devez <b>rendre la main</b> pour faire vos levées (un As à chasser, une impasse) ;</li>
+<li>et c'est de préférence l'adversaire <b>inoffensif</b> qui prendra la main.</li></ul>
+<p><b>Combien de fois ?</b> La règle de 7 : 7 − le nombre de cartes que vous avez à deux dans la couleur. 5 cartes → 2 fois, 6 cartes → 1 fois.</p>
+<h3>3. Le coup à blanc : NON, quand…</h3>
+<ul><li>vous avez <b>9 levées sans rendre la main</b> : prenez et encaissez ;</li>
+<li>une <b>autre couleur est plus dangereuse</b> : en laissant passer, vous donnez la main et le temps de changer de couleur ;</li>
+<li>vous avez <b>deux arrêts sûrs</b> (A R x) : inutile ;</li>
+<li>la couleur se répartit <b>4-4</b> (entame du 2 : 4 cartes) : ils ne feront que 3 levées dans la couleur ;</li>
+<li>c'est l'<b>adversaire dangereux lui-même</b> qui prendra la main : le coup à blanc ne le coupera pas de sa propre couleur.</li></ul>
+<h3>4. Le complément : l'impasse dans le bon sens</h3>
+<p>Quand vous avez le choix, faites l'impasse de façon que, si elle échoue, ce soit <b>l'adversaire inoffensif</b> qui prenne la main.</p>
+<div class="dx-ex"><b>Exemple</b> : ♠ D 5 au mort, ♠ A 7 3 en main. Ouest entame, Est met le Roi. Vous devez chasser deux As : laissez passer. Vous gardez l'As et la Dame, et Est n'aura bientôt plus de pique.</div>
+<div class="acts"><button class="btn" data-dq="${DQ.findIndex(d => d.id === 'blanc1')}">🕵️ Les 4 donnes-enquêtes</button><button class="btn sec" data-distclose>J'ai compris</button></div></div>`;
+function blancOpen() { let o = document.getElementById('distx'); if (o) o.remove(); o = document.createElement('div'); o.id = 'distx'; o.className = 'dx'; o.innerHTML = colorize(BLANCX()); document.body.appendChild(o); if (typeof tuTree === 'function') tuTree(o); }
+document.addEventListener('click', e => { if (e.target.closest('[data-blancx]')) { e.preventDefault(); e.stopPropagation(); blancOpen(); } else if (e.target.closest('#distx [data-dq]')) { const o = document.getElementById('distx'); o && o.remove(); } }, true);
+// liens : la batterie « coup à blanc », la cascade, le cours
+{ const th = PB_T.find(t => t.id === 'blanc'); if (th) th.hint += ' <b>Mais d\'abord, comptez</b> : avec 9 levées sans rendre la main, ou une autre couleur plus dangereuse, on prend tout de suite. <button class="btn sec small distlink" data-blancx>🤚 Quand oui, quand non</button>'; }
+{ const L = CASC_PLAY.flatMap(P => P.L).find(l => l.id === 'blanc'); if (L) L.learn = 'Laisser passer pour couper la route aux adversaires, et savoir quand ne pas le faire.'; }
+new MutationObserver(() => {
+  app.querySelectorAll('.cnode').forEach(n => { if (n.dataset.bx || !/coup à blanc/i.test(n.textContent)) return; n.dataset.bx = 1; const b = n.querySelector('.cn-b'); if (!b) return; const d = document.createElement('div'); d.className = 'acts'; d.innerHTML = `<button class="btn sec small" data-dq="${DQ.findIndex(x => x.id === 'blanc1')}">🕵️ 4 donnes-enquêtes</button>`; b.appendChild(d); });
+}).observe(app, { childList: true, subtree: true });
+
+// ====================================================================
+//  v184 — LA PARITÉ DU RÉSIDU (la faire, la lire) ET L'ADVERSAIRE DANGEREUX
+//  Deux générateurs (relancer / lire la relance du partenaire), une banque de questions
+//  sur l'adversaire dangereux, et des liens depuis le parcours, la cascade et le cours.
+// ====================================================================
+const RZ = r => ({ 14: 'A', 13: 'R', 12: 'D', 11: 'V' })[r] || String(r);
+const RZL = a => a.slice().sort((x, y) => y - x).map(RZ).join(' ');
+// une couleur de 13 cartes répartie : entameur 5 cartes (avec un honneur), troisième main A + n, mort 2-3, déclarant le reste
+function rzDeal(nRes, opts = {}) {
+  for (let t = 0; t < 500; t++) {
+    const all = shuffle([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
+    const lead = all.slice(0, 5).sort((a, b) => b - a); if (!lead.some(r => r >= 11) || (lead[0] >= 10 && lead[0] - lead[1] === 1 && lead[1] - lead[2] === 1)) continue;
+    const third = all.slice(5, 5 + nRes).sort((a, b) => b - a); if (third.some(r => r >= 11)) continue;
+    const dl = 2 + (Math.random() < .5 ? 1 : 0), dummy = all.slice(5 + nRes, 5 + nRes + dl).sort((a, b) => b - a); if (dummy.some(r => r >= 12)) continue;
+    const decl = all.slice(5 + nRes + dl).sort((a, b) => b - a); if (decl.length < 1) continue;
+    return { lead, third: [14].concat(third), dummy, decl };
+  }
+}
+const rzBack = res => res.length === 2 ? res[0] : res.length === 3 ? res[2] : res[0];
+// 1. LE FAIRE : je prends de l'As, que rejoue-je ?
+function genResidu() {
+  const nRes = pick([2, 3, 3, 2, 1]), D = rzDeal(nRes, { noHon: nRes === 3 }); if (!D) return genResidu();
+  const S = pick(['S', 'H', 'D', 'C']), sym = SYM[S], ct = pick(['3SA', '3SA', S === 'S' ? '4♥' : '4♠']);
+  const led = D.lead[3], res = D.third.slice(1), good = rzBack(res), even = res.length % 2 === 0;
+  const rule = res.length === 1 ? 'Il ne vous en reste qu\'une : pas de choix, mais votre partenaire saura qu\'il n\'y en a plus.' : `Il vous reste <b>${res.length}</b> cartes (${RZL(res)}) : un nombre <b>${even ? 'pair' : 'impair'}</b> → on rejoue la <b>plus ${even ? 'grosse' : 'petite'}</b>.`;
+  const o = res.map(r => [`Le ${RZ(r)}`, r === good, r === good ? `${rule} C'est la <b>parité du résidu</b> : votre partenaire, en voyant ${even ? 'une grosse carte' : 'une petite carte'}, saura combien de cartes il vous reste, donc combien en a le déclarant.` : `${rule} Avec le ${RZ(r)}, votre partenaire lirait ${res.length === 2 ? '3 cartes restantes' : '2 cartes restantes'} : il se tromperait dans son compte du déclarant.`]);
+  o.push(['Une autre couleur', 0, 'Quand vous prenez la main, on rejoue d\'abord la <b>couleur de son partenaire</b> : c\'est là que sont les levées de la défense.']);
+  return { p: `Contre <b>${ct}</b>, votre partenaire entame le <b>${RZ(led)} ${sym}</b> (4e meilleure). Le mort a ${sym} ${RZL(D.dummy)} et fournit une petite carte. Vous avez ${sym} <b>${RZL(D.third)}</b> : vous prenez de l'<b>As</b>.<br>Que rejouez-vous ?`, o };
+}
+// 2. LE LIRE : mon partenaire rejoue, combien de cartes avait-il ?
+function genResiduL() {
+  const nRes = pick([1, 2, 3]), D = rzDeal(nRes, { noHon: nRes === 3 }); if (!D) return genResiduL();
+  const S = pick(['S', 'H', 'D', 'C']), sym = SYM[S], res = D.third.slice(1), c1 = rzBack(res), led = D.lead[3];
+  const c2 = nRes === 2 ? res[1] : nRes === 3 ? res[1] : null, orig = nRes + 1, declN = D.decl.length;
+  const story = nRes === 1 ? `Il rejoue le <b>${RZ(c1)}</b>. Au tour suivant de la couleur, il <b>défausse</b> : il n'en a plus.` : `Il rejoue le <b>${RZ(c1)}</b>. Au tour suivant de la couleur, il fournit le <b>${RZ(c2)}</b>.`;
+  const read = nRes === 1 ? 'Il ne lui restait qu\'une carte : il avait donc l\'As et une autre, <b>2 cartes</b>.' : nRes === 2 ? `Grosse carte d'abord, puis plus petite (le ${RZ(c1)} puis le ${RZ(c2)}) : un résidu <b>pair</b>, 2 cartes. Avec l'As déjà joué : <b>3 cartes</b> au départ.` : `Petite carte d'abord, puis plus grosse (le ${RZ(c1)} puis le ${RZ(c2)}) : un résidu <b>impair</b>, 3 cartes. Avec l'As : <b>4 cartes</b> au départ.`;
+  const tail = ` Le déclarant en avait donc 13 − 5 (vous) − ${D.dummy.length} (le mort) − ${orig} = <b>${declN}</b> au départ : vous savez maintenant combien de tours il pourra encore fournir, et quand vos cartes deviendront maîtresses.`;
+  const o = [2, 3, 4].map(v => [`${v} cartes`, v === orig, (v === orig ? '' : `Pas ${v}. `) + read + tail]);
+  return { p: `Vous entamez le <b>${RZ(led)} ${sym}</b> de ${sym} ${RZL(D.lead)} (4e meilleure). Le mort a ${sym} ${RZL(D.dummy)}. Votre partenaire prend de l'<b>As</b>. ${story}<br>Avec la <b>parité du résidu</b>, combien de cartes votre partenaire avait-il au départ ?`, o };
+}
+// 3. L'ADVERSAIRE DANGEREUX
+const SQ_DANGER = [
+  { p: 'Vous jouez <b>3SA</b>. Ouest est intervenu à 1♠ ; Est a passé partout. Ouest entame le 5 de pique. Qui est l\'adversaire <b>dangereux</b> ?', o: [['Ouest', 1, 'Il a la <b>longueur</b> à pique (son intervention promet 5 cartes) et des <b>points</b>, donc des reprises de main. S\'il reprend la main quand ses piques sont affranchis, il les encaisse.'], ['Est', 0, 'Est a passé partout et a peu de piques : il ne devient dangereux que s\'il peut rejouer pique vers Ouest.'], ['Les deux autant', 0, 'Non : celui qui a la longue et les reprises est le vrai danger. L\'autre ne compte que comme « messager ».']] },
+  { p: 'Vous jouez <b>3SA</b>. <b>Est</b> a ouvert 1♥ ; Ouest entame le 9 de cœur (la couleur de son partenaire). Qui est dangereux ?', o: [['Est', 1, 'C\'est lui qui a la <b>longueur</b> (5 cœurs) et les <b>points</b>. Le danger n\'est pas toujours l\'entameur ! Le coup à blanc cherchera ici à vider <b>Ouest</b> de ses cœurs.'], ['Ouest, l\'entameur', 0, 'Ouest entame la couleur de son partenaire, mais il en a peu. Le vrai danger est Est, qui a ouvert dans cette couleur.'], ['Personne', 0, 'Une ouverture à 1♥ annonce 5 cartes : Est a de quoi faire chuter s\'il reprend la main.']] },
+  { p: 'Règle de 11. Ouest entame le <b>6</b> (4e meilleure). Le mort a ♠ R 9 3, vous avez ♠ A 10 2. Combien de cartes <b>plus fortes que le 6</b> Est a-t-il ?', o: [['1', 1, '11 − 6 = <b>5</b> cartes plus fortes que le 6 entre le mort, vous et Est. Vous en voyez 4 (R, 9 au mort ; A, 10 chez vous). Est en a donc <b>1</b>.'], ['3', 0, 'Faites 11 − 6 = 5, puis retirez les cartes plus fortes que vous voyez (R, 9, A, 10) : il en reste 1.'], ['On ne peut pas savoir', 0, 'La règle de 11 sert justement à le savoir : 11 − carte entamée = cartes plus fortes chez les trois autres.']] },
+  { p: '<b>3SA</b>. Ouest est dangereux : ses piques seront affranchis. Il vous manque le Roi de carreau : ♦ 3 2 en main, ♦ A D V 10 9 au mort. Faites-vous l\'impasse ?', o: [['Oui : si elle échoue, c\'est Est qui prend', 1, 'Vous jouez petit vers la Dame : si Ouest a le Roi, l\'impasse gagne ; si c\'est Est, il prend, mais Est est l\'adversaire <b>inoffensif</b>. L\'impasse est sans danger.'], ['Non : je tire l\'As en espérant le Roi sec', 0, 'Le Roi sec est rare. Ici l\'impasse ne peut perdre que vers Est : elle est sans risque.'], ['Non, jamais d\'impasse quand un adversaire est dangereux', 0, 'Ce qui compte, c\'est <b>vers qui</b> l\'impasse peut perdre. Vers l\'adversaire inoffensif, on peut la faire.']] },
+  { p: '<b>3SA</b>. Ouest est dangereux. Vous devez rendre la main une fois. Choix : une impasse à carreau qui, si elle échoue, donne la main à <b>Est</b>, ou une impasse à trèfle qui la donne à <b>Ouest</b>. Laquelle ?', o: [['L\'impasse à carreau', 1, 'On rend la main de préférence à l\'adversaire <b>inoffensif</b> : c\'est « l\'impasse dans le bon sens ».'], ['L\'impasse à trèfle', 0, 'Si elle échoue, Ouest prend et encaisse sa couleur affranchie.'], ['C\'est pareil', 0, 'Non : la même impasse ratée peut être sans conséquence (Est) ou faire chuter (Ouest).']] },
+  { p: '<b>3SA</b>. Ouest entame le 4 de cœur (5 cartes). Ouest n\'a aucune reprise de main. Qui est dangereux ?', o: [['Est, tant qu\'il lui reste des cœurs', 1, 'Ouest ne peut pas reprendre la main lui-même : ses cœurs ne passeront que si <b>Est</b> les lui rejoue. Le coup à blanc vide Est de ses cœurs.'], ['Ouest', 0, 'Ouest a la longueur mais aucune reprise : sans l\'aide d\'Est, il ne joue plus jamais.'], ['Personne', 0, 'Si Est prend la main avec un cœur en poche, il le rejoue et Ouest encaisse.']] },
+  { p: '<b>3SA</b>. Ouest entame le <b>2</b> de pique (4e meilleure : exactement 4 cartes). Après votre As, combien de levées de pique la défense peut-elle faire au maximum ?', o: [['3', 1, 'Avec 4 cartes chez Ouest, Est en a au plus 4 : la couleur est répartie <b>4-4</b> au pire. Après votre As, ils feront 3 levées au maximum. Le danger est limité : le coup à blanc est souvent <b>inutile</b>.'], ['4', 0, 'Avec 4 cartes chacun et votre As, ils ne peuvent en faire que 3.'], ['5', 0, 'Le 2 en 4e meilleure dit : 4 cartes exactement, pas 5.']] },
+  { p: '<b>4♠</b>. Vous avez ♥ R 5 en main (Sud), le mort a ♥ 8 4 3. Lequel des deux adversaires est dangereux pour les cœurs ?', o: [['Est, qui joue juste avant vous', 1, 'Si <b>Est</b> prend la main et joue cœur, il joue <b>à travers</b> votre Roi : si Ouest a l\'As, votre Roi est pris. Si c\'est Ouest qui joue cœur, vous jouez en dernier et votre Roi tient.'], ['Ouest', 0, 'Quand Ouest joue cœur, vous jouez après lui : votre Roi est protégé. Le danger est la main qui joue <b>devant</b> votre honneur.'], ['Aucun', 0, 'R 5, c\'est un Roi second : il peut tomber si on joue à travers lui.']] },
+  { p: '<b>4♥</b>. Ouest entame le <b>2 de carreau</b>, sans doute un singleton. Est a peut-être l\'As d\'atout. Qui est dangereux ?', o: [['Est : s\'il prend la main, il rejoue carreau pour la coupe', 1, 'La coupe est le danger à la couleur. Purgez vite, et évitez de donner la main à Est avant que les atouts d\'Ouest soient tombés.'], ['Ouest, l\'entameur', 0, 'Ouest attend la coupe ; c\'est <b>Est</b> qui peut la lui offrir en rejouant carreau.'], ['Personne : on purge et c\'est tout', 0, 'Purger, oui, mais si Est a l\'As d\'atout, il prendra la main pendant la purge et rejouera carreau.']] },
+  { p: 'Pour repérer l\'adversaire dangereux, quelles questions se pose-t-on, dans l\'ordre ?', o: [['Qui a la longue ? A-t-il une reprise ? Qui prendra la main ?', 1, 'L\'entame et les enchères disent <b>qui a la longue</b> ; les points annoncés disent <b>qui a des reprises</b> ; votre plan dit <b>qui prendra la main</b>. Ensuite : coup à blanc, impasse dans le bon sens.'], ['Qui a le plus de points ? Qui a entamé ?', 0, 'L\'entameur n\'est pas toujours le dangereux (il entame parfois la couleur de son partenaire).'], ['Combien de levées me faut-il ?', 0, 'C\'est la première question de votre plan, mais elle ne dit pas qui est dangereux.']] },
+  { p: '<b>3SA</b>. Ouest est dangereux (sa couleur est presque affranchie) et il a ouvert : vous savez que le Roi de trèfle est chez lui. Vous avez encore un arrêt dans sa couleur. Que faites-vous d\'abord ?', o: [['J\'attaque les trèfles : je lui chasse sa reprise maintenant', 1, 'Tant que vous avez un arrêt, Ouest ne peut pas encaisser sa couleur. Chassez sa <b>reprise</b> maintenant : quand sa couleur sera affranchie, il ne pourra plus jamais reprendre la main.'], ['J\'encaisse d\'abord mes levées', 0, 'Vous perdriez votre arrêt sans avoir chassé sa reprise : il prendrait plus tard et encaisserait tout.'], ['Je laisse les trèfles pour la fin', 0, 'Plus tard, votre arrêt sera parti : son Roi de trèfle deviendrait l\'entrée vers sa couleur affranchie.']] },
+];
+T2_BATS.residu = { ic: '↩️', t: 'La parité du résidu : relancer', d: 'Je prends la main : quelle carte rejouer dans la couleur du partenaire ?', gen: genResidu };
+T2_BATS.residuL = { ic: '👀', t: 'La parité du résidu : lire', d: 'Mon partenaire relance : combien de cartes avait-il ?', gen: genResiduL };
+T2_BATS.danger = { ic: '🎯', t: 'L\'adversaire dangereux', d: 'Qui a la longue ? A-t-il une reprise ? Qui prendra la main ?', bank: SQ_DANGER };
+// le parcours et les exercices de fin de chapitre
+{ const P = T2_PATH.find(s => /plan du déclarant/i.test(s.t)); if (P && !P.it.some(x => x[1] === 'danger')) P.it.splice(1, 0, ['t2', 'danger']); }
+{ const P = T2_PATH.find(s => /^La défense/.test(s.t)); if (P && !P.it.some(x => x[1] === 'residu')) { const i = P.it.findIndex(x => x[1] === 'relance'); P.it.splice(i + 1, 0, ['t2', 'residu'], ['t2', 'residuL']); } }
+if (LES_T2.d9) LES_T2.d9.splice(2, 0, ['t2', 'residu'], ['t2', 'residuL']); if (LES_T2.c9) LES_T2.c9.push(['t2', 'danger']);
+// la page « L'adversaire dangereux » (même fenêtre que les points de distribution)
+const DANGX = () => `<div class="dx-in"><button class="dx-x" data-distclose aria-label="Fermer">✕</button>
+<h2>🎯 L'adversaire dangereux</h2><p class="dx-lead">Avant de jouer la première carte du mort, le déclarant se demande : <b>qui, chez les adversaires, peut me faire chuter s'il prend la main ?</b> Toute la suite du plan en dépend.</p>
+<h3>Trois questions, dans l'ordre</h3>
+<ol><li><b>Qui a la longue ?</b> L'entame le dit (une petite carte = 4 ou 5 cartes ; la règle de 11 aide à compter), les enchères aussi (celui qui a nommé la couleur). Attention : l'entameur joue parfois la couleur de son partenaire.</li>
+<li><b>A-t-il une reprise ?</b> Celui qui a ouvert ou est intervenu a des points, donc des moyens de reprendre la main. Sans reprise, sa couleur ne passera que si son partenaire la lui rejoue.</li>
+<li><b>Qui prendra la main ?</b> Votre plan dit ce que vous devez céder (un As à chasser, une impasse) et à qui.</li></ol>
+<h3>Ce qu'on fait ensuite</h3>
+<ul><li><b>Le coup à blanc</b> : laisser passer pour vider l'autre adversaire de la couleur.</li>
+<li><b>L'impasse dans le bon sens</b> : si elle échoue, c'est l'adversaire inoffensif qui prend.</li>
+<li><b>Chasser d'abord la reprise</b> du dangereux, tant que vous avez un arrêt.</li>
+<li><b>À la couleur</b> : le danger, c'est aussi l'adversaire qui joue devant votre Roi gardé, ou celui qui peut faire couper son partenaire.</li></ul>
+<div class="dx-ex"><b>Exemple</b> : 3SA. Est a ouvert 1♥, Ouest entame le 9 de cœur. Le dangereux, c'est <b>Est</b> (5 cœurs et des points), pas l'entameur. Vous laisserez passer pour vider Ouest de ses cœurs, et vous rendrez la main à Ouest plutôt qu'à Est.</div>
+<div class="acts"><button class="btn" data-t2="danger">🎯 S'exercer</button><button class="btn sec" data-distclose>J'ai compris</button></div></div>`;
+function dangOpen() { let o = document.getElementById('distx'); if (o) o.remove(); o = document.createElement('div'); o.id = 'distx'; o.className = 'dx'; o.innerHTML = colorize(DANGX()); document.body.appendChild(o); if (typeof tuTree === 'function') tuTree(o); }
+document.addEventListener('click', e => { if (e.target.closest('[data-dangx]')) { e.preventDefault(); e.stopPropagation(); dangOpen(); } else if (e.target.closest('#distx [data-t2]')) { const o = document.getElementById('distx'); o && o.remove(); } }, true);
+// la cascade : des liens dans les marches concernées
+new MutationObserver(() => {
+  app.querySelectorAll('.cnode').forEach(n => {
+    if (n.dataset.rz) return; const b = n.querySelector('.cn-b'); if (!b) return; const tx = n.textContent;
+    let h = ''; if (/3e main et la relance|Défendre contre|relance/i.test(tx)) h = `<button class="btn sec small" data-t2="residu">↩️ Parité du résidu : relancer</button><button class="btn sec small" data-t2="residuL">👀 La lire chez le partenaire</button>`;
+    else if (/Sans-Atout|coup à blanc|ALC|gagnantes/i.test(tx)) h = `<button class="btn sec small" data-dangx>🎯 L'adversaire dangereux</button><button class="btn sec small" data-t2="danger">S'exercer</button>`;
+    if (!h) return; n.dataset.rz = 1; const d = document.createElement('div'); d.className = 'acts'; d.innerHTML = h; b.appendChild(d);
+  });
 }).observe(app, { childList: true, subtree: true });
 
 // ====================================================================
