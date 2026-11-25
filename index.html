@@ -1902,6 +1902,20 @@ body.tv .dx-in{max-width:980px;font-size:1.25em}
 .t2o .btn.sec:disabled{opacity:.6}
 .t2o .btn.good:disabled{background:#2e8b57!important;color:#fff!important;border-color:#2e8b57!important}
 .t2o .btn.badb:disabled{background:#c0394b!important;color:#fff!important;border-color:#c0394b!important}
+
+/* v186 : la recherche */
+.srchb{margin-left:auto;flex:0 0 auto;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.14);color:#fff;border-radius:999px;padding:7px 12px;font:inherit;font-size:15px;cursor:pointer;white-space:nowrap}
+.srchb:hover{background:rgba(255,255,255,.24)}
+@media (max-width:420px){.hero .srchb span{display:none}}
+.srbox input{width:100%;font:inherit;font-size:17px;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--paper);color:var(--ink)}
+.srbox input:focus{outline:none;border-color:var(--gold)}
+.srans h2{margin:2px 0 8px}.srk{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.srans h3{margin:14px 0 6px;font-size:15px}
+.srbs{display:flex;flex-wrap:wrap;gap:8px}
+.srex{margin-top:12px}.srex summary{cursor:pointer;font-weight:700;color:var(--feltx);padding:6px 0}
+.srlist{display:flex;flex-direction:column;gap:6px}.srl{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.srt{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);min-width:92px}
+body.tv .srbox input{font-size:24px}
 </style>
 </head>
 <body>
@@ -6667,7 +6681,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v185';
+const APP_V = 'v186';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -15624,6 +15638,134 @@ new MutationObserver(() => {
     if (!h) return; n.dataset.rz = 1; const d = document.createElement('div'); d.className = 'acts'; d.innerHTML = h; b.appendChild(d);
   });
 }).observe(app, { childList: true, subtree: true });
+
+// ====================================================================
+//  v186 — 🔎 LA RECHERCHE : « que dois-je faire ? », « rappelle-moi la règle de… »
+//  Une question en français → la réponse courte (la règle à retenir), l'accès à la théorie,
+//  et en option les exercices pour s'entraîner sur ce point. Tout fonctionne hors ligne.
+// ====================================================================
+const SRN = s => String(s || '').replace(/<[^>]+>/g, ' ').replace(/&[a-z]+;/g, ' ').replace(/♠/g, ' pique ').replace(/♥/g, ' coeur ').replace(/♦/g, ' carreau ').replace(/♣/g, ' trefle ').replace(/œ/g, 'oe').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9 ]+/g, ' ');
+const SR_STOP = new Set('le la les l de des du d un une et ou que qu qui quoi quel quelle quels quelles est c ce cet cette ces ca je j tu il elle on nous vous ils me m moi te t se s a au aux en dans sur pour par avec sans faire fait fais dois doit dois-je faut regle regles comment pourquoi quand combien rappelle rappeler explique expliquer cas la-dessus mon ma mes ton ta tes son sa ses y ne pas plus moins tres bien quoi encore donne dire dit veut voudrait c-est cest alors donc si mais apres avant'.split(' '));
+const SR_SYN = { x: ['contre'], contrer: ['contre'], residu: ['parite', 'relance'], pair: ['parite'], impair: ['parite'], hold: ['blanc'], laisser: ['blanc'], passer: ['blanc'], cles: ['blackwood'], cle: ['blackwood'], '4sa': ['blackwood'], transfert: ['texas'], longueur: ['distribution'], singleton: ['distribution'], chicane: ['distribution'], doubleton: ['distribution'], courte: ['distribution'], courtes: ['distribution'], danger: ['dangereux'], negatif: ['spoutnik'], reouverture: ['reveil'], rejouer: ['relance', 'parite'], relancer: ['relance', 'parite'], aime: ['signal'], intervient: ['intervention'], interviennent: ['intervention'], intervenu: ['intervention'], refus: ['signal'], interv: ['intervention'], intervenir: ['intervention'], ouvrir: ['ouverture'], repondre: ['reponse'], soutenir: ['soutien'], entamer: ['entame'], couper: ['coupe'], purger: ['purge'], onze: ['11'], sept: ['7'], perdantes: ['perdante'], gagnantes: ['gagnante'] };
+const srTok = q => { const out = []; SRN(q).split(/\s+/).forEach(w => { if (!w || SR_STOP.has(w) || (w.length < 2 && !/\d/.test(w))) return; out.push(w); (SR_SYN[w] || []).forEach(s => out.push(s)); }); return [...new Set(out)]; };
+const srHit = (t, words) => { const k = t.length > 5 ? t.slice(0, t.length - 2) : t; return words.some(w => w === t || (k.length >= 4 && w.startsWith(k))); };
+// les sujets fréquents : mots-clés → théorie + exercices
+const SR_TOP = [
+  { k: 'parite residu relance rejouer relancer prendre main couleur partenaire', t: 'La parité du résidu', a: 'Quand vous prenez la main et rejouez la couleur de votre partenaire, comptez les cartes qui vous <b>restent</b> : 2 (pair) → la <b>plus grosse</b> ; 3 (impair) → la <b>plus petite</b>. Votre partenaire en déduit combien de cartes a le déclarant.', th: [['cch', 'd9']], ex: [['t2', 'residu'], ['t2', 'residuL'], ['t2', 'relance']] },
+  { k: 'defausse italienne paire impaire', th: [['cch', 'e8i']], ex: [['mini', 'ital'], ['t2', 'sign']] },
+  { k: 'signal signaux appel refus aime compte haut bas defausse classique', th: [['cch', 'd10'], ['chap', 'signaux']], ex: [['t2', 'sign'], ['dq', 'signal'], ['dq', 'defausse'], ['pb', 'defa']] },
+  { k: 'entame entamer quatrieme meilleure sequence top nothing premiere carte', th: [['cch', 'c10'], ['chap', 'entame'], ['chap', 'entbonnes']], ex: [['case', 'entsa'], ['case', 'entcoul'], ['case', 'entpart'], ['t2', 'ent'], ['pb', 'entsa'], ['pb', 'entc']] },
+  { k: 'regle 11 onze', t: 'La règle de 11', a: 'Sur une entame en 4e meilleure : <b>11 − la carte entamée</b> = le nombre de cartes plus fortes chez les trois autres joueurs. Vous voyez deux de ces mains : vous savez ce que tient la troisième.', th: [['ov', 'dangx']], ex: [['t2', 'danger']] },
+  { k: 'coup blanc laisser passer hold up regle 7 sept arret', th: [['cch', 'e5'], ['ov', 'blancx'], ['chap', 'comms']], ex: [['dq', 'blanc1'], ['dq', 'blanc2'], ['dq', 'blanc3'], ['pb', 'blanc']] },
+  { k: 'dangereux danger impasse bon sens reprise', t: 'L\'adversaire dangereux', a: 'Trois questions, dans l\'ordre : <b>qui a la longue</b> (l\'entame, les enchères) ? <b>a-t-il une reprise</b> ? <b>qui prendra la main</b> dans mon plan ? Ensuite : coup à blanc, et impasse dans le bon sens (si elle échoue, c\'est l\'adversaire inoffensif qui prend).', th: [['ov', 'dangx'], ['cch', 'c9']], ex: [['t2', 'danger'], ['dq', 'blanc4']] },
+  { k: 'points distribution longueur singleton chicane doubleton courte compter points honneur', t: 'Compter ses points (et la distribution)', a: 'As 4, Roi 3, Dame 2, Valet 1. La distribution (chicane 3, singleton 2, doubleton 1) ne se compte <b>qu\'avec un fit</b>, et +1 par atout au-delà du 3e seulement pour soutenir une majeure 5e.', th: [['ov', 'distx'], ['cch', 'c4']], ex: [['case', 'compter'], ['case', 'hld']] },
+  { k: 'stayman 2 trefle sur 1sa majeure 4 cartes', t: 'Le Stayman', th: [['cch', 'd2']], ex: [['case', 'stayman'], ['casc', 'stayman'], ['dq', 'stayman']] },
+  { k: 'texas transfert', t: 'Le Texas', th: [['cch', 'd2'], ['cch', 'd3']], ex: [['case', 'texas'], ['casc', 'texas']] },
+  { k: 'blackwood cles 4sa dame atout rois', t: 'Le Blackwood 5 clés', a: 'Réponses à 4SA : <b>5♣</b> 0 ou 3 clés · <b>5♦</b> 1 ou 4 · <b>5♥</b> 2 sans la Dame d\'atout · <b>5♠</b> 2 avec la Dame. Il manque 2 clés : stop à 5 ; 1 clé : petit chelem ; aucune : on cherche le grand (question à la Dame, puis 5SA pour les Rois).', th: [['cch', 'e3']], ex: [['case', 'bw'], ['case', 'bwcap'], ['case', 'dame'], ['t2', 'bwr'], ['t2', 'bwd'], ['t2', 'bwq'], ['dq', 'bw']] },
+  { k: 'spoutnik contre negatif', t: 'Le contre Spoutnik', a: 'Votre partenaire a ouvert, l\'adversaire intervient au palier 1 : votre contre n\'est <b>pas punitif</b>. Il dit « j\'ai 4 cartes dans la majeure que personne n\'a nommée, et au moins 8 points ». Avec 5 cartes, on nomme la couleur.', th: [['chap', 'spoutnik'], ['cch', 'd6']], ex: [['t2', 'redint']] },
+  { k: 'reveil contre reouverture', t: 'Le contre de réveil', a: 'L\'adversaire est intervenu, tout le monde a passé, et l\'ouvreur est <b>court</b> dans leur couleur : il contre pour réveiller. Son partenaire, qui avait peut-être de beaux atouts sans pouvoir contrer (à cause du Spoutnik), passe pour <b>punir</b>.', th: [['cch', 'e1']], ex: [['t2', 'redint']] },
+  { k: 'adversaire intervient intervention apres ouverture partenaire ouvert gene genes', t: 'Votre partenaire a ouvert, l\'adversaire intervient', a: 'Avec le <b>fit</b> : soutenez comme d\'habitude (le <b>cue-bid</b> de leur couleur = fit et 11 points et plus). Avec 4 cartes dans la majeure non nommée et 8 points : le <b>contre Spoutnik</b>. Avec 8-11 H et un arrêt chez eux : <b>1SA</b>. Sinon, votre couleur (« enchère libre »), ou passe.', th: [['chap', 'spoutnik'], ['chap', 'intervenir']], ex: [['t2', 'redint'], ['case', 'cuebid']] },
+  { k: 'contre appel', th: [['cch', 'd6']], ex: [['case', 'contre'], ['casc', 'contre'], ['case', 'repcontre'], ['casc', 'repcontre']] },
+  { k: 'reponse contre appel repondre', t: 'Répondre au contre d\'appel', a: 'On répond <b>toujours</b>, même avec 0 point. 0 à 7 : une majeure de 4 cartes au plus bas, sinon sa couleur la plus longue ; avec deux majeures 4-4 : <b>les piques</b>. 8 à 11 : avec un saut. 12 et plus : la manche ou le cue-bid.', th: [['cch', 'd6']], ex: [['case', 'repcontre'], ['casc', 'repcontre']] },
+  { k: 'intervention intervenir adversaire ouvert', t: 'Intervenir quand l\'adversaire a ouvert', th: [['cch', 'd5'], ['chap', 'intervenir']], ex: [['case', 'intervenir'], ['casc', 'intervenir']] },
+  { k: 'barrage faible deux faibles 2 coeur 2 pique', th: [['cch', 'd4']], ex: [['case', 'barrage'], ['casc', 'barrage']] },
+  { k: 'ouverture ouvrir 12 points', th: [['cch', 'c5']], ex: [['case', 'ouvrir'], ['casc', 'ouvrir']] },
+  { k: 'reponse repondre fit soutien majeure', th: [['cch', 'c6']], ex: [['case', 'soutien'], ['case', 'sansfit'], ['case', 'mineure']] },
+  { k: 'redemande ouvreur troisieme tour', th: [['cch', 'c7']], ex: [['case', 'troisieme'], ['case', 'fitouv'], ['case', 'capitaine']] },
+  { k: '1sa sans atout 15 17 reponse questions', t: 'Répondre à 1SA', th: [['cch', 'd2']], ex: [['case', 'sa1'], ['casc', 'sa1']] },
+  { k: 'ouverture forte fortes 2sa 2 trefle 2 carreau 22 24 relais', th: [['cch', 'd1']], ex: [['case', 'fortes'], ['case', 'deuxt']] },
+  { k: 'cue bid cuebid fit 11 points', th: [['cch', 'd6']], ex: [['case', 'cuebid'], ['casc', 'cuebid']] },
+  { k: 'chelem 33 37 quantitatif grand petit', th: [['cch', 'e3']], ex: [['case', 'potentiel'], ['case', 'quanti'], ['case', 'grand']] },
+  { k: 'plan sans atout alc gagnante affranchir communications', th: [['cch', 'c9']], ex: [['t2', 'gagn'], ['t2', 'plan'], ['pb', 'sa']] },
+  { k: 'plan couleur cdi perdante coupe main courte', th: [['cch', 'd7']], ex: [['t2', 'perd'], ['pb', 'coul'], ['pb', 'coupe']] },
+  { k: 'impasse double fourchette maniement', t: 'L\'impasse et la double impasse', a: 'Je joue <b>vers</b> la fourchette, de la main faible vers la main forte. Double impasse : d\'abord la plus petite carte.', th: [['chap', 'impasses']], ex: [['t2', 'man'], ['dq', 'dame']] },
+  { k: 'purge purger atouts', th: [['cch', 'd8']], ex: [['pb', 'purge'], ['dq', 'coupe']] },
+  { k: 'defense troisieme main 3e position seconde basse couvrir honneur', th: [['cch', 'd9']], ex: [['pb', 'def3'], ['dq', 'def']] },
+  { k: 'marque manche vulnerable vulnerabilite score points', th: [['cch', 'c8']] },
+  { k: 'squeeze', th: [['cch', 'e9']], ex: [['t2', 'av']] },
+  { k: 'elimination mise main', th: [['cch', 'e6']], ex: [['t2', 'av']] },
+  { k: 'securite maniement', th: [['cch', 'e7']], ex: [['t2', 'man']] },
+  { k: 'compter main adversaire comptage', th: [['cch', 'e4']] },
+  { k: 'contre punitif surcontre', th: [['cch', 'e2']] },
+];
+const srChap = id => { try { return cFind(id)[1]; } catch (e) { return null; } };
+const srKeep = c => { if (!c || !c.th) return ''; const m = String(c.th).match(/<div class="keep"><b>À retenir<\/b><br>([\s\S]*?)<\/div>/); return m ? m[1] : (c.d || ''); };
+function srLink([k, v]) {
+  const B = (a, ic, t) => `<button class="btn sec t2b" ${a}>${ic} ${t}</button>`;
+  try {
+    if (k === 'cch') { const c = srChap(v); return c ? B(`data-cch="${v}"`, '📖', 'Le cours : ' + c.t) : ''; }
+    if (k === 'chap') { const f = THEORY.find(x => x.id === v); return f ? B(`data-chap="${v}"`, '📄', 'La fiche : ' + f.t) : ''; }
+    if (k === 'ov') return B({ distx: 'data-distx', blancx: 'data-blancx', dangx: 'data-dangx' }[v], '📐', { distx: 'Les points de distribution', blancx: 'Le coup à blanc : quand oui, quand non', dangx: 'L\'adversaire dangereux' }[v]);
+    if (k === 't2') { const b = T2_BATS[v]; return b ? B(`data-t2="${v}"`, b.ic, b.t) : ''; }
+    if (k === 'case') { const c = CASES.find(x => x.id === v); return c ? B(`data-case="${v}"`, '🃏', c.short || c.title) : ''; }
+    if (k === 'casc') { const l = CASC_BID.flatMap(P => P.L).find(x => x.id === v); return l ? B(`data-sgo="casc:${v}"`, '🪜', 'Cascade : ' + l.t) : ''; }
+    if (k === 'dq') { const d = DQ.find(x => x.id === v); return d ? B(`data-sgo="dq:${v}"`, '🕵️', d.t) : ''; }
+    if (k === 'pb') { const t = PB_T.find(x => x.id === v); return t ? B(`data-sgo="pb:${v}"`, '🎯', t.t) : ''; }
+    if (k === 'mini') return MINI[v] ? B(`data-mini="${v}"`, '🎲', MINI[v].t) : '';
+  } catch (e) { } return '';
+}
+// l'index : les sujets, tous les chapitres du cours, les fiches, les exercices
+let SR_IDX = null;
+function srIndex() {
+  if (SR_IDX) return SR_IDX; const I = [];
+  const F = (txt) => SRN(txt).split(/\s+/).filter(Boolean);
+  SR_TOP.forEach((T, i) => { const c = T.th && T.th[0] && T.th[0][0] === 'cch' ? srChap(T.th[0][1]) : null; I.push({ ty: 'top', i, T, t: T.t || (c ? c.t : T.k), kw: F(T.k + ' ' + (T.t || '')), tw: F(T.t || (c ? c.t : '')), bw: [] }); });
+  COURS.forEach(L => L.ch.forEach(c => I.push({ ty: 'cch', id: c.id, t: c.t, tw: F(c.t), kw: F(c.d), bw: F(c.th) })));
+  THEORY.forEach(f => I.push({ ty: 'chap', id: f.id, t: f.t, tw: F(f.t), kw: F(f.d), bw: F(f.html) }));
+  Object.entries(T2_BATS).forEach(([k, b]) => I.push({ ty: 't2', id: k, t: b.t, tw: F(b.t), kw: F(b.d), bw: [] }));
+  CASES.forEach(c => I.push({ ty: 'case', id: c.id, t: c.short || c.title, tw: F(c.title + ' ' + (c.short || '')), kw: [], bw: F(c.memo) }));
+  CASC_BID.forEach(P => P.L.forEach(l => I.push({ ty: 'casc', id: l.id, t: 'Cascade : ' + l.t, tw: F(l.t), kw: F(l.learn), bw: F(l.rule) })));
+  PB_T.forEach(t => I.push({ ty: 'pb', id: t.id, t: t.t, tw: F(t.t), kw: F(t.d || ''), bw: F(t.hint || '') }));
+  DQ.forEach(d => I.push({ ty: 'dq', id: d.id, t: d.t, tw: F(d.t), kw: [], bw: F((d.steps || []).map(s => s.p).join(' ')) }));
+  return SR_IDX = I;
+}
+function srSearch(q) {
+  const toks = srTok(q); if (!toks.length) return [];
+  return srIndex().map(e => {
+    let s = 0, hits = 0;
+    toks.forEach(t => { let h = 0; if (srHit(t, e.kw)) h = Math.max(h, e.ty === 'top' ? 9 : 3); if (srHit(t, e.tw)) h = Math.max(h, 6); if (!h && srHit(t, e.bw)) h = 1; if (h) hits++; s += h; });
+    if (hits) s *= (1 + hits / toks.length); if (e.ty === 'top') s *= 1.25;
+    return { e, s };
+  }).filter(r => r.s >= 3).sort((a, b) => b.s - a.s);
+}
+const SR_EX = ['Rappelle-moi la parité du résidu', 'C\'est quoi la défausse italienne ?', 'Que répondre au contre d\'appel ?', 'Quand faire un coup à blanc ?', 'Comment compter la distribution ?', 'Blackwood : que veut dire 5♦ ?', 'Le contre Spoutnik', 'Qui est l\'adversaire dangereux ?'];
+function srAnswer(r) {
+  const e = r.e;
+  if (e.ty === 'top') {
+    const T = e.T, c = T.th && T.th[0] && T.th[0][0] === 'cch' ? srChap(T.th[0][1]) : null;
+    const ans = T.a || srKeep(c) || (c && c.d) || '';
+    return `<div class="card srans"><div class="srk">Réponse</div><h2>${e.t}</h2>${ans ? `<div class="keep"><b>À retenir</b><br>${ans}</div>` : ''}
+      ${T.th && T.th.length ? `<h3>📖 La théorie</h3><div class="srbs">${T.th.map(srLink).join('')}</div>` : ''}
+      ${T.ex && T.ex.length ? `<details class="srex"><summary>🎯 S'entraîner sur ce point (${T.ex.length})</summary><div class="srbs">${T.ex.map(srLink).join('')}</div></details>` : ''}</div>`;
+  }
+  if (e.ty === 'cch') { const c = srChap(e.id); return `<div class="card srans"><div class="srk">Réponse</div><h2>${c.ic || '📖'} ${c.t}</h2><div class="keep"><b>À retenir</b><br>${srKeep(c)}</div><div class="srbs">${srLink(['cch', e.id])}</div></div>`; }
+  return '';
+}
+const SR_LAB = { top: 'Sujet', cch: 'Cours', chap: 'Fiche', t2: 'Exercices', case: 'Exercices d\'enchères', casc: 'Cascade', pb: 'Batterie de jeu', dq: 'Donne-enquête' };
+function srResults(q) {
+  if (!SRN(q).trim()) return `<div class="card"><h3>💡 Exemples de questions</h3><div class="srbs">${SR_EX.map(x => `<button class="btn sec t2b" data-sq="${escA(x)}">${x}</button>`).join('')}</div><p class="small">Écrivez une question ou quelques mots. La réponse donne la règle à retenir, le chapitre du cours, et en option les exercices sur ce point.</p></div>`;
+  const R = srSearch(q); if (!R.length) return `<div class="card"><p>Rien trouvé pour « ${escA(q)} ». Essayez un autre mot : <i>entame, Stayman, contre, coup à blanc, signal, Blackwood…</i></p></div>`;
+  const top = R.find(r => r.e.ty === 'top' || r.e.ty === 'cch');
+  const rest = R.filter(r => r !== top).slice(0, 10);
+  const map = { top: r => r.e.T.th && r.e.T.th[0] ? srLink(r.e.T.th[0]) : '', cch: r => srLink(['cch', r.e.id]), chap: r => srLink(['chap', r.e.id]), t2: r => srLink(['t2', r.e.id]), case: r => srLink(['case', r.e.id]), casc: r => srLink(['casc', r.e.id]), pb: r => srLink(['pb', r.e.id]), dq: r => srLink(['dq', r.e.id]) };
+  const ans = top ? srAnswer(top) : '', seen = new Set((ans.match(/data-[a-z0-9]+="[^"]*"/g) || []));
+  const more = rest.map(r => { const b = (map[r.e.ty] || (() => ''))(r); const at = (b.match(/data-[a-z0-9]+="[^"]*"/) || [''])[0]; if (!b || seen.has(at)) return ''; seen.add(at); return `<div class="srl"><span class="srt">${SR_LAB[r.e.ty]}</span>${b}</div>`; }).filter(Boolean).slice(0, 8);
+  return ans + (more.length ? `<div class="card"><h3>Voir aussi</h3><div class="srlist">${more.join('')}</div></div>` : '');
+}
+function searchPage(q = '') {
+  show(`${topBar('🔎 Rechercher', 'Une question, un mot : la règle, la théorie, les exercices', 'menu')}<div class="wrap"><div class="card srbox"><input id="srq" type="search" enterkeyhint="search" autocomplete="off" placeholder="Ex. : la parité du résidu, que répondre au contre d'appel ?" value="${escA(q)}"></div><div id="srres">${srResults(q)}</div></div>`);
+  const i = document.getElementById('srq'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); let tm; i.addEventListener('input', () => { clearTimeout(tm); tm = setTimeout(() => srRender(i.value), 160); }); }
+  ST.srq = q;
+}
+function srRender(q) { const r = document.getElementById('srres'); if (!r) return; r.innerHTML = colorize(srResults(q)); if (typeof tuTree === 'function') tuTree(r); ST.srq = q; }
+document.addEventListener('click', e => {
+  const s = e.target.closest('[data-srch]'); if (s) { e.preventDefault(); e.stopPropagation(); return searchPage(ST.srq || ''); }
+  const x = e.target.closest('[data-sq]'); if (x) { const i = document.getElementById('srq'); if (i) { i.value = x.dataset.sq; srRender(i.value); } return; }
+  const g = e.target.closest('[data-sgo]'); if (g) { e.preventDefault(); e.stopPropagation(); const [k, v] = g.dataset.sgo.split(':');
+    if (k === 'casc') return cascPage('bid', v); if (k === 'dq') return dqStart(DQ.findIndex(d => d.id === v)); if (k === 'pb') return pbStart(v); }
+}, true);
+// le bouton 🔎 dans l'en-tête de chaque écran
+new MutationObserver(() => { const h = app.querySelector('.top .in, .hero .in'); if (h && !h.querySelector('[data-srch]') && !document.getElementById('srq')) { const b = document.createElement('button'); b.className = 'srchb'; b.dataset.srch = ''; b.setAttribute('aria-label', 'Rechercher'); b.innerHTML = app.querySelector('.hero') ? '🔎 <span>Rechercher</span>' : '🔎'; h.appendChild(b); } }).observe(app, { childList: true });
 
 // ====================================================================
 //  v176 — APPRENDRE POUR RETENIR
