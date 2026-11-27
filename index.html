@@ -1939,6 +1939,13 @@ body.tv .srbox input{font-size:24px}
 .agehide{display:none!important}
 .agetin h2{margin:0 0 4px}.agetin p{margin:0}
 .champhero{border:2px solid var(--gold,#c9a227)}
+
+/* v191b : le choix du niveau, « J'enseigne » sous chaque monde, l'encoche de l'iPhone */
+.ageteach2{display:flex;flex-direction:column;gap:8px;margin-top:14px;padding-top:12px;border-top:1px dashed rgba(255,255,255,.35)}
+.ageteach2 .btn{font-size:15px}
+.age4n{display:flex;flex-direction:column;gap:10px}
+.nivhero{border:2px solid var(--gold,#c9a227)}
+body .hero{padding-top:max(22px,calc(env(safe-area-inset-top,0px) + 12px))}
 </style>
 </head>
 <body>
@@ -6713,7 +6720,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v191';
+const APP_V = 'v192';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -16387,30 +16394,37 @@ const TEACH4 = [['petit', 'kid', '7 à 10 ans', 'L\'École de Bridgelart', 'Le m
   ['ado', 'teen', '13 à 17 ans', 'La Comté', 'Les règles sans blabla, des défis, et le tournoi de Chelemdor au bout.', '🧝 ⛏️ 🌫️'],
   ['adulte', 'adult', 'Adultes', 'Le Vapeur du Nil', 'Le grand cours, avec le Duke of Blackwood et ses passagers.', '🎖️ ⚓ 🏺']];
 const teachGo = k => { ST.prof = 'enseignant'; ST.opt.tpub = (k === 'petit' || k === 'grand') ? 'enfant' : k; if (k === 'petit' || k === 'grand') ST.opt.kage = k; AGE_OK = true; save(); try { syncCours(); } catch (e) { } teachHome(); };
+// L'écran « Qui vient jouer ? » : dans chaque monde, d'abord le personnage (masculin / féminin),
+// puis, sous le monde, « J'enseigne le bridge aux … ». Le niveau de jeu se choisit à l'écran suivant.
+const NIV4 = [['debutant', '🌱 Je suis débutant', 'adulte'], ['joue', '🃏 Je sais jouer', 'confirme'], ['confirme', '🏆 Je suis un joueur confirmé', 'expert'], ['champion', '🥇 Je veux devenir un champion', 'champion']];
+const TEACH_OF = { kid: [['petit', '7-10 ans'], ['grand', '11-12 ans']], teen: [['ado', '13-17 ans']], adult: [['adulte', 'adultes']] };
 { const _ag = ageGate; ageGate = function () {
   _ag.apply(this, arguments);
   const pg = app.querySelector('.agepage'); if (!pg) return;
-  const tab = ST.opt.agetab === 'teach' ? 'teach' : 'play';
-  // 1. l'onglet
-  const head = pg.querySelector('.ageh');
-  head.insertAdjacentHTML('afterend', `<div class="agetabs" role="tablist"><button role="tab" class="${tab === 'play' ? 'on' : ''}" data-agetab="play">🃏 Je joue, j'apprends</button><button role="tab" class="${tab === 'teach' ? 'on' : ''}" data-agetab="teach">🎓 J'enseigne</button></div>`);
-  // 2. côté joueur : les 4 niveaux adultes (le 4e = champion ; plus de bouton « enseigner » ici)
-  const ens = pg.querySelector('[data-agep="enseignant:"]');
-  if (ens) { ens.outerHTML = `<button class="${ens.className}" data-agep="champion:">🥇 Je veux devenir un champion</button>`; }
-  pg.querySelectorAll('.agedoor.kid .agek').forEach(k => { if (/8 à 12/.test(k.textContent)) k.textContent = '7 à 12 ans'; });
-  // 3. côté professeur : les 4 publics, chacun dans son univers
-  const doors = [...pg.querySelectorAll('.agedoor')];
-  const teach = `<div class="ageteach"><div class="card agetin"><h2>🎓 J'enseigne le bridge</h2><p>Choisissez le public de votre classe : les leçons sur grand écran, les fiches et les donnes prennent l'univers de leur âge.</p></div>
-   ${TEACH4.map(([k, cls, age, uni, d, cast]) => `<section class="agedoor ${cls}"><div class="agek">${age}</div><h2>${uni}</h2><p>${d}</p><div class="agecast">${cast}</div><div class="agebtns"><button class="btn" data-teachage="${k}">🎓 Enseigner aux ${age === 'Adultes' ? 'adultes' : age}</button></div></section>`).join('')}</div>`;
-  doors[doors.length - 1].insertAdjacentHTML('afterend', teach);
-  doors.forEach(d => d.classList.toggle('agehide', tab !== 'play'));
-  pg.querySelector('.ageteach').classList.toggle('agehide', tab !== 'teach');
+  pg.querySelectorAll('.age4').forEach(x => x.remove());
+  pg.querySelectorAll('[data-agep$=":"]').forEach(x => x.remove());
+  pg.querySelectorAll('.agedoor').forEach(d => {
+    const k = ['kid', 'teen', 'adult'].find(c => d.classList.contains(c)); if (!k) return;
+    const ak = d.querySelector('.agek'); if (ak && /8 à 12/.test(ak.textContent)) ak.textContent = '7 à 12 ans';
+    const bt = d.querySelector('.agebtns') || d;
+    bt.insertAdjacentHTML('beforeend', `<div class="ageteach2">${TEACH_OF[k].map(([t, lab]) => `<button class="btn sec" data-teachage="${t}">🎓 J'enseigne le bridge aux ${lab}</button>`).join('')}</div>`);
+  });
 }; }
+function nivPage(world) {
+  const cls = { enfant: 'kid', ado: 'teen', adulte: 'adult' }[world], tu = world !== 'adulte';
+  const cur = world === 'adulte' ? (NIV4.find(x => x[2] === ST.prof) || [])[0] : ST.opt.niv;
+  show(`<div class="agepage"><div class="ageh"><div class="agesuits"><b>♠</b><b class="r">♥</b><b class="r">♦</b><b>♣</b></div><h1>${tu ? 'Ton' : 'Votre'} niveau de bridge</h1><p>${tu ? 'Dis-nous où tu en es : on te propose le bon point de départ. Tu pourras changer quand tu veux.' : 'Dites-nous où vous en êtes : nous vous proposons le bon point de départ. Vous pourrez changer à tout moment.'}</p></div>
+  <section class="agedoor ${cls}"><div class="agebtns age4n">${NIV4.map(([k, t]) => `<button class="btn${k === cur ? '' : ' sec'}" data-niv="${world}:${k}">${t}</button>`).join('')}</div></section>
+  <p class="small" style="text-align:center"><button class="btn small sec" data-agegate="1">‹ Changer de personnage</button></p></div>`);
+}
 document.addEventListener('click', e => {
-  const t = e.target.closest('[data-agetab],[data-teachage],[data-tage4]'); if (!t) return; e.stopPropagation(); const d = t.dataset;
-  if (d.agetab) { ST.opt.agetab = d.agetab; save(); return ageGate(); }
-  if (d.teachage) return teachGo(d.teachage);
-  if (d.tage4) return teachGo(d.tage4);
+  const n = e.target.closest('[data-agep^="enfant:"],[data-agep^="ado:"],[data-agesex],[data-niv],[data-teachage],[data-tage4]'); if (!n || !app.contains(n)) return; const d = n.dataset;
+  if (d.teachage) { e.stopPropagation(); return teachGo(d.teachage); }
+  if (d.tage4) { e.stopPropagation(); return teachGo(d.tage4); }
+  if (d.niv) { e.stopPropagation(); const [w, k] = d.niv.split(':'); if (w === 'adulte') ST.prof = NIV4.find(x => x[0] === k)[2]; else ST.opt.niv = k; AGE_OK = true; save(); return home(); }
+  e.stopPropagation();
+  if (d.agesex) { ST.opt.genre = d.agesex; if (!['adulte', 'confirme', 'expert', 'champion'].includes(ST.prof)) ST.prof = 'adulte'; save(); return nivPage('adulte'); }
+  const [k, g] = d.agep.split(':'); ST.prof = k; if (g) ST.opt.genre = g; ST.opt.showH = true; save(); return nivPage(k);
 }, true);
 // l'accueil du professeur : 4 publics au lieu de 3
 { const _t = teachHome; teachHome = function () {
@@ -16420,12 +16434,17 @@ document.addEventListener('click', e => {
   document.querySelectorAll('.card.kage').forEach(c => c.remove()); // le groupe d'âge est déjà choisi ci-dessus
   document.querySelectorAll('.courslink b').forEach(b => { b.textContent = b.textContent.replace('trois saisons', 'quatre saisons'); });
   return r; }; }
-// l'accueil du futur champion : son parcours en tête (au-dessus des 4 portes)
-new MutationObserver(() => { try { if (ST.prof !== 'champion') return; const g = app.querySelector('.wrap > .hubg'); if (g && !app.querySelector('.champhero')) g.insertAdjacentHTML('beforebegin', `<div class="card champhero"><h2>🥇 Votre parcours Champions</h2><p>Les conventions de compétition, des plus jouées aux options. Commencez, si vous le voulez, par le test d'entrée.</p><div class="acts"><button class="btn" data-t2="champtest">🎓 Le test d'entrée</button><button class="btn sec" data-cch="chx">🗺 La carte des conventions</button></div></div>`); } catch (e) { } }).observe(app, { childList: true });
+// l'accueil selon le niveau choisi : le parcours Champions, ou le point de départ (enfants, ados)
+const NIV_TXT = { debutant: ['🌱', 'Tu débutes', 'Commence par la bibliothèque : le cours, leçon après leçon, depuis le tout début.'], joue: ['🃏', 'Tu sais jouer', 'Révise vite les bases du cours, puis va t\'entraîner : enchères, jeu de la carte, défense.'], confirme: ['🏆', 'Tu es un joueur confirmé', 'Le terrain d\'entraînement est pour toi : les exercices sans fin, les cascades et les donnes.'], champion: ['🥇', 'Tu veux devenir un champion', 'Entraîne-toi sans relâche, puis lance-toi dans les tournois : chaque défi réussi te rapproche du titre !'] };
+new MutationObserver(() => { try {
+  const g = app.querySelector('.wrap > .hubg'); if (!g || app.querySelector('.champhero,.nivhero')) return;
+  if (ST.prof === 'champion' || (ST.prof === 'ado' && ST.opt.niv === 'champion')) return g.insertAdjacentHTML('beforebegin', `<div class="card champhero"><h2>🥇 ${ST.prof === 'ado' ? 'Ton' : 'Votre'} parcours Champions</h2><p>Les conventions de compétition, des plus jouées aux options. ${ST.prof === 'ado' ? 'Commence, si tu veux, par le test d\'entrée.' : 'Commencez, si vous le voulez, par le test d\'entrée.'}</p><div class="acts"><button class="btn" data-t2="champtest">🎓 Le test d'entrée</button><button class="btn sec" data-cch="chx">🗺 La carte des conventions</button></div></div>`);
+  if ((ST.prof === 'enfant' || ST.prof === 'ado') && NIV_TXT[ST.opt.niv]) { const [ic, t, d] = NIV_TXT[ST.opt.niv]; g.insertAdjacentHTML('beforebegin', `<div class="card nivhero"><h2>${ic} ${t}</h2><p>${d}</p><div class="acts"><button class="btn" data-hub="${ST.opt.niv === 'debutant' ? 2 : ST.opt.niv === 'champion' ? 4 : 3}">${ST.opt.niv === 'debutant' ? '📚 Apprendre pas à pas' : ST.opt.niv === 'champion' ? '🏆 Les tournois' : '🎯 S\'entraîner'}</button><button class="btn sec" data-agegate="1">Changer de niveau</button></div></div>`); }
+} catch (e) { } }).observe(app, { childList: true });
 // les groupes d'âge des enfants : 7 à 10 ans, 11 à 12 ans
 { const _k = kAgeCard; kAgeCard = function () { return _k.apply(this, arguments).replace('Moins de 10 ans', '7 à 10 ans').replace('10 à 12 ans', '11 à 12 ans').replace('les moins de 10 ans', 'les 7-10 ans').replace('Les 10-12 ans', 'Les 11-12 ans'); }; }
 // le bouton « Accueil » du professeur ramène à l'écran des univers (onglet « J'enseigne »)
-document.addEventListener('click', e => { const t = e.target.closest('[data-tgo="app"]'); if (!t || ST.prof !== 'enseignant') return; e.stopPropagation(); e.preventDefault(); document.body.classList.remove('teaching'); CUR = null; ST.opt.agetab = 'teach'; save(); ageGate(); }, true);
+document.addEventListener('click', e => { const t = e.target.closest('[data-tgo="app"]'); if (!t || ST.prof !== 'enseignant') return; e.stopPropagation(); e.preventDefault(); document.body.classList.remove('teaching'); CUR = null; save(); ageGate(); }, true);
 
 // ====================================================================
 //  v176 — APPRENDRE POUR RETENIR
