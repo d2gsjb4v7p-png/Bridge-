@@ -1931,6 +1931,14 @@ body.tv .srbox input{font-size:24px}
 /* v190 : le test d'entrée Champions */
 .ctinv{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin:8px 0 10px;padding:10px 12px;border-radius:12px;border:1px dashed var(--gold,#c9a227);background:rgba(201,162,39,.10)}
 .ctinv b{flex:1 1 100%;color:var(--ink,#15211c)}.ctinv span{flex:1 1 200px;font-size:14px;color:var(--ink,#15211c)}
+
+/* v191 : l'accueil en deux onglets */
+.agetabs{display:flex;gap:6px;margin:10px 0 4px;padding:5px;border-radius:16px;background:rgba(127,127,127,.16);border:1px solid rgba(127,127,127,.3)}
+.agetabs button{flex:1;border:0;border-radius:12px;padding:11px 8px;font:inherit;font-weight:800;font-size:15px;color:var(--ink,#15211c);background:transparent;cursor:pointer}
+.agetabs button.on{background:#e3c77e;color:#1b1b1b;box-shadow:0 3px 10px -4px rgba(0,0,0,.5)}
+.agehide{display:none!important}
+.agetin h2{margin:0 0 4px}.agetin p{margin:0}
+.champhero{border:2px solid var(--gold,#c9a227)}
 </style>
 </head>
 <body>
@@ -6705,7 +6713,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v190';
+const APP_V = 'v191';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -10083,7 +10091,7 @@ function convOn(k) {
   return r;
 }; }
 // ---------------- la page « Mon système » ----------------
-const isConf = () => ST.prof === 'expert';
+const isConf = () => ST.prof === 'expert' || ST.prof === 'champion';
 function sysHome(open) {
   const id = sysId(), S = SYSTEMS[id];
   const cats = {}; Object.entries(CONV).forEach(([k, c]) => { (cats[c.cat] = cats[c.cat] || []).push([k, c]); });
@@ -16367,6 +16375,57 @@ const ctInvite = () => { const c = ST.champ; return `<div class="ctinv"><b>🎓 
   if (X && !/data-t2="champtest"/.test(X.th)) X.th = X.th.replace('<h3>La règle d\'or</h3>', `<div class="ex">🎓 <b>Avant de commencer</b>, un test facultatif : 5 questions de théorie et 5 exercices tirés au hasard dans les saisons 2 et 3. Vous saurez si vous avez le niveau, et ce qu'il faut revoir.<div class="acts"><button class="btn small" data-t2="champtest">Faire le test d'entrée</button></div></div>\n<h3>La règle d'or</h3>`); }
 { const C = T2_PATH.find(s => /Champions/.test(s.t)); if (C && !C.it.some(x => x[1] === 'champtest')) C.it.unshift(['t2', 'champtest']); }
 if (typeof SR_TOP !== 'undefined') SR_TOP.push({ k: 'test entree niveau champion champions evaluer', t: 'Le test d\'entrée Champions', a: 'Facultatif : 5 questions de théorie et 5 exercices tirés au hasard dans les saisons 2 et 3. Un bilan vous dit si vous êtes prêt, et quoi revoir.', th: [['cch', 'chx']], ex: [['t2', 'champtest']] });
+
+// ====================================================================
+//  v191 — L'ACCUEIL EN DEUX ONGLETS : « JE JOUE » et « J'ENSEIGNE »
+//  · Je joue : les univers, et pour les adultes les 4 niveaux (dont « Je veux devenir un champion »)
+//  · J'enseigne : 4 publics (7-10 ans, 11-12 ans, 13-17 ans, adultes), chacun dans son univers
+// ====================================================================
+PROFILES.champion = { t: 'Je veux devenir un champion', s: 'Le parcours Champions', d: 'Les conventions de compétition : les employer, ne pas les employer, comprendre le partenaire.' };
+const TEACH4 = [['petit', 'kid', '7 à 10 ans', 'L\'École de Bridgelart', 'Le mini-bridge, puis des enchères simples, tout doucement. Dumblebridge raconte, la classe joue.', '🧙 🦉 ✨'],
+  ['grand', 'kid', '11 à 12 ans', 'L\'École de Bridgelart', 'Le parcours complet des petits sorciers : enchères, jeu de la carte, défense.', '🧙 🧝 ⛏️'],
+  ['ado', 'teen', '13 à 17 ans', 'La Comté', 'Les règles sans blabla, des défis, et le tournoi de Chelemdor au bout.', '🧝 ⛏️ 🌫️'],
+  ['adulte', 'adult', 'Adultes', 'Le Vapeur du Nil', 'Le grand cours, avec le Duke of Blackwood et ses passagers.', '🎖️ ⚓ 🏺']];
+const teachGo = k => { ST.prof = 'enseignant'; ST.opt.tpub = (k === 'petit' || k === 'grand') ? 'enfant' : k; if (k === 'petit' || k === 'grand') ST.opt.kage = k; AGE_OK = true; save(); try { syncCours(); } catch (e) { } teachHome(); };
+{ const _ag = ageGate; ageGate = function () {
+  _ag.apply(this, arguments);
+  const pg = app.querySelector('.agepage'); if (!pg) return;
+  const tab = ST.opt.agetab === 'teach' ? 'teach' : 'play';
+  // 1. l'onglet
+  const head = pg.querySelector('.ageh');
+  head.insertAdjacentHTML('afterend', `<div class="agetabs" role="tablist"><button role="tab" class="${tab === 'play' ? 'on' : ''}" data-agetab="play">🃏 Je joue, j'apprends</button><button role="tab" class="${tab === 'teach' ? 'on' : ''}" data-agetab="teach">🎓 J'enseigne</button></div>`);
+  // 2. côté joueur : les 4 niveaux adultes (le 4e = champion ; plus de bouton « enseigner » ici)
+  const ens = pg.querySelector('[data-agep="enseignant:"]');
+  if (ens) { ens.outerHTML = `<button class="${ens.className}" data-agep="champion:">🥇 Je veux devenir un champion</button>`; }
+  pg.querySelectorAll('.agedoor.kid .agek').forEach(k => { if (/8 à 12/.test(k.textContent)) k.textContent = '7 à 12 ans'; });
+  // 3. côté professeur : les 4 publics, chacun dans son univers
+  const doors = [...pg.querySelectorAll('.agedoor')];
+  const teach = `<div class="ageteach"><div class="card agetin"><h2>🎓 J'enseigne le bridge</h2><p>Choisissez le public de votre classe : les leçons sur grand écran, les fiches et les donnes prennent l'univers de leur âge.</p></div>
+   ${TEACH4.map(([k, cls, age, uni, d, cast]) => `<section class="agedoor ${cls}"><div class="agek">${age}</div><h2>${uni}</h2><p>${d}</p><div class="agecast">${cast}</div><div class="agebtns"><button class="btn" data-teachage="${k}">🎓 Enseigner aux ${age === 'Adultes' ? 'adultes' : age}</button></div></section>`).join('')}</div>`;
+  doors[doors.length - 1].insertAdjacentHTML('afterend', teach);
+  doors.forEach(d => d.classList.toggle('agehide', tab !== 'play'));
+  pg.querySelector('.ageteach').classList.toggle('agehide', tab !== 'teach');
+}; }
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-agetab],[data-teachage],[data-tage4]'); if (!t) return; e.stopPropagation(); const d = t.dataset;
+  if (d.agetab) { ST.opt.agetab = d.agetab; save(); return ageGate(); }
+  if (d.teachage) return teachGo(d.teachage);
+  if (d.tage4) return teachGo(d.tage4);
+}, true);
+// l'accueil du professeur : 4 publics au lieu de 3
+{ const _t = teachHome; teachHome = function () {
+  const r = _t.apply(this, arguments);
+  const tp = document.querySelector('.tpub'); if (tp) { const cur = ST.opt.tpub === 'enfant' ? kAge() : (ST.opt.tpub || 'adulte');
+    tp.innerHTML = `<span>Le public :</span>${TEACH4.map(([k, , age]) => `<button class="${k === cur ? 'on' : ''}" data-tage4="${k}">${age}</button>`).join('')}`; }
+  document.querySelectorAll('.card.kage').forEach(c => c.remove()); // le groupe d'âge est déjà choisi ci-dessus
+  document.querySelectorAll('.courslink b').forEach(b => { b.textContent = b.textContent.replace('trois saisons', 'quatre saisons'); });
+  return r; }; }
+// l'accueil du futur champion : son parcours en tête (au-dessus des 4 portes)
+new MutationObserver(() => { try { if (ST.prof !== 'champion') return; const g = app.querySelector('.wrap > .hubg'); if (g && !app.querySelector('.champhero')) g.insertAdjacentHTML('beforebegin', `<div class="card champhero"><h2>🥇 Votre parcours Champions</h2><p>Les conventions de compétition, des plus jouées aux options. Commencez, si vous le voulez, par le test d'entrée.</p><div class="acts"><button class="btn" data-t2="champtest">🎓 Le test d'entrée</button><button class="btn sec" data-cch="chx">🗺 La carte des conventions</button></div></div>`); } catch (e) { } }).observe(app, { childList: true });
+// les groupes d'âge des enfants : 7 à 10 ans, 11 à 12 ans
+{ const _k = kAgeCard; kAgeCard = function () { return _k.apply(this, arguments).replace('Moins de 10 ans', '7 à 10 ans').replace('10 à 12 ans', '11 à 12 ans').replace('les moins de 10 ans', 'les 7-10 ans').replace('Les 10-12 ans', 'Les 11-12 ans'); }; }
+// le bouton « Accueil » du professeur ramène à l'écran des univers (onglet « J'enseigne »)
+document.addEventListener('click', e => { const t = e.target.closest('[data-tgo="app"]'); if (!t || ST.prof !== 'enseignant') return; e.stopPropagation(); e.preventDefault(); document.body.classList.remove('teaching'); CUR = null; ST.opt.agetab = 'teach'; save(); ageGate(); }, true);
 
 // ====================================================================
 //  v176 — APPRENDRE POUR RETENIR
