@@ -1927,6 +1927,10 @@ body.tv .srbox input{font-size:24px}
 .chtag-faire{background:#e4f2ea;color:#14533f}.chtag-pas{background:#fbe6e4;color:#8a2a1f}.chtag-lire{background:#e6eefb;color:#1f3f7a}
 .chhd{margin:10px 0 12px}.chhd .small{margin-bottom:4px}
 .t2p br+.chtag{margin-top:4px}
+
+/* v190 : le test d'entrée Champions */
+.ctinv{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin:8px 0 10px;padding:10px 12px;border-radius:12px;border:1px dashed var(--gold,#c9a227);background:rgba(201,162,39,.10)}
+.ctinv b{flex:1 1 100%;color:var(--ink,#15211c)}.ctinv span{flex:1 1 200px;font-size:14px;color:var(--ink,#15211c)}
 </style>
 </head>
 <body>
@@ -6701,7 +6705,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v189';
+const APP_V = 'v190';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -11369,8 +11373,8 @@ const cNo = id => { const [L, c] = cFind(id); return L ? L.ch.indexOf(c) + 1 : 0
 // ---------------- l'accueil du cours ----------------
 function coursHome() {
   const P = cProg();
-  show(`${topBar(T3('Le cours de magie', 'Le cours de la Comté', 'Le cours'), T3('Deux ans, trois trimestres par an', 'Trois saisons, pas à pas', 'Trois saisons, pas à pas'), 'menu')}<div class="wrap cours">
-  <div class="card th chero"><h2>${T3('📚 Le grand grimoire du bridge', '📚 Le livre des trois saisons', '📚 Le cours en trois saisons')}</h2><p>Chaque chapitre suit le même chemin : <b>la théorie</b>, des <b>questions</b> pour vérifier qu'elle est comprise, des <b>exercices</b> sur de vraies cartes, et un <b>diaporama animé</b>. ${T3('Chaque trimestre a son', 'Chaque saison a son', 'Chaque saison a son')} <b>cahier imprimable</b>, avec les corrigés.</p></div>
+  show(`${topBar(T3('Le cours de magie', 'Le cours de la Comté', 'Le cours'), T3('Deux ans, trois trimestres par an', 'Quatre saisons, pas à pas', 'Quatre saisons, pas à pas'), 'menu')}<div class="wrap cours">
+  <div class="card th chero"><h2>${T3('📚 Le grand grimoire du bridge', '📚 Le livre des trois saisons', '📚 Le cours en quatre saisons')}</h2><p>Chaque chapitre suit le même chemin : <b>la théorie</b>, des <b>questions</b> pour vérifier qu'elle est comprise, des <b>exercices</b> sur de vraies cartes, et un <b>diaporama animé</b>. ${T3('Chaque trimestre a son', 'Chaque saison a son', 'Chaque saison a son')} <b>cahier imprimable</b>, avec les corrigés.</p></div>
   ${COURS.map(L => { const done = L.ch.filter(c => P[c.id] && P[c.id].e != null).length; return `<div class="clvl${L.ch.length ? '' : ' soon'}"><div class="clh"><span class="cli">${L.ic}</span><div><b>${cLvlName(L)}</b><small>${L.d}</small></div></div>
    ${L.ch.length ? `<div class="cbar"><i style="width:${Math.round(100 * done / L.ch.length)}%"></i></div><div class="cchs">${L.ch.map((c, k) => { const p = P[c.id] || {}; return `<button class="cch" data-cch="${c.id}"><span class="ccn">${k + 1}</span><span class="cci">${c.ic}</span><span class="cct"><b>${c.t}</b><small>${c.d}</small></span><span class="ccs">${p.q != null ? `❓ ${p.q}/${c.qs.length}` : ''}${p.e != null ? ` 🃏 ${p.e}/${c.ex.length}` : ''}</span></button>`; }).join('')}</div>
    <div class="acts"><button class="btn sec" data-ccahier="${L.n}">🖨 ${L.lab ? 'Le cahier du trimestre' : 'Le cahier de la saison ' + L.n}</button></div>` : `<p class="small csoon">En préparation.</p>`}</div>`; }).join('')}
@@ -16328,6 +16332,41 @@ if (typeof SR_TOP !== 'undefined') {
   SR_TOP.push({ k: 'deuxieme 2e main petite basse second', t: 'La 2e main petite', a: 'En 2e position, petite carte : vos honneurs doivent prendre des honneurs, le déclarant doit deviner, et votre partenaire décide en dernier. Exceptions : <b>honneur sur honneur</b>, et <b>la levée de chute</b>.', th: [['cch', 'd9'], ['chap', 'cartedef']], ex: [['t2', 'deuxm']] });
   SR_TOP.push({ k: 'cue bid controle controles italien demande chelem', t: 'Les cue-bids de contrôle', a: 'L\'atout fixé (au niveau de 3, idéalement), on annonce ses contrôles (As, Roi, singleton, chicane) du moins cher au plus cher, sous la manche. Sauter une couleur = rien dedans. Ensuite : 4SA si tout est tenu, la manche sinon.', th: [['cch', 'chctl']], ex: [['t2', 'chctl']] });
 }
+
+// ====================================================================
+//  v190 — LE TEST D'ENTRÉE « JE VEUX DEVENIR UN CHAMPION » (facultatif)
+//  5 questions de théorie tirées au hasard (saisons 2 et 3) + 5 exercices générés.
+//  Un bilan : prêt / prêt en revoyant… / consolider d'abord. Jamais bloquant.
+// ====================================================================
+const CT_EX = ['parite', 'pariteL', 'residu', 'residuL', 'seqsa', 'entcm', 'deuxm', 'gagn', 'perd', 'bwr', 'bwd'];
+function ctBuild() {
+  const chs = COURS.filter(L => L.n === 2 || L.n === 3).flatMap(L => L.ch.filter(c => c.qs && c.qs.length).map(c => ({ c, L })));
+  const th = shuffle(chs).slice(0, 5).map(({ c, L }) => { const q = pick(c.qs); return { p: `<span class="chtag chtag-lire">📖 Théorie · ${c.t}</span><br>${q[0]}`, o: q[1].map((t, i) => [t, i === q[2] ? 1 : 0, q[3] || '']), src: { lab: `${c.ic} ${c.t}`, act: `data-cch="${c.id}"`, k: 'th' } }; });
+  const ex = shuffle(CT_EX.filter(id => T2_BATS[id] && T2_BATS[id].gen)).slice(0, 5).map(id => { const B = T2_BATS[id]; let q = null; for (let t = 0; t < 5 && !q; t++) { try { q = B.gen(); } catch (e) { } } return q && { p: `<span class="chtag chtag-faire">🎯 Exercice · ${B.t}</span><br>${q.p}`, o: q.o, src: { lab: `${B.ic} ${B.t}`, act: `data-t2="${id}"`, k: 'ex' } }; }).filter(Boolean);
+  return th.concat(ex);
+}
+T2_BATS.champtest = { ic: '🎓', t: 'Le test d\'entrée Champions', d: '5 questions de théorie et 5 exercices, au hasard : ai-je le niveau ?', bank: [] };
+{ const _s = t2Start; t2Start = function (id) { if (id !== 'champtest') return _s.apply(this, arguments); const order = ctBuild(); T2 = { id, i: 0, n: order.length, ok: 0, q: null, order, res: [] }; t2Next(); }; }
+{ const _a = t2Answer; t2Answer = function (i) { if (T2 && T2.id === 'champtest' && !T2.done && T2.q) { const it = T2.order[T2.i - 1] || T2.order[T2.i]; T2.res.push({ ok: !!T2.q.o[i].ok, src: (T2.order.find(x => x.p === T2.q.p) || it).src }); } return _a.apply(this, arguments); }; }
+{ const _e = t2End; t2End = function () {
+  if (!T2 || T2.id !== 'champtest') return _e.apply(this, arguments);
+  const R = T2.res || [], tot = R.length, ok = R.filter(r => r.ok).length, th = R.filter(r => r.src.k === 'th'), ex = R.filter(r => r.src.k === 'ex');
+  const miss = R.filter(r => !r.ok).map(r => r.src);
+  ST.champ = { s: ok, n: tot, d: Date.now() }; save();
+  const v = ok >= 8 ? ['win', '🥇 Vous êtes prêt', 'Vous maîtrisez les bases des trois saisons : le parcours Champions est fait pour vous.'] : ok >= 6 ? ['', '👍 Vous pouvez y aller', 'Le niveau est là, avec quelques points à revoir en chemin (ci-dessous).'] : ['lose', '📚 Consolidez d\'abord', 'Les conventions des champions reposent sur les saisons 2 et 3. Revoyez les points ci-dessous, puis refaites le test. Vous pouvez aussi entrer quand même : le test n\'est pas obligatoire.'];
+  show(`${topBar('🎓 Le test d\'entrée Champions', 'Votre bilan', 'cours')}<div class="wrap">
+  <div class="card ${v[0]}"><h2>${ok} / ${tot} · ${v[1]}</h2><p>${v[2]}</p>
+  <p class="small">Théorie : <b>${th.filter(r => r.ok).length} / ${th.length}</b> · Exercices : <b>${ex.filter(r => r.ok).length} / ${ex.length}</b></p></div>
+  ${miss.length ? `<div class="card"><h3>À revoir</h3>${miss.map(s => `<button class="btn sec" ${s.act}>${s.lab}</button>`).join(' ')}</div>` : ''}
+  <div class="acts"><button class="btn" data-cch="chx">🥇 Entrer dans le parcours Champions</button><button class="btn sec" data-t2="champtest">🔁 Un autre test</button></div></div>`);
+}; }
+// l'invitation : dans le cours (au-dessus des chapitres Champions), dans le chapitre d'introduction, et dans le parcours
+const ctInvite = () => { const c = ST.champ; return `<div class="ctinv"><b>🎓 Test d'entrée (facultatif)</b><span>5 questions de théorie et 5 exercices au hasard, pour savoir si vous avez le niveau.${c ? ` Dernier résultat : <b>${c.s}/${c.n}</b>.` : ''}</span><button class="btn small" data-t2="champtest">Faire le test</button></div>`; };
+{ const _h = coursHome; coursHome = function () { const r = _h.apply(this, arguments); try { const L = [...document.querySelectorAll('.clvl')].find(x => /devenir un champion/.test(x.textContent)); if (L && !L.querySelector('.ctinv')) { const at = L.querySelector('.cbar') || L.querySelector('.cchs'); if (at) at.insertAdjacentHTML('beforebegin', ctInvite()); } } catch (e) { } return r; }; }
+{ const X = COURS.find(L => L.n === 4) && COURS.find(L => L.n === 4).ch.find(c => c.id === 'chx');
+  if (X && !/data-t2="champtest"/.test(X.th)) X.th = X.th.replace('<h3>La règle d\'or</h3>', `<div class="ex">🎓 <b>Avant de commencer</b>, un test facultatif : 5 questions de théorie et 5 exercices tirés au hasard dans les saisons 2 et 3. Vous saurez si vous avez le niveau, et ce qu'il faut revoir.<div class="acts"><button class="btn small" data-t2="champtest">Faire le test d'entrée</button></div></div>\n<h3>La règle d'or</h3>`); }
+{ const C = T2_PATH.find(s => /Champions/.test(s.t)); if (C && !C.it.some(x => x[1] === 'champtest')) C.it.unshift(['t2', 'champtest']); }
+if (typeof SR_TOP !== 'undefined') SR_TOP.push({ k: 'test entree niveau champion champions evaluer', t: 'Le test d\'entrée Champions', a: 'Facultatif : 5 questions de théorie et 5 exercices tirés au hasard dans les saisons 2 et 3. Un bilan vous dit si vous êtes prêt, et quoi revoir.', th: [['cch', 'chx']], ex: [['t2', 'champtest']] });
 
 // ====================================================================
 //  v176 — APPRENDRE POUR RETENIR
