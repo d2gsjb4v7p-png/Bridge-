@@ -16445,6 +16445,8 @@ new MutationObserver(() => { try {
 { const _k = kAgeCard; kAgeCard = function () { return _k.apply(this, arguments).replace('Moins de 10 ans', '7 à 10 ans').replace('10 à 12 ans', '11 à 12 ans').replace('les moins de 10 ans', 'les 7-10 ans').replace('Les 10-12 ans', 'Les 11-12 ans'); }; }
 // le bouton « Accueil » du professeur ramène à l'écran des univers (onglet « J'enseigne »)
 document.addEventListener('click', e => { const t = e.target.closest('[data-tgo="app"]'); if (!t || ST.prof !== 'enseignant') return; e.stopPropagation(); e.preventDefault(); document.body.classList.remove('teaching'); CUR = null; save(); ageGate(); }, true);
+// l'écran d'accueil est parfois déjà affiché au chargement : on le redessine avec la nouvelle version
+try { if (app.querySelector('.agepage')) ageGate(); } catch (e) { }
 
 // ====================================================================
 //  v176 — APPRENDRE POUR RETENIR
