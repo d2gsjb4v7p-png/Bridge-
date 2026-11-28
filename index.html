@@ -1946,6 +1946,75 @@ body.tv .srbox input{font-size:24px}
 .age4n{display:flex;flex-direction:column;gap:10px}
 .nivhero{border:2px solid var(--gold,#c9a227)}
 body .hero{padding-top:max(22px,calc(env(safe-area-inset-top,0px) + 12px))}
+
+/* ===================== v193 : la table des personnages ===================== */
+.deck{position:relative;margin:18px 0 8px;border-radius:22px;padding:22px 16px 18px;overflow:hidden}
+.dk-head{text-align:center;margin-bottom:14px}.dk-head h2{margin:6px 0 6px;font-size:23px;line-height:1.15}.dk-head p{margin:0 auto;max-width:440px;font-size:14.5px;line-height:1.45}
+.dk-table{position:relative;display:grid;grid-template-columns:1fr 1.25fr 1fr;grid-template-rows:auto auto auto;align-items:center;justify-items:center;gap:6px;max-width:360px;margin:6px auto 18px}
+.dk-n{grid-column:2;grid-row:1}.dk-o{grid-column:1;grid-row:2}.dk-felt{grid-column:2;grid-row:2}.dk-e{grid-column:3;grid-row:2}.dk-s{grid-column:2;grid-row:3}
+.dk-seat{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;font-size:11.5px;line-height:1.15;max-width:110px}
+.dk-av{display:flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:50%;font-size:34px;line-height:1;overflow:hidden}
+.dk-av img,.dk-portrait img{width:100%;height:100%;object-fit:contain}
+.dk-felt{width:100%;aspect-ratio:1/1;max-width:120px;border-radius:16px;display:grid;grid-template-columns:1fr 1fr;place-items:center;font-size:22px;font-weight:700}
+.dk-cards{display:flex;flex-direction:column;gap:12px}
+.dk-card{position:relative;display:flex;gap:14px;align-items:flex-start;border-radius:16px;padding:14px 14px 14px 12px;animation:castin .6s cubic-bezier(.2,1.2,.4,1) both}
+.dk-portrait{flex:none;width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:46px;overflow:hidden}
+.dk-body small{display:block;font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px}
+.dk-body h3{margin:0 0 5px;font-size:17.5px;line-height:1.2}.dk-body p{margin:0;font-size:14.5px;line-height:1.5}
+@media (min-width:640px){.dk-cards{display:grid;grid-template-columns:1fr 1fr}.dk-cme,.dk-cpr{grid-column:1 / -1}}
+
+/* ---- 7-12 ans : l'école des petits sorciers (nuit étoilée, parchemin, sceaux de cire) ---- */
+.deck-enfant{background:radial-gradient(2px 2px at 12% 18%,#fff8 50%,transparent 51%),radial-gradient(1.5px 1.5px at 78% 12%,#fff9 50%,transparent 51%),radial-gradient(2px 2px at 64% 34%,#ffe9a8 50%,transparent 51%),radial-gradient(1.5px 1.5px at 30% 46%,#fff8 50%,transparent 51%),radial-gradient(2px 2px at 90% 58%,#ffe9a8 50%,transparent 51%),radial-gradient(1.5px 1.5px at 8% 72%,#fff9 50%,transparent 51%),radial-gradient(120% 90% at 50% 0%,#5b2c9b 0%,#2c1559 55%,#1a0d38 100%);border:3px solid #f2c94c;box-shadow:0 0 0 5px #2c1559,0 0 0 7px #f2c94c55,0 14px 30px -12px #000}
+.deck-enfant .dk-head{color:#fff6dc}.deck-enfant .dk-head h2{font-family:"Grandstander",var(--f-body);font-weight:800;color:#ffd75e;text-shadow:0 2px 0 #3a1a72,0 0 18px #ffd75e66}
+.deck-enfant .dk-orn::before{content:"🪄 ⭐ 🌙 ⭐ 🪄";letter-spacing:.3em;font-size:18px}
+.deck-enfant .dk-seat{color:#fff1c9;font-family:"Grandstander",var(--f-body);font-weight:600}
+.deck-enfant .dk-av{background:radial-gradient(circle at 35% 30%,#fffbe8,#f2d98a);box-shadow:0 0 0 2px #f2c94c,0 0 14px #ffd75e88}
+.deck-enfant .dk-you .dk-av{box-shadow:0 0 0 3px #ff6fa5,0 0 18px #ff6fa5aa}
+.deck-enfant .dk-felt{background:radial-gradient(circle,#2f8a5b,#145a39);border:3px dashed #f2c94c;color:#fff}.deck-enfant .dk-felt .r{color:#ff6b6b}
+.deck-enfant .dk-card{background:linear-gradient(180deg,#fff9e6,#f6e7bd);border:2px solid #e0b84a;box-shadow:0 6px 0 #c99a2e,0 12px 22px -10px #000;color:#3a2357}
+.deck-enfant .dk-card::after{content:"";position:absolute;top:-8px;right:14px;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#ff7b7b,#b3122e);box-shadow:0 2px 3px #0006}
+.deck-enfant .dk-portrait{background:radial-gradient(circle at 35% 30%,#efe2ff,#c7a8f2);box-shadow:0 0 0 3px #7a4cc2}
+.deck-enfant .dk-body small{color:#8a4fd1}.deck-enfant .dk-body h3{font-family:"Grandstander",var(--f-body);font-weight:800;color:#4b237f}
+.deck-enfant .dk-cme{background:linear-gradient(180deg,#fff3f8,#ffd9e8);border-color:#ff6fa5;box-shadow:0 6px 0 #d94f86,0 12px 22px -10px #000}
+.deck-enfant .dk-cpr{background:linear-gradient(180deg,#f3ecff,#dccbff);border-color:#7a4cc2;box-shadow:0 6px 0 #5a3399,0 12px 22px -10px #000}
+
+/* ---- 13-17 ans : la Comté (parchemin, runes, pierre et bronze) ---- */
+.deck-ado{background:linear-gradient(180deg,#26391f,#16240f);border:3px solid #a8894a;box-shadow:inset 0 0 0 2px #0c1408,inset 0 0 0 5px #6d5a2e,0 14px 30px -12px #000}
+.deck-ado::before{content:"ᚠᚢᚦᚨᚱᚲ ᚷᚹᚺᚾ ᛁᛃᛇᛈ ᛉᛊᛏᛒ ᛖᛗᛚᛜ ᛞᛟ ᚠᚢᚦᚨᚱᚲ ᚷᚹᚺᚾ";position:absolute;left:0;right:0;top:6px;text-align:center;font-size:13px;letter-spacing:.35em;color:#c9a96199;white-space:nowrap;overflow:hidden}
+.deck-ado .dk-head{color:#efe3c2;padding-top:10px}.deck-ado .dk-head h2{font-family:"Uncial Antiqua",var(--f-disp);font-weight:400;color:#e7cf8c;text-shadow:0 2px 0 #0c1408}
+.deck-ado .dk-orn::before{content:"🍃 ⚔️ 🏹 ⛏️ 🍃";letter-spacing:.3em;font-size:17px}
+.deck-ado .dk-seat{color:#efe3c2}
+.deck-ado .dk-av{background:radial-gradient(circle at 35% 30%,#f5ecd2,#cdb98a);box-shadow:0 0 0 2px #a8894a,0 3px 8px #000a}
+.deck-ado .dk-you .dk-av{box-shadow:0 0 0 3px #7fd36b,0 0 16px #7fd36b99}
+.deck-ado .dk-felt{background:radial-gradient(circle,#3f6b2b,#22401a);border:4px double #a8894a;color:#f1e6c6;border-radius:50%}.deck-ado .dk-felt .r{color:#e86a5a}
+.deck-ado .dk-card{background:linear-gradient(135deg,#f6edd3,#e7d6aa);border:2px solid #8c6d34;box-shadow:inset 0 0 22px #b8964d55,0 10px 20px -10px #000;color:#2c2212;border-radius:6px 18px 6px 18px}
+.deck-ado .dk-card::before{content:"";position:absolute;inset:4px;border:1px dashed #8c6d3477;border-radius:4px 14px 4px 14px;pointer-events:none}
+.deck-ado .dk-portrait{border-radius:14px;background:radial-gradient(circle at 35% 30%,#fbf5e2,#d6c193);box-shadow:0 0 0 2px #6d5a2e,0 0 0 5px #e7d6aa,0 0 0 6px #8c6d34}
+.deck-ado .dk-body small{color:#5b7a2a}.deck-ado .dk-body h3{font-family:"Uncial Antiqua",var(--f-disp);font-weight:400;font-size:16.5px;color:#3b2a0e}
+.deck-ado .dk-cme{background:linear-gradient(135deg,#eef6dc,#d7e8b0);border-color:#5b7a2a}
+.deck-ado .dk-cpr{background:linear-gradient(135deg,#efe6f6,#d9c8e8);border-color:#6a4f8c}
+
+/* ---- Adultes : le Vapeur du Nil, very British, art nouveau à la Victor Horta ---- */
+.deck-adulte{background:radial-gradient(130% 80% at 50% 0%,#1e4c5c 0%,#123241 45%,#0b1f2b 100%);border:1px solid #c9a35a;box-shadow:inset 0 0 0 6px #0b1f2b,inset 0 0 0 7px #c9a35a88,0 16px 34px -14px #000;padding:30px 18px 22px}
+.deck-adulte::before,.deck-adulte::after{content:"";position:absolute;width:78px;height:78px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23c9a35a' stroke-linecap='round'%3E%3Cpath d='M6 114C6 62 30 34 68 26C96 20 110 10 114 4' stroke-width='2'/%3E%3Cpath d='M6 114C16 82 40 60 62 56C80 53 90 44 92 32' stroke-width='1.2'/%3E%3Cpath d='M6 114C30 100 52 94 70 96C86 98 96 92 100 84' stroke-width='1'/%3E%3C/g%3E%3Ccircle cx='92' cy='32' r='3' fill='%23c9a35a'/%3E%3Ccircle cx='100' cy='84' r='2.4' fill='%23c9a35a'/%3E%3C/svg%3E") no-repeat center/contain;opacity:.9;pointer-events:none}
+.deck-adulte::before{left:6px;bottom:6px}.deck-adulte::after{right:6px;top:6px;transform:rotate(180deg);opacity:.6}
+.dk-ship{display:block;font-size:14px;font-style:normal;letter-spacing:.32em;text-transform:uppercase;font-family:var(--f-body);font-weight:700;color:#c9b27a;margin-top:6px;white-space:nowrap}
+.deck-adulte .dk-head{color:#e9e0c9}
+.deck-adulte .dk-orn{height:26px;margin:0 auto 4px;max-width:240px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 40'%3E%3Cg fill='none' stroke='%23c9a35a' stroke-linecap='round'%3E%3Cpath d='M10 30C60 30 80 8 120 10C140 11 146 22 150 30C154 22 160 11 180 10C220 8 240 30 290 30' stroke-width='1.6'/%3E%3Cpath d='M60 34C90 32 110 20 130 22M240 34C210 32 190 20 170 22' stroke-width='1'/%3E%3C/g%3E%3Cpath d='M150 4l5 8-5 8-5-8z' fill='%23c9a35a'/%3E%3C/svg%3E") no-repeat center/contain}
+.deck-adulte .dk-head h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:700;font-style:italic;font-size:27px;letter-spacing:.02em;color:#e6c98a}
+.deck-adulte .dk-head p{font-family:"Cormorant Garamond",Georgia,serif;font-size:17px;font-style:italic}
+.deck-adulte .dk-seat{color:#e9e0c9;font-family:"Cormorant Garamond",Georgia,serif;font-size:13.5px;font-weight:700}
+.deck-adulte .dk-av{background:radial-gradient(circle at 35% 30%,#fbf6e8,#e3d3ad);box-shadow:0 0 0 1.5px #c9a35a,0 0 0 4px #123241,0 0 0 5px #c9a35a88}
+.deck-adulte .dk-you .dk-av{box-shadow:0 0 0 2px #e6c98a,0 0 0 4px #123241,0 0 0 5.5px #e6c98a,0 0 16px #e6c98a88}
+.deck-adulte .dk-felt{background:radial-gradient(circle,#2c6e57,#17402f);border-radius:50% 50% 50% 50% / 42% 42% 58% 58%;box-shadow:0 0 0 2px #c9a35a,0 0 0 5px #123241,0 0 0 6px #c9a35a88;color:#f2ead3;font-family:"Cormorant Garamond",Georgia,serif}.deck-adulte .dk-felt .r{color:#e7867b}
+.deck-adulte .dk-card{background:linear-gradient(180deg,#fbf7ec,#f0e6cf);color:#24302e;border-radius:4px 28px 4px 28px;border:1px solid #c9a35a;box-shadow:inset 0 0 0 4px #fbf7ec,inset 0 0 0 5px #c9a35a77,0 12px 24px -14px #000}
+.deck-adulte .dk-card::after{content:"";position:absolute;right:6px;bottom:6px;width:54px;height:54px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23c9a35a' stroke-linecap='round'%3E%3Cpath d='M6 114C6 62 30 34 68 26C96 20 110 10 114 4' stroke-width='2'/%3E%3Cpath d='M6 114C16 82 40 60 62 56C80 53 90 44 92 32' stroke-width='1.2'/%3E%3Cpath d='M6 114C30 100 52 94 70 96C86 98 96 92 100 84' stroke-width='1'/%3E%3C/g%3E%3Ccircle cx='92' cy='32' r='3' fill='%23c9a35a'/%3E%3Ccircle cx='100' cy='84' r='2.4' fill='%23c9a35a'/%3E%3C/svg%3E") no-repeat center/contain;transform:rotate(180deg);opacity:.55;pointer-events:none}
+.deck-adulte .dk-portrait{border-radius:50% 50% 50% 50% / 58% 58% 42% 42%;background:radial-gradient(circle at 35% 30%,#ffffff,#eadcb8);box-shadow:0 0 0 1.5px #c9a35a,0 0 0 5px #fbf7ec,0 0 0 6px #c9a35a}
+.deck-adulte .dk-body small{color:#1e6a6a;letter-spacing:.18em;font-family:var(--f-body)}
+.deck-adulte .dk-body h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:700;font-size:20px;color:#14303a}
+.deck-adulte .dk-body p{font-family:"Cormorant Garamond",Georgia,serif;font-size:17px;line-height:1.42}
+.deck-adulte .dk-cme{background:linear-gradient(180deg,#fff9ea,#f3e2b6)}
+.deck-adulte .dk-cpr{background:linear-gradient(180deg,#f2f5ef,#dfe8de)}
 </style>
 </head>
 <body>
@@ -6720,7 +6789,7 @@ Object.assign(QZ_SETS, {
   ethique: { t: 'Éthique et mental', items: ETH_Q, back: 'jeux', chap: 'qualites' },
 });
 
-const APP_V = 'v192';
+const APP_V = 'v193';
 'use strict';
 // ====================================================================
 //  MOT DE PASSE · CARNET D'ERREURS · REVOIR SES DONNES · DIPLÔMES · IMPRESSION
@@ -16447,6 +16516,45 @@ new MutationObserver(() => { try {
 document.addEventListener('click', e => { const t = e.target.closest('[data-tgo="app"]'); if (!t || ST.prof !== 'enseignant') return; e.stopPropagation(); e.preventDefault(); document.body.classList.remove('teaching'); CUR = null; save(); ageGate(); }, true);
 // l'écran d'accueil est parfois déjà affiché au chargement : on le redessine avec la nouvelle version
 try { if (app.querySelector('.agepage')) ageGate(); } catch (e) { }
+
+// ====================================================================
+//  v193 — LA TABLE DES PERSONNAGES, juste sous le choix du niveau
+//  Moi, mon partenaire, mes deux adversaires, mon professeur : une mise en page
+//  dans le style de chaque monde — l'école des petits sorciers, la Comté des elfes,
+//  nains et gobelins, le Vapeur du Nil « very British », art nouveau à la Horta.
+// ====================================================================
+const DECK_HEAD = {
+  enfant: ['✨ Le registre de Bridgelart ✨', 'Voici ta table de jeu : ton partenaire, tes deux adversaires… et ton professeur, qui veille sur toi.'],
+  ado: ['La Compagnie de la Table Ronde des Piques', 'Ta compagnie est réunie autour de la table. Fais connaissance avant l\'aventure.'],
+  adulte: ['Liste des passagers<small class="dk-ship">S.S. Caroline</small>', 'Le steward, Mr. Pennyworth-Smythe, a l\'honneur de vous présenter vos compagnons de table.'],
+};
+function castDeck() {
+  const th = tone() === 'enfant' || tone() === 'ado' ? tone() : 'adulte', C = CAST_TXT[th], TC = THEME_CAST[th], h = HERO[th](), S = C.S(), tu = th !== 'adulte';
+  const short = s => s.split(',')[0].replace(/^Son Altesse l'(Archiduc|Archiduchesse) /, '').replace(/^Le professeur /, '');
+  const seat = (k, av, nm, cls) => `<div class="dk-seat dk-${k} ${cls || ''}"><span class="dk-av">${av}</span><b>${nm}</b></div>`;
+  const P = [['me', h[1], S[0], tu ? 'C\'est toi · Sud' : 'Vous-même · Sud', S[1]], ['pa', TC.N[1], C.N[0], C.N[2], C.N[1]], ['op', TC.E[1], C.E[0], C.E[2], C.E[1]], ['op', TC.O[1], C.O[0], C.O[2], C.O[1]], ['pr', PROF_AV(), C.P[0], tu ? 'Ton professeur' : 'Votre professeur', C.P[1]]];
+  const [tt, ti] = DECK_HEAD[th];
+  const SN = { enfant: ['Grognon', 'Lirelune', 'Flottin', h[2]], ado: ['Vaelmor', 'Borbak', 'Orlavin', h[2]], adulte: ['L\'Archbishop', 'Le colonel', 'La princesse Nour', FEM() ? 'L\'Archiduchesse' : 'L\'Archiduc'] }[th].map(x => x + '');
+  SN[3] += th === 'adulte' ? '' : ' (toi)';
+  return `<section class="deck deck-${th}" aria-label="Les personnages">
+  <header class="dk-head"><div class="dk-orn" aria-hidden="true"></div><h2>${tt}</h2><p>${ti}</p></header>
+  <div class="dk-table" aria-hidden="true">
+    ${seat('n', TC.N[1], SN[0])}${seat('o', TC.O[1], SN[2])}
+    <div class="dk-felt"><span>♠</span><span class="r">♥</span><span class="r">♦</span><span>♣</span></div>
+    ${seat('e', TC.E[1], SN[1])}${seat('s', h[1], SN[3], 'dk-you')}
+  </div>
+  <div class="dk-cards">${P.map(([k, av, nm, role, txt], i) => `<article class="dk-card dk-c${k}" style="animation-delay:${120 + i * 110}ms"><div class="dk-portrait"><span>${av}</span></div><div class="dk-body"><small>${role}</small><h3>${nm}</h3><p>${txt}</p></div></article>`).join('')}</div>
+  </section>`;
+}
+{ const _n = nivPage; nivPage = function (world) {
+  const r = _n.apply(this, arguments);
+  try {
+    const pg = app.querySelector('.agepage'); const btns = pg && pg.querySelector('.age4n');
+    if (btns) { const sec = btns.closest('.agedoor'); sec.insertAdjacentHTML('afterend', castDeck());
+      const th = tone() === 'enfant' || tone() === 'ado' ? tone() : 'adulte'; ST.opt.castSeen = ST.opt.castSeen || {}; ST.opt.castSeen[th + '3'] = 1; save(); }
+  } catch (e) { }
+  return r;
+}; }
 
 // ====================================================================
 //  v176 — APPRENDRE POUR RETENIR
