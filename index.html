@@ -2022,7 +2022,7 @@ body .hero{padding-top:max(22px,calc(env(safe-area-inset-top,0px) + 12px))}
 .dk-card h3{margin:0 0 8px;line-height:1.15}
 .dk-text{display:flow-root}
 .dk-text p{margin:0;font-size:15px;line-height:1.52}
-.dk-fig{width:auto;max-width:46%;shape-image-threshold:.25;shape-margin:10px;margin-top:2px;filter:drop-shadow(0 6px 6px rgba(0,0,0,.25))}
+.dk-fig{width:auto;max-width:64%;object-fit:contain;object-position:top;shape-image-threshold:.25;shape-margin:10px;margin-top:2px;filter:drop-shadow(0 6px 6px rgba(0,0,0,.25))}
 .dk-fl{float:left;margin-right:6px}.dk-fr{float:right;margin-left:6px}
 .dk-text p::first-letter{float:left;font-size:3.1em;line-height:.85;margin:4px 6px 0 0;padding:0}
 /* 7-12 ans : une écriture de grimoire pour enfants */
@@ -10846,8 +10846,8 @@ const CAST_TXT = {
       : ['Son Altesse l\'Archiduc Friedrich-Wilhelm von Spilkarte', 'Souverain de l\'Archiduché de Herz-von-Fünften-Majoren. Embarqué au Caire avec quatorze malles, un valet de chambre et un second valet pour surveiller le premier. A appris le bridge à six ans, l\'humilité jamais. Lorsqu\'il chute, ce n\'est pas une chute : c\'est « une généreuse redistribution des levées au profit des classes ouvrières, et une preuve de sa grande mansuétude ». Il ne dit jamais « je », mais « Nous ». Même pour demander le sucre.', 'Vous-même'],
     N: ['Alistair Clubs, Archbishop of Beukbury', 'Votre partenaire. Prélat d\'une patience infinie, sauf lorsque vous oubliez son fit : il cite alors le Lévitique, verset après verset. Avant chaque donne, il bénit le tapis de son goupillon, en l\'honneur de la Sainte Trinité du Roi, de la Dame et du Valet. Il tient le Stayman pour une forme de prière universelle, et le contre punitif pour un péché véniel, surtout quand c\'est lui qui contre. Il a fait vœu de ne jamais mentir ; ses enchères mettent ce vœu à rude épreuve. Il refuse de jouer le dimanche… sauf en tournoi, « car le Seigneur aime aussi les masterpoints ».', 'Votre partenaire · Nord'],
     E: ['Le colonel belgo-anglais Charles-Archibald de Surcontre', 'Trente ans aux Indes, dont vingt-neuf à jouer au bridge sous une moustache si impressionnante qu\'elle lui cache ses plus beaux honneurs. Cela lui a d\'ailleurs déjà joué quelques tours. Il a surcontré un maharadjah, deux généraux de l\'ancien Empire, un tigre du Bengale et, dit-on, sa belle-mère, qui, à son grand dam, l\'a battu à plate couture. Il tient toute enchère adverse pour une déclaration de guerre, et tout retard du thé pour un acte de haute trahison. Il dort avec ses cartes, « au cas où l\'ennemi attaquerait de nuit ». Il annonçait ses enchères au clairon, jusqu\'à ce que le steward le lui confisque. Il les annonce désormais en sifflant <i>la Brabançonne</i>.', 'Adversaire · Est'],
-    O: ['La princesse Nour Sanzatou', 'Princesse de la cour du Caire, égyptologue diplômée, aventurière et aviatrice : elle a posé son biplan sur le toit de l\'hôtel Winter Palace de Louxor « parce que le jardin était plein ». « Nour » veut dire « lumière » : elle brille à 3SA et méprise les contrats à la couleur, « une invention de marins ». Avec son éventail en plumes d\'autruche, elle envoie à son partenaire des signaux d\'une grande élégance, selon un code qu\'elle-même n\'a jamais compris. Trois fois fiancée au même lord, elle a perdu une momie au poker à Louxor et l\'a regagnée le lendemain… mais ce n\'était pas la bonne. La momie voyage désormais avec elle, en cabine de première, et lui sert de partenaire d\'entraînement : « Elle a un très bon sens du jeu, pour quelqu\'un d\'aussi sec. »', 'Adversaire · Ouest'],
-    P: ['The Duke of Blackwood', 'Gentleman, membre de la Chambre des lords et de onze clubs de bridge londoniens, dont neuf l\'ont élu président pour qu\'il cesse enfin de corriger leurs enchères. Il n\'élève jamais la voix : son sourcil gauche s\'en charge, le droit assure le service après-vente. Sa plus grande colère connue tient en deux mots : « Délicat. Très délicat. » Une impasse ratée ? De la malchance. Une impasse non tentée ? Un manque de caractère. Une carte jouée trop vite ? Une offense à la Couronne britannique.'],
+    O: ['La princesse Nour Sanzatou', 'Princesse de la cour du Caire, égyptologue diplômée, aventurière et aviatrice : elle a posé son biplan sur le toit de l\'hôtel Winter Palace de Louxor « parce que le jardin était plein ». « Nour » veut dire « lumière » : elle brille à 3SA et méprise les contrats à la couleur, « une invention de marins ». Avec son éventail en plumes d\'autruche, elle envoie à son partenaire des signaux d\'une grande élégance, selon un code qu\'elle-même n\'a jamais compris. Trois fois fiancée au même lord, elle a perdu une momie au poker à Louxor et l\'a regagnée le lendemain… mais ce n\'était pas la bonne. La momie voyage désormais avec elle, en cabine de première : c\'est son sparring-partner. Nour en parle avec tendresse : « Ma momie a un très bon sens du jeu, pour quelqu\'un d\'aussi sec. »', 'Adversaire · Ouest'],
+    P: ['The Duke of Blackwood', 'Gentleman, membre de la Chambre des lords et de onze clubs de bridge londoniens, dont neuf l\'ont élu président pour qu\'il cesse enfin de corriger leurs enchères. Il n\'élève jamais la voix : son sourcil gauche s\'en charge, le droit assure le service après-vente. Sa plus grande colère connue tient en trois mots : « Hum… Délicat… Très délicat… » Une impasse ratée ? De la malchance. Une impasse non tentée ? Un manque de caractère. Une carte jouée trop vite ? Une offense à la Couronne britannique.'],
     go: 'Prendre place à la table de jeu', goF: 'Prendre place à la table de jeu',
   },
 };
@@ -16586,6 +16586,16 @@ function castDeck() {
   } catch (e) { }
   return r;
 }; }
+// ====================================================================
+//  La typographie française partout : une espace insécable avant ? ! : ; » et après «,
+//  pour qu'aucun signe de ponctuation ni guillemet ne se retrouve seul en début de ligne.
+// ====================================================================
+const NBSP_RE1 = /[  ]+([?!:;»])/g, NBSP_RE2 = /«[  ]+/g, NBSP_RE3 = /[  ]+(…)(?=\s*[»"]|$)/g;
+function frTypo(root) {
+  if (!root) return; const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => { const p = n.parentNode; return p && /^(SCRIPT|STYLE|TEXTAREA|INPUT|CODE|PRE)$/.test(p.nodeName) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT; } });
+  for (let n = w.nextNode(); n; n = w.nextNode()) { const t = n.nodeValue; if (!/[?!:;»«]/.test(t)) continue; const u = t.replace(NBSP_RE1, ' $1').replace(NBSP_RE2, '« '); if (u !== t) n.nodeValue = u; }
+}
+{ let pend = false; new MutationObserver(() => { if (pend) return; pend = true; requestAnimationFrame(() => { pend = false; try { frTypo(app); } catch (e) { } }); }).observe(app, { childList: true, subtree: true }); try { frTypo(app); } catch (e) { } }
 
 // ====================================================================
 //  v176 — APPRENDRE POUR RETENIR
